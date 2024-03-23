@@ -11,7 +11,7 @@ const sourceCodePro = Source_Code_Pro({
 export function IntroSection() {
   return (
     <section
-      className="relative sm:mx-auto sm:max-w-screen-md my-4"
+      className="relative sm:mx-auto sm:max-w-screen-md my-8"
       id="introduction"
     >
       <h1 className="mb-[0.25em] text-5xl sm:text-7xl font-light">
