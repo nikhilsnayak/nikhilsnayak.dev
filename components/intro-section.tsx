@@ -29,6 +29,7 @@ export function IntroSection() {
         src={profile}
         alt="picture of Nikhil S"
         className="drop-shadow-md sm:absolute sm:top-0 sm:right-4 aspect-[4/3] sm:w-[300px] mx-auto"
+        priority
       />
     </section>
   );
