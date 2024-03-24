@@ -19,6 +19,9 @@ export const metadata: Metadata = {
     template: "%s | Nikhil S",
   },
   description: "Software Engineer",
+  verification: {
+    google: "Ako36nekKPve0mWwGE-aLy1f_0bPXoqbK2sQhoAitEg",
+  },
 };
 
 export default function RootLayout({
