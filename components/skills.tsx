@@ -5,15 +5,21 @@ import {
   ReactIcon,
   NextIcon,
   NodeJsIcon,
+  NestIcon,
+  TsIcon,
+  TailwindIcon,
 } from "@/assets/icons";
 
 const skillsIcons = [
   HtmlIcon,
   CssIcon,
+  TailwindIcon,
   JsIcon,
+  TsIcon,
   ReactIcon,
   NextIcon,
   NodeJsIcon,
+  NestIcon,
 ];
 
 export function Skills() {

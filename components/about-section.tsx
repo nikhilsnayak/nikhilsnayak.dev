@@ -10,14 +10,14 @@ export function AboutSection() {
       <p className="text-xl sm:text-2xl">
         An ambitious and motivated software engineer with a strong foundation in
         web development, I possess a deep understanding of both front-end and
-        backend development.
+        backend development. This proficiency enables me to create comprehensive
+        web solutions.
       </p>
       <Gallery />
       <p className="text-xl sm:text-2xl">
-        This proficiency enables me to create comprehensive web solutions. My
-        ability to adapt to new technologies and proficiency in debugging errors
-        make me a quick learner. My passion for web development has driven me to
-        acquire essential knowledge and skills in the field.
+        My ability to adapt to new technologies and proficiency in debugging
+        errors make me a quick learner. My passion for web development has
+        driven me to acquire essential knowledge and skills in the field.
       </p>
       <Skills />
       <p className="text-xl sm:text-2xl">

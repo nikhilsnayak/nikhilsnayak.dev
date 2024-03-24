@@ -15,6 +15,8 @@ export function Footer() {
             href="https://x.com/_nikhilsnayak_"
             className="p-4 dark:text-fluorescent"
             target="_blank"
+            rel="noopener noreferrer"
+            aria-label="twitter"
           >
             <Twitter />
           </a>
@@ -24,6 +26,8 @@ export function Footer() {
             href="https://github.com/nikhilsnayak3473"
             className="p-4 dark:text-fluorescent"
             target="_blank"
+            rel="noopener noreferrer"
+            aria-label="github"
           >
             <Github />
           </a>
@@ -33,6 +37,8 @@ export function Footer() {
             href="https://linkedin.com/in/nikhilsnayak3473"
             className="p-4 dark:text-fluorescent"
             target="_blank"
+            rel="noopener noreferrer"
+            aria-label="linkedin"
           >
             <Linkedin />
           </a>
@@ -42,6 +48,8 @@ export function Footer() {
             href="https://instagram.com/_nikhilsnayak_"
             className="p-4 dark:text-fluorescent"
             target="_blank"
+            rel="noopener noreferrer"
+            aria-label="instagram"
           >
             <Instagram />
           </a>

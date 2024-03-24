@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -61,7 +61,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="max-w-screen-lg mx-auto lg:my-4">
+          <div className="max-w-screen-lg mx-auto lg:py-4 min-h-screen flex flex-col justify-between">
             <Header />
             <div className="px-4 py-2 mt-4">{children}</div>
             <Footer />
