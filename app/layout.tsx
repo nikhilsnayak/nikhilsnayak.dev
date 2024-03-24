@@ -19,6 +19,29 @@ export const metadata: Metadata = {
     template: "%s | Nikhil S",
   },
   description: "Software Engineer",
+  openGraph: {
+    title: "Nikhil S",
+    description: "Software Engineer",
+    url: "https://nikhilsnayak3473.vercel.app",
+    siteName: "Nikhil S",
+    locale: "en_US",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  twitter: {
+    title: "Nikhil S",
+    card: "summary_large_image",
+  },
   verification: {
     google: "Ako36nekKPve0mWwGE-aLy1f_0bPXoqbK2sQhoAitEg",
   },
