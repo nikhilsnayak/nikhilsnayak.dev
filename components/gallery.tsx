@@ -17,8 +17,8 @@ const images = [
 export function Gallery() {
   return (
     <div id="gallery">
-      <h3 className="mb-[0.5em] text-2xl sm:text-4xl font-bold">Gallery :</h3>
-      <ul className="flex items-center flex-wrap gap-8">
+      <h3 className="mb-[0.5em] text-2xl font-bold sm:text-4xl">Gallery :</h3>
+      <ul className="flex flex-wrap items-center gap-8">
         {images.map((image, index) => (
           <li className="max-w-[450px]" key={index}>
             <TooltipProvider>
@@ -27,7 +27,7 @@ export function Gallery() {
                   <Image
                     src={image.src}
                     alt={image.alt}
-                    className="object-cover rounded-sm drop-shadow-sm"
+                    className="rounded-sm object-cover drop-shadow-sm"
                   />
                 </TooltipTrigger>
                 <TooltipContent>

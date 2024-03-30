@@ -25,10 +25,10 @@ const skillsIcons = [
 export function Skills() {
   return (
     <div id="skills">
-      <h3 className="mb-[0.5em] text-2xl sm:text-4xl font-bold">Skills :</h3>
-      <ul className="flex items-center flex-wrap gap-8">
+      <h3 className="mb-[0.5em] text-2xl font-bold sm:text-4xl">Skills :</h3>
+      <ul className="flex flex-wrap items-center gap-8">
         {skillsIcons.map((Icon, index) => (
-          <li className="w-12 h-12" key={index}>
+          <li className="h-12 w-12" key={index}>
             <Icon />
           </li>
         ))}

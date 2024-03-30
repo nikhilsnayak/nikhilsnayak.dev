@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Nikhil S",
   },
   description: "Software Engineer",
+  metadataBase: new URL("https://nikhilsnayak3473.vercel.app"),
   openGraph: {
     title: "Nikhil S",
     description: "Software Engineer",
@@ -61,9 +62,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="max-w-screen-lg mx-auto lg:py-4 min-h-screen flex flex-col justify-between">
+          <div className="mx-auto flex min-h-svh max-w-screen-lg flex-col justify-between lg:py-4">
             <Header />
-            <div className="px-4 py-2 mt-4">{children}</div>
+            <div className="mt-4 px-4 py-2">{children}</div>
             <Footer />
           </div>
         </ThemeProvider>

@@ -4,7 +4,7 @@ import { Skills } from "./skills";
 export function AboutSection() {
   return (
     <section className="mb-4 mt-16 space-y-8" id="about">
-      <h2 className="mb-[0.25em] text-5xl sm:text-7xl dark:text-fluorescent after:block after:w-full after:h-[2px] after:dark:bg-fluorescent after:bg-current font-bold">
+      <h2 className="mb-[0.25em] text-5xl font-bold after:block after:h-[2px] after:w-full after:bg-current dark:text-fluorescent after:dark:bg-fluorescent sm:text-7xl">
         Get to Know Me
       </h2>
       <p className="text-xl sm:text-2xl">

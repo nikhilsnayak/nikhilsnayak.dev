@@ -5,11 +5,11 @@ export function Footer() {
     <footer className="text-center text-xl">
       <a
         href="mailto:nikhilsnayak3473@gmail.com"
-        className="dark:text-fluorescent font-bold hover:opacity-70 hover:underline"
+        className="font-bold hover:underline hover:opacity-70 dark:text-fluorescent"
       >
         nikhilsnayak3473@gmail.com
       </a>
-      <ul className="flex justify-center mt-4 gap-4 items-center">
+      <ul className="mt-4 flex items-center justify-center gap-4">
         <li className="hover:opacity-70">
           <a
             href="https://x.com/_nikhilsnayak_"

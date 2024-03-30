@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const path = usePathname();
   return (
-    <header className="flex justify-between px-4 py-2 lg:rounded-md drop-shadow-md items-center sticky top-0 bg-background text-foreground z-10">
+    <header className="sticky top-0 z-10 flex items-center justify-between bg-background px-4 py-2 text-foreground drop-shadow-md lg:rounded-md">
       <nav>
         <ul className="flex gap-2">
           <li>
@@ -15,7 +15,7 @@ export function Header() {
               href="/"
               className={cn(
                 path === "/" &&
-                  "after:block after:w-full after:h-[2px] after:dark:bg-fluorescent after:bg-current",
+                  "after:block after:h-[2px] after:w-full after:bg-current after:dark:bg-fluorescent",
               )}
             >
               Home
@@ -26,21 +26,10 @@ export function Header() {
               href="/work"
               className={cn(
                 path === "/work" &&
-                  "after:block after:w-full after:h-[2px] after:dark:bg-fluorescent after:bg-current",
+                  "after:block after:h-[2px] after:w-full after:bg-current after:dark:bg-fluorescent",
               )}
             >
               Work
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/blogs"
-              className={cn(
-                path === "/blogs" &&
-                  "after:block after:w-full after:h-[2px] after:dark:bg-fluorescent after:bg-current",
-              )}
-            >
-              Blogs
             </Link>
           </li>
         </ul>

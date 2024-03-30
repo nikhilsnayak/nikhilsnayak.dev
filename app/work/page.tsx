@@ -11,7 +11,7 @@ export default function WorkPage() {
   return (
     <section>
       <div>
-        <h1 className="font-medium text-2xl mb-6 tracking-tighter">My Work</h1>
+        <h1 className="mb-6 text-2xl font-medium tracking-tighter">My Work</h1>
         <p>
           On a mission to build user centric software solutions and along the
           way share my learnings with the community
@@ -19,18 +19,18 @@ export default function WorkPage() {
       </div>
       <hr className="my-6 border-foreground/20" />
       <div>
-        <h2 className="font-medium text-xl mb-1 tracking-tighter hover:opacity-70 hover:underline inline-block">
+        <h2 className="mb-1 inline-block text-xl font-medium tracking-tighter hover:underline hover:opacity-70">
           <a
             href="https://www.codecrafttech.com/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="codecraft technologies"
-            className="flex items-center transition-all gap-2"
+            className="flex items-center gap-2 transition-all"
           >
             CodeCraft Technologies <ArrowIcon />
           </a>
         </h2>
-        <p className="text-muted-foreground text-sm mb-4">
+        <p className="mb-4 text-sm text-muted-foreground">
           Trainee Engineer - Software Development
         </p>
         <p className="my-4">
@@ -46,7 +46,7 @@ export default function WorkPage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="react"
-              className="flex items-center transition-all gap-1"
+              className="flex items-center gap-1 transition-all"
             >
               <ReactIcon className="w-3" />
               React
@@ -59,7 +59,7 @@ export default function WorkPage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="nextjs"
-              className="flex items-center transition-all gap-1"
+              className="flex items-center gap-1 transition-all"
             >
               <NextIcon className="w-4" />
               Next.js
@@ -72,7 +72,7 @@ export default function WorkPage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="nestjs"
-              className="flex items-center transition-all gap-1"
+              className="flex items-center gap-1 transition-all"
             >
               <NestIcon className="w-4" />
               Nest.js

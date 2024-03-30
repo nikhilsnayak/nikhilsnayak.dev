@@ -11,15 +11,15 @@ const sourceCodePro = Source_Code_Pro({
 export function IntroSection() {
   return (
     <section
-      className="relative sm:mx-auto sm:max-w-screen-md my-8"
+      className="relative my-8 sm:mx-auto sm:max-w-screen-md"
       id="introduction"
     >
-      <h1 className="mb-[0.25em] text-5xl sm:text-7xl font-light">
+      <h1 className="mb-[0.25em] text-5xl font-light sm:text-7xl">
         Hi, I am <strong className="block font-extrabold">Nikhil S</strong>
       </h1>
       <p
         className={cn(
-          "text-xl sm:text-2xl bg-fluorescent mb-[1em] py-[0.25em] px-[1em] text-slate-800",
+          "mb-[1em] bg-fluorescent px-[1em] py-[0.25em] text-xl text-slate-800 sm:text-2xl",
           sourceCodePro.className,
         )}
       >
@@ -28,7 +28,7 @@ export function IntroSection() {
       <Image
         src={profile}
         alt="picture of Nikhil S"
-        className="drop-shadow-md sm:absolute sm:top-0 sm:right-4 aspect-[4/3] sm:w-[300px] mx-auto"
+        className="mx-auto aspect-[4/3] drop-shadow-md sm:absolute sm:right-4 sm:top-0 sm:w-[300px]"
         priority
       />
     </section>
