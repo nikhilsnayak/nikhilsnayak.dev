@@ -38,7 +38,7 @@ export default function WorkPage() {
           super-talented designers and engineers work closely and bring to life,
           user-focused solutions.
         </p>
-        <p className="my-4 align-baseline">
+        <p className="my-4">
           At CodeCraft I contribute to projects using modern frameworks such as
           <Badge className="mx-1" variant={"secondary"}>
             <a

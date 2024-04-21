@@ -28,7 +28,7 @@ export function Skills() {
       <h3 className="mb-[0.5em] text-2xl font-bold sm:text-4xl">Skills :</h3>
       <ul className="flex flex-wrap items-center gap-8">
         {skillsIcons.map((Icon, index) => (
-          <li className="h-12 w-12" key={index}>
+          <li className="h-8 w-8 sm:h-12 sm:w-12" key={index}>
             <Icon />
           </li>
         ))}

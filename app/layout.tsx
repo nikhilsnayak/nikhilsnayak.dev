@@ -62,7 +62,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="mx-auto flex min-h-svh max-w-screen-lg flex-col justify-between lg:py-4">
+          <div className="mx-auto flex min-h-dvh max-w-screen-lg flex-col justify-between lg:py-4">
             <Header />
             <div className="mt-4 px-4 py-2">{children}</div>
             <Footer />

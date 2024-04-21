@@ -13,7 +13,7 @@ export function Footer() {
         <li className="hover:opacity-70">
           <a
             href="https://x.com/_nikhilsnayak_"
-            className="p-4 dark:text-fluorescent"
+            className="dark:text-fluorescent"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="twitter"
@@ -24,7 +24,7 @@ export function Footer() {
         <li className="hover:opacity-70">
           <a
             href="https://github.com/nikhilsnayak3473"
-            className="p-4 dark:text-fluorescent"
+            className="dark:text-fluorescent"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="github"
@@ -35,7 +35,7 @@ export function Footer() {
         <li className="hover:opacity-70">
           <a
             href="https://linkedin.com/in/nikhilsnayak3473"
-            className="p-4 dark:text-fluorescent"
+            className="dark:text-fluorescent"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="linkedin"
@@ -46,7 +46,7 @@ export function Footer() {
         <li className="hover:opacity-70">
           <a
             href="https://instagram.com/_nikhilsnayak_"
-            className="p-4 dark:text-fluorescent"
+            className="dark:text-fluorescent"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="instagram"
