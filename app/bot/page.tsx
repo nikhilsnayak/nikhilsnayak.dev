@@ -1,5 +1,5 @@
 import { zoro } from '@/assets/images';
-import { Chat } from '@/components/chat';
+import { Chat } from './chat';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Metadata } from 'next';
 
@@ -10,14 +10,16 @@ export const metadata: Metadata = {
 
 export default function BotPage() {
   return (
-    <section className='flex h-[70vh] w-full flex-col rounded-sm bg-gray-100 px-4 py-2 dark:bg-gray-950'>
-      <header className='flex h-16 items-center'>
+    <section className='space-y-4'>
+      <header className='flex items-center'>
         <div className='flex items-center gap-3'>
-          <Avatar className='h-12 w-12 ring ring-green-500'>
+          <Avatar className='ring ring-green-500 sm:h-12 sm:w-12'>
             <AvatarImage alt='zoro' src={zoro.src} fetchPriority='high' />
             <AvatarFallback>Z</AvatarFallback>
           </Avatar>
-          <h1 className='text-3xl font-bold italic'>Zoro</h1>
+          <h1 className='bg-gradient-to-tr from-green-900 to-green-100 bg-clip-text text-2xl font-bold italic text-transparent sm:text-3xl'>
+            Zoro
+          </h1>
         </div>
       </header>
       <Chat />
