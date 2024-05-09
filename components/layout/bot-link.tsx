@@ -16,7 +16,7 @@ export function BotLink() {
         path === '/bot' && 'ring ring-green-500'
       )}
     >
-      <Image src={zoro} alt='bot-icon' className='h-10 w-auto' />
+      <Image src={zoro} alt='bot-icon' className='h-10 w-auto' priority />
     </Link>
   );
 }
