@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write --ignore-path .gitignore ."
+    "lint:fix": "next lint --fix",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write --ignore-path .gitignore .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
@@ -37,6 +40,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
