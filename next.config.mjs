@@ -28,6 +28,12 @@ const nextConfig = {
     return config;
   },
 
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+
   experimental: {
     turbo: {
       rules: {
@@ -37,6 +43,7 @@ const nextConfig = {
         },
       },
     },
+    ppr: true,
   },
 };
 
