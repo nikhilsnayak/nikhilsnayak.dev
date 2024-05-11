@@ -49,7 +49,7 @@ export function Chat() {
   }, [messages]);
 
   return (
-    <div className='flex h-[70vh] w-full flex-col gap-4'>
+    <div className='flex h-[70dvh] w-full flex-col gap-4'>
       <div className='flex-1 overflow-auto'>
         <ScrollArea className='h-full w-full rounded-md border' ref={scrollRef}>
           <div className='p-4 text-sm'>
