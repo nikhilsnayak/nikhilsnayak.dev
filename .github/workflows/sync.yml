@@ -17,4 +17,7 @@ jobs:
       - name: Install Dependencies
         run: bun install
       - name: Run Script
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: bun run ./generate-embeddings.ts
