@@ -9,9 +9,10 @@ import { env } from './config/env';
 
 function trimPageContent(doc: DocumentInterface) {
   return doc.pageContent
-    .replace(/^import.*$/gm, '') // Remove all import statements
-    .replace(/ className=(["']).*?\1| className={.*?}/g, '') // Remove all className props
-    .replace(/^\s*[\r]/gm, '') // remove empty lines
+    .replace(/^import\s.*$/gm, '') // Remove all import statements
+    .replace(/ className=(["']).*?\1/g, '') // Remove all className props with quotes
+    .replace(/ className=\{[^}]*\}/g, '') // Remove all className props with curly braces
+    .replace(/^\s*[\r\n]/gm, '') // remove empty lines
     .trim();
 }
 
