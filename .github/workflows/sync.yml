@@ -20,4 +20,5 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
         run: bun run ./generate-embeddings.ts
