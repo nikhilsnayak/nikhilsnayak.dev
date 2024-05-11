@@ -5,7 +5,6 @@ import { DocumentInterface } from '@langchain/core/documents';
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
 import { TextLoader } from 'langchain/document_loaders/fs/text';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { env } from './config/env';
 
 function trimPageContent(doc: DocumentInterface) {
   return doc.pageContent
@@ -17,7 +16,10 @@ function trimPageContent(doc: DocumentInterface) {
 }
 
 async function generateEmbeddings() {
-  const client = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
+  const client = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!
+  );
 
   await client.from('documents').delete().neq('id', 0);
 
