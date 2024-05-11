@@ -1,16 +1,13 @@
-name: CI
+name: SYNC
 
 on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
 
 jobs:
-  ci:
-    name: CI
+  sync:
+    name: Generate Embeddings
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,7 +16,5 @@ jobs:
         uses: oven-sh/setup-bun@v1
       - name: Install Dependencies
         run: bun install
-      - name: Check Types
-        run: bun run check-types
-      - name: Lint
-        run: bun run lint
+      - name: Run Script
+        run: bun run ./generate-embeddings.ts

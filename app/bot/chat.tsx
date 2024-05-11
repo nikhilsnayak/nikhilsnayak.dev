@@ -1,93 +1,86 @@
 'use client';
 
-import { useState } from 'react';
-import { AssistantContent, UserContent, type CoreMessage } from 'ai';
-import { readStreamableValue } from 'ai/rsc';
+import { useChat } from 'ai/react';
 import { toast } from 'sonner';
+import Markdown from 'react-markdown';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { continueConversation } from './actions';
+import { useEffect, useRef } from 'react';
+import { LoadingSpinner } from '@/assets/icons';
 
-function BotMessage({ content }: { content: AssistantContent }) {
+function BotMessage({ content }: { content: string }) {
   return (
     <div className='max-w-full'>
       <p className='max-w-max whitespace-pre-wrap rounded-lg bg-gray-100 p-2 dark:bg-gray-800'>
-        {content as string}
+        <Markdown>{content}</Markdown>
       </p>
     </div>
   );
 }
 
-function UserMessage({ content }: { content: UserContent }) {
+function UserMessage({ content }: { content: string }) {
   return (
     <div className='max-w-full'>
       <p className='ml-auto max-w-max whitespace-pre-wrap rounded-lg bg-gray-800 p-2 text-gray-100 dark:bg-gray-100 dark:text-gray-800'>
-        {content as string}
+        {content}
       </p>
     </div>
   );
 }
 
 export function Chat() {
-  const [messages, setMessages] = useState<CoreMessage[]>([]);
-  const [input, setInput] = useState('');
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      onError: (e) => {
+        toast(e.message);
+      },
+    });
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollArea = scrollRef.current?.querySelector(
+      '[data-radix-scroll-area-viewport]'
+    );
+    if (scrollArea) {
+      scrollArea.scrollTop = scrollArea.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className='flex h-[55vh] w-full flex-col gap-4'>
+    <div className='flex h-[70vh] w-full flex-col gap-4'>
       <div className='flex-1 overflow-auto'>
-        <ScrollArea className='h-full w-full rounded-md border'>
+        <ScrollArea className='h-full w-full rounded-md border' ref={scrollRef}>
           <div className='p-4 text-sm'>
             <div className='grid gap-4'>
-              {/* <BotMessage content={'Coming soon...'} /> */}
-              {messages.map((m, i) =>
-                m.role === 'user' ? (
-                  <UserMessage key={i} content={m.content} />
+              {messages.map(({ id, content, role }) =>
+                role === 'user' ? (
+                  <UserMessage key={id} content={content} />
                 ) : (
-                  <BotMessage key={i} content={m.content as AssistantContent} />
+                  <BotMessage key={id} content={content} />
                 )
               )}
             </div>
           </div>
         </ScrollArea>
       </div>
-      <form
-        className='flex items-center'
-        action={async () => {
-          const newMessages: CoreMessage[] = [
-            ...messages,
-            { content: input, role: 'user' },
-          ];
-
-          setMessages(newMessages);
-          setInput('');
-
-          const result = await continueConversation(newMessages);
-
-          if ('error' in result) {
-            setMessages((messages) => messages.slice(0, -1));
-            toast.error(result.error as string);
-            return;
-          }
-
-          for await (const content of readStreamableValue(result)) {
-            setMessages([
-              ...newMessages,
-              {
-                role: 'assistant',
-                content: content as string,
-              },
-            ]);
-          }
-        }}
-      >
+      <form className='flex items-center gap-3' onSubmit={handleSubmit}>
         <Input
-          className='mr-4 flex-1'
+          className=''
           placeholder='Type your message...'
           type='text'
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleInputChange}
+          disabled={isLoading}
         />
-        <Button size='sm'>Ask Zoro</Button>
+        <Button
+          disabled={isLoading}
+          size='sm'
+          className='w-[10%] shrink-0 text-center'
+        >
+          {isLoading ? <LoadingSpinner /> : 'Ask Zoro'}
+        </Button>
       </form>
     </div>
   );

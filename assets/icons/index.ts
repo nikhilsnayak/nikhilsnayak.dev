@@ -8,3 +8,4 @@ export { default as NextIcon } from './next.svg';
 export { default as NodeJsIcon } from './nodejs.svg';
 export { default as NestIcon } from './nest.svg';
 export { default as ArrowIcon } from './arrow.svg';
+export { default as LoadingSpinner } from './loading.svg';
