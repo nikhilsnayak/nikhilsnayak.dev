@@ -74,11 +74,7 @@ export function Chat() {
           onChange={handleInputChange}
           disabled={isLoading}
         />
-        <Button
-          disabled={isLoading}
-          size='sm'
-          className='w-[10%] shrink-0 text-center'
-        >
+        <Button disabled={isLoading} size='sm'>
           {isLoading ? <LoadingSpinner /> : 'Ask Zoro'}
         </Button>
       </form>
