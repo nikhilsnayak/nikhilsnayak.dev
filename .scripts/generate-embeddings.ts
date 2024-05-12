@@ -31,7 +31,7 @@ async function generateEmbeddings() {
   });
 
   const pagesLoader = new DirectoryLoader(
-    '../app/',
+    './app/',
     {
       '.tsx': (path) => new TextLoader(path),
     },
@@ -39,7 +39,7 @@ async function generateEmbeddings() {
   );
 
   const layoutLoader = new DirectoryLoader(
-    '../components/layout/',
+    './components/layout/',
     {
       '.tsx': (path) => new TextLoader(path),
     },
