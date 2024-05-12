@@ -20,6 +20,12 @@ import {
   TsIcon,
   TailwindIcon,
 } from '@/assets/icons';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Home',
+  description: 'Find the information of about me here',
+};
 
 const skillsIcons = [
   HtmlIcon,

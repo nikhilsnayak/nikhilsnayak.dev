@@ -1,7 +1,13 @@
 import { zoro } from '@/assets/images';
-import { Chat } from './chat';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+import { ChatSkeleton } from './chat-skeleton';
+
+const Chat = dynamic(() => import('./chat').then(({ Chat }) => Chat), {
+  ssr: false,
+  loading: () => <ChatSkeleton />,
+});
 
 export const metadata: Metadata = {
   title: 'Bot',

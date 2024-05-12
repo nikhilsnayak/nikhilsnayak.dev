@@ -1,28 +1,36 @@
 'use client';
 
+import { Message } from 'ai';
 import { useChat } from 'ai/react';
 import { toast } from 'sonner';
-import Markdown from 'react-markdown';
+import { useEffect, useRef } from 'react';
+import { useLocalStorage, useUnmount } from 'usehooks-ts';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useEffect, useRef } from 'react';
 import { LoadingSpinner } from '@/assets/icons';
+import Markdown from 'react-markdown';
 
-function BotMessage({ content }: { content: string }) {
+interface MessageProps {
+  content: string;
+}
+
+function BotMessage({ content }: Readonly<MessageProps>) {
   return (
     <div className='max-w-full'>
-      <p className='max-w-max whitespace-pre-wrap rounded-lg bg-gray-100 p-2 dark:bg-gray-800'>
-        <Markdown>{content}</Markdown>
-      </p>
+      <div className='max-w-max whitespace-pre-wrap rounded-md bg-gray-100 p-2 dark:bg-gray-800'>
+        <Markdown className='prose prose-green dark:prose-invert'>
+          {content}
+        </Markdown>
+      </div>
     </div>
   );
 }
 
-function UserMessage({ content }: { content: string }) {
+function UserMessage({ content }: Readonly<MessageProps>) {
   return (
     <div className='max-w-full'>
-      <p className='ml-auto max-w-max whitespace-pre-wrap rounded-lg bg-gray-800 p-2 text-gray-100 dark:bg-gray-100 dark:text-gray-800'>
+      <p className='ml-auto max-w-max whitespace-pre-wrap rounded-md bg-gray-800 p-2 text-gray-100 dark:bg-gray-100 dark:text-gray-800'>
         {content}
       </p>
     </div>
@@ -30,14 +38,24 @@ function UserMessage({ content }: { content: string }) {
 }
 
 export function Chat() {
+  const [initialMessages, saveMessages] = useLocalStorage<Message[]>(
+    'messages',
+    []
+  );
+
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
+      initialMessages,
       onError: (e) => {
         toast(e.message);
       },
     });
 
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useUnmount(() => {
+    saveMessages(messages);
+  });
 
   useEffect(() => {
     const scrollArea = scrollRef.current?.querySelector(
@@ -74,7 +92,7 @@ export function Chat() {
           onChange={handleInputChange}
           disabled={isLoading}
         />
-        <Button disabled={isLoading} size='sm'>
+        <Button disabled={isLoading} size='sm' className='w-1/5'>
           {isLoading ? <LoadingSpinner /> : 'Ask Zoro'}
         </Button>
       </form>
