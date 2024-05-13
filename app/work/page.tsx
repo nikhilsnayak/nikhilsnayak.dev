@@ -10,15 +10,15 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <section>
-      <div>
+      <header>
         <h1 className='mb-6 text-2xl font-medium tracking-tighter'>My Work</h1>
         <p>
           On a mission to build user centric software solutions and along the
           way share my learnings with the community
         </p>
-      </div>
+      </header>
       <hr className='my-6 border-foreground/20' />
-      <div>
+      <section>
         <h2 className='mb-1 inline-block text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
           <a
             href='https://www.codecrafttech.com/'
@@ -81,7 +81,7 @@ export default function WorkPage() {
           </Badge>
           to build rich and interactive user experience
         </p>
-      </div>
+      </section>
     </section>
   );
 }

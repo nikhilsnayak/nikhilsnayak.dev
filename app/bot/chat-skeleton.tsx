@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { LucideTrash2 } from 'lucide-react';
 
 export function ChatSkeleton() {
   return (
@@ -32,6 +33,9 @@ export function ChatSkeleton() {
         />
         <Button size='sm' className='w-1/5' disabled>
           Ask Zoro
+        </Button>
+        <Button size='icon' variant='outline'>
+          <LucideTrash2 />
         </Button>
       </form>
     </div>

@@ -9,6 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/assets/icons';
+import { LucideTrash2 } from 'lucide-react';
 import Markdown from 'react-markdown';
 
 interface MessageProps {
@@ -43,13 +44,19 @@ export function Chat() {
     []
   );
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({
-      initialMessages,
-      onError: (e) => {
-        toast(e.message);
-      },
-    });
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    setMessages,
+  } = useChat({
+    initialMessages,
+    onError: (e) => {
+      toast(e.message);
+    },
+  });
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -94,6 +101,10 @@ export function Chat() {
         />
         <Button disabled={isLoading} size='sm' className='w-1/5'>
           {isLoading ? <LoadingSpinner /> : 'Ask Zoro'}
+        </Button>
+        <Button size='icon' variant='outline' onClick={() => setMessages([])}>
+          <LucideTrash2 />
+          <span className='sr-only'>clear chat</span>
         </Button>
       </form>
     </div>

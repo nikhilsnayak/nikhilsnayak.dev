@@ -23,7 +23,7 @@ export default function BotPage() {
             <AvatarImage alt='zoro' src={zoro.src} fetchPriority='high' />
             <AvatarFallback>Z</AvatarFallback>
           </Avatar>
-          <h1 className='bg-gradient-to-tr from-green-900 to-green-100 bg-clip-text text-2xl font-bold italic text-transparent sm:text-3xl'>
+          <h1 className='bg-gradient-to-tr from-green-900 to-green-200 bg-clip-text text-2xl font-bold italic text-transparent sm:text-3xl'>
             Zoro
           </h1>
         </div>

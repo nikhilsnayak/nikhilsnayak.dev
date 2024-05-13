@@ -9,7 +9,6 @@ import { createClient } from '@supabase/supabase-js';
 import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { RedisCache } from '@langchain/community/caches/ioredis';
 import { getIp } from '@/lib/server/utils';
 import { env } from '@/config/env';
 
@@ -94,16 +93,11 @@ export async function POST(req: Request) {
     const previousMessages = messages.slice(0, -1);
     const currentMessageContent = messages[messages.length - 1].content;
 
-    const cache = new RedisCache({
-      client: kv,
-    });
-
     const model = new ChatOpenAI({
       model: 'gpt-3.5-turbo',
       temperature: 0,
       streaming: true,
       verbose: true,
-      cache,
     });
 
     const client = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);

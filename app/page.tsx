@@ -20,12 +20,6 @@ import {
   TsIcon,
   TailwindIcon,
 } from '@/assets/icons';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Home',
-  description: 'Find the information of about me here',
-};
 
 const skillsIcons = [
   HtmlIcon,
@@ -53,7 +47,7 @@ const sourceCodePro = Source_Code_Pro({
 
 function Gallery() {
   return (
-    <div id='gallery'>
+    <section>
       <h3 className='mb-[0.5em] text-2xl font-bold sm:text-4xl'>Gallery :</h3>
       <ul className='flex flex-wrap items-center gap-8'>
         {images.map((image, index) => (
@@ -77,13 +71,13 @@ function Gallery() {
           </li>
         ))}
       </ul>
-    </div>
+    </section>
   );
 }
 
 function Skills() {
   return (
-    <div id='skills'>
+    <section>
       <h3 className='mb-[0.5em] text-2xl font-bold sm:text-4xl'>Skills :</h3>
       <ul className='flex flex-wrap items-center gap-8'>
         {skillsIcons.map((Icon, index) => (
@@ -92,7 +86,7 @@ function Skills() {
           </li>
         ))}
       </ul>
-    </div>
+    </section>
   );
 }
 
