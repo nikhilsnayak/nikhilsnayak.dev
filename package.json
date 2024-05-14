@@ -13,7 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@langchain/community": "^0.0.56",
+    "@langchain/community": "^0.0.57",
     "@langchain/openai": "^0.0.29",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
