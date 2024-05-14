@@ -99,7 +99,7 @@ export function Chat() {
           onChange={handleInputChange}
           disabled={isLoading}
         />
-        <Button disabled={isLoading} size='sm' className='w-1/5'>
+        <Button disabled={isLoading} size='sm' className='w-1/5 text-xs'>
           {isLoading ? <LoadingSpinner /> : 'Ask Zoro'}
         </Button>
         <Button size='icon' variant='outline' onClick={() => setMessages([])}>

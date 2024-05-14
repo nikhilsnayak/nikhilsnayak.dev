@@ -96,7 +96,7 @@ function Skills() {
 
 export default function HomePage() {
   return (
-    <section className='space-y-8'>
+    <section className='space-y-20'>
       <header className='relative'>
         <h1 className='mb-[0.25em] text-5xl font-light sm:text-7xl'>
           Hi, I am <strong className='block font-extrabold'>Nikhil S</strong>
@@ -118,7 +118,7 @@ export default function HomePage() {
         />
       </header>
       <section className='space-y-8'>
-        <h2 className='mb-[0.25em] font-mono text-5xl font-bold after:block after:h-[2px] after:w-full after:bg-current dark:text-fluorescent after:dark:bg-fluorescent sm:text-7xl'>
+        <h2 className='mb-[0.25em] font-mono text-3xl font-bold after:block after:h-[2px] after:w-full after:bg-current dark:text-fluorescent after:dark:bg-fluorescent sm:text-5xl'>
           Get to Know Me
         </h2>
         <p className='text-lg sm:text-xl'>

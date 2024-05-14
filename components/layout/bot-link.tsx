@@ -12,8 +12,8 @@ export function BotLink() {
     <Link
       href='/bot'
       className={cn(
-        'inline-block rounded-full',
-        path === '/bot' && 'ring ring-green-500'
+        'hover inline-block rounded-full ring ring-transparent transition-all hover:ring-green-200',
+        path === '/bot' && 'ring-green-500'
       )}
     >
       <Image src={zoro} alt='bot-icon' className='h-10 w-auto' priority />

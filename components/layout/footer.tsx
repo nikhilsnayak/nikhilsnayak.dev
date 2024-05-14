@@ -5,7 +5,7 @@ export function Footer() {
     <footer className='grid place-items-center gap-4 px-2 py-4'>
       <a
         href='mailto:nikhilsnayak3473@gmail.com'
-        className='font-bold hover:underline hover:opacity-70 dark:text-fluorescent'
+        className='font-mono font-bold italic hover:underline hover:opacity-70 dark:text-fluorescent'
       >
         nikhilsnayak3473@gmail.com
       </a>
