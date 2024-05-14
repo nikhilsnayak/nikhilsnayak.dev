@@ -48,7 +48,9 @@ const sourceCodePro = Source_Code_Pro({
 function Gallery() {
   return (
     <section>
-      <h3 className='mb-[0.5em] text-2xl font-bold sm:text-4xl'>Gallery :</h3>
+      <h3 className='mb-[0.5em] font-mono text-2xl font-bold sm:text-4xl'>
+        Gallery:
+      </h3>
       <ul className='flex flex-wrap items-center gap-8'>
         {images.map((image, index) => (
           <li className='max-w-[450px]' key={index}>
@@ -78,7 +80,9 @@ function Gallery() {
 function Skills() {
   return (
     <section>
-      <h3 className='mb-[0.5em] text-2xl font-bold sm:text-4xl'>Skills :</h3>
+      <h3 className='mb-[0.5em] font-mono text-2xl font-bold sm:text-4xl'>
+        Skills:
+      </h3>
       <ul className='flex flex-wrap items-center gap-8'>
         {skillsIcons.map((Icon, index) => (
           <li className='h-8 w-8 sm:h-12 sm:w-12' key={index}>
@@ -114,7 +118,7 @@ export default function HomePage() {
         />
       </header>
       <section className='space-y-8'>
-        <h2 className='mb-[0.25em] text-5xl font-bold after:block after:h-[2px] after:w-full after:bg-current dark:text-fluorescent after:dark:bg-fluorescent sm:text-7xl'>
+        <h2 className='mb-[0.25em] font-mono text-5xl font-bold after:block after:h-[2px] after:w-full after:bg-current dark:text-fluorescent after:dark:bg-fluorescent sm:text-7xl'>
           Get to Know Me
         </h2>
         <p className='text-lg sm:text-xl'>

@@ -77,6 +77,8 @@ const config = {
       },
       fontFamily: {
         poppins: ['var(--font-poppins)'],
+        mono: ['var(--font-geist-mono)'],
+        sans: ['var(--font-geist-sans)'],
       },
     },
   },

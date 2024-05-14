@@ -14,7 +14,7 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
       {...props}
       href={href}
       className={cn(
-        'bg-transparent after:block after:h-[2px] after:w-full',
+        'font-semibold after:block after:h-[2px] after:w-full after:bg-transparent',
         path === href && 'after:bg-current after:dark:bg-fluorescent',
         className
       )}

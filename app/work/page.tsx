@@ -11,7 +11,9 @@ export default function WorkPage() {
   return (
     <section>
       <header>
-        <h1 className='mb-6 text-2xl font-medium tracking-tighter'>My Work</h1>
+        <h1 className='mb-6 font-mono text-2xl font-medium tracking-tighter'>
+          My Work
+        </h1>
         <p>
           On a mission to build user centric software solutions and along the
           way share my learnings with the community
@@ -19,7 +21,7 @@ export default function WorkPage() {
       </header>
       <hr className='my-6 border-foreground/20' />
       <section>
-        <h2 className='mb-1 inline-block text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
+        <h2 className='mb-1 inline-block font-mono text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
           <a
             href='https://www.codecrafttech.com/'
             target='_blank'
@@ -30,8 +32,8 @@ export default function WorkPage() {
             CodeCraft Technologies <ArrowIcon />
           </a>
         </h2>
-        <p className='mb-4 text-sm text-muted-foreground'>
-          Trainee Engineer - Software Development
+        <p className='mb-4 break-words text-sm text-muted-foreground'>
+          Trainee Engineer - Software Development (Aug 2023 - Present)
         </p>
         <p className='my-4'>
           CodeCraft is an award-winning creative engineering company where

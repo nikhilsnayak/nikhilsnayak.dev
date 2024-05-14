@@ -17,16 +17,14 @@ export const metadata: Metadata = {
 export default function BotPage() {
   return (
     <section className='space-y-4'>
-      <header className='flex items-center'>
-        <div className='flex items-center gap-3'>
-          <Avatar className='ring ring-green-500 sm:h-12 sm:w-12'>
-            <AvatarImage alt='zoro' src={zoro.src} fetchPriority='high' />
-            <AvatarFallback>Z</AvatarFallback>
-          </Avatar>
-          <h1 className='bg-gradient-to-tr from-green-900 to-green-200 bg-clip-text text-2xl font-bold italic text-transparent sm:text-3xl'>
-            Zoro
-          </h1>
-        </div>
+      <header className='flex items-center gap-3'>
+        <Avatar className='ring ring-green-500 sm:h-12 sm:w-12'>
+          <AvatarImage alt='zoro' src={zoro.src} fetchPriority='high' />
+          <AvatarFallback>Z</AvatarFallback>
+        </Avatar>
+        <h1 className='animate-pulse bg-gradient-to-tr from-green-900 to-green-200 bg-clip-text font-mono text-2xl font-bold italic text-transparent sm:text-3xl'>
+          Zoro
+        </h1>
       </header>
       <Chat />
     </section>
