@@ -1,6 +1,6 @@
+import type { Metadata } from 'next';
 import { ArrowIcon, NestIcon, NextIcon, ReactIcon } from '@/assets/icons';
 import { Badge } from '@/components/ui/badge';
-import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Work',
@@ -32,7 +32,7 @@ export default function WorkPage() {
             CodeCraft Technologies <ArrowIcon />
           </a>
         </h2>
-        <p className='mb-4 break-words text-sm text-muted-foreground'>
+        <p className='mb-4 text-sm text-muted-foreground'>
           Trainee Engineer - Software Development (Aug 2023 - Present)
         </p>
         <p className='my-4'>

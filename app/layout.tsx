@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from '@/providers/theme-provider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
+import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from '@/providers/theme-provider';
 import { cn } from '@/lib/utils';
 import './globals.css';
 

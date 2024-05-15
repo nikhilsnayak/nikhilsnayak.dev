@@ -1,7 +1,7 @@
+import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { zoro } from '@/assets/images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import { ChatSkeleton } from './chat-skeleton';
 
 const Chat = dynamic(() => import('./chat').then(({ Chat }) => Chat), {

@@ -1,14 +1,13 @@
 import Image from 'next/image';
-import { profile } from '@/assets/images';
 import { Source_Code_Pro } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import { gImage1 } from '@/assets/images';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { gImage1, profile } from '@/assets/images';
 import {
   HtmlIcon,
   CssIcon,
