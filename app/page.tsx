@@ -9,27 +9,27 @@ import {
 } from '@/components/ui/tooltip';
 import { gImage1, profile } from '@/assets/images';
 import {
-  HtmlIcon,
-  CssIcon,
-  JsIcon,
-  ReactIcon,
-  NextIcon,
-  NodeJsIcon,
-  NestIcon,
-  TsIcon,
-  TailwindIcon,
-} from '@/assets/icons';
+  SiHtml5,
+  SiCss3,
+  SiTailwindcss,
+  SiJavascript,
+  SiTypescript,
+  SiReact,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiNestjs,
+} from '@icons-pack/react-simple-icons';
 
 const skillsIcons = [
-  HtmlIcon,
-  CssIcon,
-  TailwindIcon,
-  JsIcon,
-  TsIcon,
-  ReactIcon,
-  NextIcon,
-  NodeJsIcon,
-  NestIcon,
+  SiHtml5,
+  SiCss3,
+  SiTailwindcss,
+  SiJavascript,
+  SiTypescript,
+  SiReact,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiNestjs,
 ];
 
 const images = [
@@ -84,8 +84,8 @@ function Skills() {
       </h3>
       <ul className='flex flex-wrap items-center gap-8'>
         {skillsIcons.map((Icon, index) => (
-          <li className='h-8 w-8 sm:h-12 sm:w-12' key={index}>
-            <Icon />
+          <li className='h-6 w-6 sm:h-10 sm:w-10' key={index}>
+            <Icon width='100%' height='100%' />
           </li>
         ))}
       </ul>

@@ -1,4 +1,9 @@
-import { Github, Linkedin, Instagram, Twitter } from 'lucide-react';
+import {
+  SiGithub,
+  SiLinkedin,
+  SiInstagram,
+  SiX,
+} from '@icons-pack/react-simple-icons';
 
 export function Footer() {
   return (
@@ -18,7 +23,7 @@ export function Footer() {
             rel='noopener noreferrer'
             aria-label='twitter'
           >
-            <Twitter />
+            <SiX />
           </a>
         </li>
         <li className='hover:opacity-70'>
@@ -29,7 +34,7 @@ export function Footer() {
             rel='noopener noreferrer'
             aria-label='github'
           >
-            <Github />
+            <SiGithub />
           </a>
         </li>
         <li className='hover:opacity-70'>
@@ -40,7 +45,7 @@ export function Footer() {
             rel='noopener noreferrer'
             aria-label='linkedin'
           >
-            <Linkedin />
+            <SiLinkedin />
           </a>
         </li>
         <li className='hover:opacity-70'>
@@ -51,7 +56,7 @@ export function Footer() {
             rel='noopener noreferrer'
             aria-label='instagram'
           >
-            <Instagram />
+            <SiInstagram />
           </a>
         </li>
       </ul>

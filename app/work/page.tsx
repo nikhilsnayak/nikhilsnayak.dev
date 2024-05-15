@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { ArrowIcon, NestIcon, NextIcon, ReactIcon } from '@/assets/icons';
 import { Badge } from '@/components/ui/badge';
+import { SiReact, SiNextdotjs, SiNestjs } from '@icons-pack/react-simple-icons';
+import { ArrowUpRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Work',
@@ -29,7 +30,7 @@ export default function WorkPage() {
             aria-label='codecraft technologies'
             className='flex items-center gap-2 transition-all'
           >
-            CodeCraft Technologies <ArrowIcon />
+            CodeCraft Technologies <ArrowUpRight className='w-4' />
           </a>
         </h2>
         <p className='mb-4 text-sm text-muted-foreground'>
@@ -40,8 +41,11 @@ export default function WorkPage() {
           super-talented designers and engineers work closely and bring to life,
           user-focused solutions.
         </p>
-        <p className='my-4'>
-          At CodeCraft I contribute to projects using modern frameworks such as
+        <p className='my-4 *:align-middle'>
+          <span>
+            At CodeCraft I contribute to projects using modern frameworks such
+            as
+          </span>
           <Badge className='mx-1' variant={'secondary'} asChild>
             <a
               href='https://react.dev'
@@ -50,9 +54,9 @@ export default function WorkPage() {
               aria-label='react'
               className='flex items-center gap-1 transition-all'
             >
-              <ReactIcon className='w-3' />
+              <SiReact className='w-3' />
               React
-              <ArrowIcon />
+              <ArrowUpRight className='w-4' />
             </a>
           </Badge>
           <Badge className='mx-1' variant={'secondary'} asChild>
@@ -63,9 +67,9 @@ export default function WorkPage() {
               aria-label='nextjs'
               className='flex items-center gap-1 transition-all'
             >
-              <NextIcon className='w-4' />
+              <SiNextdotjs className='w-4' />
               Next.js
-              <ArrowIcon />
+              <ArrowUpRight className='w-4' />
             </a>
           </Badge>
           <Badge className='mx-1' variant={'secondary'} asChild>
@@ -76,12 +80,12 @@ export default function WorkPage() {
               aria-label='nestjs'
               className='flex items-center gap-1 transition-all'
             >
-              <NestIcon className='w-4' />
+              <SiNestjs className='w-4' />
               Nest.js
-              <ArrowIcon />
+              <ArrowUpRight className='w-4' />
             </a>
           </Badge>
-          to build rich and interactive user experience
+          <span>to build rich and interactive user experience </span>
         </p>
       </section>
     </section>

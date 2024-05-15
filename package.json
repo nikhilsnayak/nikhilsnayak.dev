@@ -13,6 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@icons-pack/react-simple-icons": "^9.5.0",
     "@langchain/community": "^0.0.57",
     "@langchain/openai": "^0.0.29",
     "@radix-ui/react-avatar": "^1.0.4",
