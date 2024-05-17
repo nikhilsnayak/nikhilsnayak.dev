@@ -2,7 +2,7 @@
 <h3 align="center">A passionate software Engineer from India</h3>
 
 - 📫 How to reach me **nikhilsnayak3473@gmail.com**
-- 👨‍💻 Visit my portfolio @ [nikhilsnayak3.vercel.app](https://nikhilsnayak.vercel.app)
+- 👨‍💻 Visit my portfolio @ [nikhilsnayak.vercel.app](https://nikhilsnayak.vercel.app)
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
