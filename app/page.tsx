@@ -20,17 +20,44 @@ import {
   SiNestjs,
 } from '@icons-pack/react-simple-icons';
 
-const skillsIcons = [
-  SiHtml5,
-  SiCss3,
-  SiTailwindcss,
-  SiJavascript,
-  SiTypescript,
-  SiReact,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiNestjs,
-];
+const skills = [
+  {
+    name: 'HTML5',
+    Icon: SiHtml5,
+  },
+  {
+    name: 'CSS3',
+    Icon: SiCss3,
+  },
+  {
+    name: 'Tailwind CSS',
+    Icon: SiTailwindcss,
+  },
+  {
+    name: 'JavaScript',
+    Icon: SiJavascript,
+  },
+  {
+    name: 'TypeScript',
+    Icon: SiTypescript,
+  },
+  {
+    name: 'React',
+    Icon: SiReact,
+  },
+  {
+    name: 'Next.js',
+    Icon: SiNextdotjs,
+  },
+  {
+    name: 'Node.js',
+    Icon: SiNodedotjs,
+  },
+  {
+    name: 'Nestjs',
+    Icon: SiNestjs,
+  },
+] as const;
 
 const images = [
   {
@@ -83,9 +110,9 @@ function Skills() {
         Skills:
       </h3>
       <ul className='flex flex-wrap items-center gap-8'>
-        {skillsIcons.map((Icon, index) => (
-          <li className='h-6 w-6 sm:h-10 sm:w-10' key={index}>
-            <Icon width='100%' height='100%' />
+        {skills.map(({ Icon, name }) => (
+          <li className='h-6 w-6 sm:h-10 sm:w-10' key={name}>
+            <Icon width='100%' height='100%' aria-label={name} />
           </li>
         ))}
       </ul>
