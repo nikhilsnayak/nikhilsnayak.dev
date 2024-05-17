@@ -12,16 +12,16 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Nikhil S - nikhilsnayak3473',
-    template: '%s | Nikhil S - nikhilsnayak3473',
+    default: 'Nikhil S - nikhilsnayak',
+    template: '%s | Nikhil S - nikhilsnayak',
   },
   description: 'Software Engineer from India',
-  metadataBase: new URL('https://nikhilsnayak3473.vercel.app'),
+  metadataBase: new URL('https://nikhilsnayak.vercel.app'),
   openGraph: {
-    title: 'Nikhil S - nikhilsnayak3473',
+    title: 'Nikhil S - nikhilsnayak',
     description: 'Software Engineer from India',
-    url: 'https://nikhilsnayak3473.vercel.app',
-    siteName: 'Nikhil S - nikhilsnayak3473',
+    url: 'https://nikhilsnayak.vercel.app',
+    siteName: 'Nikhil S - nikhilsnayak',
     locale: 'en_US',
     type: 'website',
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: 'Nikhil S - nikhilsnayak3473',
+    title: 'Nikhil S - nikhilsnayak',
     card: 'summary_large_image',
   },
   verification: {
