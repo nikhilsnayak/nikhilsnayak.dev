@@ -15,68 +15,64 @@ function trimPageContent(doc: DocumentInterface) {
     .trim();
 }
 
-async function generateEmbeddings() {
-  const client = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!
-  );
+const client = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
+);
 
-  await client.from('documents').delete().neq('id', 0);
+await client.from('documents').delete().neq('id', 0);
 
-  const embeddings = new OpenAIEmbeddings();
+const embeddings = new OpenAIEmbeddings();
 
-  const store = new SupabaseVectorStore(embeddings, {
-    client,
-    tableName: 'documents',
+const store = new SupabaseVectorStore(embeddings, {
+  client,
+  tableName: 'documents',
+});
+
+const pagesLoader = new DirectoryLoader(
+  './app/',
+  {
+    '.tsx': (path) => new TextLoader(path),
+  },
+  true
+);
+
+const layoutLoader = new DirectoryLoader(
+  './components/layout/',
+  {
+    '.tsx': (path) => new TextLoader(path),
+  },
+  true
+);
+
+const pageContent = (await pagesLoader.load())
+  .filter((doc) => doc.metadata.source.endsWith('page.tsx'))
+  .map((doc): DocumentInterface => {
+    const url =
+      doc.metadata.source
+        .replace(/\\/g, '/')
+        .split('/app')[1]
+        .split('/page.')[0] || '/';
+
+    return {
+      pageContent: trimPageContent(doc),
+      metadata: { url },
+    };
   });
 
-  const pagesLoader = new DirectoryLoader(
-    './app/',
-    {
-      '.tsx': (path) => new TextLoader(path),
-    },
-    true
-  );
+const layoutContent = (await layoutLoader.load()).map(
+  (doc): DocumentInterface => {
+    return {
+      ...doc,
+      pageContent: trimPageContent(doc),
+    };
+  }
+);
 
-  const layoutLoader = new DirectoryLoader(
-    './components/layout/',
-    {
-      '.tsx': (path) => new TextLoader(path),
-    },
-    true
-  );
+const docs = [...layoutContent, ...pageContent];
 
-  const pageContent = (await pagesLoader.load())
-    .filter((doc) => doc.metadata.source.endsWith('page.tsx'))
-    .map((doc): DocumentInterface => {
-      const url =
-        doc.metadata.source
-          .replace(/\\/g, '/')
-          .split('/app')[1]
-          .split('/page.')[0] || '/';
+const splitter = RecursiveCharacterTextSplitter.fromLanguage('html');
 
-      return {
-        pageContent: trimPageContent(doc),
-        metadata: { url },
-      };
-    });
+const splitDocs = await splitter.splitDocuments(docs);
 
-  const layoutContent = (await layoutLoader.load()).map(
-    (doc): DocumentInterface => {
-      return {
-        ...doc,
-        pageContent: trimPageContent(doc),
-      };
-    }
-  );
-
-  const docs = [...layoutContent, ...pageContent];
-
-  const splitter = RecursiveCharacterTextSplitter.fromLanguage('html');
-
-  const splitDocs = await splitter.splitDocuments(docs);
-
-  await store.addDocuments(splitDocs);
-}
-
-generateEmbeddings();
+await store.addDocuments(splitDocs);
