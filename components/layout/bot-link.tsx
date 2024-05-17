@@ -13,11 +13,11 @@ export function BotLink() {
     <Link
       href='/bot'
       className={cn(
-        'hover inline-block rounded-full ring ring-transparent transition-all',
+        'hover inline-block rounded-full ring-2 ring-transparent transition-all',
         path === '/bot' && 'ring-green-500'
       )}
     >
-      <Image src={zoro} alt='bot-icon' className='h-10 w-auto' priority />
+      <Image src={zoro} alt='bot-icon' className='h-8 w-auto' priority />
     </Link>
   );
 }
