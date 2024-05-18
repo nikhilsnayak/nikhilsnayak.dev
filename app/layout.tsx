@@ -12,16 +12,16 @@ import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Nikhil S - nikhilsnayak',
-    template: '%s | Nikhil S - nikhilsnayak',
+    default: 'Nikhil S',
+    template: '%s | Nikhil S',
   },
   description: 'Software Engineer from India',
-  metadataBase: new URL('https://nikhilsnayak.dev'),
+  metadataBase: new URL('https://www.nikhilsnayak.dev'),
   openGraph: {
-    title: 'Nikhil S - nikhilsnayak',
+    title: 'Nikhil S',
     description: 'Software Engineer from India',
-    url: 'https://nikhilsnayak.dev',
-    siteName: 'Nikhil S - nikhilsnayak',
+    url: 'https://www.nikhilsnayak.dev',
+    siteName: 'Nikhil S',
     locale: 'en_US',
     type: 'website',
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: 'Nikhil S - nikhilsnayak',
+    title: 'Nikhil S',
     card: 'summary_large_image',
   },
 };

@@ -5,7 +5,7 @@ export default function robots() {
         userAgent: '*',
       },
     ],
-    sitemap: 'https://nikhilsnayak.dev/sitemap.xml',
-    host: 'https://nikhilsnayak.dev',
+    sitemap: 'https://www.nikhilsnayak.dev/sitemap.xml',
+    host: 'https://www.nikhilsnayak.dev',
   };
 }

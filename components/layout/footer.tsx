@@ -34,7 +34,7 @@ export function Footer() {
         </li>
         <li className='hover:opacity-70'>
           <a
-            href='https://github.com/nikhilsnayak3473'
+            href='https://github.com/nikhilsnayak'
             className='dark:text-fluorescent'
             target='_blank'
             rel='noopener noreferrer'
@@ -45,7 +45,7 @@ export function Footer() {
         </li>
         <li className='hover:opacity-70'>
           <a
-            href='https://linkedin.com/in/nikhilsnayak3473'
+            href='https://linkedin.com/in/nikhilsnayak'
             className='dark:text-fluorescent'
             target='_blank'
             rel='noopener noreferrer'
