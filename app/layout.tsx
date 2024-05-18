@@ -1,3 +1,4 @@
+import './globals.css';
 import type { Metadata } from 'next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
@@ -8,7 +9,6 @@ import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { cn } from '@/lib/utils';
-import './globals.css';
 
 export const metadata: Metadata = {
   title: {
@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     template: '%s | Nikhil S - nikhilsnayak',
   },
   description: 'Software Engineer from India',
-  metadataBase: new URL('https://nikhilsnayak.vercel.app'),
+  metadataBase: new URL('https://nikhilsnayak.dev'),
   openGraph: {
     title: 'Nikhil S - nikhilsnayak',
     description: 'Software Engineer from India',
-    url: 'https://nikhilsnayak.vercel.app',
+    url: 'https://nikhilsnayak.dev',
     siteName: 'Nikhil S - nikhilsnayak',
     locale: 'en_US',
     type: 'website',
@@ -39,9 +39,6 @@ export const metadata: Metadata = {
   twitter: {
     title: 'Nikhil S - nikhilsnayak',
     card: 'summary_large_image',
-  },
-  verification: {
-    google: 'Ako36nekKPve0mWwGE-aLy1f_0bPXoqbK2sQhoAitEg',
   },
 };
 
