@@ -54,7 +54,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
+    "eslint": "^9",
     "eslint-config-next": "14.2.3",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.11",
