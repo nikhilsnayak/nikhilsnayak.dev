@@ -19,8 +19,8 @@ This application requires Node.js v18.17+.
 Create a `.env.local` file similar to [`.env.example`](./.env.example).
 
 ```bash
-git clone https://github.com/nikhilsnayak/nikhilsnayak.dev.git
-cd nikhilsnayak.dev
+git clone https://github.com/nikhilsnayak/nikhilsnayak.dev.git <name-of-your-repo>
+cd <name-of-your-repo>
 bun install
 bun run dev
 ```
