@@ -3,7 +3,7 @@ name: SYNC
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   sync:

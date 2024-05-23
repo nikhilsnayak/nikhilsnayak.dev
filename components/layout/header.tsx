@@ -14,6 +14,9 @@ export function Header() {
             <li>
               <NavLink href='/work'>Work</NavLink>
             </li>
+            <li>
+              <NavLink href='/blogs'>Blogs</NavLink>
+            </li>
           </ul>
           <ul>
             <li className='grid place-items-center'>
