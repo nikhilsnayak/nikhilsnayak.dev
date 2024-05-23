@@ -25,17 +25,13 @@ export function ChatSkeleton() {
         </div>
       </div>
       <form className='flex items-center gap-3'>
-        <Input
-          className=''
-          placeholder='Type your message...'
-          type='text'
-          disabled
-        />
-        <Button size='sm' className='w-1/5' disabled>
+        <Input placeholder='Type your message...' type='text' disabled />
+        <Button size='sm' className='w-1/5 text-xs' disabled>
           Ask Zoro
         </Button>
         <Button size='icon' variant='outline'>
           <LucideTrash2 />
+          <span className='sr-only'>clear chat</span>
         </Button>
       </form>
     </div>

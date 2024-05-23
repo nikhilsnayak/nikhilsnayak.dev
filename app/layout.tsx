@@ -59,7 +59,7 @@ export default function RootLayout({
           <Toaster />
           <div className='flex min-h-dvh flex-col justify-between gap-4'>
             <Header />
-            <main className='mx-auto w-full max-w-screen-lg px-4 py-2'>
+            <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
               {children}
             </main>
             <Footer />

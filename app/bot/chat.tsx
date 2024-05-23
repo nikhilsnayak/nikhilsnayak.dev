@@ -92,7 +92,6 @@ export function Chat() {
       </div>
       <form className='flex items-center gap-3' onSubmit={handleSubmit}>
         <Input
-          className=''
           placeholder='Type your message...'
           type='text'
           value={input}

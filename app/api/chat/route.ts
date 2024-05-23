@@ -9,7 +9,7 @@ import { createClient } from '@supabase/supabase-js';
 import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { getIp } from '@/lib/server/utils';
+import { getIp } from '@/lib/utils/server';
 import { env } from '@/config/env';
 
 export const dynamic = 'force-dynamic';
