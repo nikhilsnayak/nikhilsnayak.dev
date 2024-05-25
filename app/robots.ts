@@ -1,3 +1,5 @@
+import { BASE_URL } from '@/config/constants';
+
 export default function robots() {
   return {
     rules: [
@@ -5,7 +7,6 @@ export default function robots() {
         userAgent: '*',
       },
     ],
-    sitemap: 'https://www.nikhilsnayak.dev/sitemap.xml',
-    host: 'https://www.nikhilsnayak.dev',
+    sitemap: `${BASE_URL}/sitemap`,
   };
 }

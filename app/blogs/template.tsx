@@ -53,9 +53,9 @@ export default function BlogsTemplate({
   const items = getBreadCrumbItems(path);
 
   return (
-    <>
+    <div className='space-y-4'>
       {items.length > 1 ? <Breadcrumb items={items} /> : null}
       {children}
-    </>
+    </div>
   );
 }
