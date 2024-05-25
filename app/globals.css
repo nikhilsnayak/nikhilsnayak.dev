@@ -35,6 +35,16 @@
     --radius: 0.5rem;
 
     --fluorescent: #2feeee;
+
+    --sh-class: #70aeff;
+    --sh-identifier: #d6e8ff;
+    --sh-sign: #8996a3;
+    --sh-property: #0acef1;
+    --sh-entity: #249a97;
+    --sh-jsxliterals: #9599ff;
+    --sh-string: #00a99a;
+    --sh-keyword: #ff867e;
+    --sh-comment: #a19595;
   }
 
   .dark {
@@ -83,8 +93,33 @@
 
 html {
   scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+.prose .anchor {
+  @apply invisible absolute no-underline;
+
+  margin-left: -1em;
+  padding-right: 0.5em;
+  width: 80%;
+  max-width: 700px;
+  cursor: pointer;
+}
+
+.anchor:hover {
+  @apply visible;
+}
+
+.prose .anchor:after {
+  @apply text-neutral-300 dark:text-neutral-700;
+  content: '#';
+}
+
+.prose *:hover > .anchor {
+  @apply visible;
 }

@@ -11,7 +11,9 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 const DOCUMENT_TABLE = 'documents';
 const APP_DIR = './app/';
 const LAYOUT_DIR = './components/layout/';
+const BLOGS_DIR = './content';
 const TSX_EXTENSION = '.tsx';
+const MDX_EXTENSION = '.mdx';
 
 function trimPageContent(doc: DocumentInterface) {
   return doc.pageContent
@@ -36,7 +38,10 @@ const store = new SupabaseVectorStore(embeddings, {
 const loadDocuments = async (directory: string) => {
   const loader = new DirectoryLoader(
     directory,
-    { [TSX_EXTENSION]: (path) => new TextLoader(path) },
+    {
+      [TSX_EXTENSION]: (path) => new TextLoader(path),
+      [MDX_EXTENSION]: (path) => new TextLoader(path),
+    },
     true
   );
   return loader.load();
@@ -44,6 +49,7 @@ const loadDocuments = async (directory: string) => {
 
 const pages = await loadDocuments(APP_DIR);
 const layouts = await loadDocuments(LAYOUT_DIR);
+const blogs = await loadDocuments(BLOGS_DIR);
 
 const pageContent = pages
   .filter((doc) => doc.metadata.source.endsWith('page.tsx'))
@@ -67,9 +73,25 @@ const layoutContent = layouts.map(
   })
 );
 
+const blogsContent = blogs.map((doc): DocumentInterface => {
+  const url = `https://nikhilsnayak.dev/blogs${doc.metadata.source
+    .replace(/\\/g, '/')
+    .split('/content')[1]
+    .replace('.mdx', '')}`;
+
+  return {
+    pageContent: trimPageContent(doc),
+    metadata: { url },
+  };
+});
+
 const docs = [...layoutContent, ...pageContent];
 
-const splitter = RecursiveCharacterTextSplitter.fromLanguage('html');
-const splitDocs = await splitter.splitDocuments(docs);
+const htmlSplitter = RecursiveCharacterTextSplitter.fromLanguage('html');
+const splitDocs = await htmlSplitter.splitDocuments(docs);
 
-await store.addDocuments(splitDocs);
+const markdownSplitter =
+  RecursiveCharacterTextSplitter.fromLanguage('markdown');
+const splitBlogs = await markdownSplitter.splitDocuments(blogsContent);
+
+await store.addDocuments([...splitDocs, ...splitBlogs]);

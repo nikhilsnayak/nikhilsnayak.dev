@@ -42,6 +42,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
+  transpilePackages: ['next-mdx-remote'],
+
   experimental: {
     turbo: {
       rules: {

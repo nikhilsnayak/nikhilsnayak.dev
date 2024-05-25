@@ -4,6 +4,7 @@ import {
   SiInstagram,
   SiX,
   SiGmail,
+  SiRss,
 } from '@icons-pack/react-simple-icons';
 
 export function Footer() {
@@ -63,6 +64,17 @@ export function Footer() {
             aria-label='instagram'
           >
             <SiInstagram />
+          </a>
+        </li>
+        <li className='hover:opacity-70'>
+          <a
+            href='/api/rss'
+            className='dark:text-fluorescent'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='rss'
+          >
+            <SiRss />
           </a>
         </li>
       </ul>

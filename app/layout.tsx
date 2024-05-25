@@ -9,6 +9,7 @@ import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { cn } from '@/lib/utils';
+import { BASE_URL } from '@/config/constants';
 
 export const metadata: Metadata = {
   title: {
@@ -16,11 +17,11 @@ export const metadata: Metadata = {
     template: '%s | Nikhil S',
   },
   description: 'Software Engineer from India',
-  metadataBase: new URL('https://www.nikhilsnayak.dev'),
+  metadataBase: new URL(BASE_URL),
   openGraph: {
     title: 'Nikhil S',
     description: 'Software Engineer from India',
-    url: 'https://www.nikhilsnayak.dev',
+    url: BASE_URL,
     siteName: 'Nikhil S',
     locale: 'en_US',
     type: 'website',

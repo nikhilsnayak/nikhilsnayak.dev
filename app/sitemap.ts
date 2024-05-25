@@ -1,8 +1,15 @@
+import { BASE_URL } from '@/config/constants';
+import { getBlogPosts } from '@/lib/utils/blogs';
+
 export default async function sitemap() {
-  const routes = ['', '/work', '/bot'].map((route) => ({
-    url: `https://www.nikhilsnayak.dev${route}`,
+  const blogs = getBlogPosts().map((post) => ({
+    url: `${BASE_URL}/blogs/${post.slug}`,
+    lastModified: post.metadata.publishedAt,
+  }));
+  const routes = ['', '/work', '/bot', '/blogs'].map((route) => ({
+    url: `${BASE_URL}${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }));
 
-  return routes;
+  return [...routes, ...blogs];
 }
