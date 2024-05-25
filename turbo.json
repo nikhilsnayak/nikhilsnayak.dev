@@ -27,6 +27,7 @@
       "inputs": [
         "app/**/page.tsx",
         "components/layout/*.tsx",
+        "content/*.mdx",
         ".scripts/generate-embeddings.ts"
       ],
       "env": ["SUPABASE_URL", "SUPABASE_ANON_KEY", "OPENAI_API_KEY"]
