@@ -5,17 +5,17 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
 import { slugify } from '@/lib/utils';
 
-//@ts-expect-error
+//@ts-expect-error -- I am lazy to add types
 function Table({ data }) {
-  //@ts-expect-error
+  //@ts-expect-error -- I am lazy to add types
   const headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>
   ));
 
-  //@ts-expect-error
+  //@ts-expect-error -- I am lazy to add types
   const rows = data.rows.map((row, index) => (
     <tr key={index}>
-      {/* @ts-expect-error */}
+      {/* @ts-expect-error -- I am lazy to add types */}
       {row.map((cell, cellIndex) => (
         <td key={cellIndex}>{cell}</td>
       ))}
@@ -32,7 +32,7 @@ function Table({ data }) {
   );
 }
 
-//@ts-expect-error
+//@ts-expect-error -- I am lazy to add types
 function CustomLink(props) {
   const href = props.href;
 
