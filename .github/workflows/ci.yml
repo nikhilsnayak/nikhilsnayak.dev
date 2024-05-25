@@ -12,6 +12,9 @@ jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,6 +23,6 @@ jobs:
       - name: Install Dependencies
         run: bun install
       - name: Check Types
-        run: bun run check-types
+        run: bunx turbo type-check
       - name: Lint
-        run: bun run lint
+        run: bunx turbo lint
