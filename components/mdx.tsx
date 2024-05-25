@@ -5,17 +5,17 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
 import { slugify } from '@/lib/utils';
 
-//@ts-ignore
+//@ts-expect-error
 function Table({ data }) {
-  //@ts-ignore
+  //@ts-expect-error
   const headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>
   ));
 
-  //@ts-ignore
+  //@ts-expect-error
   const rows = data.rows.map((row, index) => (
     <tr key={index}>
-      {/* @ts-ignore */}
+      {/* @ts-expect-error */}
       {row.map((cell, cellIndex) => (
         <td key={cellIndex}>{cell}</td>
       ))}
@@ -32,7 +32,7 @@ function Table({ data }) {
   );
 }
 
-//@ts-ignore
+//@ts-expect-error
 function CustomLink(props) {
   const href = props.href;
 
