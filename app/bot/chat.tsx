@@ -1,12 +1,14 @@
 'use client';
+import type { Message } from 'ai';
+import { useEffect, useRef, useState } from 'react';
 import { useChat } from 'ai/react';
 import { toast } from 'sonner';
-import { useEffect, useRef } from 'react';
 import { LucideTrash2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/assets/icons';
+import Cookies from 'js-cookie';
 
 interface MessageProps {
   content: string;
@@ -32,7 +34,13 @@ function UserMessage({ content }: Readonly<MessageProps>) {
   );
 }
 
-export function Chat() {
+interface ChatProps {
+  initialMessages: Message[];
+}
+
+export function Chat({ initialMessages }: ChatProps) {
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [showSpinner, setShowSpinner] = useState(false);
   const {
     messages,
     input,
@@ -41,18 +49,21 @@ export function Chat() {
     isLoading,
     setMessages,
   } = useChat({
+    initialMessages,
     onError: (e) => {
-      toast(e.message);
+      toast.error(e.message);
+    },
+    onResponse: () => {
+      setShowSpinner(false);
     },
   });
-
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const scrollArea = scrollAreaRef.current;
     if (scrollArea) {
       scrollArea.scrollTop = scrollArea.scrollHeight;
     }
+    Cookies.set('messages', JSON.stringify(messages));
   }, [messages]);
 
   return (
@@ -71,11 +82,23 @@ export function Chat() {
                   <BotMessage key={id} content={content} />
                 )
               )}
+              {showSpinner ? <LoadingSpinner /> : null}
             </div>
           </div>
         </ScrollArea>
       </div>
-      <form className='flex items-center gap-3' onSubmit={handleSubmit}>
+      <form
+        className='flex items-center gap-3'
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (input.length < 5) {
+            toast.error('Message must be minimum 5 characters');
+          } else {
+            setShowSpinner(true);
+            handleSubmit(e);
+          }
+        }}
+      >
         <Input
           placeholder='Type your message...'
           type='text'
@@ -89,13 +112,14 @@ export function Chat() {
           className='w-1/5 text-xs'
           type='submit'
         >
-          {isLoading ? <LoadingSpinner /> : 'Ask Zoro'}
+          Ask Zoro
         </Button>
         <Button
           size='icon'
           variant='outline'
           onClick={() => setMessages([])}
           type='reset'
+          disabled={isLoading || messages.length < 1}
         >
           <LucideTrash2 />
           <span className='sr-only'>clear chat</span>
