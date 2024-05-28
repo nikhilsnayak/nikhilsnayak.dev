@@ -57,8 +57,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster />
-          <div className='flex min-h-dvh flex-col justify-between gap-4'>
+          <Toaster richColors />
+          <div className='flex min-h-dvh flex-col justify-between gap-8'>
             <Header />
             <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
               {children}

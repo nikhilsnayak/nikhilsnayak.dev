@@ -9,7 +9,7 @@ import {
 
 export function Footer() {
   return (
-    <footer className='grid place-items-center gap-4 px-2 py-4'>
+    <footer className='mb-8 grid place-items-center gap-4 px-2'>
       <ul className='flex items-center justify-center gap-4'>
         <li className='hover:opacity-70'>
           <a
