@@ -1,6 +1,7 @@
-import { formatDate, getBlogPosts } from '@/lib/utils/blogs';
-import { type Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
+import { getBlogPosts } from '@/lib/utils/server';
 
 export const metadata: Metadata = {
   title: 'Blogs',

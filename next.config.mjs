@@ -55,6 +55,8 @@ const nextConfig = {
     },
 
     reactCompiler: true,
+
+    ppr: true,
   },
 };
 

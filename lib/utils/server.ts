@@ -1,19 +1,55 @@
 import 'server-only';
+import fs from 'fs';
+import path from 'path';
 
-import { headers } from 'next/headers';
+type BlogMetadata = {
+  title: string;
+  publishedAt: string;
+  summary: string;
+  image?: string;
+};
 
-export function getIp() {
-  let ip = headers().get('x-forwarded-for');
+function parseFrontmatter(fileContent: string) {
+  const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
+  const match = frontmatterRegex.exec(fileContent);
+  const frontMatterBlock = match![1];
+  const content = fileContent.replace(frontmatterRegex, '').trim();
+  const frontMatterLines = frontMatterBlock.trim().split('\n');
+  const metadata: Partial<BlogMetadata> = {};
 
-  if (ip) {
-    return ip.split(',')[0].trim();
-  }
+  frontMatterLines.forEach((line) => {
+    const [key, ...valueArr] = line.split(': ');
+    let value = valueArr.join(': ').trim();
+    value = value.replace(/^['"](.*)['"]$/, '$1'); // Remove quotes
+    metadata[key.trim() as keyof BlogMetadata] = value;
+  });
 
-  ip = headers().get('x-real-ip');
+  return { metadata: metadata as BlogMetadata, content };
+}
 
-  if (ip) {
-    return ip;
-  }
+function getMDXFiles(dir: string) {
+  return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx');
+}
 
-  return headers().get('host');
+function readMDXFile(filePath: string) {
+  const rawContent = fs.readFileSync(filePath, 'utf-8');
+  return parseFrontmatter(rawContent);
+}
+
+function getMDXData(dir: string) {
+  const mdxFiles = getMDXFiles(dir);
+  return mdxFiles.map((file) => {
+    const { metadata, content } = readMDXFile(path.join(dir, file));
+    const slug = path.basename(file, path.extname(file));
+
+    return {
+      metadata,
+      slug,
+      content,
+    };
+  });
+}
+
+export function getBlogPosts() {
+  return getMDXData(path.join(process.cwd(), 'content'));
 }

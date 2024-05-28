@@ -1,6 +1,4 @@
-import { kv } from '@vercel/kv';
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
-import { Ratelimit } from '@upstash/ratelimit';
 import { LangChainAdapter, Message, StreamingTextResponse } from 'ai';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { Document } from '@langchain/core/documents';
@@ -9,7 +7,6 @@ import { createClient } from '@supabase/supabase-js';
 import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { getIp } from '@/lib/utils/server';
 import { env } from '@/config/env';
 
 export const dynamic = 'force-dynamic';
@@ -43,9 +40,7 @@ const condenseQuestionPrompt = PromptTemplate.fromTemplate(
 const ANSWER_TEMPLATE = `You are an AI Assistant called Roronova Zoro. You are the chat bot prensent on personal portfolio website and you answer questions only related to the portfolio.
 The name of the Owner of this Website is Nikhil S.
 
-Whenever it makes sense, provide links to pages that contain more information about the topic from the given context. If the question is out of context inform user accordingly.
-
-Format your messages in markdown format.
+If the question is out of context inform user accordingly. Format the response in plain text only.
 
 Answer the question based only on the following context and chat history:
 <context>
@@ -60,30 +55,8 @@ Question: {question}
 `;
 const answerPrompt = PromptTemplate.fromTemplate(ANSWER_TEMPLATE);
 
-const ratelimit = new Ratelimit({
-  redis: kv,
-  limiter: Ratelimit.fixedWindow(2, '1m'),
-});
-
 export async function POST(req: Request) {
   try {
-    const ip = getIp();
-
-    const { success, limit, reset, remaining } = await ratelimit.limit(
-      `ratelimit_${ip ?? 'anonymous'}`
-    );
-
-    if (!success) {
-      return new Response('You have reached your request limit for the day.', {
-        status: 429,
-        headers: {
-          'X-RateLimit-Limit': limit.toString(),
-          'X-RateLimit-Remaining': remaining.toString(),
-          'X-RateLimit-Reset': reset.toString(),
-        },
-      });
-    }
-
     const {
       messages,
     }: {

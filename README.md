@@ -8,7 +8,6 @@
 - **Database**: [Supabase](https://supabase.com/)
 - **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag)
 - **LLM**: [OpenAI](https://platform.openai.com/)
-- **Rate Limiting**: [Vercel KV](https://vercel.com/docs/storage/vercel-kv) and [Upstash Ratelimiter](https://github.com/upstash/ratelimit-js)
 - **Deployment**: [Vercel](https://vercel.com)
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
 
