@@ -1,6 +1,4 @@
-import { kv } from '@vercel/kv';
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
-import { Ratelimit } from '@upstash/ratelimit';
 import { LangChainAdapter, Message, StreamingTextResponse } from 'ai';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { Document } from '@langchain/core/documents';
@@ -9,7 +7,6 @@ import { createClient } from '@supabase/supabase-js';
 import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { getIp } from '@/lib/utils/server';
 import { env } from '@/config/env';
 
 export const dynamic = 'force-dynamic';
@@ -58,30 +55,8 @@ Question: {question}
 `;
 const answerPrompt = PromptTemplate.fromTemplate(ANSWER_TEMPLATE);
 
-const ratelimit = new Ratelimit({
-  redis: kv,
-  limiter: Ratelimit.fixedWindow(2, '1m'),
-});
-
 export async function POST(req: Request) {
   try {
-    const ip = getIp();
-
-    const { success, limit, reset, remaining } = await ratelimit.limit(
-      `ratelimit_${ip ?? 'anonymous'}`
-    );
-
-    if (!success) {
-      return new Response('You have reached your request limit for the day.', {
-        status: 429,
-        headers: {
-          'X-RateLimit-Limit': limit.toString(),
-          'X-RateLimit-Remaining': remaining.toString(),
-          'X-RateLimit-Reset': reset.toString(),
-        },
-      });
-    }
-
     const {
       messages,
     }: {
