@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { CustomMDX } from '@/components/mdx';
-import { formatDate, getBlogPosts } from '@/lib/utils/blogs';
+import { formatDate, getBlogPosts } from '@/lib/utils';
 import { BASE_URL } from '@/config/constants';
 
 interface BlogProps {
