@@ -4,6 +4,171 @@ publishedAt: '2024-04-08'
 summary: 'I am still testing this lazy to complete'
 ---
 
+## Prerequisites
+
+Before you start reading, I encourage you to check out the source code of my portfolio, which is available [here](https://github.com/nikhilsnayak/nikhilsnayak.dev). You might also want to take a look at the [package.json](https://github.com/nikhilsnayak/nikhilsnayak.dev/blob/main/package.json) file.
+
+## Let's Start
+
+I know what you're thinking:
+
+> Why has this person over-engineered a portfolio that has zero visitors?
+
+Stick around until the end, and hopefully, by the time you finish reading this post, you'll have the answer.
+
+I've often heard people say that building frontend applications is very easy. This is true to a certain extent. If your site doesn't need any interactions or beautiful animations, you can simply throw in some HTML along with basic CSS, and voilà, your website is ready.
+
+However, these days, websites are much more than static HTML documents. People spend most of their time on the internet, consuming a vast amount of information via the web. When someone visits your site, they should feel like it has life and offers a native experience. No one likes to wait 5-6 seconds after clicking a button to see something meaningful happen.
+
+## My Choice of Tech
+
+A glimpse of the benefits of the tech stack I used.
+
+![Speed Insights](/speed-insights.png)
+
+Here is a rundown of the technologies I chose for building my portfolio:
+
+- **Framework**: [Next.js](https://nextjs.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com)
+- **Components**: [Shadcn UI](https://ui.shadcn.com/)
+- **LLM**: [OpenAI](https://platform.openai.com/)
+- **Vector Store**: [Supabase](https://supabase.com/)
+- **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag)
+- **Database**: [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
+- **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
+- **Auth**: [Auth.js](https://authjs.dev/)
+- **Deployment**: [Vercel](https://vercel.com)
+- **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
+
+## Next.js
+
+I consider Next.js to be an ideal framework for anyone looking to build a portfolio, for several compelling reasons:
+
+### Built-in Support for SEO
+
+Next.js offers robust support for SEO, including the ability to generate **sitemap.xml**, **robots.txt**, **og:image**, and provides an intuitive way to add metadata to a page. Adding correct metadata tags can be challenging (at least for me), but using a JavaScript object is much more enjoyable and straightforward, as demonstrated below.
+
 ```ts
-console.log('WIP');
+export const metadata: Metadata = {
+  title: {
+    default: 'Nikhil S',
+    template: '%s | Nikhil S',
+  },
+  description: 'Software Engineer from India',
+  metadataBase: new URL(BASE_URL),
+  openGraph: {
+    title: 'Nikhil S',
+    description: 'Software Engineer from India',
+    url: BASE_URL,
+    siteName: 'Nikhil S',
+    locale: 'en_US',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  twitter: {
+    title: 'Nikhil S',
+    card: 'summary_large_image',
+  },
+};
 ```
+
+### The `next/image` Component
+
+The `next/image` component in Next.js is a powerful tool that brings several advantages to your portfolio, making it an ideal choice for handling images. Here are some key benefits and features:
+
+1. **Optimized Image Loading**: The `next/image` component automatically optimizes images on-demand, serving the best image format (WebP when supported) and size for each device, resulting in faster load times and improved performance.
+
+2. **Responsive Images**: By default, `next/image` provides built-in support for responsive images. It automatically adjusts the size of the images based on the screen size, ensuring that the images look great on any device.
+
+3. **Lazy Loading**: The `next/image` component supports lazy loading out of the box. Images are only loaded when they enter the viewport, reducing initial load times and improving the user experience.
+
+4. **Blur-Up Placeholder**: It offers a blur-up placeholder effect, which displays a low-resolution version of the image while the full image is loading. This provides a better visual experience, especially for users with slower internet connections.
+
+5. **Automatic Image Sizing**: You can define the desired width and height for your images, and the `next/image` component will automatically handle the aspect ratio and resizing, ensuring consistent and accurate image display.
+
+### Partial Pre-rendering (PPR)
+
+Ninety percent of the content on this site, including the blogs, is statically generated. Next.js converts the entire project into static assets at build time. But you might wonder, if the site is static, why not use a static site generator? The answer lies in the remaining 10% of the content, such as the view counter on this blog or the comments section, which are all dynamic.
+
+Before Partial Pre-rendering (PPR) in Next.js, a page could either be statically generated at build time or dynamically rendered on the server per request. However, rendering the same 90% static content for each request is inefficient.
+
+This is exactly the problem that PPR solves. As of now, PPR is still experimental. To enable PPR, you need to turn on the support in `next.config.js`. You can refer to the official documentation [here](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering).
+
+With PPR enabled, Next.js tries to pre-render as much content statically at build time as possible. All the dynamic content can be wrapped in the React [Suspense](https://react.dev/reference/react/Suspense) boundary. When a request comes in, Next.js immediately returns all the static content pre-rendered at build time along with the fallback provided to `Suspense`. It then kicks off the generation of the dynamic parts and streams the response as they become available. On the client side, the fallbacks are seamlessly swapped with the streamed content.
+
+You can learn more about PPR by watching this amazing [video](https://www.youtube.com/watch?v=MTcPrTIBkpA) by [Delba](https://x.com/delba_oliveira)
+
+There you go. The reason for choosing Next.js as the framework of choice.
+
+## Tailwind CSS
+
+Let’s be honest for a second. How many times have you gotten frustrated thinking of a meaningful class name for CSS and ended up suffixing the class name with **Wrapper** or **Section**? For me, the biggest pain point when working with vanilla CSS was coming up with meaningful class names.
+
+Enter Tailwind CSS. Tailwind CSS eliminates this frustration by providing a utility-first approach to styling, allowing you to build custom designs directly in your HTML without having to come up with creative class names.
+
+### Why Tailwind CSS?
+
+- **Utility-First Approach**: Tailwind CSS uses low-level utility classes that can be composed to build any design directly in your markup. This eliminates the need for complex class naming conventions and reduces cognitive load.
+- **Flexibility**: Tailwind CSS is highly customizable, allowing you to extend or modify the default configuration to fit your specific needs. You can easily create your own utility classes or modify existing ones.
+
+- **Efficiency**: By using predefined utility classes, you can quickly prototype and build responsive designs without writing a single line of custom CSS. This speeds up development and ensures consistency across your project.
+
+- **Consistency**: With Tailwind CSS, you maintain a consistent design language throughout your application. The utility classes enforce a uniform look and feel, making it easier to manage and update styles.
+
+## Shadcn UI
+
+How many times have you considered implementing accessibility features on your website? Making a website accessible to everyone is crucial for SEO and page ranking. Headless component libraries, such as [Radix UI](https://www.radix-ui.com/), provide unstyled component primitives with built-in accessibility features, allowing you to focus on writing actual business code.
+
+However, implementing a good design system with these headless UI components to ensure that all elements look and feel consistent can be challenging. This is where Shadcn UI comes in. Shadcn UI combines the core benefits of Radix UI with a consistent design system powered by Tailwind CSS.
+
+### Key Benefits of Shadcn UI
+
+1. **Accessibility**: Shadcn UI components come with built-in accessibility features, ensuring that your website is usable by everyone, including those with disabilities. This improves your SEO and overall user experience.
+
+2. **Consistency**: Shadcn UI ensures that all components have a consistent look and feel, which is crucial for maintaining a professional and cohesive design across your website.
+
+3. **Customization**: The components provided by Shadcn UI are part of your project's source code, which means you can easily tweak and customize them to fit your specific needs.
+
+4. **Integration with Tailwind CSS**: Shadcn UI uses Tailwind CSS for styling, allowing you to leverage the powerful utility-first CSS framework to build and customize your components quickly.
+
+## Vercel
+
+Vercel is the creator of Next.js, and hosting a Next.js application on Vercel's infrastructure comes with numerous benefits. The best part is their very generous free tier, making it an excellent choice for a website like this.
+
+With Vercel, you don’t have to worry about deployment. Just push your code to GitHub, and your website will be updated within a matter of minutes. Vercel also provides analytics and speed insights, which are incredibly valuable for monitoring your site's performance.
+
+Their newer firewall feature is very powerful, enabling you to protect your site from unwanted traffic and spam. I might be somewhat biased towards Vercel, but that’s because my ideology about the web aligns closely with what Vercel is doing.
+
+In my opinion, for a project like this, Vercel is the best choice.
+
+## Why Over-Engineering Matters
+
+Creating a portfolio site that stands out involves more than just slapping together a few HTML and CSS files. Here are some reasons why taking the extra time to refine and enhance your site is worthwhile:
+
+1. **First Impressions Matter**: Your portfolio is often the first point of contact potential employers or clients have with you. A well-engineered site can demonstrate your attention to detail and your commitment to quality.
+
+2. **Performance and Speed**: Optimized code and efficient design ensure that your site loads quickly and runs smoothly, providing a better user experience. This can make the difference between a visitor staying on your site or moving on to the next one.
+
+3. **Scalability and Maintenance**: Well-structured and modular code makes it easier to update and maintain your site over time. This is especially important as you add new projects or features to your portfolio.
+
+4. **Learning and Growth**: Pushing yourself to over-engineer your site can be a valuable learning experience. It allows you to experiment with new technologies and techniques, which can enhance your skill set and make you a better developer.
+
+## Conclusion
+
+Building a portfolio can be a deeply rewarding process, especially when approached with care and attention to detail. Through my experience, I've highlighted the importance of choosing the right technology stack and demonstrated how tools like Next.js, Tailwind CSS, Shadcn UI, and Vercel can elevate a simple portfolio to a professional, high-performing website.
+
+While I've focused on showcasing specific aspects of my portfolio in this post, I want to acknowledge that there are other notable features that deserve attention, namely the [**Blogs**](/blogs) (The section which you are reading) and the [**Bot**](/bot) integration.
+
+I plan to explore these features in more detail in future posts, providing insights into their development and implementation.
+
+Thank you so much for reading. I'd love to hear your thoughts in the comments. Happy coding!

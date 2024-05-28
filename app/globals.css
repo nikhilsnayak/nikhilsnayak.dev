@@ -36,15 +36,15 @@
 
     --fluorescent: #2feeee;
 
-    --sh-class: #70aeff;
-    --sh-identifier: #d6e8ff;
+    --sh-class: #2d5e9d;
+    --sh-identifier: #354150;
     --sh-sign: #8996a3;
-    --sh-property: #0acef1;
-    --sh-entity: #249a97;
-    --sh-jsxliterals: #9599ff;
-    --sh-string: #00a99a;
-    --sh-keyword: #ff867e;
+    --sh-string: #007f7a;
+    --sh-keyword: #e02518;
     --sh-comment: #a19595;
+    --sh-jsxliterals: #6266d1;
+    --sh-property: #e25a1c;
+    --sh-entity: #e25a1c;
   }
 
   .dark {
@@ -75,6 +75,11 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    --sh-class: #4c97f8;
+    --sh-identifier: white;
+    --sh-keyword: #f47067;
+    --sh-string: #0fa295;
   }
 }
 
@@ -122,4 +127,8 @@ body::-webkit-scrollbar {
 
 .prose *:hover > .anchor {
   @apply visible;
+}
+
+.prose pre {
+  @apply bg-neutral-200 dark:bg-neutral-800;
 }
