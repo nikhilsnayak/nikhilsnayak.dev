@@ -16,7 +16,7 @@
   "dependencies": {
     "@icons-pack/react-simple-icons": "^9.5.0",
     "@langchain/community": "^0.2.0",
-    "@langchain/openai": "^0.0.33",
+    "@langchain/openai": "^0.0.34",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
