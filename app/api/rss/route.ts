@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/config/constants';
-import { getBlogPosts } from '@/lib/utils';
+import { getBlogPosts } from '@/lib/utils/server';
 
 export async function GET() {
   const allBlogs = getBlogPosts();
