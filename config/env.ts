@@ -6,10 +6,12 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().min(1),
     SUPABASE_URL: z.string().min(1),
     SUPABASE_ANON_KEY: z.string().min(1),
+    POSTGRES_URL: z.string().min(1),
   },
   runtimeEnv: {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
     SUPABASE_URL: process.env.SUPABASE_URL,
+    POSTGRES_URL: process.env.POSTGRES_URL,
   },
 });
