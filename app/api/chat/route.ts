@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     const currentMessageContent = messages[messages.length - 1].content;
 
     const model = new ChatOpenAI({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o',
       temperature: 0,
       streaming: true,
       verbose: true,
