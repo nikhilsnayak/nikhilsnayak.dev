@@ -3,6 +3,7 @@ import { CustomMDX } from '@/components/mdx';
 import { BASE_URL } from '@/config/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
+import { Views } from '@/components/views';
 
 interface BlogProps {
   params: { slug: string };
@@ -94,6 +95,7 @@ export default function Blog({ params }: BlogProps) {
         <p className='text-sm text-neutral-600 dark:text-neutral-400'>
           {formatDate(post.metadata.publishedAt)}
         </p>
+        <Views slug={post.slug} />
       </div>
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} />

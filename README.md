@@ -5,9 +5,11 @@
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Components**: [Shadcn UI](https://ui.shadcn.com/)
-- **Database**: [Supabase](https://supabase.com/)
-- **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag)
 - **LLM**: [OpenAI](https://platform.openai.com/)
+- **Vector Store**: [Supabase](https://supabase.com/)
+- **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag)
+- **Database**: [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
+- **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
 - **Deployment**: [Vercel](https://vercel.com)
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
 
@@ -24,7 +26,7 @@ bun install
 bun run dev
 ```
 
-## Database Schema
+## Vector Store Schema
 
 Run the following sql in your supabase database
 
