@@ -9,14 +9,6 @@ interface BlogProps {
   params: { slug: string };
 }
 
-export async function generateStaticParams() {
-  const posts = getBlogPosts();
-
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
 export function generateMetadata({ params }: BlogProps) {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
   if (!post) {
