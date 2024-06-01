@@ -4,6 +4,8 @@ import { BASE_URL } from '@/config/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 import { Views } from '@/components/views';
+import { CommentsSection } from '@/components/comments';
+import { Suspense } from 'react';
 
 interface BlogProps {
   params: { slug: string };
@@ -92,6 +94,14 @@ export default function Blog({ params }: BlogProps) {
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} />
       </article>
+      <div className='mt-8'>
+        <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>
+          Comments
+        </h2>
+        <Suspense fallback={<p>Loading...</p>}>
+          <CommentsSection slug={post.slug} />
+        </Suspense>
+      </div>
     </section>
   );
 }

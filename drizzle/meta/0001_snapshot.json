@@ -1,7 +1,5 @@
 {
-  "id": "7d67d0d0-8973-4c34-b485-b2e1c12314d0",
-  "prevId": "48dd651a-a356-4788-a7ff-13b7bf437ca6",
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.views": {
@@ -31,8 +29,10 @@
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "7d67d0d0-8973-4c34-b485-b2e1c12314d0",
+  "prevId": "48dd651a-a356-4788-a7ff-13b7bf437ca6"
 }

@@ -16,9 +16,11 @@
     "db:studio": "drizzle-kit studio",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
+    "db:up": "drizzle-kit up",
     "prepare": "husky"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.1.0",
     "@icons-pack/react-simple-icons": "^9.5.0",
     "@langchain/community": "^0.2.0",
     "@langchain/openai": "^0.0.34",
@@ -42,6 +44,7 @@
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.379.0",
     "next": "^15.0.0-rc.0",
+    "next-auth": "^5.0.0-beta.18",
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.3.0",
     "react": "^19.0.0-rc-4c2e457c7c-20240522",
