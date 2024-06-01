@@ -4,7 +4,7 @@ import { BASE_URL } from '@/config/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 import { Views } from '@/components/views';
-import { Comments } from '@/components/comments';
+import { CommentsSection } from '@/components/comments';
 import { Suspense } from 'react';
 
 interface BlogProps {
@@ -99,7 +99,7 @@ export default function Blog({ params }: BlogProps) {
           Comments
         </h2>
         <Suspense fallback={<p>Loading...</p>}>
-          <Comments />
+          <CommentsSection slug={post.slug} />
         </Suspense>
       </div>
     </section>
