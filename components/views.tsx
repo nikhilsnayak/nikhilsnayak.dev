@@ -16,13 +16,15 @@ async function ViewsCount({ slug }: ViewsProps) {
   });
 
   after(async () => {
-    if (!views) {
-      await db.insert(viewsTable).values({ slug, count: 1 });
-    } else {
-      await db
-        .update(viewsTable)
-        .set({ count: views.count + 1 })
-        .where(eq(viewsTable.slug, slug));
+    if (process.env.NODE_ENV === 'production') {
+      if (!views) {
+        await db.insert(viewsTable).values({ slug, count: 1 });
+      } else {
+        await db
+          .update(viewsTable)
+          .set({ count: views.count + 1 })
+          .where(eq(viewsTable.slug, slug));
+      }
     }
   });
 
@@ -33,7 +35,7 @@ export function Views({ slug }: ViewsProps) {
   return (
     <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
       <Eye />
-      <Suspense fallback={<Skeleton className='h-5 w-5' />}>
+      <Suspense fallback={<Skeleton className='h-5 w-5 bg-foreground/10' />}>
         <ViewsCount slug={slug} />
       </Suspense>
     </div>

@@ -15,6 +15,13 @@
       "when": 1717131104514,
       "tag": "0001_large_rocket_raccoon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1717179845619,
+      "tag": "0002_nervous_the_call",
+      "breakpoints": true
     }
   ]
 }
