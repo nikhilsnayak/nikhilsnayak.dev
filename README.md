@@ -10,6 +10,7 @@
 - **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag)
 - **Database**: [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
+- **Auth**: [Auth.js](https://authjs.dev/)
 - **Deployment**: [Vercel](https://vercel.com)
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
 
