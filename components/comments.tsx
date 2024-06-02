@@ -6,6 +6,7 @@ import { db } from '@/lib/db';
 import { Suspense } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
+import { formatDate } from '@/lib/utils';
 
 export interface CommentsProps {
   slug: string;
@@ -25,7 +26,7 @@ async function Comments({ slug }: CommentsProps) {
   }
 
   return (
-    <div className='space-y-4'>
+    <div className='space-y-6'>
       {comments.map((comment) => (
         <div key={comment.id} className='flex items-start gap-4'>
           <Avatar className='h-10 w-10 border'>
@@ -35,8 +36,13 @@ async function Comments({ slug }: CommentsProps) {
             />
             <AvatarFallback>{comment.user.name?.charAt(0)}</AvatarFallback>
           </Avatar>
-          <div className='flex flex-col gap-1'>
-            <h3 className='font-bold'>{comment.user.name}</h3>
+          <div className='flex flex-col gap-2'>
+            <div>
+              <h3 className='font-bold'>{comment.user.name}</h3>
+              <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                {formatDate(comment.createdAt.toISOString(), true)}
+              </span>
+            </div>
             <p>{comment.content}</p>
           </div>
         </div>

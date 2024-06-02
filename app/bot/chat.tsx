@@ -7,7 +7,7 @@ import { LucideTrash2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LoadingSpinner } from '@/assets/icons';
+import { LoadingSpinner2 } from '@/assets/icons';
 import Cookies from 'js-cookie';
 
 interface MessageProps {
@@ -82,7 +82,9 @@ export function Chat({ initialMessages }: ChatProps) {
                   <BotMessage key={id} content={content} />
                 )
               )}
-              {showSpinner ? <LoadingSpinner /> : null}
+              {showSpinner ? (
+                <LoadingSpinner2 className='fill-foreground' />
+              ) : null}
             </div>
           </div>
         </ScrollArea>

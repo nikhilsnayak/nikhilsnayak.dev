@@ -1,17 +1,20 @@
-import { signOut } from '@/config/auth';
+'use client';
+import { useActionState } from 'react';
 import { Button } from '../ui/button';
 import { LogOut } from 'lucide-react';
+import { logout } from '@/lib/actions/auth';
+import { LoadingSpinner } from '@/assets/icons';
 
 export function SignOutButton() {
+  const [_, action, isPending] = useActionState(logout, undefined);
   return (
-    <form
-      action={async () => {
-        'use server';
-        await signOut();
-      }}
-    >
-      <Button type='submit' size='icon'>
-        <LogOut />
+    <form action={action}>
+      <Button type='submit' size='icon' disabled={isPending}>
+        {isPending ? (
+          <LoadingSpinner className='fill-background' />
+        ) : (
+          <LogOut />
+        )}
       </Button>
     </form>
   );
