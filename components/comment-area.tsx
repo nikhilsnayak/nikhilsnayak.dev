@@ -1,10 +1,10 @@
 'use client';
-
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { CommentsProps } from './comments';
 import { useActionState } from 'react';
 import { addComment } from '@/lib/actions/comments';
+import { LoadingSpinner } from '@/assets/icons';
 
 export function CommentArea({ slug }: CommentsProps) {
   const [error, action, isPending] = useActionState(addComment, undefined);
@@ -18,8 +18,9 @@ export function CommentArea({ slug }: CommentsProps) {
         minLength={3}
       />
       {error && <p className='text-red-500'>{error}</p>}
-      <Button disabled={isPending} className='self-end'>
-        {isPending ? '...' : 'Comment'}
+      <Button disabled={isPending} className='flex items-center gap-2 self-end'>
+        <span>Comment</span>
+        {isPending ? <LoadingSpinner className='fill-background' /> : null}
       </Button>
     </form>
   );
