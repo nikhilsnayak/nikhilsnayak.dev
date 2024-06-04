@@ -10,7 +10,7 @@ export function CommentArea({ slug }: CommentsProps) {
   const [error, action, isPending] = useActionState(addComment, undefined);
   return (
     <form action={action} className='flex flex-col gap-2'>
-      <input type='text' name='slug' value={slug} hidden />
+      <input type='text' name='slug' value={slug} hidden readOnly />
       <Textarea
         name='content'
         placeholder='Write a comment...'
