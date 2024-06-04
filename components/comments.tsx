@@ -1,15 +1,44 @@
+import { Suspense } from 'react';
 import { auth } from '@/config/auth';
+import { db } from '@/lib/db';
+import { formatDate } from '@/lib/utils';
 import { SignInButton } from './auth/signin-button';
 import { SignOutButton } from './auth/signout-button';
 import { CommentArea } from './comment-area';
-import { db } from '@/lib/db';
-import { Suspense } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
-import { formatDate } from '@/lib/utils';
+import { Button } from './ui/button';
+import { Comment } from '@/lib/db/schema';
+import { DeleteCommentControl, EditCommentControl } from './comment-controls';
 
 export interface CommentsProps {
   slug: string;
+}
+
+export interface CommentControlsProps {
+  comment: Comment;
+}
+
+async function CommentControls({ comment }: CommentControlsProps) {
+  const session = await auth();
+  if (!session || !session.user || session.user.id !== comment.userId) {
+    return null;
+  }
+  return (
+    <div className='flex items-center gap-2'>
+      <EditCommentControl comment={comment} />
+      <DeleteCommentControl comment={comment} />
+    </div>
+  );
+}
+
+function CommentControlsSkeleton() {
+  return (
+    <div className='flex items-center gap-2'>
+      <Skeleton className='h-8 w-8' />
+      <Skeleton className='h-8 w-8' />
+    </div>
+  );
 }
 
 async function Comments({ slug }: CommentsProps) {
@@ -44,6 +73,9 @@ async function Comments({ slug }: CommentsProps) {
               </span>
             </div>
             <p>{comment.content}</p>
+            <Suspense fallback={<CommentControlsSkeleton />}>
+              <CommentControls comment={comment} />
+            </Suspense>
           </div>
         </div>
       ))}
