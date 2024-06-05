@@ -1,12 +1,15 @@
 'use client';
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
-import { CommentsProps } from './comments';
 import { useActionState } from 'react';
 import { addComment } from '@/lib/actions/comments';
 import { LoadingSpinner } from '@/assets/icons';
 
-export function CommentArea({ slug }: CommentsProps) {
+interface CommentAreaProps {
+  slug: string;
+}
+
+export function CommentArea({ slug }: CommentAreaProps) {
   const [error, action, isPending] = useActionState(addComment, undefined);
   return (
     <form action={action} className='flex flex-col gap-2'>
