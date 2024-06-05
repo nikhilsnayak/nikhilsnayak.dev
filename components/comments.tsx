@@ -7,41 +7,15 @@ import { SignOutButton } from './auth/signout-button';
 import { CommentArea } from './comment-area';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
-import { Button } from './ui/button';
-import { Comment } from '@/lib/db/schema';
 import { DeleteCommentControl, EditCommentControl } from './comment-controls';
+import type { User } from 'next-auth';
 
-export interface CommentsProps {
+interface CommentsProps {
   slug: string;
+  user?: User;
 }
 
-export interface CommentControlsProps {
-  comment: Comment;
-}
-
-async function CommentControls({ comment }: CommentControlsProps) {
-  const session = await auth();
-  if (!session || !session.user || session.user.id !== comment.userId) {
-    return null;
-  }
-  return (
-    <div className='flex items-center gap-2'>
-      <EditCommentControl comment={comment} />
-      <DeleteCommentControl comment={comment} />
-    </div>
-  );
-}
-
-function CommentControlsSkeleton() {
-  return (
-    <div className='flex items-center gap-2'>
-      <Skeleton className='h-8 w-8' />
-      <Skeleton className='h-8 w-8' />
-    </div>
-  );
-}
-
-async function Comments({ slug }: CommentsProps) {
+async function Comments({ slug, user }: CommentsProps) {
   const comments = await db.query.comments.findMany({
     where: (commentsTable, { eq }) => eq(commentsTable.slug, slug),
     with: {
@@ -73,9 +47,12 @@ async function Comments({ slug }: CommentsProps) {
               </span>
             </div>
             <p>{comment.content}</p>
-            <Suspense fallback={<CommentControlsSkeleton />}>
-              <CommentControls comment={comment} />
-            </Suspense>
+            {user && user.id === comment.userId ? (
+              <div className='flex items-center gap-2'>
+                <EditCommentControl comment={comment} />
+                <DeleteCommentControl comment={comment} />
+              </div>
+            ) : null}
           </div>
         </div>
       ))}
@@ -97,29 +74,24 @@ function CommentsSkeleton() {
 
 export async function CommentsSection({ slug }: CommentsProps) {
   const session = await auth();
-  if (!session || !session.user) {
-    return (
-      <div className='space-y-8'>
+  return (
+    <div className='space-y-8'>
+      {!session || !session.user ? (
         <div className='space-y-2'>
           <p>Please sign in to comment.</p>
           <SignInButton />
         </div>
-        <Suspense fallback={<CommentsSkeleton />}>
-          <Comments slug={slug} />
-        </Suspense>
-      </div>
-    );
-  }
-
-  return (
-    <div className='space-y-8'>
-      <div className='flex items-center gap-2'>
-        <p>You are signed in as {session.user.name}.</p>
-        <SignOutButton />
-      </div>
-      <CommentArea slug={slug} />
+      ) : (
+        <>
+          <div className='flex items-center gap-2'>
+            <p>You are signed in as {session.user.name}.</p>
+            <SignOutButton />
+          </div>
+          <CommentArea slug={slug} />
+        </>
+      )}
       <Suspense fallback={<CommentsSkeleton />}>
-        <Comments slug={slug} />
+        <Comments slug={slug} user={session?.user} />
       </Suspense>
     </div>
   );

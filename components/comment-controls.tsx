@@ -10,10 +10,14 @@ import {
 } from './ui/dialog';
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
-import { CommentControlsProps } from './comments';
 import { useState, useTransition } from 'react';
 import { editComment, deleteComment } from '@/lib/actions/comments';
 import { LoadingSpinner } from '@/assets/icons';
+import { Comment } from '@/lib/db/schema';
+
+interface CommentControlsProps {
+  comment: Comment;
+}
 
 export function EditCommentControl({ comment }: CommentControlsProps) {
   const [open, setOpen] = useState(false);
