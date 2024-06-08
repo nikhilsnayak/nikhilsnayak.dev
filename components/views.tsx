@@ -15,8 +15,8 @@ async function ViewsCount({ slug }: ViewsProps) {
     where: (views, { eq }) => eq(views.slug, slug),
   });
 
-  after(async () => {
-    if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
+    after(async () => {
       if (!views) {
         await db.insert(viewsTable).values({ slug, count: 1 });
       } else {
@@ -25,8 +25,8 @@ async function ViewsCount({ slug }: ViewsProps) {
           .set({ count: views.count + 1 })
           .where(eq(viewsTable.slug, slug));
       }
-    }
-  });
+    });
+  }
 
   return <span className='h-5 w-5'>{(views?.count ?? 0) + 1}</span>;
 }
