@@ -68,7 +68,7 @@ export function Footer() {
         </li>
         <li className='hover:opacity-70'>
           <a
-            href='/api/rss'
+            href='/rss'
             className='dark:text-fluorescent'
             target='_blank'
             rel='noopener noreferrer'

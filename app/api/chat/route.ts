@@ -9,7 +9,6 @@ import { RunnableSequence } from '@langchain/core/runnables';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { env } from '@/config/env';
 
-export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 function combineDocumentsFn(docs: Document[]) {
@@ -40,7 +39,7 @@ const condenseQuestionPrompt = PromptTemplate.fromTemplate(
 const ANSWER_TEMPLATE = `You are an AI Assistant called Roronova Zoro. You are the chat bot prensent on personal portfolio website and you answer questions only related to the portfolio.
 The name of the Owner of this Website is Nikhil S.
 
-If the question is out of context inform user accordingly. Format the response in plain text only.
+If the question is out of context inform user accordingly. Format the response in markdown as much as possible.
 
 Answer the question based only on the following context and chat history:
 <context>
