@@ -20,6 +20,8 @@ import {
   SiNestjs,
 } from '@icons-pack/react-simple-icons';
 
+export const dynamic = 'force-static';
+
 const skills = [
   {
     name: 'HTML5',

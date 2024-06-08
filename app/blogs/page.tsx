@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 
+export const dynamic = 'force-static';
+
 export const metadata: Metadata = {
   title: 'Blogs',
   description: 'A list of blog posts where I document my learnings',

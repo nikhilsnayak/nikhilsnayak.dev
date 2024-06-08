@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 export function generateMetadata({ params }: BlogProps) {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
   if (!post) {
-    return;
+    return {};
   }
 
   const {
