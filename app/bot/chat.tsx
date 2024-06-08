@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner2 } from '@/assets/icons';
 import Cookies from 'js-cookie';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface MessageProps {
   content: string;
@@ -17,9 +19,18 @@ interface MessageProps {
 function BotMessage({ content }: Readonly<MessageProps>) {
   return (
     <div className='max-w-full'>
-      <p className='max-w-max whitespace-pre-wrap rounded-md bg-gray-100 p-2 dark:bg-gray-800'>
-        {content}
-      </p>
+      <div className='max-w-max whitespace-pre-wrap rounded-md bg-gray-100 p-2 dark:bg-gray-800'>
+        <Markdown
+          components={{
+            a: (props) => (
+              <a {...props} className='text-green-500 hover:underline' />
+            ),
+          }}
+          remarkPlugins={[remarkGfm]}
+        >
+          {content}
+        </Markdown>
+      </div>
     </div>
   );
 }
