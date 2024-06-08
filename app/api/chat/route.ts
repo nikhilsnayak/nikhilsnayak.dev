@@ -1,58 +1,17 @@
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { LangChainAdapter, Message, StreamingTextResponse } from 'ai';
-import { AIMessage, HumanMessage } from '@langchain/core/messages';
-import { Document } from '@langchain/core/documents';
-import { PromptTemplate } from '@langchain/core/prompts';
 import { createClient } from '@supabase/supabase-js';
 import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
-import { RunnableSequence } from '@langchain/core/runnables';
+import {
+  RunnableSequence,
+  RunnablePassthrough,
+} from '@langchain/core/runnables';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { env } from '@/config/env';
+import { combineDocuments, formatChatHistory } from '@/lib/utils/server';
+import { answerPrompt, standaloneQuestionPrompt } from './prompts';
 
 export const maxDuration = 60;
-
-function combineDocumentsFn(docs: Document[]) {
-  const serializedDocs = docs.map((doc) => doc.pageContent);
-  return serializedDocs.join('\n\n');
-}
-
-function formatChatHistory(chatHistory: Message[]) {
-  const formattedDialogueTurns = chatHistory.map((m) =>
-    m.role === 'user' ? new HumanMessage(m.content) : new AIMessage(m.content)
-  );
-  return formattedDialogueTurns.join('\n\n');
-}
-
-const CONDENSE_QUESTION_TEMPLATE = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
-
-<chat_history>
-  {chat_history}
-</chat_history>
-
-Follow Up Input: {question}
-Standalone question:
-`;
-const condenseQuestionPrompt = PromptTemplate.fromTemplate(
-  CONDENSE_QUESTION_TEMPLATE
-);
-
-const ANSWER_TEMPLATE = `You are an AI Assistant called Roronova Zoro. You are the chat bot prensent on personal portfolio website and you answer questions only related to the portfolio.
-The name of the Owner of this Website is Nikhil S.
-
-If the question is out of context inform user accordingly. Format the response in markdown as much as possible.
-
-Answer the question based only on the following context and chat history:
-<context>
-  {context}
-</context>
-
-<chat_history>
-  {chat_history}
-</chat_history>
-
-Question: {question}
-`;
-const answerPrompt = PromptTemplate.fromTemplate(ANSWER_TEMPLATE);
 
 export async function POST(req: Request) {
   try {
@@ -80,38 +39,40 @@ export async function POST(req: Request) {
       queryName: 'match_documents',
     });
 
+    const retriever = vectorstore.asRetriever();
+
     const standaloneQuestionChain = RunnableSequence.from([
-      condenseQuestionPrompt,
+      standaloneQuestionPrompt,
       model,
       new StringOutputParser(),
     ]);
 
-    const retriever = vectorstore.asRetriever();
-
-    const retrievalChain = retriever.pipe(combineDocumentsFn);
-
-    const answerChain = RunnableSequence.from([
-      {
-        context: RunnableSequence.from([
-          (input) => input.question,
-          retrievalChain,
-        ]),
-        chat_history: (input) => input.chat_history,
-        question: (input) => input.question,
-      },
-      answerPrompt,
-      model,
+    const retrievalChain = RunnableSequence.from([
+      ({ standalone_question }) => standalone_question,
+      retriever,
+      combineDocuments,
     ]);
 
-    const conversationalRetrievalQAChain = RunnableSequence.from([
+    const answerChain = RunnableSequence.from([
+      answerPrompt,
+      model,
+      new StringOutputParser(),
+    ]);
+
+    const conversationalRetrievalChain = RunnableSequence.from([
       {
-        question: standaloneQuestionChain,
-        chat_history: (input) => input.chat_history,
+        standalone_question: standaloneQuestionChain,
+        original_input: new RunnablePassthrough(),
+      },
+      {
+        context: retrievalChain,
+        question: ({ original_input }) => original_input.question,
+        chat_history: ({ original_input }) => original_input.chat_history,
       },
       answerChain,
     ]);
 
-    const stream = await conversationalRetrievalQAChain.stream({
+    const stream = await conversationalRetrievalChain.stream({
       question: currentMessageContent,
       chat_history: formatChatHistory(previousMessages),
     });

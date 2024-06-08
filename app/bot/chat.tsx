@@ -23,7 +23,11 @@ function BotMessage({ content }: Readonly<MessageProps>) {
         <Markdown
           components={{
             a: (props) => (
-              <a {...props} className='text-green-500 hover:underline' />
+              <a
+                {...props}
+                className='text-green-500 hover:underline'
+                target='_blank'
+              />
             ),
           }}
           remarkPlugins={[remarkGfm]}

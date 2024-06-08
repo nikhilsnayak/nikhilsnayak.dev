@@ -1,6 +1,9 @@
 import 'server-only';
 import fs from 'fs';
 import path from 'path';
+import { AIMessage, HumanMessage } from '@langchain/core/messages';
+import type { Document } from '@langchain/core/documents';
+import type { Message } from 'ai';
 
 type BlogMetadata = {
   title: string;
@@ -52,4 +55,16 @@ function getMDXData(dir: string) {
 
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'content'));
+}
+
+export function combineDocuments(docs: Document[]) {
+  const serializedDocs = docs.map((doc) => doc.pageContent);
+  return serializedDocs.join('\n\n');
+}
+
+export function formatChatHistory(chatHistory: Message[]) {
+  const formattedDialogueTurns = chatHistory.map((m) =>
+    m.role === 'user' ? new HumanMessage(m.content) : new AIMessage(m.content)
+  );
+  return formattedDialogueTurns.join('\n\n');
 }
