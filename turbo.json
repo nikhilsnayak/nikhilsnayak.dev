@@ -24,12 +24,8 @@
       "cache": true
     },
     "generate-embeddings": {
-      "inputs": [
-        "app/**/page.tsx",
-        "components/layout/*.tsx",
-        "content/*.mdx",
-        ".scripts/generate-embeddings.ts"
-      ],
+      "cache": true,
+      "inputs": ["content/*.{mdx,md}", ".scripts/generate-embeddings.ts"],
       "env": ["SUPABASE_URL", "SUPABASE_ANON_KEY", "OPENAI_API_KEY"]
     }
   }
