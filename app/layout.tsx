@@ -10,6 +10,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { cn } from '@/lib/utils';
 import { BASE_URL } from '@/config/constants';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   title: {
@@ -51,6 +52,7 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={cn(GeistSans.variable, GeistMono.variable, 'font-sans')}>
+        <NextTopLoader shadow={false} showSpinner={false} />
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
