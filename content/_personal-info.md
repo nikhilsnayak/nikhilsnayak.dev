@@ -3,6 +3,7 @@
 - **Name:** Nikhil S
 - **Profession:** Full Stack Developer
 - **Date of Birth:** 22-NOV-2001
+- **Portfolio/Website:** https://www.nikhilsnayak.dev
 
 ## Education
 
@@ -39,4 +40,3 @@ An ambitious and motivated software engineer with a strong foundation in web dev
 - **GitHub:** [nikhilsnayak](https://github.com/nikhilsnayak)
 - **LinkedIn:** [nikhilsnayak](https://linkedin.com/in/nikhilsnayak)
 - **Instagram:** [\_nikhilsnayak\_](https://instagram.com/_nikhilsnayak_)
-- **RSS:** [nikhilsnayak.dev/rss](https://www.nikhilsnayak.dev/rss)
