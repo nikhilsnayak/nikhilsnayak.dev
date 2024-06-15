@@ -18,13 +18,13 @@ export default function WorkPage() {
           My Work
         </h1>
         <p>
-          On a mission to build user centric software solutions and along the
-          way share my learnings with the community
+          Building user centric software solutions and along the way share my
+          learnings with the community
         </p>
       </header>
       <hr className='my-6 border-foreground/20' />
       <section>
-        <h2 className='mb-1 inline-block font-mono text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
+        <h2 className='mb-2 inline-block font-mono text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
           <a
             href='https://www.codecrafttech.com/'
             target='_blank'
@@ -35,8 +35,9 @@ export default function WorkPage() {
             CodeCraft Technologies <ArrowUpRight className='w-4' />
           </a>
         </h2>
-        <p className='mb-4 text-sm text-muted-foreground'>
-          Trainee Engineer - Software Development (Aug 2023 - Present)
+        <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
+          <span>Trainee Engineer - Software Development </span>
+          <span>(Aug 2023 - Present)</span>
         </p>
         <p className='my-4'>
           CodeCraft is an award-winning creative engineering company where
@@ -47,7 +48,7 @@ export default function WorkPage() {
           <span>
             At CodeCraft I contribute to projects using modern frameworks such
             as
-          </span>
+          </span>{' '}
           <Badge className='mx-1' variant={'secondary'} asChild>
             <a
               href='https://react.dev'
@@ -83,7 +84,7 @@ export default function WorkPage() {
               className='flex items-center gap-1 transition-all'
             >
               <SiNestjs className='w-4' />
-              Nest.js
+              NestJS
               <ArrowUpRight className='w-4' />
             </a>
           </Badge>

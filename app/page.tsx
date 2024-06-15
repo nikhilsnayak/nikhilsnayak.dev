@@ -19,6 +19,7 @@ import {
   SiNodedotjs,
   SiNestjs,
 } from '@icons-pack/react-simple-icons';
+import { Badge } from '@/components/ui/badge';
 
 export const dynamic = 'force-static';
 
@@ -56,7 +57,7 @@ const skills = [
     Icon: SiNodedotjs,
   },
   {
-    name: 'Nestjs',
+    name: 'NestJS',
     Icon: SiNestjs,
   },
 ] as const;
@@ -111,10 +112,15 @@ function Skills() {
       <h3 className='mb-[0.5em] font-mono text-2xl font-bold sm:text-4xl'>
         Skills:
       </h3>
-      <ul className='flex flex-wrap items-center gap-8'>
+      <ul className='flex flex-wrap items-center gap-4'>
         {skills.map(({ Icon, name }) => (
-          <li className='h-6 w-6 sm:h-10 sm:w-10' key={name}>
-            <Icon width='100%' height='100%' aria-label={name} />
+          <li key={name}>
+            <Badge asChild className='cursor-default'>
+              <div className='flex items-center gap-1'>
+                <Icon className='w-3 sm:w-4' />
+                <span className='text-sm sm:text-base'>{name}</span>
+              </div>
+            </Badge>{' '}
           </li>
         ))}
       </ul>
