@@ -7,6 +7,8 @@ import { Views } from '@/components/views';
 import { CommentsSection } from '@/components/comments';
 import { Suspense } from 'react';
 
+export const maxDuration = 60;
+
 interface BlogProps {
   params: { slug: string };
 }
