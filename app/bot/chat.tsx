@@ -11,6 +11,7 @@ import { LoadingSpinner2 } from '@/assets/icons';
 import Cookies from 'js-cookie';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useSearchParams } from 'next/navigation';
 
 interface MessageProps {
   content: string;
@@ -54,6 +55,11 @@ interface ChatProps {
 }
 
 export function Chat({ initialMessages }: ChatProps) {
+  const params = useSearchParams();
+  const prompt = params.get('prompt') ?? undefined;
+
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const {
@@ -65,6 +71,7 @@ export function Chat({ initialMessages }: ChatProps) {
     setMessages,
   } = useChat({
     initialMessages,
+    initialInput: prompt,
     onError: (e) => {
       toast.error(e.message);
     },
@@ -80,6 +87,12 @@ export function Chat({ initialMessages }: ChatProps) {
     }
     Cookies.set('messages', JSON.stringify(messages));
   }, [messages]);
+
+  useEffect(() => {
+    if (prompt && submitButtonRef.current) {
+      submitButtonRef.current.click();
+    }
+  }, []);
 
   return (
     <div className='flex h-[60dvh] w-full flex-col gap-4'>
@@ -128,6 +141,7 @@ export function Chat({ initialMessages }: ChatProps) {
           size='sm'
           className='w-1/5 text-xs'
           type='submit'
+          ref={submitButtonRef}
         >
           Ask Zoro
         </Button>
