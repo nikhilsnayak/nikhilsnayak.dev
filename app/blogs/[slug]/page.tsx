@@ -101,7 +101,7 @@ export default function Blog({ params }: BlogProps) {
         <p className='text-sm text-neutral-600 dark:text-neutral-400'>
           {formatDate(post.metadata.publishedAt)}
         </p>
-        {/* <Views slug={post.slug} /> */}
+        <Views slug={post.slug} />
       </div>
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} />
@@ -110,9 +110,9 @@ export default function Blog({ params }: BlogProps) {
         <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>
           Comments
         </h2>
-        {/* <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<p>Loading...</p>}>
           <CommentsSection slug={post.slug} />
-        </Suspense> */}
+        </Suspense>
       </div>
     </section>
   );

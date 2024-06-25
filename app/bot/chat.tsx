@@ -8,10 +8,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner2 } from '@/assets/icons';
+import { useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useSearchParams } from 'next/navigation';
 
 interface MessageProps {
   content: string;
@@ -89,10 +89,13 @@ export function Chat({ initialMessages }: ChatProps) {
   }, [messages]);
 
   useEffect(() => {
-    if (prompt && submitButtonRef.current) {
-      submitButtonRef.current.click();
-    }
-  }, []);
+    // Wrapping in setTimeout to ensure low priority
+    setTimeout(() => {
+      if (prompt && submitButtonRef.current) {
+        submitButtonRef.current.click();
+      }
+    });
+  }, [prompt]);
 
   return (
     <div className='flex h-[60dvh] w-full flex-col gap-4'>
