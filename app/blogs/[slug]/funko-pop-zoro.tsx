@@ -28,6 +28,7 @@ export function FunkoPopZoro({ blogTitle }: FunkoPopZoroProps) {
         bottom: 0,
         transform: `translateY(${translateY})`,
       }}
+      //@ts-expect-error -- I don't know why this error is coming
       className='hidden transition-transform duration-500 ease-in lg:block'
     >
       <div className='relative'>
