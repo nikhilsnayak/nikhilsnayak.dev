@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner2 } from '@/assets/icons';
+import { useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -54,6 +55,11 @@ interface ChatProps {
 }
 
 export function Chat({ initialMessages }: ChatProps) {
+  const params = useSearchParams();
+  const prompt = params.get('prompt') ?? undefined;
+
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const {
@@ -65,6 +71,7 @@ export function Chat({ initialMessages }: ChatProps) {
     setMessages,
   } = useChat({
     initialMessages,
+    initialInput: prompt,
     onError: (e) => {
       toast.error(e.message);
     },
@@ -80,6 +87,15 @@ export function Chat({ initialMessages }: ChatProps) {
     }
     Cookies.set('messages', JSON.stringify(messages));
   }, [messages]);
+
+  useEffect(() => {
+    // Wrapping in setTimeout to ensure low priority
+    setTimeout(() => {
+      if (prompt && submitButtonRef.current) {
+        submitButtonRef.current.click();
+      }
+    });
+  }, [prompt]);
 
   return (
     <div className='flex h-[60dvh] w-full flex-col gap-4'>
@@ -128,6 +144,7 @@ export function Chat({ initialMessages }: ChatProps) {
           size='sm'
           className='w-1/5 text-xs'
           type='submit'
+          ref={submitButtonRef}
         >
           Ask Zoro
         </Button>

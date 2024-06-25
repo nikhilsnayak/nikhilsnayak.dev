@@ -10,10 +10,18 @@ export const metadata: Metadata = {
   description: 'My personal AI Chat Bot called Zoro which speaks about me',
 };
 
-export default function BotPage() {
-  const initialMessages = JSON.parse(
-    cookies().get('messages')?.value ?? JSON.stringify([])
-  ) as Message[];
+interface BotPageProps {
+  searchParams: {
+    prompt?: string;
+  };
+}
+
+export default function BotPage({ searchParams: { prompt } }: BotPageProps) {
+  const initialMessages = Boolean(prompt)
+    ? []
+    : (JSON.parse(
+        cookies().get('messages')?.value ?? JSON.stringify([])
+      ) as Message[]);
   return (
     <section className='space-y-4'>
       <header className='flex items-center gap-3'>

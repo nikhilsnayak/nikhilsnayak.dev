@@ -6,6 +6,7 @@ import { getBlogPosts } from '@/lib/utils/server';
 import { Views } from '@/components/views';
 import { CommentsSection } from '@/components/comments';
 import { Suspense } from 'react';
+import { FunkoPopZoro } from './funko-pop-zoro';
 
 export const maxDuration = 60;
 
@@ -70,6 +71,7 @@ export default function Blog({ params }: BlogProps) {
 
   return (
     <section>
+      <FunkoPopZoro blogTitle={post.metadata.title} />
       <script
         type='application/ld+json'
         suppressHydrationWarning
