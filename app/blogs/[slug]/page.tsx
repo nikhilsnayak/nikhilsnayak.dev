@@ -7,6 +7,7 @@ import { Views } from '@/components/views';
 import { CommentsSection } from '@/components/comments';
 import { Suspense } from 'react';
 import { FunkoPopZoro } from './funko-pop-zoro';
+import { SummarizeButton } from './summarize-button';
 
 export const maxDuration = 60;
 
@@ -68,10 +69,10 @@ export default function Blog({ params }: BlogProps) {
   if (!post) {
     notFound();
   }
-
+  const blogTitle = post.metadata.title;
   return (
     <section>
-      <FunkoPopZoro blogTitle={post.metadata.title} />
+      <FunkoPopZoro blogTitle={blogTitle} />
       <script
         type='application/ld+json'
         suppressHydrationWarning
@@ -97,10 +98,13 @@ export default function Blog({ params }: BlogProps) {
       <h1 className='title text-2xl font-semibold tracking-tighter'>
         {post.metadata.title}
       </h1>
-      <div className='mb-8 mt-2 flex items-center justify-between text-sm'>
-        <p className='text-sm text-neutral-600 dark:text-neutral-400'>
-          {formatDate(post.metadata.publishedAt)}
-        </p>
+      <div className='mb-8 mt-4 flex flex-col justify-between text-sm sm:flex-row'>
+        <div className='flex items-center gap-3'>
+          <p className='text-sm text-neutral-600 dark:text-neutral-400'>
+            {formatDate(post.metadata.publishedAt)}
+          </p>
+          <SummarizeButton blogTitle={blogTitle} />
+        </div>
         <Views slug={post.slug} />
       </div>
       <article className='prose min-w-full dark:prose-invert'>

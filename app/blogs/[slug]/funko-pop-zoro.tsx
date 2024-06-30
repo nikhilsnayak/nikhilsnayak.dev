@@ -58,11 +58,11 @@ export function FunkoPopZoro({ blogTitle }: FunkoPopZoroProps) {
                     pathname: '/bot',
                     query: {
                       ...(blogTitle && {
-                        prompt: `Summarize ${blogTitle} blog`,
+                        prompt: `Summarize "${blogTitle}" Blog`,
                       }),
                     },
                   }}
-                  className='text-blue-500 underline'
+                  className='text-green-500 underline'
                 >
                   click here
                 </Link>
