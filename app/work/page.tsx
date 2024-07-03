@@ -18,8 +18,8 @@ export default function WorkPage() {
           My Work
         </h1>
         <p>
-          Building user centric software solutions and along the way share my
-          learnings with the community
+          Developing user-focused software solutions and continuously sharing my
+          knowledge and insights with the community.
         </p>
       </header>
       <hr className='my-6 border-foreground/20' />
@@ -36,7 +36,9 @@ export default function WorkPage() {
           </a>
         </h2>
         <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
-          <span>Trainee Engineer - Software Development </span>
+          <span className='font-medium'>
+            Trainee Engineer - Software Development{' '}
+          </span>
           <span>(Aug 2023 - Present)</span>
         </p>
         <p className='my-4'>
@@ -48,8 +50,8 @@ export default function WorkPage() {
           <span>
             At CodeCraft I contribute to projects using modern frameworks such
             as
-          </span>{' '}
-          <Badge className='mx-1' variant={'secondary'} asChild>
+          </span>
+          <Badge className='m-1' variant={'secondary'} asChild>
             <a
               href='https://react.dev'
               target='_blank'
@@ -57,12 +59,12 @@ export default function WorkPage() {
               aria-label='react'
               className='flex items-center gap-1 transition-all'
             >
-              <SiReact className='w-3' />
+              <SiReact className='w-4 text-blue-500' />
               React
               <ArrowUpRight className='w-4' />
             </a>
           </Badge>
-          <Badge className='mx-1' variant={'secondary'} asChild>
+          <Badge className='m-1' variant={'secondary'} asChild>
             <a
               href='https://nextjs.org'
               target='_blank'
@@ -75,7 +77,7 @@ export default function WorkPage() {
               <ArrowUpRight className='w-4' />
             </a>
           </Badge>
-          <Badge className='mx-1' variant={'secondary'} asChild>
+          <Badge className='m-1' variant={'secondary'} asChild>
             <a
               href='https://nestjs.com'
               target='_blank'
@@ -83,7 +85,7 @@ export default function WorkPage() {
               aria-label='nestjs'
               className='flex items-center gap-1 transition-all'
             >
-              <SiNestjs className='w-4' />
+              <SiNestjs className='w-4 text-red-600' />
               NestJS
               <ArrowUpRight className='w-4' />
             </a>

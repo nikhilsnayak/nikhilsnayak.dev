@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
@@ -11,37 +12,37 @@ export const metadata: Metadata = {
 };
 
 export default function BlogsPage() {
-  const allBlogs = getBlogPosts();
+  const allBlogs = getBlogPosts().toSorted((a, b) => {
+    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
+      return -1;
+    }
+    return 1;
+  });
+
   return (
     <section>
-      <h1 className='mb-8 text-2xl font-semibold tracking-tighter'>My Blogs</h1>
-      <div>
-        {allBlogs
-          .sort((a, b) => {
-            if (
-              new Date(a.metadata.publishedAt) >
-              new Date(b.metadata.publishedAt)
-            ) {
-              return -1;
-            }
-            return 1;
-          })
-          .map((post) => (
-            <Link
-              key={post.slug}
-              className='mb-4 flex flex-col space-y-1'
-              href={`/blogs/${post.slug}`}
-            >
-              <div className='flex w-full flex-col space-x-0 md:flex-row md:space-x-2'>
-                <p className='w-[100px] tabular-nums text-neutral-600 dark:text-neutral-400'>
-                  {formatDate(post.metadata.publishedAt)}
-                </p>
-                <p className='tracking-tight text-neutral-900 dark:text-neutral-100'>
-                  {post.metadata.title}
-                </p>
-              </div>
-            </Link>
-          ))}
+      <h1 className='mb-6 font-mono text-2xl font-medium tracking-tighter'>
+        My Blogs
+      </h1>
+      <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
+        {allBlogs.map((post) => (
+          <Link
+            key={post.slug}
+            href={`/blogs/${post.slug}`}
+            className='group block'
+          >
+            <div className='transform space-y-2 overflow-hidden rounded-lg border border-border p-4 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl'>
+              <p className='flex items-center justify-between text-xs text-muted-foreground'>
+                <span>{formatDate(post.metadata.publishedAt)}</span>
+                <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
+              </p>
+              <h2 className='font-mono text-lg font-semibold'>
+                {post.metadata.title}
+              </h2>
+              <p className='text-sm'>{post.metadata.summary}</p>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

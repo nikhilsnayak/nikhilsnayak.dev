@@ -120,7 +120,7 @@ function Skills() {
                 <Icon className='w-3 sm:w-4' />
                 <span className='text-sm sm:text-base'>{name}</span>
               </div>
-            </Badge>{' '}
+            </Badge>
           </li>
         ))}
       </ul>
