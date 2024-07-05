@@ -1,16 +1,12 @@
-import { env } from './env';
+import { type VercelPostgresFields } from '@langchain/community/vectorstores/vercel_postgres';
 
-const DOCUMENT_TABLE = 'documents';
-
-export const vectorStoreConfig = {
-  tableName: DOCUMENT_TABLE,
-  postgresConnectionOptions: {
-    connectionString: env.POSTGRES_URL,
-  },
-  columns: {
-    idColumnName: 'id',
-    vectorColumnName: 'embedding',
-    contentColumnName: 'content',
-    metadataColumnName: 'metadata',
-  },
-};
+export const vectorStoreConfig: Omit<VercelPostgresFields, 'pool' | 'client'> =
+  {
+    tableName: 'documents',
+    columns: {
+      idColumnName: 'id',
+      vectorColumnName: 'embedding',
+      contentColumnName: 'content',
+      metadataColumnName: 'metadata',
+    },
+  };

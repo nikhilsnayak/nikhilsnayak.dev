@@ -7,6 +7,7 @@ import {
 import { VercelPostgres } from '@langchain/community/vectorstores/vercel_postgres';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { vectorStoreConfig } from '@/config/vector-store';
+import { env } from '@/config/env';
 import { combineDocuments, formatChatHistory } from '@/lib/utils/server';
 import { answerPrompt, standaloneQuestionPrompt } from './prompts';
 
@@ -32,7 +33,12 @@ export async function POST(req: Request) {
 
     const vectorstore = await VercelPostgres.initialize(
       new OpenAIEmbeddings(),
-      vectorStoreConfig
+      {
+        ...vectorStoreConfig,
+        postgresConnectionOptions: {
+          connectionString: env.POSTGRES_URL,
+        },
+      }
     );
 
     const retriever = vectorstore.asRetriever();
