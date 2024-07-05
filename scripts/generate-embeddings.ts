@@ -9,10 +9,12 @@ const CONTENT_DIR = './content';
 
 console.log('Initailizing vector store...');
 
-const vectorstore = await VercelPostgres.initialize(
-  new OpenAIEmbeddings(),
-  vectorStoreConfig
-);
+const vectorstore = await VercelPostgres.initialize(new OpenAIEmbeddings(), {
+  ...vectorStoreConfig,
+  postgresConnectionOptions: {
+    connectionString: process.env.POSTGRES_URL,
+  },
+});
 
 console.log('Initailized vector store');
 

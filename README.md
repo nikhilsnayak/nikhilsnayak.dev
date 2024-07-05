@@ -15,8 +15,6 @@
 
 ## Running Locally
 
-This application requires Node.js v18.17+.
-
 Create a `.env.local` file similar to [`.env.example`](./.env.example).
 
 ```bash
@@ -24,23 +22,6 @@ git clone https://github.com/nikhilsnayak/nikhilsnayak.dev.git <name-of-your-rep
 cd <name-of-your-repo>
 bun install
 bun run dev
-```
-
-## Vector Store Schema
-
-Run the following sql in your vercel postgres database
-
-```sql
--- Enable the pgvector extension to work with embedding vectors
-create extension vector;
-
--- Create a table to store your documents
-create table documents (
-  id bigserial primary key,
-  content text, -- corresponds to Document.pageContent
-  metadata jsonb, -- corresponds to Document.metadata
-  embedding vector(1536) -- 1536 works for OpenAI embeddings, change if needed
-);
 ```
 
 Feel free to use this repository as a template. Please remove all of my personal information
