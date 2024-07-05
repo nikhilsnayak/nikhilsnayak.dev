@@ -21,7 +21,6 @@ jobs:
         run: bun install
       - name: Run Script
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
           OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
         run: bunx turbo generate-embeddings

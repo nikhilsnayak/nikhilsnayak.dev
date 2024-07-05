@@ -22,7 +22,5 @@ jobs:
         uses: oven-sh/setup-bun@v2
       - name: Install Dependencies
         run: bun install
-      - name: Check Types
-        run: bunx turbo type-check
-      - name: Lint
-        run: bunx turbo lint
+      - name: Check Types and Lint
+        run: bunx turbo type-check lint

@@ -1,13 +1,12 @@
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { LangChainAdapter, Message, StreamingTextResponse } from 'ai';
-import { createClient } from '@supabase/supabase-js';
-import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
 import {
   RunnableSequence,
   RunnablePassthrough,
 } from '@langchain/core/runnables';
+import { VercelPostgres } from '@langchain/community/vectorstores/vercel_postgres';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { env } from '@/config/env';
+import { vectorStoreConfig } from '@/config/vector-store';
 import { combineDocuments, formatChatHistory } from '@/lib/utils/server';
 import { answerPrompt, standaloneQuestionPrompt } from './prompts';
 
@@ -31,13 +30,10 @@ export async function POST(req: Request) {
       verbose: true,
     });
 
-    const client = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
-
-    const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-      client,
-      tableName: 'documents',
-      queryName: 'match_documents',
-    });
+    const vectorstore = await VercelPostgres.initialize(
+      new OpenAIEmbeddings(),
+      vectorStoreConfig
+    );
 
     const retriever = vectorstore.asRetriever();
 
