@@ -6,8 +6,7 @@
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Components**: [Shadcn UI](https://ui.shadcn.com/)
 - **LLM**: [OpenAI](https://platform.openai.com/)
-- **Vector Store**: [Supabase](https://supabase.com/)
-- **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag)
+- **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag) and [AI SDK](https://sdk.vercel.ai/docs/introduction)
 - **Database**: [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
 - **Auth**: [Auth.js](https://authjs.dev/)
@@ -29,7 +28,7 @@ bun run dev
 
 ## Vector Store Schema
 
-Run the following sql in your supabase database
+Run the following sql in your vercel postgres database
 
 ```sql
 -- Enable the pgvector extension to work with embedding vectors
@@ -42,36 +41,6 @@ create table documents (
   metadata jsonb, -- corresponds to Document.metadata
   embedding vector(1536) -- 1536 works for OpenAI embeddings, change if needed
 );
-
--- Create a function to search for documents
-create function match_documents (
-  query_embedding vector(1536),
-  match_count int DEFAULT null,
-  filter jsonb DEFAULT '{}'
-) returns table (
-  id bigint,
-  content text,
-  metadata jsonb,
-  embedding jsonb,
-  similarity float
-)
-language plpgsql
-as $$
-#variable_conflict use_column
-begin
-  return query
-  select
-    id,
-    content,
-    metadata,
-    (embedding::text)::jsonb as embedding,
-    1 - (documents.embedding <=> query_embedding) as similarity
-  from documents
-  where metadata @> filter
-  order by documents.embedding <=> query_embedding
-  limit match_count;
-end;
-$$;
 ```
 
 Feel free to use this repository as a template. Please remove all of my personal information

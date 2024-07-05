@@ -1,22 +1,24 @@
 import { OpenAIEmbeddings } from '@langchain/openai';
-import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
-import { createClient } from '@supabase/supabase-js';
+import { VercelPostgres } from '@langchain/community/vectorstores/vercel_postgres';
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
 import { TextLoader } from 'langchain/document_loaders/fs/text';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { vectorStoreConfig } from '@/config/vector-store';
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
-const DOCUMENT_TABLE = 'documents';
 const CONTENT_DIR = './content';
 
-const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-await client.from('documents').delete().neq('id', 0);
+console.log('Initailizing vector store...');
 
-const store = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-  client,
-  tableName: DOCUMENT_TABLE,
-});
+const vectorstore = await VercelPostgres.initialize(
+  new OpenAIEmbeddings(),
+  vectorStoreConfig
+);
+
+console.log('Initailized vector store');
+
+vectorstore.delete({ deleteAll: true });
+
+console.log('Deleted existing embeddings');
 
 const loadDocuments = async (directory: string) => {
   const loader = new DirectoryLoader(
@@ -35,4 +37,10 @@ const markdownSplitter =
   RecursiveCharacterTextSplitter.fromLanguage('markdown');
 const splitedContent = await markdownSplitter.splitDocuments(content);
 
-await store.addDocuments(splitedContent);
+console.log({ splitedContent });
+
+await vectorstore.addDocuments(splitedContent);
+
+console.log('Updated vector store. Bye...');
+
+await vectorstore.end();
