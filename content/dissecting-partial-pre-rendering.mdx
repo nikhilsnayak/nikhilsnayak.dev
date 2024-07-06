@@ -1,0 +1,360 @@
+---
+title: 'Dissecting Partial Pre Rendering'
+publishedAt: '2024-07-06'
+summary: 'Fast initial loads, dynamic content, and rich interactivity in a single HTTP request!'
+---
+
+## Prelude
+
+In my previous blog post, [How I Built My Portfolio](/blogs/how-i-built-my-portfolio), I discussed the technologies I used to create my portfolio site. While discussing Next.js, I gave a very high-level explanation of what partial pre-rendering is.
+
+In this post, I will dive deep into how partial pre-rendering works. I will also share my thoughts on whether you should consider using it or if it's just another hype train in the JavaScript ecosystem.
+
+## Rendering Strategies
+
+Over the years, innovations in web development have led to different strategies for delivering content on the internet. Let's quickly review these strategies:
+
+- **Static Content**
+- **Server-Side Rendering (SSR)**
+- **Client-Side Rendering (CSR)**
+- **Static Site Generation (SSG)**
+
+We'll go over each of them briefly to ensure we have a common understanding and avoid confusion.
+
+### Static Content
+
+As the web started to become a mainstream platform for consuming information, people began sharing information by writing HTML documents. All the information was written as static markup and published to the internet. Each time something new needed to be shared, we would add another HTML document, and everything worked seamlessly.
+
+### Server Side Rendering
+
+Static content served its purpose, but it became challenging as web applications grew more dynamic. Consider a product details page as an example: the layout, styling, and markup remain the same across different products, with only the actual content varying. If you have 10 products to display, you'd need to duplicate the same markup with different content 10 times. Just copy-pasting seems easy at first, but imagine maintaining this for hundreds of pages or making design changes—it quickly becomes a daunting task.
+
+Server Side Rendering (SSR) addresses these challenges by having a server handle the rendering. With SSR, your content resides in a database, and when a user requests the details page of a product, the server retrieves the content and generates a new HTML document using templates. This approach allows for dynamic content generation on the server before sending it to the client, providing a personalized and efficient user experience.
+
+### Client Side Rendering
+
+Okay, SSR solved the problems we had, right? Then why did front-end frameworks like React, Angular, etc., become so popular and push the entire developer ecosystem to build websites rendered by the browser instead of a server? The answer is rich interactivity. With Client Side Rendering (CSR), we can provide instantaneous feedback to the user, thereby offering a native experience. In this approach, JavaScript on the client is responsible for constructing the entire web page from a blank HTML document with some script tags to load the actual JS. Whenever the page requires more data, an API call can be made to a backend hosted independently, which provides the required data in a format agreed upon by the client and server (e.g., JSON).
+
+#### The Problem with CSR
+
+1. **Poor SEO:** Since the entire web page is constructed by the client, there will be poor SEO as crawlers cannot execute JS. Additionally, when the page loads, there is no meaningful content, which severely affects the indexing of web pages by search engines.
+   > People argue that crawlers can now execute JS and index CSR'ed websites, but I still believe an HTML document with full meaningful content will always have the upper hand.
+2. **The Loading Spinners Hell:** The most irritating problem I call "The Loading Spinners Hell." Let's break this down in detail because this is interesting:
+
+   - **Step 1:** Your HTML document loads <LoadingSpinner className='fill-foreground inline-block' /> (1)
+   - **Step 2:** JS starts to render the page.
+   - **Step 3:** Oh wait, I need more data to render this part of the page; I'll get it from the API. Meanwhile... <LoadingSpinner className='fill-foreground inline-block' /> (2)
+   - **Step 4:** I got the data; let's continue rendering. Oh wait, I need more data to finish rendering this part; I'll get it from the API. Meanwhile... <LoadingSpinner className='fill-foreground inline-block'/> (3)
+   - **Step 5:** Repeat Step 4 another 3-4 times.
+   - **Step 6:** Finally, my UI is ready to interact!
+
+   Trust me, I am not joking. This happens in real production applications used by real users, and I have experienced this myself. Unfortunately, we cannot avoid this as our requirements grow larger and more complex.
+
+   > I don’t know if you are getting irritated or not, but for me, seeing those three spinners at a time makes my head spin!!!
+
+### Static Site Generation
+
+Static Site Generation (SSG) is an advanced version of static content. With SSG, you can write the markup more intuitively using markdown or React (with Next.js). At build time, your custom code is transformed into plain HTML, CSS, and JS, which can be deployed to a CDN. This approach ensures fast initial page loads since all the content is already present, resulting in excellent SEO and good core web vitals. The downside is that there won't be any dynamic content. This strategy is extremely useful for writing articles, documentation, etc.
+
+Now that we have a solid understanding of how different web rendering strategies work, let's address the elephant in the room "Partial Pre-Rendering".
+
+## Partial Pre-Rendering
+
+Partial Pre-Rendering is a feature that allows static portions of a route to be pre-rendered and served from the cache, with dynamic content streamed in, all in a single HTTP request. ([The official definition as per Next.js docs](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering))
+
+There are some big words in this definition, so let's break them down step by step.
+
+### Chapter 1 - The Why
+
+We have briefly gone through various rendering strategies. Each has its own set of pros and cons, and we can choose any one of them according to our requirements. Trust me, if the right solution is picked based on the project's needs, it will work flawlessly.
+
+But why invent another technology and make things more complicated?
+
+Because we are humans, and humans are greedy. We want all the pros of all the rendering strategies so that everyone is happy and we can earn millions 🤑🤑
+
+Just kidding. But what if there existed an ideal technology that actually combined all the best parts of the techniques we discussed earlier?
+
+**[Vercel](https://vercel.com)** saw an opportunity here, invested their resources, and I must say they actually did it.
+
+Yes, Partial Pre-Rendering is exactly that. It combines all the good parts of the rendering strategies we discussed until now.
+
+### Chapter 2 - The How
+
+Partial Pre-Rendering (PPR) is a new experimental feature introduced in [Next.js 14](https://nextjs.org/blog/next-14#partial-prerendering-preview). To understand how PPR works, a basic understanding of React and Next.js is beneficial. However, even if you're new to these technologies, you should still grasp the implementation theory.
+
+Next.js is a meta-framework for React that offers powerful features on top of React, such as server-side rendering, file-based routing, and more.
+
+With the introduction of the new App Router in Next.js 13, the framework heavily leverages streaming and concurrent features of React.js. The App Router utilizes all the features of server-side React, such as React Server Components (RSCs), Suspense Boundaries, and Streaming.
+
+Since PPR is still an experimental feature, it is only available in the canary channels. So you need to use `next@canary` or `next@rc`. (PPR should not be used in production with real users.)
+
+PPR is built on top of [React Server Components](https://react.dev/reference/rsc/server-components) and [Suspense Boundaries](https://react.dev/reference/react/Suspense), so there are no new APIs to learn. You use the concepts you are already familiar with.
+
+When PPR is enabled, all the content is treated as static content, meaning it will be the same for every user. If the part of a page needs to have dynamic content rendered on a per-request basis, that particular component can be wrapped inside a Suspense boundary.
+
+#### Let's Understand this with an Example
+
+Consider a Course Details Page as shown below.
+
+> Note: This is just an example for illustration purposes and the use case might vary in real scenarios. In this example, I assume that course details don't change very often.
+
+<Image
+  src='/blogs/dissecting-partial-pre-rendering/course-details-page.png'
+  alt='Course Details page'
+  width={1168}
+  height={929}
+/>
+
+The corresponding JSX to render this page looks like this:
+
+```tsx
+import Image from 'next/image';
+
+export default function Home() {
+  return (
+    <div className='flex min-h-[100dvh] flex-col'>
+      <section className='bg-muted w-full py-12 md:py-24 lg:py-32'>
+        <div className='container m-auto px-4 md:px-6'>
+          <div className='grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]'>
+            <div className='flex flex-col justify-center space-y-4'>
+              <div className='space-y-2'>
+                <h1 className='text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none'>
+                  Mastering React: A Comprehensive Course
+                </h1>
+                <p className='text-muted-foreground max-w-[600px] md:text-xl'>
+                  Dive deep into the world of React and become a proficient
+                  frontend developer. This course covers everything from
+                  fundamental concepts to advanced techniques.
+                </p>
+              </div>
+              <button className='bg-primary text-primary-foreground'>
+                Enroll Now
+              </button>
+            </div>
+            <Image
+              src='https://generated.vusercontent.net/placeholder.svg'
+              width='550'
+              height='550'
+              alt='Course Hero'
+              className='mx-auto aspect-video overflow-hidden'
+            />
+          </div>
+        </div>
+      </section>
+      <section className='w-full py-12 md:py-24 lg:py-32'>
+        <div className='container m-auto px-4 md:px-6'>
+          <div className='grid gap-12 lg:grid-cols-2'>
+            <div>
+              <h2 className='text-3xl font-bold tracking-tighter'>
+                Course Curriculum
+              </h2>
+              <div className='text-muted-foreground mt-6 space-y-4'>
+                <div>
+                  <h3 className='text-xl font-bold'>Introduction to React</h3>
+                  <p>
+                    Learn the fundamentals of React, including components,
+                    state, and props.
+                  </p>
+                </div>
+                <div>
+                  <h3 className='text-xl font-bold'>Advanced React Concepts</h3>
+                  <p>
+                    Explore advanced topics like hooks, context, and performance
+                    optimization.
+                  </p>
+                </div>
+                <div>
+                  <h3 className='text-xl font-bold'>
+                    Building Real-World Apps
+                  </h3>
+                  <p>
+                    Apply your knowledge by building complex, production-ready
+                    applications.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h2 className='text-3xl font-bold tracking-tighter'>
+                About the Instructor
+              </h2>
+              <div className='text-muted-foreground mt-6 space-y-4'>
+                <div className='flex items-center gap-4'>
+                  <div className='flex h-16 w-16 items-center justify-center rounded-full border'>
+                    <Image
+                      src='https://generated.vusercontent.net/placeholder.svg'
+                      alt='Instructor'
+                      width={64}
+                      height={64}
+                      className='h-full w-full rounded-full object-cover'
+                    />
+                    <span className='sr-only'>JD</span>
+                  </div>
+                  <div>
+                    <h3 className='text-xl font-bold'>John Doe</h3>
+                    <p>Senior Frontend Engineer</p>
+                  </div>
+                </div>
+                <p>
+                  John Doe is a seasoned frontend engineer with over 10 years of
+                  experience. He has worked on a wide range of projects, from
+                  small startups to large enterprises, and is passionate about
+                  sharing his knowledge with others.
+                </p>
+                <div>
+                  <h3 className='text-xl font-bold'>Course Duration</h3>
+                  <p>24 hours of video content</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+```
+
+> Oh, by the way, I am using [v0.dev](https://v0.dev) by Vercel to generate the UI used in the example. Give it a try if you haven't already; it's really awesome!
+
+All of the content here is static. That is, for each user, this course information doesn't change. We don't require any request-time information to render this page. The text hardcoded in this markup can be stored in a database, and technically, we can generate this page only once at build time, according to our previous assumption.
+
+So, technically, we generate a static HTML page with this information (SSG), resulting in faster page loads and excellent SEO.
+
+Here is the build logs for the above use case:
+
+<Image
+  src='/blogs/dissecting-partial-pre-rendering/build-output-1.png'
+  alt='Build output 1'
+  width={805}
+  height={307}
+/>
+
+Now let's increase the complexity a bit more. We need to add a customer review section as shown below:
+
+<Image
+  src='/blogs/dissecting-partial-pre-rendering/customer-review-section.png'
+  alt='Course Details page'
+  width={1121}
+  height={183}
+/>
+
+The tricky part here is that the reviews get added and edited very often since our platform is very popular. Therefore, the reviews must be dynamically generated for each request.
+
+To make this use case even more interesting, we need to show an edit and delete button for the review that the currently logged-in user has added. We might also need to show a text area to add review in the first place if the user is logged in. I will leave this part as an excersise. I hope this use case makes sense.
+
+Let's update our JSX to include this dynamic review section:
+
+```tsx
+------
+import { getReviews } from './db';
+import { ReviewCard } from './components/review-card';
+import { Suspense } from 'react';
+import { cookies } from 'next/headers';
+
+async function Reviews() {
+  const user = cookies().get('user')
+  const reviews = await getReviews();
+  return reviews.map(({ review, userName }) => (
+    <ReviewCard key={userName} review={review} userName={userName} />
+  ));
+}
+
+export default function Home() {
+  return (
+    <div className='flex flex-col min-h-[100dvh]'>
+      ------
+      <section className='w-full py-12 md:py-24 lg:py-32 border-t'>
+        <div className='container m-auto px-4 md:px-6'>
+          <h2 className='text-3xl font-bold tracking-tighter mb-8'>
+            Customer Reviews
+          </h2>
+          <Suspense fallback='loading..'>
+            <Reviews />
+          </Suspense>
+        </div>
+      </section>
+    </div>
+  );
+}
+```
+
+How it currently works is that, all the content until the `Suspense` boundary along with the fallback UI provided to Suspense is returned and immediatly when a request is made. In the meantime the suspended children in our case the `Reviews` component will start resolving the promises. Once the promises are resolved the UI for the suspened children gets streamed in the same response. On Client side react will seamlessly swap the fallback UI with the streamed content.
+
+Remember everything here happens in single Request-Response Cycle so no client waterfall. And you have all the meaningful content on your page in a **SINGLE** Request.
+
+With the above changes, our entire route is now dynamically rendered because we want to render reviews dynamically for each request. The sad part is that we are wasting resources and doing redundant work: only the reviews section is dynamic, but all the other parts are the same for every request. Even though the content is the same for every request, we are rendering it every time. This increases the Time to First Byte (TTFB) since the entire page must be dynamically generated for each request.
+
+Here the build logs for the above use case:
+
+<Image
+  src='/blogs/dissecting-partial-pre-rendering/build-output-2.png'
+  alt='Build output 2'
+  width={811}
+  height={322}
+/>
+
+Now comes the actual fun part. Remember earlier I said the PPR is built on top of existing React APIs? We have used the `Suspense` boundary in the above code to show a fallback UI while our `Reviews` component is suspended to get the data from the database.
+
+PPR takes this `Suspense` with the streaming model to the next level:
+
+1. **Build Time:** All the content up to the `Suspense` boundary, along with the fallbacks, is statically generated only **ONCE** at build time and suspends the rendering at build time **(Pre Rendering)**.
+
+2. **Request Time:** At request time, the **pre-rendered** static shell is immediately served to the client. Meanwhile, Next.js resumes rendering from where it had suspended at build time.
+
+3. **Streaming to Client:** Once the suspended children resolve, the UI is streamed to the client in the same response. On the client side, React swaps the fallbacks with the streamed content.
+
+So How do we achive this?
+
+Simple updated your `next.config.js` file to have the experimental ppr turned on (Make sure you are on either next@canary or next@rc)
+
+```js
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    ppr: true,
+  },
+};
+
+export default nextConfig;
+```
+
+With this one change we are now PPRing our page. Here is the build output with PPR turned ON
+
+<Image
+  src='/blogs/dissecting-partial-pre-rendering/build-output-3.png'
+  alt='Build output 3'
+  width={1122}
+  height={322}
+/>
+
+### Chapter 3 - How It Compares to Other Rendering Strategies
+
+1. **Static Content / Static Site Generation (SSG)** - The initial static shell is pre-rendered at build time, ensuring fast initial page loads and excellent SEO.
+
+2. **Server-Side Rendering (SSR)** - Suspended components are streamed at request time, providing dynamic content tailored to the user while maintaining efficient resource usage.
+
+3. **Client-Side Rendering (CSR)** - Rich client-side interactivity is achieved with React client components, allowing for a highly responsive and engaging user experience.
+
+#### Combining the Best of All Strategies
+
+Partial Pre-Rendering (PPR) effectively combines the best aspects of these rendering strategies:
+
+- **SSG** provides a fast, SEO-friendly initial load by pre-rendering static content.
+- **SSR** ensures that dynamic, personalized content is delivered efficiently by streaming it on demand.
+- **CSR** enables rich interactivity on the client side, enhancing the user experience with responsive UI components.
+
+## Final Thoughts
+
+Isn't this a true marvel? With Partial Pre-Rendering (PPR), we achieve fast initial page loads with meaningful content, personalized dynamic content, and rich interactivity all in a single page rendered through a single request.
+
+I believe that PPR has the potential to significantly improve the web experience. Currently, this technology is exclusive to Next.js, so you must be familiar with Next.js to take full advantage of PPR.
+
+As an experimental feature, PPR is still in its early stages and will undoubtedly see many improvements as a larger community begins to adopt and refine it.
+
+Lastly, a big salute 🫡 to all the engineers behind PPR. You have truly made the web a better place.
+
+Thank you so much for patiently reading this long blog post. I appreciate your time 🙏🙏🙏. I'd love to hear your thoughts in the comments. Happy PPRing!
+
+A complete version of example code used can found [here](https://github.com/nikhilsnayak/dissecting-partial-pre-rendering) and the corresponding [demo](https://dissecting-ppr.nikhilsnayak.dev)
