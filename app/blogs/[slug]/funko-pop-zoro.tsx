@@ -9,6 +9,19 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 
+function getRandomInteractionMessage() {
+  const interactionMessages = [
+    'Hey there! Just finished a hundred push-ups. Need a summary of this blog while I catch my breath?',
+    'Yo! Taking a break from sword practice. Need me to summarize this blog for you while I recharge?',
+    'Hello! I seem to have gotten lost again. While I find my bearings, how about a summary of this blog?',
+    "Hey! Just taking a moment to reflect. Want me to summarize this blog for you while I contemplate life's mysteries?",
+    'Hi there! Just enjoying the breeze. How about a summary of this blog while I take in the scenery?',
+    'Yo! Always ready for action. Want me to summarize this blog for you before the next adventure begins?',
+  ];
+  const randomIndex = Math.floor(Math.random() * interactionMessages.length);
+  return interactionMessages[randomIndex];
+}
+
 interface FunkoPopZoroProps {
   blogTitle?: string;
 }
@@ -51,8 +64,7 @@ export function FunkoPopZoro({ blogTitle }: FunkoPopZoroProps) {
               className='absolute -top-32 right-16 max-w-sm rounded-lg border border-gray-300 bg-white p-4 shadow-lg'
             >
               <p className='text-sm text-gray-700'>
-                Hey there! Do you know where I can find my swords? Just kidding.
-                I can summarize this blog for you{' '}
+                {`${getRandomInteractionMessage()} `}
                 <Link
                   href={{
                     pathname: '/bot',
