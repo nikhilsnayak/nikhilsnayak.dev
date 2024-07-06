@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
+import { LoadingSpinner } from '@/assets/icons';
 import { slugify } from '@/lib/utils';
 
 //@ts-expect-error -- I am lazy to add types
@@ -93,6 +94,7 @@ const components = {
   a: CustomLink,
   code: Code,
   Table,
+  LoadingSpinner,
 };
 
 export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {
