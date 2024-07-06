@@ -2,6 +2,11 @@
 
 # [nikhilsnayak.dev](https://nikhilsnayak.dev)
 
+## Overview
+
+This project utilizes several cutting-edge technologies to build a modern web application:
+
+- **Package Manager**: [Bun](https://bun.sh)
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Components**: [Shadcn UI](https://ui.shadcn.com/)
@@ -13,20 +18,38 @@
 - **Deployment**: [Vercel](https://vercel.com)
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
 
-## Running Locally
+## Getting Started
 
-Create a `.env.local` file similar to [`.env.example`](./.env.example).
+### Running Locally
 
-```bash
-git clone https://github.com/nikhilsnayak/nikhilsnayak.dev.git <name-of-your-repo>
-cd <name-of-your-repo>
-bun install
-bun run dev
-```
+> **Note:** This repository uses several experimental features which may result in unstable behavior.
 
-Feel free to use this repository as a template. Please remove all of my personal information
+1. Clone the repository and navigate to the directory:
 
-- [CODE_OF_CONDUCT](./CODE_OF_CONDUCT.md)
-- [CONTRIBUTING](./CONTRIBUTING.md)
+   ```bash
+   git clone https://github.com/nikhilsnayak/nikhilsnayak.dev.git <your-repo-name>
+   cd <your-repo-name>
+   ```
+
+2. Install the dependencies using [Bun](https://bun.sh):
+
+   ```bash
+   bun install
+   ```
+
+3. Create a `.env.local` file based on the [`.env.example`](./.env.example) file.
+
+4. Start the development server:
+
+   ```bash
+   bun run dev
+   ```
+
+Feel free to use this repository as a template. Ensure to remove any personal information.
+
+## Additional Resources
+
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Contributing Guidelines](./CONTRIBUTING.md)
 - [License](./LICENSE)
-- [SECURITY](./SECURITY.md)
+- [Security Policy](./SECURITY.md)

@@ -95,10 +95,10 @@ export default function Blog({ params }: BlogProps) {
           }),
         }}
       />
-      <h1 className='title text-2xl font-semibold tracking-tighter'>
+      <h1 className='title font-mono text-2xl font-semibold tracking-tighter'>
         {post.metadata.title}
       </h1>
-      <div className='mb-8 mt-4 flex flex-col justify-between text-sm sm:flex-row'>
+      <div className='mb-8 mt-4 flex flex-col justify-between gap-3 text-sm sm:flex-row'>
         <div className='flex items-center gap-3'>
           <p className='text-sm text-neutral-600 dark:text-neutral-400'>
             {formatDate(post.metadata.publishedAt)}
