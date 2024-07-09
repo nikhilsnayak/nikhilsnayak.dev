@@ -1,16 +1,22 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
+import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { cn } from '@/lib/utils';
 import { BASE_URL } from '@/config/constants';
 import NextTopLoader from 'nextjs-toploader';
+import { NavLink } from '@/components/nav-link';
+import { BotLink } from '@/components/bot-link';
+
+const ThemeToggle = dynamic(() => import('@/components/theme-toggle'), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: {
@@ -43,6 +49,70 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
   },
 };
+
+function Header() {
+  return (
+    <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur'>
+      <nav className='mx-auto flex max-w-screen-lg items-center justify-between p-4'>
+        <ul className='flex gap-4'>
+          <li>
+            <NavLink href='/'>home</NavLink>
+          </li>
+          <li>
+            <NavLink href='/work'>work</NavLink>
+          </li>
+          <li>
+            <NavLink href='/blogs'>blogs</NavLink>
+          </li>
+        </ul>
+        <ul className='flex gap-4'>
+          <li className='hover:opacity-70'>
+            <a
+              href='https://x.com/_nikhilsnayak_'
+              className='dark:text-fluorescent'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='x.com'
+            >
+              <SiX className='size-4' />
+            </a>
+          </li>
+          <li className='hover:opacity-70'>
+            <a
+              href='https://github.com/nikhilsnayak'
+              className='dark:text-fluorescent'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='github'
+            >
+              <SiGithub className='size-4' />
+            </a>
+          </li>
+          <li className='hover:opacity-70'>
+            <a
+              href='https://linkedin.com/in/nikhilsnayak'
+              className='dark:text-fluorescent'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='linkedin'
+            >
+              <SiLinkedin className='size-4' />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className='mx-auto mb-8 flex w-full max-w-screen-lg items-center justify-between border-t p-4'>
+      <BotLink />
+      <ThemeToggle />
+    </footer>
+  );
+}
 
 export default function RootLayout({
   children,

@@ -11,7 +11,6 @@ import { LoadingSpinner2 } from '@/assets/icons';
 import { useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 interface MessageProps {
   content: string;
@@ -31,7 +30,6 @@ function BotMessage({ content }: Readonly<MessageProps>) {
               />
             ),
           }}
-          remarkPlugins={[remarkGfm]}
         >
           {content}
         </Markdown>

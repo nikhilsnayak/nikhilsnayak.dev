@@ -3,11 +3,13 @@ import { CustomMDX } from '@/components/mdx';
 import { BASE_URL } from '@/config/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
-import { Views } from '@/components/views';
+import { PostViewsCount } from '@/components/post-views';
 import { CommentsSection } from '@/components/comments';
 import { Suspense } from 'react';
 import { FunkoPopZoro } from './funko-pop-zoro';
 import { SummarizeButton } from './summarize-button';
+import { Eye } from 'lucide-react';
+import { LoadingSpinner2 } from '@/assets/icons';
 
 interface BlogProps {
   params: { slug: string };
@@ -88,14 +90,22 @@ export default function Blog({ params }: BlogProps) {
       <h1 className='title font-mono text-2xl font-semibold tracking-tighter'>
         {post.metadata.title}
       </h1>
-      <div className='mb-8 mt-4 flex flex-col justify-between gap-3 text-sm sm:flex-row'>
+      <div className='mb-8 mt-4 flex flex-col justify-between gap-3 text-sm sm:flex-row sm:items-center'>
         <div className='flex items-center gap-3'>
           <p className='text-sm text-neutral-600 dark:text-neutral-400'>
             {formatDate(post.metadata.publishedAt)}
           </p>
           <SummarizeButton blogTitle={blogTitle} />
         </div>
-        <Views slug={post.slug} />
+        <Suspense fallback={<LoadingSpinner2 className='fill-foreground' />}>
+          <PostViewsCount slug={post.slug} updateViews>
+            {(count) => (
+              <span className='flex items-center gap-2'>
+                <Eye /> {count}
+              </span>
+            )}
+          </PostViewsCount>
+        </Suspense>
       </div>
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} />
@@ -104,7 +114,7 @@ export default function Blog({ params }: BlogProps) {
         <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>
           Comments
         </h2>
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<LoadingSpinner2 className='fill-foreground' />}>
           <CommentsSection slug={post.slug} />
         </Suspense>
       </div>

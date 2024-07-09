@@ -1,6 +1,6 @@
 'use client';
 import { useActionState } from 'react';
-import { Button } from '../ui/button';
+import { Button } from './ui/button';
 import { LogOut } from 'lucide-react';
 import { logout } from '@/lib/actions/auth';
 import { LoadingSpinner } from '@/assets/icons';
