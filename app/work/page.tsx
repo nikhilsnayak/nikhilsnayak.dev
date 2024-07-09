@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { SiReact, SiNextdotjs, SiNestjs } from '@icons-pack/react-simple-icons';
 import { ArrowUpRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { techMang24 } from '@/assets/images';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Work',
@@ -94,17 +96,37 @@ export default function WorkPage() {
           <span>to build rich and interactive user experience </span>
         </p>
       </section>
-      {/* <section className='mt-12'>
+      <section className='mt-12'>
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
           Other Activites
         </h2>
-        <iframe
-          src='https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7153010859382878209'
-          title='Tech Mang 24'
-          height='1024'
-          className='min-w-full'
-        ></iframe>
-      </section> */}
+        <div className='flex flex-col gap-4 md:flex-row md:items-center'>
+          <div className='space-y-2'>
+            <span className='text-sm text-muted-foreground underline'>
+              Jan 14 2024
+            </span>
+            <p>
+              Delivered a captivating session on React Server Components, Server
+              Actions, and Full-Stack Development using Next.js 14 at Mangalore
+              Tech Day 2024 hosted by{' '}
+              <a
+                href='https://mangaloreinfotech.in/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-green-500 hover:underline'
+              >
+                (UniCourt India) Mangalore Infotech Solutions Private Limited
+              </a>
+            </p>
+          </div>
+          <Image
+            src={techMang24}
+            alt='Me as Speaker at TechMang24 giving a talk on Next.js 14'
+            className='w-full max-w-sm rounded-sm object-cover drop-shadow-sm'
+            placeholder='blur'
+          />
+        </div>
+      </section>
     </section>
   );
 }

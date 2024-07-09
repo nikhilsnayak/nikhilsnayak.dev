@@ -6,13 +6,7 @@ import { cn, formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 import { Badge } from '@/components/ui/badge';
 import { PostViewCount } from '@/components/views';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { gImage1, profile } from '@/assets/images';
+import { profile } from '@/assets/images';
 import {
   SiHtml5,
   SiCss3,
@@ -65,49 +59,10 @@ const skills = [
   },
 ] as const;
 
-const images = [
-  {
-    src: gImage1,
-    alt: 'Me as Speaker at TechMang24 giving a talk on Next.js 14',
-  },
-] as const;
-
 const sourceCodePro = Source_Code_Pro({
   weight: ['600'],
   subsets: ['latin'],
 });
-
-function Gallery() {
-  return (
-    <section>
-      <h3 className='mb-[0.5em] font-mono text-2xl font-bold sm:text-4xl'>
-        Gallery:
-      </h3>
-      <ul className='flex flex-wrap items-center gap-8'>
-        {images.map((image, index) => (
-          <li className='max-w-[450px]' key={index}>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    className='rounded-sm object-cover drop-shadow-sm'
-                    priority
-                    placeholder='blur'
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{image.alt}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
 
 export default function HomePage() {
   const allBlogs = getBlogPosts()
@@ -119,7 +74,7 @@ export default function HomePage() {
     })
     .slice(0, 2);
   return (
-    <section className='space-y-20'>
+    <section>
       <header className='relative'>
         <h1 className='mb-[0.25em] text-3xl font-light sm:text-5xl'>
           Hi, I&apos;m
@@ -141,7 +96,7 @@ export default function HomePage() {
           placeholder='blur'
         />
       </header>
-      <section className='space-y-4'>
+      <section className='mt-20 space-y-4'>
         <p className='text-lg sm:text-xl'>
           I am a passionate and driven software engineer with expertise in both
           front-end and back-end development. My skills include:
@@ -170,7 +125,7 @@ export default function HomePage() {
           seasoned developer or just starting out.
         </p>
       </section>
-      <section>
+      <section className='mt-10'>
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
           Recent Posts:
         </h2>
