@@ -9,18 +9,8 @@ import { Suspense } from 'react';
 import { FunkoPopZoro } from './funko-pop-zoro';
 import { SummarizeButton } from './summarize-button';
 
-export const maxDuration = 60;
-
 interface BlogProps {
   params: { slug: string };
-}
-
-export async function generateStaticParams() {
-  const posts = getBlogPosts();
-
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
 }
 
 export function generateMetadata({ params }: BlogProps) {

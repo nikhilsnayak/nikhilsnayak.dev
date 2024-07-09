@@ -26,8 +26,6 @@ import {
 } from '@icons-pack/react-simple-icons';
 import { ArrowUpRight } from 'lucide-react';
 
-export const dynamic = 'force-static';
-
 const skills = [
   {
     name: 'HTML5',
