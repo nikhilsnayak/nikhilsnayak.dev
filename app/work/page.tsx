@@ -24,7 +24,10 @@ export default function WorkPage() {
       </header>
       <hr className='my-6 border-foreground/20' />
       <section>
-        <h2 className='mb-2 inline-block font-mono text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
+        <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
+          Experience
+        </h2>
+        <h3 className='mb-2 inline-block font-mono text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
           <a
             href='https://www.codecrafttech.com/'
             target='_blank'
@@ -34,7 +37,7 @@ export default function WorkPage() {
           >
             CodeCraft Technologies <ArrowUpRight className='w-4' />
           </a>
-        </h2>
+        </h3>
         <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
           <span className='font-medium'>
             Trainee Engineer - Software Development{' '}
@@ -93,6 +96,17 @@ export default function WorkPage() {
           <span>to build rich and interactive user experience </span>
         </p>
       </section>
+      {/* <section className='mt-12'>
+        <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
+          Other Activites
+        </h2>
+        <iframe
+          src='https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7153010859382878209'
+          title='Tech Mang 24'
+          height='1024'
+          className='min-w-full'
+        ></iframe>
+      </section> */}
     </section>
   );
 }
