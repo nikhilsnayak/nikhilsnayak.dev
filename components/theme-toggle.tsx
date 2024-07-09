@@ -1,39 +1,49 @@
 'use client';
 
-import * as React from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { PropsWithChildren } from 'react';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
-export function ThemeToggle() {
-  const { setTheme } = useTheme();
+interface ThemeButtonProps extends PropsWithChildren {
+  type: 'light' | 'dark' | 'system';
+}
+
+function ThemeButton({ type, children }: ThemeButtonProps) {
+  const { theme, setTheme } = useTheme();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant='outline' size='icon'>
-          <Sun className='h-[1rem] w-[1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
-          <Moon className='absolute h-[1rem] w-[1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
-          <span className='sr-only'>Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => setTheme('light')}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      variant='ghost'
+      size='icon'
+      onClick={() => setTheme(type)}
+      className={cn(
+        'rounded-full p-2 hover:bg-background/50',
+        theme === type && 'bg-background'
+      )}
+    >
+      <span className='sr-only'>{type}</span>
+      {children}
+    </Button>
   );
 }
+
+export function ThemeToggle() {
+  return (
+    <div className='flex gap-2 rounded-full border bg-muted'>
+      <span className='sr-only'>Toggle theme</span>
+      <ThemeButton type='light'>
+        <Sun />
+      </ThemeButton>
+      <ThemeButton type='dark'>
+        <Moon />
+      </ThemeButton>
+      <ThemeButton type='system'>
+        <Monitor />
+      </ThemeButton>
+    </div>
+  );
+}
+
+export default ThemeToggle;

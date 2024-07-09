@@ -41,3 +41,11 @@ export function Views({ slug }: ViewsProps) {
     </div>
   );
 }
+
+export async function PostViewCount({ slug }: ViewsProps) {
+  const views = await db.query.views.findFirst({
+    where: (views, { eq }) => eq(views.slug, slug),
+  });
+
+  return <span className='text-lg'>{views?.count ?? 0} views</span>;
+}
