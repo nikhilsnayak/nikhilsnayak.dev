@@ -1,0 +1,38 @@
+import { unstable_after as after } from 'next/server';
+import { unstable_noStore as noStore } from 'next/cache';
+import { db } from '@/lib/db';
+import { views as viewsTable } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
+import React from 'react';
+
+interface ViewsProps {
+  slug: string;
+  children: (count: number) => React.ReactNode;
+  updateViews?: boolean;
+}
+
+export async function PostViewsCount({
+  slug,
+  children,
+  updateViews = false,
+}: ViewsProps) {
+  noStore();
+  const views = await db.query.views.findFirst({
+    where: (views, { eq }) => eq(views.slug, slug),
+  });
+
+  if (process.env.NODE_ENV === 'production' && updateViews) {
+    after(async () => {
+      if (!views) {
+        await db.insert(viewsTable).values({ slug, count: 1 });
+      } else {
+        await db
+          .update(viewsTable)
+          .set({ count: views.count + 1 })
+          .where(eq(viewsTable.slug, slug));
+      }
+    });
+  }
+
+  return children(views?.count ?? 0);
+}

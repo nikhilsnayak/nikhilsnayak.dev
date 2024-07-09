@@ -53,7 +53,6 @@
     "react": "^19.0.0-rc-cc1ec60d0d-20240607",
     "react-dom": "^19.0.0-rc-cc1ec60d0d-20240607",
     "react-markdown": "^9.0.1",
-    "remark-gfm": "^4.0.0",
     "server-only": "^0.0.1",
     "sharp": "^0.33.3",
     "sonner": "^1.4.41",

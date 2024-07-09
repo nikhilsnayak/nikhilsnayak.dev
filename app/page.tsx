@@ -5,8 +5,9 @@ import { Source_Code_Pro } from 'next/font/google';
 import { cn, formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 import { Badge } from '@/components/ui/badge';
-import { PostViewCount } from '@/components/views';
+import { PostViewsCount } from '@/components/post-views';
 import { profile } from '@/assets/images';
+import { LoadingSpinner2 } from '@/assets/icons';
 import {
   SiHtml5,
   SiCss3,
@@ -136,18 +137,22 @@ export default function HomePage() {
               href={`/blogs/${post.slug}`}
               className='group block'
             >
-              <div className='h-full transform space-y-2 overflow-hidden rounded-lg border border-border p-4 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl'>
-                <p className='flex items-center justify-between text-xs text-muted-foreground'>
-                  <span>{formatDate(post.metadata.publishedAt)}</span>
-                  <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
-                </p>
-                <h2 className='font-mono text-xl font-semibold'>
-                  {post.metadata.title}
-                </h2>
+              <div className='h-full transform space-y-4 overflow-hidden rounded-lg border border-border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'>
+                <div className='space-y-1'>
+                  <p className='flex items-center justify-between text-xs text-muted-foreground'>
+                    <span>{formatDate(post.metadata.publishedAt)}</span>
+                    <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
+                  </p>
+                  <h2 className='font-mono text-xl font-semibold'>
+                    {post.metadata.title}
+                  </h2>
+                </div>
                 <Suspense
-                  fallback={<span className='text-lg blur-sm'>100 views</span>}
+                  fallback={<LoadingSpinner2 className='fill-foreground' />}
                 >
-                  <PostViewCount slug={post.slug} />
+                  <PostViewsCount slug={post.slug}>
+                    {(count) => <p>{count} views</p>}
+                  </PostViewsCount>
                 </Suspense>
               </div>
             </Link>

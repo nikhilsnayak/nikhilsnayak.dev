@@ -1,6 +1,6 @@
 'use client';
 import { useActionState } from 'react';
-import { Button } from '../ui/button';
+import { Button } from './ui/button';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { signInWithGithub } from '@/lib/actions/auth';
 import { LoadingSpinner } from '@/assets/icons';

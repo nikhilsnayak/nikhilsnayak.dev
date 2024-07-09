@@ -6,17 +6,20 @@ import { highlight } from 'sugar-high';
 import { LoadingSpinner } from '@/assets/icons';
 import { slugify } from '@/lib/utils';
 
-//@ts-expect-error -- I am lazy to add types
-function Table({ data }) {
-  //@ts-expect-error -- I am lazy to add types
+function Table({
+  data,
+}: {
+  data: {
+    headers: string[];
+    rows: string[][];
+  };
+}) {
   const headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>
   ));
 
-  //@ts-expect-error -- I am lazy to add types
   const rows = data.rows.map((row, index) => (
     <tr key={index}>
-      {/* @ts-expect-error -- I am lazy to add types */}
       {row.map((cell, cellIndex) => (
         <td key={cellIndex}>{cell}</td>
       ))}
@@ -33,8 +36,7 @@ function Table({ data }) {
   );
 }
 
-//@ts-expect-error -- I am lazy to add types
-function CustomLink(props) {
+function CustomLink(props: any) {
   const href = props.href;
 
   if (href.startsWith('/')) {
