@@ -2,6 +2,7 @@ import { Eye } from 'lucide-react';
 import { Suspense } from 'react';
 import { Skeleton } from './ui/skeleton';
 import { unstable_after as after } from 'next/server';
+import { unstable_noStore as noStore } from 'next/cache';
 import { db } from '@/lib/db';
 import { views as viewsTable } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -43,6 +44,7 @@ export function Views({ slug }: ViewsProps) {
 }
 
 export async function PostViewCount({ slug }: ViewsProps) {
+  noStore();
   const views = await db.query.views.findFirst({
     where: (views, { eq }) => eq(views.slug, slug),
   });

@@ -154,7 +154,7 @@ export default function HomePage() {
               <Badge asChild className='cursor-default'>
                 <div className='flex items-center gap-1'>
                   <Icon className='w-3 sm:w-4' />
-                  <span className='text-sm sm:text-base'>{name}</span>
+                  <span className='text-xs sm:text-sm'>{name}</span>
                 </div>
               </Badge>
             </li>
