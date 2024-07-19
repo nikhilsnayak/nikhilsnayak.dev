@@ -88,7 +88,7 @@
   },
   "packageManager": "bun@1.1.10",
   "overrides": {
-    "@langchain/core": "0.2.16",
+    "@langchain/core": "0.2.17",
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc"
   },
