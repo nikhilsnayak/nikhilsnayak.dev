@@ -7,7 +7,7 @@ import { SignOutButton } from './signout-button';
 import { addComment } from '@/lib/actions/comments';
 import { LoadingSpinner } from '@/assets/icons';
 import { Textarea } from './ui/textarea';
-import { Form } from './ui/form';
+import { Form, FormError, FormSubmit } from './ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
 import { DeleteCommentControl, EditCommentControl } from './comment-controls';
@@ -98,13 +98,13 @@ export async function CommentsSection({ slug }: CommentsProps) {
               required
               minLength={3}
             />
-            <Form.Error className='text-red-500' />
-            <Form.Submit
+            <FormError className='text-red-500' />
+            <FormSubmit
               className='self-end'
               pendingFallback={<LoadingSpinner className='fill-background' />}
             >
               Comment
-            </Form.Submit>
+            </FormSubmit>
           </Form>
         </>
       )}
