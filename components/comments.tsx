@@ -4,7 +4,10 @@ import { db } from '@/lib/db';
 import { formatDate } from '@/lib/utils';
 import { SignInButton } from './signin-button';
 import { SignOutButton } from './signout-button';
-import { CommentArea } from './comment-area';
+import { addComment } from '@/lib/actions/comments';
+import { LoadingSpinner } from '@/assets/icons';
+import { Textarea } from './ui/textarea';
+import { Form } from './ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
 import { DeleteCommentControl, EditCommentControl } from './comment-controls';
@@ -87,7 +90,22 @@ export async function CommentsSection({ slug }: CommentsProps) {
             <p>You are signed in as {session.user.name}.</p>
             <SignOutButton />
           </div>
-          <CommentArea slug={slug} />
+          <Form action={addComment} className='flex flex-col gap-2'>
+            <input type='text' name='slug' value={slug} hidden readOnly />
+            <Textarea
+              name='content'
+              placeholder='Write a comment...'
+              required
+              minLength={3}
+            />
+            <Form.Error className='text-red-500' />
+            <Form.Submit
+              className='self-end'
+              pendingFallback={<LoadingSpinner className='fill-background' />}
+            >
+              Comment
+            </Form.Submit>
+          </Form>
         </>
       )}
       <Suspense fallback={<CommentsSkeleton />}>
