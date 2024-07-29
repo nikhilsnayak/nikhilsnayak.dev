@@ -1,9 +1,11 @@
 import { Suspense } from 'react';
+import type { User } from 'next-auth';
+import { SiGithub } from '@icons-pack/react-simple-icons';
+import { LogOut } from 'lucide-react';
 import { auth } from '@/config/auth';
 import { db } from '@/lib/db';
 import { formatDate } from '@/lib/utils';
-import { SignInButton } from './signin-button';
-import { SignOutButton } from './signout-button';
+import { signIn, signOut } from '@/config/auth';
 import { addComment } from '@/lib/actions/comments';
 import { LoadingSpinner } from '@/assets/icons';
 import { Textarea } from './ui/textarea';
@@ -11,7 +13,6 @@ import { Form, FormError, FormSubmit } from './ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
 import { DeleteCommentControl, EditCommentControl } from './comment-controls';
-import type { User } from 'next-auth';
 
 interface CommentsProps {
   slug: string;
@@ -82,13 +83,37 @@ export async function CommentsSection({ slug }: CommentsProps) {
       {!session || !session.user ? (
         <div className='space-y-2'>
           <p>Please sign in to comment.</p>
-          <SignInButton />
+          <Form
+            action={async () => {
+              'use server';
+              return await signIn('github');
+            }}
+          >
+            <FormSubmit
+              className='flex items-center gap-2'
+              pendingFallback={<LoadingSpinner className='fill-background' />}
+            >
+              <SiGithub />
+              <span>Sign in with GitHub</span>
+            </FormSubmit>
+          </Form>
         </div>
       ) : (
         <>
           <div className='flex items-center gap-2'>
             <p>You are signed in as {session.user.name}.</p>
-            <SignOutButton />
+            <Form
+              action={async () => {
+                'use server';
+                return await signOut();
+              }}
+            >
+              <FormSubmit
+                pendingFallback={<LoadingSpinner className='fill-background' />}
+              >
+                <LogOut />
+              </FormSubmit>
+            </Form>
           </div>
           <Form action={addComment} className='flex flex-col gap-2'>
             <input type='text' name='slug' value={slug} hidden readOnly />
