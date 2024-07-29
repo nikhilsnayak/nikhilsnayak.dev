@@ -51,7 +51,7 @@ interface FormSubmitProps extends Omit<ButtonProps, 'type' | 'disabled'> {
   pendingFallback?: ReactNode;
 }
 
-Form.Submit = function FormSubmit({
+export function FormSubmit({
   children,
   pendingFallback,
   ...rest
@@ -63,13 +63,13 @@ Form.Submit = function FormSubmit({
       {isPending && pendingFallback ? pendingFallback : children}
     </Button>
   );
-};
+}
 
-Form.Error = function FormError(props: Omit<ComponentProps<'p'>, 'children'>) {
+export function FormError(props: Omit<ComponentProps<'p'>, 'children'>) {
   const { error } = useForm();
 
   return <p {...props}>{error}</p>;
-};
+}
 
 Form.Pending = function FormPending({ children }: PropsWithChildren) {
   const { isPending } = useForm();
