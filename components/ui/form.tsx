@@ -71,9 +71,9 @@ export function FormError(props: Omit<ComponentProps<'p'>, 'children'>) {
   return <p {...props}>{error}</p>;
 }
 
-Form.Pending = function FormPending({ children }: PropsWithChildren) {
+export function FormPending({ children }: PropsWithChildren) {
   const { isPending } = useForm();
   if (isPending) {
     return <>{children}</>;
   }
-};
+}
