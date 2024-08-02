@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, cache } from 'react';
 import type { User } from 'next-auth';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { LogOut } from 'lucide-react';
@@ -19,14 +19,20 @@ interface CommentsProps {
   user?: User;
 }
 
-async function Comments({ slug, user }: CommentsProps) {
-  const comments = await db.query.comments.findMany({
+function INTERNAL__getComments(slug: string) {
+  return db.query.comments.findMany({
     where: (commentsTable, { eq }) => eq(commentsTable.slug, slug),
     with: {
       user: true,
     },
     orderBy: (commentsTable, { desc }) => [desc(commentsTable.createdAt)],
   });
+}
+
+const getComments = cache(INTERNAL__getComments);
+
+async function Comments({ slug, user }: CommentsProps) {
+  const comments = await getComments(slug);
 
   if (comments.length === 0) {
     return <p>No comments yet.</p>;
@@ -77,6 +83,7 @@ function CommentsSkeleton() {
 }
 
 export async function CommentsSection({ slug }: CommentsProps) {
+  getComments(slug);
   const session = await auth();
   return (
     <div className='space-y-8'>
