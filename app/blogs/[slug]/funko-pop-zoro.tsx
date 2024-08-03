@@ -1,4 +1,7 @@
 'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
 import { FunkoPopZoroSvg } from '@/assets/icons';
 import {
   AnimatePresence,
@@ -6,8 +9,6 @@ import {
   useMotionValueEvent,
   useScroll,
 } from 'framer-motion';
-import Link from 'next/link';
-import { useState } from 'react';
 
 function getRandomInteractionMessage() {
   const interactionMessages = [

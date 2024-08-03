@@ -1,21 +1,22 @@
-import { Suspense, cache } from 'react';
-import type { User } from 'next-auth';
+import { cache, Suspense } from 'react';
+import { LoadingSpinner } from '@/assets/icons';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { LogOut, Pencil, Trash2 } from 'lucide-react';
-import { auth } from '@/config/auth';
-import { db } from '@/lib/db';
-import { formatDate } from '@/lib/utils';
-import { signIn, signOut } from '@/config/auth';
+import type { User } from 'next-auth';
+
+import { auth, signIn, signOut } from '@/config/auth';
 import { addComment, deleteComment, editComment } from '@/lib/actions/comments';
-import { LoadingSpinner } from '@/assets/icons';
-import { Textarea } from './ui/textarea';
-import { Form, FormError, FormSubmit } from './ui/form';
+import { db } from '@/lib/db';
+import { type Comment } from '@/lib/db/schema';
+import { formatDate } from '@/lib/utils';
+
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Skeleton } from './ui/skeleton';
-import { DialogForm } from './ui/dialog-form';
 import { Button } from './ui/button';
 import { DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
-import { type Comment } from '@/lib/db/schema';
+import { DialogForm } from './ui/dialog-form';
+import { Form, FormError, FormSubmit } from './ui/form';
+import { Skeleton } from './ui/skeleton';
+import { Textarea } from './ui/textarea';
 
 function INTERNAL__getComments(slug: string) {
   return db.query.comments.findMany({

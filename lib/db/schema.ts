@@ -2,12 +2,12 @@ import { create } from 'domain';
 import { relations } from 'drizzle-orm';
 import {
   boolean,
-  timestamp,
-  pgTable,
-  varchar,
-  text,
-  primaryKey,
   integer,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  varchar,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 

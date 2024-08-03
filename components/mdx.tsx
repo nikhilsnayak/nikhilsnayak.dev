@@ -1,9 +1,10 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { LoadingSpinner } from '@/assets/icons';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
-import { LoadingSpinner } from '@/assets/icons';
+
 import { slugify } from '@/lib/utils';
 
 function Table({

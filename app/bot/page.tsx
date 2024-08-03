@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
-import type { Message } from 'ai';
-import { zoro } from '@/assets/images';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Chat } from './chat';
 import { cookies } from 'next/headers';
+import { zoro } from '@/assets/images';
+import type { Message } from 'ai';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+import { Chat } from './chat';
 
 export const metadata: Metadata = {
   title: 'Bot',

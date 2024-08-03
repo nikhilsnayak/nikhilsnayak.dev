@@ -1,11 +1,13 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+import { eq } from 'drizzle-orm';
+import { createSelectSchema } from 'drizzle-zod';
+
 import { auth } from '@/config/auth';
+
 import { db } from '../db';
 import { comments } from '../db/schema';
-import { revalidatePath } from 'next/cache';
-import { createSelectSchema } from 'drizzle-zod';
-import { eq } from 'drizzle-orm';
 
 const commentSchema = createSelectSchema(comments);
 

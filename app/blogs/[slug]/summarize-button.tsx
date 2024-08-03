@@ -1,6 +1,8 @@
 'use client';
-import { HoverBorderGradient } from '@/components/ui/hover-border-gradient';
+
 import { useRouter } from 'next/navigation';
+
+import { HoverBorderGradient } from '@/components/ui/hover-border-gradient';
 
 export function SummarizeButton({ blogTitle }: { blogTitle: string }) {
   const router = useRouter();

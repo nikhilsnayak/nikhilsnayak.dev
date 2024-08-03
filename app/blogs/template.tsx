@@ -1,16 +1,18 @@
 'use client';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+
 import { Fragment } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { getBreadCrumbItems } from '@/lib/utils';
 import {
-  BreadcrumbRoot,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbRoot,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { getBreadCrumbItems } from '@/lib/utils';
 
 interface BreadcrumbResponsiveProps {
   items: Array<{ label: string; href?: string }>;

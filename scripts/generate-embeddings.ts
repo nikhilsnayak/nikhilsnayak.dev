@@ -1,8 +1,9 @@
-import { OpenAIEmbeddings } from '@langchain/openai';
 import { VercelPostgres } from '@langchain/community/vectorstores/vercel_postgres';
+import { OpenAIEmbeddings } from '@langchain/openai';
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
 import { TextLoader } from 'langchain/document_loaders/fs/text';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+
 import { vectorStoreConfig } from '@/config/vector-store';
 
 const CONTENT_DIR = './content';

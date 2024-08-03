@@ -1,14 +1,15 @@
+import { VercelPostgres } from '@langchain/community/vectorstores/vercel_postgres';
+import { StringOutputParser } from '@langchain/core/output_parsers';
+import { PromptTemplate } from '@langchain/core/prompts';
+import {
+  RunnablePassthrough,
+  RunnableSequence,
+} from '@langchain/core/runnables';
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { LangChainAdapter, Message, StreamingTextResponse } from 'ai';
-import {
-  RunnableSequence,
-  RunnablePassthrough,
-} from '@langchain/core/runnables';
-import { VercelPostgres } from '@langchain/community/vectorstores/vercel_postgres';
-import { PromptTemplate } from '@langchain/core/prompts';
-import { StringOutputParser } from '@langchain/core/output_parsers';
-import { vectorStoreConfig } from '@/config/vector-store';
+
 import { env } from '@/config/env';
+import { vectorStoreConfig } from '@/config/vector-store';
 import { combineDocuments, formatChatHistory } from '@/lib/utils/server';
 
 export const maxDuration = 60;

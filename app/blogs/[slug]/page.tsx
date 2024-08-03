@@ -1,15 +1,17 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { CustomMDX } from '@/components/mdx';
+import { LoadingSpinner2 } from '@/assets/icons';
+import { Eye } from 'lucide-react';
+
 import { BASE_URL } from '@/config/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
-import { PostViewsCount } from '@/components/post-views';
 import { CommentsSection } from '@/components/comments';
-import { Suspense } from 'react';
+import { CustomMDX } from '@/components/mdx';
+import { PostViewsCount } from '@/components/post-views';
+
 import { FunkoPopZoro } from './funko-pop-zoro';
 import { SummarizeButton } from './summarize-button';
-import { Eye } from 'lucide-react';
-import { LoadingSpinner2 } from '@/assets/icons';
 
 interface BlogProps {
   params: { slug: string };

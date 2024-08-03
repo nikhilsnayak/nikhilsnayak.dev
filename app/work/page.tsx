@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { SiReact, SiNextdotjs, SiNestjs } from '@icons-pack/react-simple-icons';
-import { ArrowUpRight } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { techMang24 } from '@/assets/images';
+import { SiNestjs, SiNextdotjs, SiReact } from '@icons-pack/react-simple-icons';
+import { ArrowUpRight } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
   title: 'Work',

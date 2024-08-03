@@ -1,16 +1,18 @@
 'use client';
-import type { Message } from 'ai';
+
 import { useEffect, useRef, useState } from 'react';
-import { useChat } from 'ai/react';
-import { toast } from 'sonner';
-import { LucideTrash2 } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { LoadingSpinner2 } from '@/assets/icons';
 import { useSearchParams } from 'next/navigation';
+import { LoadingSpinner2 } from '@/assets/icons';
+import type { Message } from 'ai';
+import { useChat } from 'ai/react';
 import Cookies from 'js-cookie';
+import { LucideTrash2 } from 'lucide-react';
 import Markdown from 'react-markdown';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface MessageProps {
   content: string;

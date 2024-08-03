@@ -1,18 +1,20 @@
 import './globals.css';
+
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Analytics } from '@vercel/analytics/react';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
-import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/providers/theme-provider';
-import { cn } from '@/lib/utils';
-import { BASE_URL } from '@/config/constants';
+import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
 import NextTopLoader from 'nextjs-toploader';
-import { NavLink } from '@/components/nav-link';
+
+import { BASE_URL } from '@/config/constants';
+import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/sonner';
 import { BotLink } from '@/components/bot-link';
+import { NavLink } from '@/components/nav-link';
 
 const ThemeToggle = dynamic(() => import('@/components/theme-toggle'), {
   ssr: false,
