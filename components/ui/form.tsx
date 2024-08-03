@@ -9,6 +9,7 @@ import {
   PropsWithChildren,
 } from 'react';
 import { Button, ButtonProps } from './button';
+import { cn } from '@/lib/utils';
 
 interface FormContext {
   error?: string;
@@ -25,7 +26,7 @@ export function useForm() {
   return formContext;
 }
 
-interface FormProps extends Omit<ComponentProps<'form'>, 'action'> {
+export interface FormProps extends Omit<ComponentProps<'form'>, 'action'> {
   action: (
     state: string | undefined,
     payload: FormData
@@ -65,10 +66,17 @@ export function FormSubmit({
   );
 }
 
-export function FormError(props: Omit<ComponentProps<'p'>, 'children'>) {
+export function FormError({
+  className,
+  ...rest
+}: Omit<ComponentProps<'p'>, 'children'>) {
   const { error } = useForm();
 
-  return <p {...props}>{error}</p>;
+  return (
+    <p className={cn('text-red-500', className)} {...rest}>
+      {error}
+    </p>
+  );
 }
 
 export function FormPending({ children }: PropsWithChildren) {

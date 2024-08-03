@@ -1,23 +1,21 @@
 import { Suspense, cache } from 'react';
 import type { User } from 'next-auth';
 import { SiGithub } from '@icons-pack/react-simple-icons';
-import { LogOut } from 'lucide-react';
+import { LogOut, Pencil, Trash2 } from 'lucide-react';
 import { auth } from '@/config/auth';
 import { db } from '@/lib/db';
 import { formatDate } from '@/lib/utils';
 import { signIn, signOut } from '@/config/auth';
-import { addComment } from '@/lib/actions/comments';
+import { addComment, deleteComment, editComment } from '@/lib/actions/comments';
 import { LoadingSpinner } from '@/assets/icons';
 import { Textarea } from './ui/textarea';
 import { Form, FormError, FormSubmit } from './ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
-import { DeleteCommentControl, EditCommentControl } from './comment-controls';
-
-interface CommentsProps {
-  slug: string;
-  user?: User;
-}
+import { DialogForm } from './ui/dialog-form';
+import { Button } from './ui/button';
+import { DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
+import { type Comment } from '@/lib/db/schema';
 
 function INTERNAL__getComments(slug: string) {
   return db.query.comments.findMany({
@@ -30,6 +28,72 @@ function INTERNAL__getComments(slug: string) {
 }
 
 const getComments = cache(INTERNAL__getComments);
+
+function EditCommentControl({ comment }: { comment: Comment }) {
+  return (
+    <DialogForm
+      action={editComment}
+      trigger={
+        <Button size='icon' variant='ghost'>
+          <Pencil className='text-blue-400' />
+        </Button>
+      }
+    >
+      <DialogHeader>
+        <DialogTitle>Edit Comment</DialogTitle>
+      </DialogHeader>
+      <input type='text' name='id' value={comment.id} hidden readOnly />
+      <Textarea
+        name='content'
+        placeholder='Write a comment...'
+        required
+        minLength={3}
+        defaultValue={comment.content}
+      />
+      <FormError />
+      <DialogFooter>
+        <FormSubmit
+          pendingFallback={<LoadingSpinner className='fill-background' />}
+        >
+          Save changes
+        </FormSubmit>
+      </DialogFooter>
+    </DialogForm>
+  );
+}
+
+function DeleteCommentControl({ id }: { id: string }) {
+  return (
+    <DialogForm
+      action={deleteComment}
+      trigger={
+        <Button size='icon' variant='ghost'>
+          <Trash2 className='text-red-400' />
+        </Button>
+      }
+    >
+      <DialogHeader>
+        <DialogTitle>Delete Comment</DialogTitle>
+      </DialogHeader>
+      <input type='text' name='id' value={id} hidden readOnly />
+      <p>Are you sure you want to delete this comment?</p>
+      <FormError />
+      <DialogFooter>
+        <FormSubmit
+          variant='destructive'
+          pendingFallback={<LoadingSpinner className='fill-background' />}
+        >
+          Continue
+        </FormSubmit>
+      </DialogFooter>
+    </DialogForm>
+  );
+}
+
+interface CommentsProps {
+  slug: string;
+  user?: User;
+}
 
 async function Comments({ slug, user }: CommentsProps) {
   const comments = await getComments(slug);
@@ -60,7 +124,7 @@ async function Comments({ slug, user }: CommentsProps) {
             {user && user.id === comment.userId ? (
               <div className='flex items-center gap-2'>
                 <EditCommentControl comment={comment} />
-                <DeleteCommentControl comment={comment} />
+                <DeleteCommentControl id={comment.id} />
               </div>
             ) : null}
           </div>
@@ -130,7 +194,7 @@ export async function CommentsSection({ slug }: CommentsProps) {
               required
               minLength={3}
             />
-            <FormError className='text-red-500' />
+            <FormError />
             <FormSubmit
               className='self-end'
               pendingFallback={<LoadingSpinner className='fill-background' />}
