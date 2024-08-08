@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { zoro } from '@/assets/images';
-import { generateId } from 'ai';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 

@@ -30,7 +30,6 @@ function UserMessage({ children }: PropsWithChildren) {
 }
 
 export function Chat({ prompt }: { prompt?: string }) {
-  const isInitialMount = useRef(true);
   const [input, setInput] = useState<string>('');
   const [conversation, setConversation] = useUIState<typeof AI>();
   const [messages, setMessages] = useAIState<typeof AI>();
@@ -60,10 +59,6 @@ export function Chat({ prompt }: { prompt?: string }) {
   }, []);
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
     if (prompt) {
       setConversation((currentConversation) => [
         ...currentConversation,
