@@ -36,6 +36,13 @@
       "when": 1717219211331,
       "tag": "0004_purple_chimera",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1722954566011,
+      "tag": "0005_bizarre_mentallo",
+      "breakpoints": true
     }
   ]
 }
