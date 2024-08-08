@@ -29,7 +29,8 @@ function UserMessage({ children }: PropsWithChildren) {
   );
 }
 
-export function Chat() {
+export function Chat({ prompt }: { prompt?: string }) {
+  const isInitialMount = useRef(true);
   const [input, setInput] = useState<string>('');
   const [conversation, setConversation] = useUIState<typeof AI>();
   const [messages, setMessages] = useAIState<typeof AI>();
@@ -41,9 +42,6 @@ export function Chat() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
     const scrollArea = scrollAreaRef.current;
     const messagesEnd = messagesEndRef.current;
     if (!scrollArea || !messagesEnd) return;
@@ -60,6 +58,35 @@ export function Chat() {
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (prompt) {
+      setConversation((currentConversation) => [
+        ...currentConversation,
+        {
+          id: generateId(),
+          role: 'user',
+          display: <UserMessage>{prompt}</UserMessage>,
+        },
+      ]);
+
+      startTransition(async () => {
+        const message = await continueConversation(prompt);
+        setConversation((currentConversation) => [
+          ...currentConversation,
+          message,
+        ]);
+      });
+    } else {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }
+  }, [prompt, setConversation, continueConversation]);
 
   return (
     <div className='flex h-[60dvh] w-full flex-col gap-4'>
