@@ -5,9 +5,8 @@ import { eq } from 'drizzle-orm';
 import { createSelectSchema } from 'drizzle-zod';
 
 import { auth } from '@/config/auth';
-
-import { db } from '../db';
-import { comments } from '../db/schema';
+import { db } from '@/lib/db';
+import { comments } from '@/lib/db/schema';
 
 const commentSchema = createSelectSchema(comments);
 

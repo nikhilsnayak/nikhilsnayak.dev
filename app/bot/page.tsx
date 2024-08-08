@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import { zoro } from '@/assets/images';
-import type { Message } from 'ai';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
+import { AI } from './actions';
 import { Chat } from './chat';
 
 export const metadata: Metadata = {
@@ -12,18 +11,9 @@ export const metadata: Metadata = {
   description: 'My personal AI Chat Bot called Zoro which speaks about me',
 };
 
-interface BotPageProps {
-  searchParams: {
-    prompt?: string;
-  };
-}
+export const maxDuration = 30;
 
-export default function BotPage({ searchParams: { prompt } }: BotPageProps) {
-  const initialMessages = Boolean(prompt)
-    ? []
-    : (JSON.parse(
-        cookies().get('messages')?.value ?? JSON.stringify([])
-      ) as Message[]);
+export default function BotPage() {
   return (
     <section className='space-y-4'>
       <header className='flex items-center gap-3'>
@@ -35,7 +25,9 @@ export default function BotPage({ searchParams: { prompt } }: BotPageProps) {
           Zoro
         </h1>
       </header>
-      <Chat initialMessages={initialMessages} />
+      <AI>
+        <Chat />
+      </AI>
     </section>
   );
 }

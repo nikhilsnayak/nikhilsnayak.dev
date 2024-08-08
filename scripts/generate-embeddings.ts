@@ -1,49 +1,73 @@
-import { VercelPostgres } from '@langchain/community/vectorstores/vercel_postgres';
-import { OpenAIEmbeddings } from '@langchain/openai';
-import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
-import { TextLoader } from 'langchain/document_loaders/fs/text';
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { readdir, readFile } from 'fs/promises';
+import path from 'path';
+import { sql } from '@vercel/postgres';
+import { drizzle } from 'drizzle-orm/vercel-postgres';
 
-import { vectorStoreConfig } from '@/config/vector-store';
+import { generateEmbeddings } from '@/lib/ai/embedding';
+import { embeddings as embeddingsTable } from '@/lib/db/schema';
 
-const CONTENT_DIR = './content';
+const CONTENT_DIR = path.join(process.cwd(), 'content');
 
-console.log('Initailizing vector store...');
+const db = drizzle(sql);
 
-const vectorstore = await VercelPostgres.initialize(new OpenAIEmbeddings(), {
-  ...vectorStoreConfig,
-  postgresConnectionOptions: {
-    connectionString: process.env.POSTGRES_URL,
-  },
-});
+const log = (message: string) =>
+  console.log(`[${new Date().toISOString()}] ${message}`);
 
-console.log('Initailized vector store');
+const processFile = async (file: string) => {
+  const filePath = path.join(CONTENT_DIR, file);
+  const content = await readFile(filePath, 'utf-8');
+  const extension = path.extname(file);
+  const slug = path.basename(file, extension);
 
-vectorstore.delete({ deleteAll: true });
-
-console.log('Deleted existing embeddings');
-
-const loadDocuments = async (directory: string) => {
-  const loader = new DirectoryLoader(
-    directory,
-    {
-      '.md': (path) => new TextLoader(path),
-      '.mdx': (path) => new TextLoader(path),
-    },
-    true
-  );
-  return loader.load();
+  return {
+    slug,
+    content,
+    contentType: ['.mdx', '.md'].includes(extension) ? 'markdown' : 'plainText',
+  } as const;
 };
 
-const content = await loadDocuments(CONTENT_DIR);
-const markdownSplitter =
-  RecursiveCharacterTextSplitter.fromLanguage('markdown');
-const splitedContent = await markdownSplitter.splitDocuments(content);
+const main = async () => {
+  log('Starting the process...');
 
-console.log({ splitedContent });
+  log('Deleting existing embeddings...');
+  await db.delete(embeddingsTable);
+  log('Existing embeddings deleted.');
 
-await vectorstore.addDocuments(splitedContent);
+  log('Reading files...');
+  const files = await readdir(CONTENT_DIR);
+  log(`${files.length} files found.`);
 
-console.log('Updated vector store. Bye...');
+  const filePromises = files.map(processFile);
+  const fileContents = await Promise.all(filePromises);
+  log('Files read successfully.');
 
-await vectorstore.end();
+  log('Generating embeddings and preparing batch insert...');
+  const embeddingPromises = fileContents.map(
+    async ({ content, contentType }) => {
+      const embeddings = await generateEmbeddings({
+        value: content,
+        contentType,
+      });
+      return embeddings;
+    }
+  );
+
+  const embeddingsArray = await Promise.all(embeddingPromises);
+  log('Embeddings generated.');
+
+  log('Inserting embeddings into the database...');
+
+  await Promise.all(
+    embeddingsArray.map((embeddings) =>
+      db.insert(embeddingsTable).values(embeddings)
+    )
+  );
+  log('Embeddings inserted successfully.');
+
+  log('Process completed.');
+};
+
+main().catch((error) => {
+  log(`Error: ${error.message}`);
+  process.exit(1);
+});

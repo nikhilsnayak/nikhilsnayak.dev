@@ -5,18 +5,22 @@ import { LogOut, Pencil, Trash2 } from 'lucide-react';
 import type { User } from 'next-auth';
 
 import { auth, signIn, signOut } from '@/config/auth';
-import { addComment, deleteComment, editComment } from '@/lib/actions/comments';
 import { db } from '@/lib/db';
 import { type Comment } from '@/lib/db/schema';
 import { formatDate } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { DialogForm } from '@/components/ui/dialog-form';
+import { Form, FormError, FormSubmit } from '@/components/ui/form';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Textarea } from '@/components/ui/textarea';
 
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
-import { DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
-import { DialogForm } from './ui/dialog-form';
-import { Form, FormError, FormSubmit } from './ui/form';
-import { Skeleton } from './ui/skeleton';
-import { Textarea } from './ui/textarea';
+import { addComment, deleteComment, editComment } from './actions';
 
 function INTERNAL__getComments(slug: string) {
   return db.query.comments.findMany({

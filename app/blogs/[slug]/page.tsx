@@ -6,11 +6,10 @@ import { Eye } from 'lucide-react';
 import { BASE_URL } from '@/config/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
-import { CommentsSection } from '@/components/comments';
 import { CustomMDX } from '@/components/mdx';
 import { PostViewsCount } from '@/components/post-views';
 
-import { FunkoPopZoro } from './funko-pop-zoro';
+import { CommentsSection } from './comments';
 import { SummarizeButton } from './summarize-button';
 
 interface BlogProps {
@@ -66,7 +65,6 @@ export default function Blog({ params }: BlogProps) {
   const blogTitle = post.metadata.title;
   return (
     <section>
-      <FunkoPopZoro blogTitle={blogTitle} />
       <script
         type='application/ld+json'
         suppressHydrationWarning

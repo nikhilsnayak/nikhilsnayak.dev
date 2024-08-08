@@ -2,12 +2,14 @@ import { create } from 'domain';
 import { relations } from 'drizzle-orm';
 import {
   boolean,
+  index,
   integer,
   pgTable,
   primaryKey,
   text,
   timestamp,
   varchar,
+  vector,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 
@@ -117,3 +119,21 @@ export const commentsRelations = relations(comments, ({ one }) => ({
 }));
 
 export type Comment = typeof comments.$inferSelect;
+
+export const embeddings = pgTable(
+  'embeddings',
+  {
+    id: varchar('id', { length: 191 })
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    content: text('content').notNull(),
+    embedding: vector('embedding', { dimensions: 1536 }).notNull(),
+  },
+  (table) => ({
+    embeddingIndex: index('embeddingIndex').using(
+      'hnsw',
+      table.embedding.op('vector_cosine_ops')
+    ),
+  })
+);
