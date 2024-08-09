@@ -35,16 +35,24 @@ export function AudioPlayer({
         setCurrentTime(audio.currentTime);
       };
 
+      const handleEnded = () => {
+        setIsPlaying(false);
+        setCurrentTime(0);
+        audio.currentTime = 0; // Reset audio to start
+      };
+
       if (audio.readyState >= 1) {
         handleLoadedMetadata();
       }
 
       audio.addEventListener('loadedmetadata', handleLoadedMetadata);
       audio.addEventListener('timeupdate', handleTimeUpdate);
+      audio.addEventListener('ended', handleEnded);
 
       return () => {
         audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
         audio.removeEventListener('timeupdate', handleTimeUpdate);
+        audio.removeEventListener('ended', handleEnded);
       };
     }
   }, [src]);
