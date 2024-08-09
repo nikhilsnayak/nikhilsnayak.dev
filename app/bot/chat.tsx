@@ -36,15 +36,10 @@ export function Chat() {
   const { continueConversation } = useActions<typeof AI>();
 
   const [isPending, startTransition] = useTransition();
-  const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-
     const scrollArea = scrollAreaRef.current;
     const messagesEnd = messagesEndRef.current;
     if (!scrollArea || !messagesEnd) return;
@@ -109,7 +104,6 @@ export function Chat() {
         }}
       >
         <Input
-          ref={inputRef}
           placeholder='Type your message...'
           type='text'
           value={input}
