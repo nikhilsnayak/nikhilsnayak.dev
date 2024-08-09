@@ -16,6 +16,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { BotLink } from '@/components/bot-link';
 import { NavLink } from '@/components/nav-link';
 
+import { AI } from './bot/actions';
+
 const ThemeToggle = dynamic(() => import('@/components/theme-toggle'), {
   ssr: false,
 });
@@ -133,11 +135,13 @@ export default function RootLayout({
         >
           <Toaster richColors closeButton />
           <div className='flex min-h-dvh flex-col justify-between gap-8'>
-            <Header />
-            <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
-              {children}
-            </main>
-            <Footer />
+            <AI>
+              <Header />
+              <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
+                {children}
+              </main>
+              <Footer />
+            </AI>
           </div>
         </ThemeProvider>
         <SpeedInsights />

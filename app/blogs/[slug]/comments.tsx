@@ -166,11 +166,12 @@ export async function CommentsSection({ slug }: CommentsProps) {
             }}
           >
             <FormSubmit
-              className='flex items-center gap-2'
               pendingFallback={<LoadingSpinner className='fill-background' />}
             >
-              <SiGithub />
-              <span>Sign in with GitHub</span>
+              <span className='flex items-center gap-2'>
+                <SiGithub />
+                <span>Sign in with GitHub</span>
+              </span>
             </FormSubmit>
           </Form>
         </div>

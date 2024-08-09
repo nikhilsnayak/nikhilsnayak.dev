@@ -19,7 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { AI } from './actions';
 
-function UserMessage({ children }: PropsWithChildren) {
+export function UserMessage({ children }: PropsWithChildren) {
   return (
     <div className='max-w-full'>
       <p className='ml-auto max-w-max whitespace-pre-wrap rounded-md bg-gray-800 p-2 text-gray-100 dark:bg-gray-100 dark:text-gray-800'>
@@ -29,7 +29,7 @@ function UserMessage({ children }: PropsWithChildren) {
   );
 }
 
-export function Chat({ prompt }: { prompt?: string }) {
+export function Chat() {
   const [input, setInput] = useState<string>('');
   const [conversation, setConversation] = useUIState<typeof AI>();
   const [messages, setMessages] = useAIState<typeof AI>();
@@ -41,6 +41,10 @@ export function Chat({ prompt }: { prompt?: string }) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
     const scrollArea = scrollAreaRef.current;
     const messagesEnd = messagesEndRef.current;
     if (!scrollArea || !messagesEnd) return;
@@ -57,31 +61,6 @@ export function Chat({ prompt }: { prompt?: string }) {
       observer.disconnect();
     };
   }, []);
-
-  useEffect(() => {
-    if (prompt) {
-      setConversation((currentConversation) => [
-        ...currentConversation,
-        {
-          id: generateId(),
-          role: 'user',
-          display: <UserMessage>{prompt}</UserMessage>,
-        },
-      ]);
-
-      startTransition(async () => {
-        const message = await continueConversation(prompt);
-        setConversation((currentConversation) => [
-          ...currentConversation,
-          message,
-        ]);
-      });
-    } else {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }
-  }, [prompt, setConversation, continueConversation]);
 
   return (
     <div className='flex h-[60dvh] w-full flex-col gap-4'>

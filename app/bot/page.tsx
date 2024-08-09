@@ -3,7 +3,6 @@ import { zoro } from '@/assets/images';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-import { AI } from './actions';
 import { Chat } from './chat';
 
 export const metadata: Metadata = {
@@ -13,13 +12,7 @@ export const metadata: Metadata = {
 
 export const maxDuration = 30;
 
-export default async function BotPage({
-  searchParams: { prompt },
-}: {
-  searchParams: {
-    prompt?: string;
-  };
-}) {
+export default async function BotPage() {
   return (
     <section className='space-y-4'>
       <header className='flex items-center gap-3'>
@@ -31,9 +24,7 @@ export default async function BotPage({
           Zoro
         </h1>
       </header>
-      <AI>
-        <Chat prompt={prompt?.trim()} />
-      </AI>
+      <Chat />
     </section>
   );
 }

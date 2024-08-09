@@ -12,6 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 
 import { Button, ButtonProps } from './button';
+import { LoadingButton } from './loading-button';
 
 interface FormContext {
   error?: string;
@@ -62,9 +63,14 @@ export function FormSubmit({
   const { isPending } = useForm();
 
   return (
-    <Button type='submit' disabled={isPending} {...rest}>
-      {isPending && pendingFallback ? pendingFallback : children}
-    </Button>
+    <LoadingButton
+      type='submit'
+      isLoading={isPending}
+      loadingIndicator={pendingFallback}
+      {...rest}
+    >
+      {children}
+    </LoadingButton>
   );
 }
 
