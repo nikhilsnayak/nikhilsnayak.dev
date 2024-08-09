@@ -27,8 +27,6 @@ export function AudioPlayer({
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = isMuted ? 0 : volume / 100;
-
       const handleLoadedMetadata = () => {
         setDuration(audio.duration);
       };
@@ -36,6 +34,10 @@ export function AudioPlayer({
       const handleTimeUpdate = () => {
         setCurrentTime(audio.currentTime);
       };
+
+      if (audio.readyState >= 1) {
+        handleLoadedMetadata();
+      }
 
       audio.addEventListener('loadedmetadata', handleLoadedMetadata);
       audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -45,7 +47,14 @@ export function AudioPlayer({
         audio.removeEventListener('timeupdate', handleTimeUpdate);
       };
     }
-  }, [volume, src, isMuted]);
+  }, [src]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = isMuted ? 0 : volume / 100;
+    }
+  }, [volume, isMuted]);
 
   const handlePlayPause = () => {
     const audio = audioRef.current;
