@@ -92,6 +92,9 @@ export function AudioPlayer({
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
+  const maxDuration = formatTime(duration);
+  const currentFormattedTime = formatTime(currentTime);
+
   return (
     <div className='bg-background rounded-lg border p-4 max-w-md w-full'>
       <audio ref={audioRef} src={src} preload='metadata'></audio>
@@ -147,8 +150,14 @@ export function AudioPlayer({
           value={[(currentTime / duration) * 100]}
           onValueChange={handleSeekChange}
         />
-        <div className='text-sm text-muted-foreground'>
-          {formatTime(currentTime)} / {formatTime(duration)}
+        <div
+          className='text-sm text-muted-foreground'
+          style={{
+            fontFamily: 'monospace',
+            minWidth: `${maxDuration.length + 1}ch`,
+          }}
+        >
+          {currentFormattedTime} / {maxDuration}
         </div>
       </div>
     </div>
