@@ -85,7 +85,7 @@ export function AudioPlayer({
 
   return (
     <div className='bg-background rounded-lg border p-4 max-w-md w-full'>
-      <audio ref={audioRef} src={src}></audio>
+      <audio ref={audioRef} src={src} preload='metadata'></audio>
       <div className='flex items-center justify-between mb-4'>
         <div className='flex items-center gap-2'>
           <Button
