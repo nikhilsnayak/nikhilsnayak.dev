@@ -3,9 +3,10 @@ import { notFound } from 'next/navigation';
 import { LoadingSpinner2 } from '@/assets/icons';
 import { Eye } from 'lucide-react';
 
-import { BASE_URL } from '@/config/constants';
+import { BASE_URL, BLOB_STORAGE_URL } from '@/config/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
+import { AudioPlayer } from '@/components/ui/audio-player';
 import { CustomMDX } from '@/components/mdx';
 import { PostViewsCount } from '@/components/post-views';
 
@@ -106,6 +107,15 @@ export default function Blog({ params }: BlogProps) {
             )}
           </PostViewsCount>
         </Suspense>
+      </div>
+      <div className='mb-8'>
+        <h2 className='mb-4'>
+          {"Don't have enough time? Listen the audio version!!!"}
+        </h2>
+        <AudioPlayer
+          src={`${BLOB_STORAGE_URL}/${post.slug}.mp3`}
+          title={post.metadata.title}
+        />
       </div>
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} />
