@@ -2,21 +2,24 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
-import { ThemeProvider } from '@/providers/theme-provider';
 import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
-import NextTopLoader from 'nextjs-toploader';
+import { ThemeProvider } from 'next-themes';
 
 import { BASE_URL } from '@/config/constants';
+import { AI } from '@/lib/ai/provider';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
 import { BotLink } from '@/components/bot-link';
+import {
+  Main,
+  Footer as MotionFooter,
+  Header as MotionHeader,
+} from '@/components/framer-motion';
 import { NavLink } from '@/components/nav-link';
-
-import { AI } from './bot/actions';
 
 const ThemeToggle = dynamic(() => import('@/components/theme-toggle'), {
   ssr: false,
@@ -56,7 +59,13 @@ export const metadata: Metadata = {
 
 function Header() {
   return (
-    <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur'>
+    <MotionHeader
+      //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
+      className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur'
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, type: 'spring', stiffness: 120 }}
+    >
       <nav className='mx-auto flex max-w-screen-lg items-center justify-between p-4'>
         <ul className='flex gap-4'>
           <li>
@@ -105,16 +114,22 @@ function Header() {
           </li>
         </ul>
       </nav>
-    </header>
+    </MotionHeader>
   );
 }
 
 function Footer() {
   return (
-    <footer className='mx-auto mb-8 flex w-full max-w-screen-lg items-center justify-between border-t p-4'>
+    <MotionFooter
+      //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
+      className='mx-auto mb-8 flex w-full max-w-screen-lg items-center justify-between border-t p-4'
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, type: 'spring', stiffness: 120 }}
+    >
       <BotLink />
       <ThemeToggle />
-    </footer>
+    </MotionFooter>
   );
 }
 
@@ -126,7 +141,6 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={cn(GeistSans.variable, GeistMono.variable, 'font-sans')}>
-        <NextTopLoader shadow={false} showSpinner={false} />
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
@@ -137,9 +151,15 @@ export default function RootLayout({
           <div className='flex min-h-dvh flex-col justify-between gap-8'>
             <AI>
               <Header />
-              <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
+              <Main
+                //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
+                className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6 }}
+              >
                 {children}
-              </main>
+              </Main>
               <Footer />
             </AI>
           </div>

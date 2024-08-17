@@ -1,33 +1,15 @@
 'use client';
 
-import {
-  Fragment,
-  PropsWithChildren,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from 'react';
-import { LoadingSpinner2 } from '@/assets/icons';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
 import { LucideTrash2 } from 'lucide-react';
 
+import { AI } from '@/lib/ai/provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-import { AI } from './actions';
-
-export function UserMessage({ children }: PropsWithChildren) {
-  return (
-    <div className='max-w-full'>
-      <p className='ml-auto max-w-max whitespace-pre-wrap rounded-md bg-gray-800 p-2 text-gray-100 dark:bg-gray-100 dark:text-gray-800'>
-        {children}
-      </p>
-    </div>
-  );
-}
+import { UserMessage } from '@/components/ai';
 
 export function Chat() {
   const [input, setInput] = useState<string>('');
@@ -35,7 +17,6 @@ export function Chat() {
   const [messages, setMessages] = useAIState<typeof AI>();
   const { continueConversation } = useActions<typeof AI>();
 
-  const [isPending, startTransition] = useTransition();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +50,6 @@ export function Chat() {
               {conversation.map((message) => (
                 <Fragment key={message.id}>{message.display}</Fragment>
               ))}
-              {isPending && <LoadingSpinner2 className='fill-foreground' />}
             </div>
           </div>
           <div ref={messagesEndRef} />
@@ -94,13 +74,11 @@ export function Chat() {
             },
           ]);
 
-          startTransition(async () => {
-            const message = await continueConversation(value);
-            setConversation((currentConversation) => [
-              ...currentConversation,
-              message,
-            ]);
-          });
+          const message = await continueConversation(value);
+          setConversation((currentConversation) => [
+            ...currentConversation,
+            message,
+          ]);
         }}
       >
         <Input

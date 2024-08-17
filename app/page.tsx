@@ -5,12 +5,8 @@ import Link from 'next/link';
 import { LoadingSpinner2 } from '@/assets/icons';
 import { profile } from '@/assets/images';
 import {
-  SiCss3,
-  SiHtml5,
-  SiJavascript,
   SiNestjs,
   SiNextdotjs,
-  SiNodedotjs,
   SiReact,
   SiTailwindcss,
   SiTypescript,
@@ -20,45 +16,15 @@ import { ArrowUpRight } from 'lucide-react';
 import { cn, formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 import { Badge } from '@/components/ui/badge';
+import { Div, Header, Li, P, Section } from '@/components/framer-motion';
 import { PostViewsCount } from '@/components/post-views';
 
 const skills = [
-  {
-    name: 'HTML5',
-    Icon: SiHtml5,
-  },
-  {
-    name: 'CSS3',
-    Icon: SiCss3,
-  },
-  {
-    name: 'Tailwind CSS',
-    Icon: SiTailwindcss,
-  },
-  {
-    name: 'JavaScript',
-    Icon: SiJavascript,
-  },
-  {
-    name: 'TypeScript',
-    Icon: SiTypescript,
-  },
-  {
-    name: 'React',
-    Icon: SiReact,
-  },
-  {
-    name: 'Next.js',
-    Icon: SiNextdotjs,
-  },
-  {
-    name: 'Node.js',
-    Icon: SiNodedotjs,
-  },
-  {
-    name: 'NestJS',
-    Icon: SiNestjs,
-  },
+  { name: 'React', Icon: SiReact },
+  { name: 'Tailwind CSS', Icon: SiTailwindcss },
+  { name: 'TypeScript', Icon: SiTypescript },
+  { name: 'Next.js', Icon: SiNextdotjs },
+  { name: 'NestJS', Icon: SiNestjs },
 ] as const;
 
 const sourceCodePro = Source_Code_Pro({
@@ -75,44 +41,73 @@ export default function HomePage() {
       return 1;
     })
     .slice(0, 2);
+
   return (
-    <section>
-      <header className='relative'>
+    <Section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
+      <Header
+        //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
+        className='relative'
+        initial={{ y: -50 }}
+        animate={{ y: 0 }}
+        transition={{ type: 'spring', stiffness: 120 }}
+      >
         <h1 className='mb-[0.25em] text-3xl font-light sm:text-5xl'>
           Hi, I&apos;m
           <strong className='block font-extrabold'>Nikhil S</strong>
         </h1>
-        <p
+        <P
+          //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
           className={cn(
             'mb-[1em] bg-fluorescent px-[1em] py-[0.25em] text-lg font-semibold text-slate-800 sm:text-xl',
             sourceCodePro.className
           )}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
         >
           Full-Stack Developer
-        </p>
-        <Image
-          src={profile}
-          alt='Nikhil S'
+        </P>
+        <Div
+          //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
           className='mx-auto aspect-[4/3] drop-shadow-md sm:absolute sm:right-8 sm:top-0 sm:w-[250px]'
-          priority
-          placeholder='blur'
-        />
-      </header>
-      <section className='mt-20 space-y-4'>
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 120, duration: 0.6 }}
+        >
+          <Image src={profile} alt='Nikhil S' priority placeholder='blur' />
+        </Div>
+      </Header>
+
+      <Section
+        //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
+        className='mt-20 space-y-4'
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.8 }}
+      >
         <p className='text-lg sm:text-xl'>
-          I am a passionate and driven software engineer with expertise in both
+          I am a passionate and driven software engineer with experience in both
           front-end and back-end development. My skills include:
         </p>
         <ul className='flex flex-wrap items-center gap-4'>
-          {skills.map(({ Icon, name }) => (
-            <li key={name}>
+          {skills.map(({ Icon, name }, index) => (
+            <Li
+              key={name}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+            >
               <Badge asChild className='cursor-default'>
                 <div className='flex items-center gap-1'>
                   <Icon className='w-3 sm:w-4' />
                   <span className='text-xs sm:text-sm'>{name}</span>
                 </div>
               </Badge>
-            </li>
+            </Li>
           ))}
         </ul>
         <p className='text-lg sm:text-xl'>
@@ -121,13 +116,17 @@ export default function HomePage() {
         </p>
         <p className='text-lg sm:text-xl'>
           In my free time, I write about the technologies that excite me. I
-          enjoy breaking down complex concepts from the ground up, which allows
-          me to create in-depth and detailed blog posts. My goal is to make tech
-          topics accessible and engaging for everyone, whether you&apos;re a
-          seasoned developer or just starting out.
+          enjoy breaking down complex concepts from the ground up.
         </p>
-      </section>
-      <section className='mt-10'>
+      </Section>
+
+      <Section
+        //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
+        className='mt-10'
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.8 }}
+      >
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
           Recent Posts:
         </h2>
@@ -138,7 +137,13 @@ export default function HomePage() {
               href={`/blogs/${post.slug}`}
               className='group block'
             >
-              <div className='h-full transform space-y-4 overflow-hidden rounded-lg border border-border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'>
+              <Div
+                //@ts-ignore -- props issue due to improper peer dependency (react 19-rc)
+                className='h-full transform space-y-4 overflow-hidden rounded-lg border border-border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
                 <div className='space-y-1'>
                   <p className='flex items-center justify-between text-xs text-muted-foreground'>
                     <span>{formatDate(post.metadata.publishedAt)}</span>
@@ -155,11 +160,11 @@ export default function HomePage() {
                     {(count) => <p>{count} views</p>}
                   </PostViewsCount>
                 </Suspense>
-              </div>
+              </Div>
             </Link>
           ))}
         </div>
-      </section>
-    </section>
+      </Section>
+    </Section>
   );
 }
