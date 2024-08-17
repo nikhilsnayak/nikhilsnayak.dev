@@ -1,55 +1,18 @@
-import { ReactNode } from 'react';
+'use server';
+
+import { LoadingSpinner2 } from '@/assets/icons';
 import { openai } from '@ai-sdk/openai';
 import { generateId } from 'ai';
-import { createAI, getMutableAIState, streamUI } from 'ai/rsc';
-import Markdown from 'react-markdown';
+import { getMutableAIState, streamUI } from 'ai/rsc';
 
-import { findRelevantContent } from '@/lib/ai/embedding';
+import { BotMessage } from '@/components/ai';
 
-export type ServerMessage = {
-  role: 'user' | 'assistant';
-  content: string;
-};
-
-export type ClientMessage = {
-  id: string;
-  role: 'user' | 'assistant';
-  display: ReactNode;
-};
-
-export type AIState = ServerMessage[];
-export type UIState = ClientMessage[];
-
-function BotMessage({
-  children,
-}: Readonly<{
-  children: string;
-}>) {
-  return (
-    <div className='max-w-full'>
-      <div className='max-w-max whitespace-pre-wrap rounded-md bg-gray-100 p-4 dark:bg-gray-800'>
-        <Markdown
-          components={{
-            a: (props) => (
-              <a
-                {...props}
-                className='text-green-500 hover:underline'
-                target='_blank'
-              />
-            ),
-          }}
-        >
-          {children}
-        </Markdown>
-      </div>
-    </div>
-  );
-}
+import { findRelevantContent } from './embedding';
+import { AI, ClientMessage } from './provider';
 
 export async function continueConversation(
   message: string
 ): Promise<ClientMessage> {
-  'use server';
   const history = getMutableAIState<typeof AI>();
   history.update([...history.get(), { role: 'user', content: message }]);
 
@@ -92,12 +55,17 @@ export async function continueConversation(
       ${JSON.stringify(context)}
     </context>
 
-    **Question**: ${message}  
+    <question>
+        ${message}  
+    </question>
+
+    Answer:
     `,
-    text: ({ content, done }) => {
+    text: async function* ({ content, done }) {
       if (done) {
         history.done([...history.get(), { role: 'assistant', content }]);
       }
+      yield <LoadingSpinner2 className='fill-foreground' />;
       return <BotMessage>{content}</BotMessage>;
     },
   });
@@ -108,11 +76,3 @@ export async function continueConversation(
     display: result.value,
   };
 }
-
-export const AI = createAI({
-  initialAIState: [] as AIState,
-  initialUIState: [] as UIState,
-  actions: {
-    continueConversation,
-  },
-});
