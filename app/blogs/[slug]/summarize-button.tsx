@@ -6,9 +6,9 @@ import { LoadingSpinner } from '@/assets/icons';
 import { generateId } from 'ai';
 import { useActions, useUIState } from 'ai/rsc';
 
-import { AI } from '@/lib/ai/provider';
 import { LoadingButton } from '@/components/ui/loading-button';
-import { UserMessage } from '@/components/ai';
+import { AI } from '@/app/bot/actions';
+import { UserMessage } from '@/app/bot/chat';
 
 export function SummarizeButton({ blogTitle }: { blogTitle: string }) {
   const router = useRouter();
