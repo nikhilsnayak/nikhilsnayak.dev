@@ -20,7 +20,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.50",
+    "@ai-sdk/openai": "^0.0.51",
     "@auth/drizzle-adapter": "^1.1.0",
     "@icons-pack/react-simple-icons": "^10.0.0",
     "@radix-ui/react-avatar": "^1.0.4",
