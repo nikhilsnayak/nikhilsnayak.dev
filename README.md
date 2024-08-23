@@ -11,7 +11,7 @@ This project utilizes several cutting-edge technologies to build a modern web ap
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Components**: [Shadcn UI](https://ui.shadcn.com/)
 - **LLM**: [OpenAI](https://platform.openai.com/)
-- **RAG**: [Langchain](https://js.langchain.com/v0.2/docs/tutorials/rag) and [AI SDK](https://sdk.vercel.ai/docs/introduction)
+- **RAG**: [AI SDK](https://sdk.vercel.ai/docs/introduction)
 - **Database**: [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
 - **Auth**: [Auth.js](https://authjs.dev/)

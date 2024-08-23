@@ -8,11 +8,9 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
-import NextTopLoader from 'nextjs-toploader';
 
-import { BASE_URL } from '@/config/constants';
+import { BASE_URL } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/sonner';
 import { BotLink } from '@/components/bot-link';
 import { NavLink } from '@/components/nav-link';
 
@@ -126,14 +124,12 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={cn(GeistSans.variable, GeistMono.variable, 'font-sans')}>
-        <NextTopLoader shadow={false} showSpinner={false} />
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster richColors closeButton />
           <div className='flex min-h-dvh flex-col justify-between gap-8'>
             <AI>
               <Header />

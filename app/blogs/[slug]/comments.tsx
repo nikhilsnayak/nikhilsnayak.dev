@@ -4,7 +4,7 @@ import { SiGithub } from '@icons-pack/react-simple-icons';
 import { LogOut, Pencil, Trash2 } from 'lucide-react';
 import type { User } from 'next-auth';
 
-import { auth, signIn, signOut } from '@/config/auth';
+import { auth, signIn, signOut } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { type Comment } from '@/lib/db/schema';
 import { formatDate } from '@/lib/utils';

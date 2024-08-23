@@ -1,4 +1,4 @@
-import { BASE_URL } from '@/config/constants';
+import { BASE_URL } from '@/lib/constants';
 import { getBlogPosts } from '@/lib/utils/server';
 
 export default async function sitemap() {

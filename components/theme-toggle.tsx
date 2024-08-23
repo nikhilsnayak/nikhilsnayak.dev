@@ -30,7 +30,7 @@ function ThemeButton({ type, children }: ThemeButtonProps) {
   );
 }
 
-export function ThemeToggle() {
+function ThemeToggle() {
   return (
     <div className='flex gap-2 rounded-full border bg-muted'>
       <span className='sr-only'>Toggle theme</span>

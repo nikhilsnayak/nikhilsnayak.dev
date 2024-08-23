@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { LoadingSpinner2 } from '@/assets/icons';
 import { Eye } from 'lucide-react';
 
-import { BASE_URL, BLOB_STORAGE_URL } from '@/config/constants';
+import { BASE_URL, BLOB_STORAGE_URL } from '@/lib/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 import { AudioPlayer } from '@/components/ui/audio-player';
