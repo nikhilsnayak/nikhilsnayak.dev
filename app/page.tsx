@@ -5,12 +5,9 @@ import Link from 'next/link';
 import { LoadingSpinner2 } from '@/assets/icons';
 import { profile } from '@/assets/images';
 import {
-  SiCss3,
-  SiHtml5,
   SiJavascript,
   SiNestjs,
   SiNextdotjs,
-  SiNodedotjs,
   SiReact,
   SiTailwindcss,
   SiTypescript,
@@ -24,18 +21,6 @@ import { PostViewsCount } from '@/components/post-views';
 
 const skills = [
   {
-    name: 'HTML5',
-    Icon: SiHtml5,
-  },
-  {
-    name: 'CSS3',
-    Icon: SiCss3,
-  },
-  {
-    name: 'Tailwind CSS',
-    Icon: SiTailwindcss,
-  },
-  {
     name: 'JavaScript',
     Icon: SiJavascript,
   },
@@ -44,16 +29,16 @@ const skills = [
     Icon: SiTypescript,
   },
   {
+    name: 'Tailwind CSS',
+    Icon: SiTailwindcss,
+  },
+  {
     name: 'React',
     Icon: SiReact,
   },
   {
     name: 'Next.js',
     Icon: SiNextdotjs,
-  },
-  {
-    name: 'Node.js',
-    Icon: SiNodedotjs,
   },
   {
     name: 'NestJS',
@@ -121,10 +106,7 @@ export default function HomePage() {
         </p>
         <p className='text-lg sm:text-xl'>
           In my free time, I write about the technologies that excite me. I
-          enjoy breaking down complex concepts from the ground up, which allows
-          me to create in-depth and detailed blog posts. My goal is to make tech
-          topics accessible and engaging for everyone, whether you&apos;re a
-          seasoned developer or just starting out.
+          enjoy breaking down complex concepts from the ground up.
         </p>
       </section>
       <section className='mt-10'>
