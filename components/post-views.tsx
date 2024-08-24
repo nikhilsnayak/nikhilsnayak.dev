@@ -21,7 +21,6 @@ export async function PostViewsCount({
   const views = await db.query.views.findFirst({
     where: (views, { eq }) => eq(views.slug, slug),
   });
-  await new Promise((res) => setTimeout(res, 10000));
   if (process.env.NODE_ENV === 'production' && updateViews) {
     after(async () => {
       if (!views) {
