@@ -117,3 +117,15 @@ body::-webkit-scrollbar {
 .prose pre {
   @apply bg-neutral-200 dark:bg-neutral-800;
 }
+
+.prose pre[data-line-numbers='true'] code {
+  counter-reset: sh-line-number;
+}
+
+.prose pre[data-line-numbers='true'] .sh__line::before {
+  counter-increment: sh-line-number 1;
+  content: counter(sh-line-number);
+  display: inline-block;
+  width: 2rem;
+  color: #a4a4a4;
+}
