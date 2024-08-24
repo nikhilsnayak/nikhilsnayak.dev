@@ -25,15 +25,15 @@
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
     --fluorescent: #2feeee;
-    --sh-class: #2d5e9d;
-    --sh-identifier: #354150;
-    --sh-sign: #8996a3;
-    --sh-string: #007f7a;
-    --sh-keyword: #e02518;
-    --sh-comment: #a19595;
-    --sh-jsxliterals: #6266d1;
-    --sh-property: #e25a1c;
-    --sh-entity: #e25a1c;
+    --sh-class: #e67c73;
+    --sh-identifier: #2c3e50;
+    --sh-sign: #7f8c8d;
+    --sh-string: #27ae60;
+    --sh-keyword: #d35400;
+    --sh-comment: #95a5a6;
+    --sh-jsxliterals: #8e44ad;
+    --sh-property: #c0392b;
+    --sh-entity: #e67e22;
   }
 
   .dark {
@@ -56,10 +56,15 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-    --sh-class: #4c97f8;
-    --sh-identifier: white;
-    --sh-keyword: #f47067;
-    --sh-string: #0fa295;
+    --sh-class: #9b59b6;
+    --sh-identifier: #ecf0f1;
+    --sh-keyword: #e74c3c;
+    --sh-string: #2ecc71;
+    --sh-sign: #bdc3c7;
+    --sh-comment: #7f8c8d;
+    --sh-jsxliterals: #3498db;
+    --sh-property: #e67e22;
+    --sh-entity: #f39c12;
   }
 }
 
