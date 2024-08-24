@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { LoadingSpinner2 } from '@/assets/icons';
 import { Eye } from 'lucide-react';
 
 import { BASE_URL, BLOB_STORAGE_URL } from '@/lib/constants';
@@ -9,6 +8,7 @@ import { getBlogPosts } from '@/lib/utils/server';
 import { AudioPlayer } from '@/components/ui/audio-player';
 import { CustomMDX } from '@/components/mdx';
 import { PostViewsCount } from '@/components/post-views';
+import { Spinner } from '@/components/spinner';
 
 import { CommentsSection } from './comments';
 import { SummarizeButton } from './summarize-button';
@@ -98,7 +98,7 @@ export default function Blog({ params }: BlogProps) {
           </p>
           <SummarizeButton blogTitle={blogTitle} />
         </div>
-        <Suspense fallback={<LoadingSpinner2 className='fill-foreground' />}>
+        <Suspense fallback={<Spinner variant='ellipsis' />}>
           <PostViewsCount slug={post.slug} updateViews>
             {(count) => (
               <span className='flex items-center gap-2'>
@@ -124,7 +124,7 @@ export default function Blog({ params }: BlogProps) {
         <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>
           Comments
         </h2>
-        <Suspense fallback={<LoadingSpinner2 className='fill-foreground' />}>
+        <Suspense fallback={<Spinner variant='ellipsis' />}>
           <CommentsSection slug={post.slug} />
         </Suspense>
       </div>

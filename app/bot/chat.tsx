@@ -8,7 +8,6 @@ import {
   useState,
   useTransition,
 } from 'react';
-import { LoadingSpinner2 } from '@/assets/icons';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
 import { LucideTrash2 } from 'lucide-react';
@@ -16,6 +15,7 @@ import { LucideTrash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Spinner } from '@/components/spinner';
 
 import { AI } from './actions';
 
@@ -69,7 +69,7 @@ export function Chat() {
               {conversation.map((message) => (
                 <Fragment key={message.id}>{message.display}</Fragment>
               ))}
-              {isPending && <LoadingSpinner2 className='fill-foreground' />}
+              {isPending ? <Spinner variant='ellipsis' /> : null}
             </div>
           </div>
           <div ref={messagesEndRef} />

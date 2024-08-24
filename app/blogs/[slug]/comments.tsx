@@ -1,5 +1,4 @@
 import { cache, Suspense } from 'react';
-import { LoadingSpinner } from '@/assets/icons';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { LogOut, Pencil, Trash2 } from 'lucide-react';
 import type { User } from 'next-auth';
@@ -19,6 +18,7 @@ import { DialogForm } from '@/components/ui/dialog-form';
 import { Form, FormError, FormSubmit } from '@/components/ui/form';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/spinner';
 
 import { addComment, deleteComment, editComment } from './actions';
 
@@ -57,11 +57,7 @@ function EditCommentControl({ comment }: { comment: Comment }) {
       />
       <FormError />
       <DialogFooter>
-        <FormSubmit
-          pendingFallback={<LoadingSpinner className='fill-background' />}
-        >
-          Save changes
-        </FormSubmit>
+        <FormSubmit pendingFallback={<Spinner />}>Save changes</FormSubmit>
       </DialogFooter>
     </DialogForm>
   );
@@ -84,10 +80,7 @@ function DeleteCommentControl({ id }: { id: string }) {
       <p>Are you sure you want to delete this comment?</p>
       <FormError />
       <DialogFooter>
-        <FormSubmit
-          variant='destructive'
-          pendingFallback={<LoadingSpinner className='fill-background' />}
-        >
+        <FormSubmit variant='destructive' pendingFallback={<Spinner />}>
           Continue
         </FormSubmit>
       </DialogFooter>
@@ -165,9 +158,7 @@ export async function CommentsSection({ slug }: CommentsProps) {
               return await signIn('github');
             }}
           >
-            <FormSubmit
-              pendingFallback={<LoadingSpinner className='fill-background' />}
-            >
+            <FormSubmit pendingFallback={<Spinner />}>
               <span className='flex items-center gap-2'>
                 <SiGithub />
                 <span>Sign in with GitHub</span>
@@ -185,9 +176,7 @@ export async function CommentsSection({ slug }: CommentsProps) {
                 return await signOut();
               }}
             >
-              <FormSubmit
-                pendingFallback={<LoadingSpinner className='fill-background' />}
-              >
+              <FormSubmit pendingFallback={<Spinner />}>
                 <LogOut />
               </FormSubmit>
             </Form>
@@ -201,10 +190,7 @@ export async function CommentsSection({ slug }: CommentsProps) {
               minLength={3}
             />
             <FormError />
-            <FormSubmit
-              className='self-end'
-              pendingFallback={<LoadingSpinner className='fill-background' />}
-            >
+            <FormSubmit className='self-end' pendingFallback={<Spinner />}>
               Comment
             </FormSubmit>
           </Form>

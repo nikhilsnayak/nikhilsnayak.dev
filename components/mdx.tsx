@@ -1,11 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LoadingSpinner } from '@/assets/icons';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
 
 import { slugify } from '@/lib/utils';
+
+import { Spinner } from './spinner';
 
 function Table({
   data,
@@ -97,7 +98,7 @@ const components = {
   a: CustomLink,
   code: Code,
   Table,
-  LoadingSpinner,
+  LoadingSpinner: Spinner,
 };
 
 export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {

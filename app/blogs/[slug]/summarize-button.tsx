@@ -2,11 +2,11 @@
 
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingSpinner } from '@/assets/icons';
 import { generateId } from 'ai';
 import { useActions, useUIState } from 'ai/rsc';
 
 import { LoadingButton } from '@/components/ui/loading-button';
+import { Spinner } from '@/components/spinner';
 import { AI } from '@/app/bot/actions';
 import { UserMessage } from '@/app/bot/chat';
 
@@ -43,7 +43,7 @@ export function SummarizeButton({ blogTitle }: { blogTitle: string }) {
   return (
     <LoadingButton
       isLoading={isPending}
-      loadingIndicator={<LoadingSpinner className='fill-foreground' />}
+      loadingIndicator={<Spinner />}
       className='text-green-500 rounded-full'
       variant={'outline'}
       onClick={handleClick}

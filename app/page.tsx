@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { Source_Code_Pro } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LoadingSpinner2 } from '@/assets/icons';
 import { profile } from '@/assets/images';
 import {
   SiJavascript,
@@ -18,6 +17,7 @@ import { cn, formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
 import { Badge } from '@/components/ui/badge';
 import { PostViewsCount } from '@/components/post-views';
+import { Spinner } from '@/components/spinner';
 
 const skills = [
   {
@@ -52,7 +52,7 @@ const sourceCodePro = Source_Code_Pro({
 });
 
 export default function HomePage() {
-  const allBlogs = getBlogPosts()
+  const recentBlogs = getBlogPosts()
     .toSorted((a, b) => {
       if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
         return -1;
@@ -114,7 +114,7 @@ export default function HomePage() {
           Recent Posts:
         </h2>
         <div className='space-y-8'>
-          {allBlogs.map((post) => (
+          {recentBlogs.map((post) => (
             <Link
               key={post.slug}
               href={`/blogs/${post.slug}`}
@@ -130,9 +130,7 @@ export default function HomePage() {
                     {post.metadata.title}
                   </h2>
                 </div>
-                <Suspense
-                  fallback={<LoadingSpinner2 className='fill-foreground' />}
-                >
+                <Suspense fallback={<Spinner variant='ellipsis' />}>
                   <PostViewsCount slug={post.slug}>
                     {(count) => <p>{count} views</p>}
                   </PostViewsCount>
