@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Slot } from '@radix-ui/react-slot';
 import { nanoid } from 'nanoid';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
@@ -104,15 +103,6 @@ function Pre(props: {
 
   if (highlightLines) {
     highlightLinesStyles = `
-      #${id} code {
-        width: max-content;
-      }
-
-      #${id} .sh__line {
-        display: inline-block;
-        width: 100%;
-      }
-
       ${highlightLinesLightMode} {
         background-color: #d4d4d4;
       }
@@ -135,11 +125,9 @@ function Pre(props: {
             <h6 className='sticky top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
               {filename}
             </h6>
-            <Slot className='mt-1 overflow-auto block'>{children}</Slot>
           </>
-        ) : (
-          children
-        )}
+        ) : null}
+        {children}
       </pre>
     </>
   );

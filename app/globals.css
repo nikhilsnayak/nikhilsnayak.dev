@@ -130,6 +130,10 @@ body::-webkit-scrollbar {
   color: #a4a4a4;
 }
 
-.sh__line {
-  @apply pl-4 pr-4;
+.prose pre code {
+  @apply my-2 block w-full min-w-max;
+}
+
+.prose pre code .sh__line {
+  @apply inline-block w-full px-4;
 }
