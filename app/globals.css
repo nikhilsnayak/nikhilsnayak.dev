@@ -129,3 +129,7 @@ body::-webkit-scrollbar {
   width: 2rem;
   color: #a4a4a4;
 }
+
+.sh__line {
+  @apply pl-4 pr-4;
+}

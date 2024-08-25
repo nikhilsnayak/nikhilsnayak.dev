@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Slot } from '@radix-ui/react-slot';
 import { nanoid } from 'nanoid';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
@@ -62,10 +63,21 @@ function RoundedImage({ alt, ...props }: React.ComponentProps<typeof Image>) {
   return <Image alt={alt} className='rounded-lg' {...props} />;
 }
 
-function Code(props: { children: string; className: string }) {
-  const codeHTML = highlight(props.children);
+function Code({
+  children,
+  className,
+}: {
+  children: string;
+  className: string;
+}) {
+  const codeHTML = highlight(children);
 
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} />;
+  return (
+    <code
+      dangerouslySetInnerHTML={{ __html: codeHTML }}
+      className={className}
+    />
+  );
 }
 
 function Pre(props: {
@@ -92,35 +104,38 @@ function Pre(props: {
 
   if (highlightLines) {
     highlightLinesStyles = `
-${highlightLinesLightMode} {
-  position: absolute;
-  left: 0;
-  right: 0;
-  border-left: 4px solid #a3a3a3; 
-  background-color: #d4d4d4; 
-  padding-left: calc(1.14286em - 4px);
-}
+      #${id} code {
+        width: max-content;
+      }
 
-${highlightLinesDarkMode} {
-  border-left-color: #545454; 
-  background-color: #171717; 
-}
-`;
+      #${id} .sh__line {
+        display: inline-block;
+        width: 100%;
+      }
+
+      ${highlightLinesLightMode} {
+        background-color: #d4d4d4;
+      }
+
+      ${highlightLinesDarkMode} {
+        background-color: #171717; 
+      }`;
   }
+
   return (
     <>
       {highlightLinesStyles ? <style>{highlightLinesStyles}</style> : null}
       <pre
-        className='relative border-2 dark:border-neutral-600 border-neutral-400'
+        className='relative border-2 dark:border-neutral-600 border-neutral-400 p-0'
         data-line-numbers={lineNumbers}
         id={id}
       >
         {filename ? (
           <>
-            <h6 className='absolute top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
+            <h6 className='sticky top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
               {filename}
             </h6>
-            <div className='mt-6'>{children}</div>
+            <Slot className='mt-1 overflow-auto block'>{children}</Slot>
           </>
         ) : (
           children
