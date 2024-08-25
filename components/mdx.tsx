@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { nanoid } from 'nanoid';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import rehypeMdxCodeProps from 'rehype-mdx-code-props';
 import { highlight } from 'sugar-high';
 
 import { slugify } from '@/lib/utils';
@@ -60,9 +62,72 @@ function RoundedImage({ alt, ...props }: React.ComponentProps<typeof Image>) {
   return <Image alt={alt} className='rounded-lg' {...props} />;
 }
 
-function Code({ children, ...props }: { children: string }) {
-  const codeHTML = highlight(children);
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+function Code(props: { children: string; className: string }) {
+  const codeHTML = highlight(props.children);
+
+  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} />;
+}
+
+function Pre(props: {
+  children: ReactNode;
+  filename?: string;
+  lineNumbers?: boolean;
+  highlightLines?: string;
+}) {
+  const { children, filename, lineNumbers, highlightLines } = props;
+
+  const id = nanoid();
+
+  const highlightLineNumbers = highlightLines?.trim()?.split(',');
+
+  const highlightLinesLightMode = highlightLineNumbers
+    ?.map((line) => `#${id} .sh__line:nth-child(${line})`)
+    ?.join(',\n');
+
+  const highlightLinesDarkMode = highlightLineNumbers
+    ?.map((line) => `.dark #${id} .sh__line:nth-child(${line})`)
+    ?.join(',\n');
+
+  let highlightLinesStyles: string | undefined;
+
+  if (highlightLines) {
+    highlightLinesStyles = `
+${highlightLinesLightMode} {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-left: 4px solid #a3a3a3; 
+  background-color: #d4d4d4; 
+  padding-left: calc(1.14286em - 4px);
+}
+
+${highlightLinesDarkMode} {
+  border-left-color: #545454; 
+  background-color: #171717; 
+}
+`;
+  }
+  return (
+    <>
+      {highlightLinesStyles ? <style>{highlightLinesStyles}</style> : null}
+      <pre
+        className='relative border-2 dark:border-neutral-600 border-neutral-400'
+        data-line-numbers={lineNumbers}
+        id={id}
+      >
+        {filename ? (
+          <>
+            <h6 className='absolute top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
+              {filename}
+            </h6>
+            <div className='mt-6'>{children}</div>
+          </>
+        ) : (
+          children
+        )}
+      </pre>
+    </>
+  );
 }
 
 function createHeading(level: number) {
@@ -99,12 +164,18 @@ const components = {
   code: Code,
   Table,
   LoadingSpinner: Spinner,
+  pre: Pre,
 };
 
 export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {
   return (
     <MDXRemote
       {...props}
+      options={{
+        mdxOptions: {
+          rehypePlugins: [rehypeMdxCodeProps],
+        },
+      }}
       components={{ ...components, ...(props.components || {}) }}
     />
   );
