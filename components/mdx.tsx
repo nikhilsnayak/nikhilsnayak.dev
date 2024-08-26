@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Slot } from '@radix-ui/react-slot';
 import { nanoid } from 'nanoid';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
@@ -62,21 +63,9 @@ function RoundedImage({ alt, ...props }: React.ComponentProps<typeof Image>) {
   return <Image alt={alt} className='rounded-lg' {...props} />;
 }
 
-function Code({
-  children,
-  className,
-}: {
-  children: string;
-  className: string;
-}) {
+function Code({ children, ...props }: any) {
   const codeHTML = highlight(children);
-
-  return (
-    <code
-      dangerouslySetInnerHTML={{ __html: codeHTML }}
-      className={className}
-    />
-  );
+  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
 
 function Pre(props: {
@@ -108,28 +97,23 @@ function Pre(props: {
       }
 
       ${highlightLinesDarkMode} {
-        background-color: #171717; 
+        background-color: #171717;
       }`;
   }
 
   return (
-    <>
+    <pre
+      className='relative border-2 dark:border-neutral-600 border-neutral-400 p-0'
+      data-line-numbers={lineNumbers}
+    >
       {highlightLinesStyles ? <style>{highlightLinesStyles}</style> : null}
-      <pre
-        className='relative border-2 dark:border-neutral-600 border-neutral-400 p-0'
-        data-line-numbers={lineNumbers}
-        id={id}
-      >
-        {filename ? (
-          <>
-            <h6 className='sticky top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
-              {filename}
-            </h6>
-          </>
-        ) : null}
-        {children}
-      </pre>
-    </>
+      {filename ? (
+        <h6 className='sticky top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
+          {filename}
+        </h6>
+      ) : null}
+      <Slot id={id}>{children}</Slot>
+    </pre>
   );
 }
 
