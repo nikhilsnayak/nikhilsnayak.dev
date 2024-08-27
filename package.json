@@ -17,6 +17,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
     "db:up": "drizzle-kit up",
+    "email:dev": "email dev",
     "prepare": "husky"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-slider": "^1.2.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@react-email/components": "0.0.23",
     "@vercel/analytics": "^1.2.2",
     "@vercel/postgres": "^0.9.0",
     "@vercel/speed-insights": "^1.0.10",
@@ -48,8 +50,10 @@
     "openai": "^4.55.3",
     "react": "^19.0.0-rc-eb3ad065-20240822",
     "react-dom": "^19.0.0-rc-eb3ad065-20240822",
+    "react-email": "3.0.1",
     "react-markdown": "^9.0.1",
     "rehype-mdx-code-props": "^3.0.1",
+    "resend": "^4.0.0",
     "server-only": "^0.0.1",
     "sugar-high": "^0.7.0",
     "tailwind-merge": "^2.2.2",
