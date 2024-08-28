@@ -27,14 +27,14 @@ const deleteCommentSchema = commentSchema.pick({
 export async function addComment(prev: string | undefined, formData: FormData) {
   const session = await auth();
 
-  if (!session || !session.user || !session.user.id) {
+  if (!session?.user?.id) {
     return 'Unauthorized';
   }
 
   const parsedResult = addCommentSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsedResult.success) {
-    return 'Invaild input';
+    return 'Invalid input';
   }
 
   const { slug, content } = parsedResult.data;
@@ -57,7 +57,7 @@ export async function editComment(
 ) {
   const session = await auth();
 
-  if (!session || !session.user || !session.user.id) {
+  if (!session?.user?.id) {
     return 'Unauthorized';
   }
 
@@ -66,7 +66,7 @@ export async function editComment(
   );
 
   if (!parsedResult.success) {
-    return 'Invaild input';
+    return 'Invalid input';
   }
 
   const { data: updatedComment } = parsedResult;
@@ -111,15 +111,16 @@ export async function deleteComment(
 ) {
   const session = await auth();
 
-  if (!session || !session.user || !session.user.id) {
+  if (!session?.user?.id) {
     return 'Unauthorized';
   }
+
   const parsedResult = deleteCommentSchema.safeParse(
     Object.fromEntries(formData)
   );
 
   if (!parsedResult.success) {
-    return 'Invaild input';
+    return 'Invalid input';
   }
 
   const {

@@ -64,7 +64,7 @@ export default function HomePage() {
     <section>
       <header className='relative'>
         <h1 className='mb-[0.25em] text-3xl font-light sm:text-5xl'>
-          Hi, I&apos;m
+          {"Hi, I'm"}
           <strong className='block font-extrabold'>Nikhil S</strong>
         </h1>
         <p

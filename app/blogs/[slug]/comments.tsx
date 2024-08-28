@@ -34,7 +34,7 @@ function INTERNAL__getComments(slug: string) {
 
 const getComments = cache(INTERNAL__getComments);
 
-function EditCommentControl({ comment }: { comment: Comment }) {
+function EditCommentControl({ comment }: Readonly<{ comment: Comment }>) {
   return (
     <DialogForm
       action={editComment}
@@ -63,7 +63,7 @@ function EditCommentControl({ comment }: { comment: Comment }) {
   );
 }
 
-function DeleteCommentControl({ id }: { id: string }) {
+function DeleteCommentControl({ id }: Readonly<{ id: string }>) {
   return (
     <DialogForm
       action={deleteComment}
@@ -93,7 +93,7 @@ interface CommentsProps {
   user?: User;
 }
 
-async function Comments({ slug, user }: CommentsProps) {
+async function Comments({ slug, user }: Readonly<CommentsProps>) {
   const comments = await getComments(slug);
 
   if (comments.length === 0) {
@@ -144,12 +144,12 @@ function CommentsSkeleton() {
   ));
 }
 
-export async function CommentsSection({ slug }: CommentsProps) {
+export async function CommentsSection({ slug }: Readonly<CommentsProps>) {
   getComments(slug);
   const session = await auth();
   return (
     <div className='space-y-8'>
-      {!session || !session.user ? (
+      {!session?.user ? (
         <div className='space-y-2'>
           <p>Please sign in to comment.</p>
           <Form

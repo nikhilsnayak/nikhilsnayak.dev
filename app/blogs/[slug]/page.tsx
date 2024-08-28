@@ -5,7 +5,7 @@ import { Eye } from 'lucide-react';
 import { BASE_URL, BLOB_STORAGE_URL } from '@/lib/constants';
 import { formatDate } from '@/lib/utils';
 import { getBlogPosts } from '@/lib/utils/server';
-import { AudioPlayer } from '@/components/ui/audio-player';
+import { AudioPlayer } from '@/components/audio-player';
 import { CustomMDX } from '@/components/mdx';
 import { PostViewsCount } from '@/components/post-views';
 import { Spinner } from '@/components/spinner';
@@ -37,9 +37,8 @@ export function generateMetadata({ params }: BlogProps) {
     summary: description,
     image,
   } = post.metadata;
-  const ogImage = image
-    ? image
-    : `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`;
+  const ogImage =
+    image ?? `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`;
 
   return {
     title,
@@ -65,7 +64,7 @@ export function generateMetadata({ params }: BlogProps) {
   };
 }
 
-export default function Blog({ params }: BlogProps) {
+export default function Blog({ params }: Readonly<BlogProps>) {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
 
   if (!post) {

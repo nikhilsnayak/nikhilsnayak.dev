@@ -18,12 +18,12 @@ interface BreadcrumbResponsiveProps {
   items: Array<{ label: string; href?: string }>;
 }
 
-export function Breadcrumb({ items }: BreadcrumbResponsiveProps) {
+export function Breadcrumb({ items }: Readonly<BreadcrumbResponsiveProps>) {
   return (
     <BreadcrumbRoot>
       <BreadcrumbList>
         {items.map((item, index) => (
-          <Fragment key={index}>
+          <Fragment key={item.label}>
             <BreadcrumbItem>
               {item.href ? (
                 <BreadcrumbLink

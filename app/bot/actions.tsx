@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 import { openai } from '@ai-sdk/openai';
 import { generateId } from 'ai';
 import { createAI, getMutableAIState, streamUI } from 'ai/rsc';
@@ -20,6 +20,12 @@ export type ClientMessage = {
 export type AIState = ServerMessage[];
 export type UIState = ClientMessage[];
 
+function CustomLink(props: ComponentProps<'a'>) {
+  return (
+    <a {...props} className='text-green-500 hover:underline' target='_blank' />
+  );
+}
+
 function BotMessage({
   children,
 }: Readonly<{
@@ -30,13 +36,7 @@ function BotMessage({
       <div className='max-w-max whitespace-pre-wrap rounded-md bg-gray-100 p-4 dark:bg-gray-800'>
         <Markdown
           components={{
-            a: (props) => (
-              <a
-                {...props}
-                className='text-green-500 hover:underline'
-                target='_blank'
-              />
-            ),
+            a: CustomLink,
           }}
         >
           {children}

@@ -10,7 +10,9 @@ import { Spinner } from '@/components/spinner';
 import { AI } from '@/app/bot/actions';
 import { UserMessage } from '@/app/bot/chat';
 
-export function SummarizeButton({ blogTitle }: { blogTitle: string }) {
+export function SummarizeButton({
+  blogTitle,
+}: Readonly<{ blogTitle: string }>) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 

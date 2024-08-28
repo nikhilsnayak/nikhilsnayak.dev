@@ -1,4 +1,3 @@
-import { create } from 'domain';
 import { relations } from 'drizzle-orm';
 import {
   boolean,

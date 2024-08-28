@@ -13,12 +13,12 @@ import { Spinner } from './spinner';
 
 function Table({
   data,
-}: {
+}: Readonly<{
   data: {
     headers: string[];
     rows: string[][];
   };
-}) {
+}>) {
   const headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>
   ));
@@ -68,12 +68,14 @@ function Code({ children, ...props }: any) {
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
 
-function Pre(props: {
-  children: ReactNode;
-  filename?: string;
-  lineNumbers?: boolean;
-  highlightLines?: string;
-}) {
+function Pre(
+  props: Readonly<{
+    children: ReactNode;
+    filename?: string;
+    lineNumbers?: boolean;
+    highlightLines?: string;
+  }>
+) {
   const { children, filename, lineNumbers, highlightLines } = props;
 
   const id = nanoid();

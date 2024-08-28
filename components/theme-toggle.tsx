@@ -11,7 +11,7 @@ interface ThemeButtonProps extends PropsWithChildren {
   type: 'light' | 'dark' | 'system';
 }
 
-function ThemeButton({ type, children }: ThemeButtonProps) {
+function ThemeButton({ type, children }: Readonly<ThemeButtonProps>) {
   const { theme, setTheme } = useTheme();
 
   return (
