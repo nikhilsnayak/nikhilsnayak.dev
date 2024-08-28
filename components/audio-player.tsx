@@ -16,7 +16,7 @@ export function AudioPlayer({
   src,
   title,
   initialVolume = 50,
-}: AudioPlayerProps) {
+}: Readonly<AudioPlayerProps>) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(initialVolume);
   const [isMuted, setIsMuted] = useState(false);

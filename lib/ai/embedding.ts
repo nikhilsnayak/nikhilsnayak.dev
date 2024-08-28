@@ -22,7 +22,7 @@ function generateMarkdownChunks(
 
   const isHeader = (line: string): boolean => /^#{1,6}\s/.test(line);
 
-  const isCodeBlock = (line: string): boolean => /^```/.test(line);
+  const isCodeBlock = (line: string): boolean => line.startsWith('```');
 
   let chunks: string[] = [];
   let currentChunk: string[] = [];

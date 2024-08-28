@@ -30,7 +30,12 @@ export interface BadgeProps
   asChild?: boolean;
 }
 
-function Badge({ className, variant, asChild, ...props }: BadgeProps) {
+function Badge({
+  className,
+  variant,
+  asChild,
+  ...props
+}: Readonly<BadgeProps>) {
   const Comp = asChild ? Slot : 'span';
   return (
     <Comp className={cn(badgeVariants({ variant }), className)} {...props} />

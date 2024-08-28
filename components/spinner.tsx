@@ -11,7 +11,7 @@ export function Spinner({
   className,
   variant = 'ring',
   ...rest
-}: SpinnerProps) {
+}: Readonly<SpinnerProps>) {
   switch (variant) {
     case 'ring':
       return (

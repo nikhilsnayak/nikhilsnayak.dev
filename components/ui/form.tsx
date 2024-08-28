@@ -11,7 +11,7 @@ import {
 
 import { cn } from '@/lib/utils';
 
-import { Button, ButtonProps } from './button';
+import { ButtonProps } from './button';
 import { LoadingButton } from './loading-button';
 
 interface FormContext {
@@ -36,7 +36,7 @@ export interface FormProps extends Omit<ComponentProps<'form'>, 'action'> {
   ) => Promise<string | undefined>;
 }
 
-export function Form({ action, ...rest }: FormProps) {
+export function Form({ action, ...rest }: Readonly<FormProps>) {
   const [error, formAction, isPending] = useActionState(action, undefined);
 
   return (
@@ -59,7 +59,7 @@ export function FormSubmit({
   children,
   pendingFallback,
   ...rest
-}: FormSubmitProps) {
+}: Readonly<FormSubmitProps>) {
   const { isPending } = useForm();
 
   return (
@@ -77,7 +77,7 @@ export function FormSubmit({
 export function FormError({
   className,
   ...rest
-}: Omit<ComponentProps<'p'>, 'children'>) {
+}: Readonly<Omit<ComponentProps<'p'>, 'children'>>) {
   const { error } = useForm();
 
   return (

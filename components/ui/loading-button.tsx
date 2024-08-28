@@ -16,7 +16,7 @@ export function LoadingButton({
   children,
   disabled,
   ...rest
-}: LoadingButtonProps) {
+}: Readonly<LoadingButtonProps>) {
   return (
     <Button
       className={cn(className, 'relative')}

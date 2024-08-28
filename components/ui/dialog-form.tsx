@@ -18,7 +18,7 @@ export function DialogForm({
   className,
   action,
   children,
-}: DialogFormProps) {
+}: Readonly<DialogFormProps>) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
