@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren, ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Slot } from '@radix-ui/react-slot';
+import { AppWindow, Code2 } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
@@ -10,6 +11,7 @@ import { highlight } from 'sugar-high';
 import { slugify } from '@/lib/utils';
 
 import { Spinner } from './spinner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 function Table({
   data,
@@ -141,6 +143,32 @@ function createHeading(level: number) {
   return Heading;
 }
 
+function CodeBlock({ children }: PropsWithChildren) {
+  return (
+    <Tabs defaultValue='snippet'>
+      <TabsList className='flex w-max ml-auto'>
+        <TabsTrigger value='snippet' className='flex items-center gap-2'>
+          <Code2 className='size-5' />
+          Code
+        </TabsTrigger>
+        <TabsTrigger value='preview' className='flex items-center gap-2'>
+          <AppWindow className='size-5' />
+          Preview
+        </TabsTrigger>
+      </TabsList>
+      {children}
+    </Tabs>
+  );
+}
+
+function Snippet({ children }: PropsWithChildren) {
+  return <TabsContent value='snippet'>{children}</TabsContent>;
+}
+
+function Preview({ children }: PropsWithChildren) {
+  return <TabsContent value='preview'>{children}</TabsContent>;
+}
+
 const components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -154,6 +182,9 @@ const components = {
   Table,
   LoadingSpinner: Spinner,
   pre: Pre,
+  CodeBlock,
+  Snippet,
+  Preview,
 };
 
 export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {
