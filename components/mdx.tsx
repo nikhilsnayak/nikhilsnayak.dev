@@ -8,7 +8,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
 import { highlight } from 'sugar-high';
 
-import { slugify } from '@/lib/utils';
+import { cn, slugify } from '@/lib/utils';
 
 import { Spinner } from './spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
@@ -61,8 +61,12 @@ function CustomLink(props: any) {
   return <a target='_blank' rel='noopener noreferrer' {...props} />;
 }
 
-function RoundedImage({ alt, ...props }: React.ComponentProps<typeof Image>) {
-  return <Image alt={alt} className='rounded-lg' {...props} />;
+function RoundedImage({
+  alt,
+  className,
+  ...props
+}: React.ComponentProps<typeof Image>) {
+  return <Image alt={alt} className={cn('rounded-lg', className)} {...props} />;
 }
 
 function Code({ children, ...props }: any) {
@@ -146,7 +150,7 @@ function createHeading(level: number) {
 function CodeBlock({ children }: PropsWithChildren) {
   return (
     <Tabs defaultValue='snippet'>
-      <TabsList className='flex w-max ml-auto'>
+      <TabsList>
         <TabsTrigger value='snippet' className='flex items-center gap-2'>
           <Code2 className='size-5' />
           Code
