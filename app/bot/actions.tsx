@@ -1,5 +1,8 @@
 import { ComponentProps, ReactNode } from 'react';
+import { headers } from 'next/headers';
 import { openai } from '@ai-sdk/openai';
+import { Ratelimit } from '@upstash/ratelimit';
+import { kv } from '@vercel/kv';
 import { generateId } from 'ai';
 import { createAI, getMutableAIState, streamUI } from 'ai/rsc';
 import Markdown from 'react-markdown';
@@ -46,19 +49,38 @@ function BotMessage({
   );
 }
 
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(2, '1m'),
+});
+
 export async function continueConversation(
   message: string
-): Promise<ClientMessage> {
+): Promise<ClientMessage | { error: string }> {
   'use server';
-  const history = getMutableAIState<typeof AI>();
-  history.update([...history.get(), { role: 'user', content: message }]);
 
-  const context = await findRelevantContent(message);
+  try {
+    const headersList = headers();
+    const ip =
+      headersList.get('x-forwarded-for') ??
+      headersList.get('x-real-ip') ??
+      'Unknown';
 
-  const result = await streamUI({
-    model: openai.chat('gpt-4o-mini-2024-07-18'),
-    messages: history.get(),
-    system: `
+    const { success } = await ratelimit.limit(ip);
+
+    if (!success) {
+      return { error: 'You have been Rate Limited' };
+    }
+
+    const history = getMutableAIState<typeof AI>();
+    history.update([...history.get(), { role: 'user', content: message }]);
+
+    const context = await findRelevantContent(message);
+
+    const result = await streamUI({
+      model: openai.chat('gpt-4o-mini-2024-07-18'),
+      messages: history.get(),
+      system: `
     You are Roronova Zoro, an AI Assistant chatbot on the personal portfolio website of Nikhil S.
 
     ### Guidelines:
@@ -94,19 +116,26 @@ export async function continueConversation(
 
     **Question**: ${message}  
     `,
-    text: ({ content, done }) => {
-      if (done) {
-        history.done([...history.get(), { role: 'assistant', content }]);
-      }
-      return <BotMessage>{content}</BotMessage>;
-    },
-  });
+      text: ({ content, done }) => {
+        if (done) {
+          history.done([...history.get(), { role: 'assistant', content }]);
+        }
+        return <BotMessage>{content}</BotMessage>;
+      },
+    });
 
-  return {
-    id: generateId(),
-    role: 'assistant',
-    display: result.value,
-  };
+    return {
+      id: generateId(),
+      role: 'assistant',
+      display: result.value,
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: 'Something went wrong' };
+    }
+  }
 }
 
 export const AI = createAI({

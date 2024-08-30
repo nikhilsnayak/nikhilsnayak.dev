@@ -11,6 +11,7 @@ import { GeistSans } from 'geist/font/sans';
 
 import { BASE_URL } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/sonner';
 import { BotLink } from '@/components/bot-link';
 import { NavLink } from '@/components/nav-link';
 
@@ -130,6 +131,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster richColors />
           <div className='flex min-h-dvh flex-col justify-between gap-8'>
             <AI>
               <Header />
