@@ -1,4 +1,4 @@
-import { readdir, readFile } from 'fs/promises';
+import { readdir, readFile, stat } from 'fs/promises';
 import path from 'path';
 import { sql } from '@vercel/postgres';
 import { drizzle } from 'drizzle-orm/vercel-postgres';
@@ -15,6 +15,8 @@ const log = (message: string) =>
 
 const processFile = async (file: string) => {
   const filePath = path.join(CONTENT_DIR, file);
+  const fileStats = await stat(filePath);
+  if (fileStats.isDirectory()) return null;
   const content = await readFile(filePath, 'utf-8');
   const extension = path.extname(file);
   const slug = path.basename(file, extension);
@@ -42,15 +44,15 @@ const main = async () => {
   log('Files read successfully.');
 
   log('Generating embeddings and preparing batch insert...');
-  const embeddingPromises = fileContents.map(
-    async ({ content, contentType }) => {
+  const embeddingPromises = fileContents
+    .filter((file) => file !== null)
+    .map(async ({ content, contentType }) => {
       const embeddings = await generateEmbeddings({
         value: content,
         contentType,
       });
       return embeddings;
-    }
-  );
+    });
 
   const embeddingsArray = await Promise.all(embeddingPromises);
   log('Embeddings generated.');
