@@ -4,6 +4,7 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { generateId } from 'ai';
 import { useActions, useUIState } from 'ai/rsc';
+import { toast } from 'sonner';
 
 import { LoadingButton } from '@/components/ui/loading-button';
 import { Spinner } from '@/components/spinner';
@@ -23,22 +24,26 @@ export function SummarizeButton({
     router.push('/bot');
 
     startTransition(async () => {
+      const prompt = `Summarize "${blogTitle}" Blog`;
       setConversation((currentConversation) => [
         ...currentConversation,
         {
           id: generateId(),
           role: 'user',
-          display: <UserMessage>{`Summarize "${blogTitle}" Blog`}</UserMessage>,
+          display: <UserMessage>{prompt}</UserMessage>,
         },
       ]);
 
-      const message = await continueConversation(
-        `Summarize "${blogTitle}" Blog`
-      );
-      setConversation((currentConversation) => [
-        ...currentConversation,
-        message,
-      ]);
+      const response = await continueConversation(prompt);
+
+      if ('error' in response) {
+        toast.error(response.error);
+      } else {
+        setConversation((currentConversation) => [
+          ...currentConversation,
+          response,
+        ]);
+      }
     });
   };
 

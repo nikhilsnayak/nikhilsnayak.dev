@@ -11,6 +11,7 @@ import {
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
 import { LucideTrash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -58,7 +59,7 @@ export function Chat() {
   }, []);
 
   return (
-    <div className='flex h-[60dvh] w-full flex-col gap-4'>
+    <div className='flex h-[55dvh] w-full flex-col gap-4'>
       <div className='flex-1 overflow-auto'>
         <ScrollArea
           className='h-full w-full rounded-md border'
@@ -95,11 +96,15 @@ export function Chat() {
           ]);
 
           startTransition(async () => {
-            const message = await continueConversation(value);
-            setConversation((currentConversation) => [
-              ...currentConversation,
-              message,
-            ]);
+            const response = await continueConversation(value);
+            if ('error' in response) {
+              toast.error(response.error);
+            } else {
+              setConversation((currentConversation) => [
+                ...currentConversation,
+                response,
+              ]);
+            }
           });
         }}
       >
@@ -125,7 +130,7 @@ export function Chat() {
             setConversation([]);
           }}
           type='reset'
-          disabled={messages.length < 1}
+          disabled={messages.length < 1 && conversation.length < 1}
         >
           <LucideTrash2 />
           <span className='sr-only'>clear chat</span>
