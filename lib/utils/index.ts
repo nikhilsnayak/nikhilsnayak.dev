@@ -18,7 +18,7 @@ export function slugify(str: string) {
 
 export function deslugify(str: string) {
   return str
-    .replace(/-and-/g, '&') // Replace '-and-' with '&'
+    .replace(/-and-/g, ' & ') // Replace '-and-' with '&'
     .replace(/-/g, ' ') // Replace hyphens with spaces
     .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize the first letter of each word
     .trim(); // Remove whitespace from both ends of a string

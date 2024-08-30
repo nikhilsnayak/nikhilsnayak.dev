@@ -1,0 +1,612 @@
+---
+title: 'LLM and RSC: A match made in Heaven'
+publishedAt: 'TODO'
+summary: 'Powerful synergy between advanced AI tools and modern web technologies to enhance user interfaces.'
+image: '/blogs/llm-and-rsc/cover.png'
+components: '["GenUI", "StockDisplayDemo"]'
+---
+
+<Image
+  src='/blogs/llm-and-rsc/cover.png'
+  alt='Speed Insights'
+  width={1080}
+  height={540}
+  className='grayscale'
+/>
+
+> I know the title is a bit creepy, but bear with me till the end, and I'll convince you that the title is actually true.
+
+## Time Travel
+
+Okay, let's time travel back to 2022. Two major things happened in 2022 that caused a huge shift in how we develop web applications:
+
+1. October - Next.js 13 with the App Router (React Server Components implementation).
+2. November - OpenAI announced ChatGPT (chatbot that showcased the capabilities of large language models to the world).
+
+LLMs are very good at generating textual content based on pre-trained data, but the output of LLMs is limited to plain text or markdown content.
+
+Before React Server Components (RSCs), data fetching in React applications was done using `useEffect` on the client or `getServerSideProps` in frameworks like **Next.js**. RSCs changed this by allowing data fetching directly inside components (more on this in next section).
+
+RSCs also let parts of the React tree to be server-only, so they don’t need hydration or re-rendering on the client.
+
+> Good to Know💡: Hydration is a mechanism of making server-generated HTML interactive on the client. Since RSCs don’t have client behaviors, there’s no need to hydrate them. React uses a process called selective hydration, skipping the RSC parts and only hydrating client components.
+
+Along with RSCs, React introduced Actions (Server Actions and Client Actions), which offer first-class support for performing data mutations. Actions are asynchronous transitions managed by React. Client Actions run on the client, while Server Actions run on the server but are invoked by the client.
+
+React provides low-level APIs for RSCs and Server Actions, and the implementation is left to the framework authors. In Next.js, Server Actions are implemented as POST endpoints. You define an async function with the `'use server'` directive (Door to server), and the Next.js bundler handles the heavy lifting, such as splitting your code into client and server bundles and bootstrapping a POST endpoint for your server actions.
+
+> RSCs is a very vast topic. I won't go in-depth about RSCs here, but I will explain briefly wherever required. A good place to start exploring RSCs is the React docs linked [here](https://react.dev/reference/rsc/server-components). If you know RSCs already I still recommend you to watch [React for Two Computers](https://youtu.be/ozI4V_29fj4?si=SSIQhvzNWFWxXaM2), A talk by [Dan Abramov](https://x.com/dan_abramov2). From now on, we will talk about RSCs and Server Actions in the context of Next.js. The implementation of RSCs might slightly differ in other RSC-enabled frameworks, but the underlying primitives remain the same.
+
+With this context from the past, let's travel to present (2024).
+
+## React Server Components and Server Actions
+
+The App Router introduced in Next.js 13 is a first-class implementation of RSCs, concurrent and streaming features of React, such as transitions, suspense etc. Since the Next.js App Router has the server as the entry point, the **default** component exported from `page.tsx` becomes a Server Component by default. We can opt into client behaviors (ship JS to the client) by marking a file with `'use client'` (door to the client).
+
+Since RSCs are guaranteed to execute only on the server, we can fetch data (from the database or an external API) directly inside our components by making a component `async`, awaiting the response, and shipping the RSC payload to the client-side React to take over orchestration on the client.
+
+### A Basic RSC Example to Show a List of Movies:
+
+```tsx filename="app/movie-list/page.tsx"
+import { getMovies } from '@/lib/db';
+
+export default async function Page(props: {
+  searchParams: {
+    query: string;
+  };
+}) {
+  const movies = await getMovies(query);
+
+  if (!movies || movies.length === 0) return 'No Movies';
+
+  return (
+    <ul className='space-y-6 mt-6'>
+      {movies.map(
+        ({ id, title, director, releaseYear, genre, rating, cast }) => (
+          <li
+            key={id}
+            className='p-6 bg-white shadow-lg rounded-lg hover:bg-gray-100 transition-colors'
+          >
+            <h2 className='text-2xl font-semibold text-gray-800 mb-2'>
+              {title}
+            </h2>
+            <p className='text-gray-600 mb-1'>
+              <strong>Director:</strong> {director}
+            </p>
+            <p className='text-gray-600 mb-1'>
+              <strong>Release Year:</strong> {releaseYear}
+            </p>
+            <p className='text-gray-600 mb-1'>
+              <strong>Genre:</strong> {genre}
+            </p>
+            <p className='text-gray-600 mb-1'>
+              <strong>Rating:</strong> {rating}/10
+            </p>
+            <p className='text-gray-600 mb-1'>
+              <strong>Cast:</strong> {cast.join(', ')}
+            </p>
+          </li>
+        )
+      )}
+    </ul>
+  );
+}
+```
+
+Isn't this model more elegant? You fetch data where it is required, like a normal JavaScript function, using `async` and `await` syntax. And the best part is there’s no need for `useEffect` and all the pitfalls that come with it.
+
+Now, coming to Server Actions, they provide a straightforward approach to perform data mutations and revalidation on the server. At the end of the day, a Server Action is a POST endpoint (at least in Next.js), and all the rules that apply to APIs—such as data validation, authentication, and authorization—still apply to Server Actions. The boilerplate of setting up an API endpoint is abstracted away, and we’re given a convenient way to call the API via a function.
+
+### A Basic Example of a Server Action to Add a New Movie
+
+```tsx filename="app/add-movie/page.tsx"
+const formFields = [
+  { label: 'Title', name: 'title', type: 'text' },
+  { label: 'Director', name: 'director', type: 'text' },
+  { label: 'Release Year', name: 'releaseYear', type: 'number' },
+  { label: 'Genre', name: 'genre', type: 'text' },
+  { label: 'Rating (out of 10)', name: 'rating', type: 'number' },
+  { label: 'Cast (comma-separated)', name: 'cast', type: 'text' },
+];
+
+export default function Page() {
+  const addMovie = async (formData: FormData) => {
+    'use server'; // Door to server
+    const data = Object.fromEntries(formData);
+    await db.insert(movies).values(data);
+
+    // Returns the updated RSC payload for the '/' route, in this case, the updated movies list
+    revalidatePath('/');
+  };
+
+  return (
+    <main>
+      <h1 className='mx-auto text-center mb-8'>Add New Movie</h1>
+      {/* `action` attribute automatically invokes server action on the client when form is submitted */}
+      <form action={addMovie} className='max-w-lg mx-auto p-4 space-y-4'>
+        {formFields.map((field) => (
+          <div key={field.name}>
+            <label className='block text-sm font-medium text-gray-700'>
+              {field.label}:
+            </label>
+            <input
+              type={field.type}
+              name={field.name}
+              className='mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
+              required
+            />
+          </div>
+        ))}
+        <button
+          type='submit'
+          className='w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+        >
+          Add Movie
+        </button>
+      </form>
+    </main>
+  );
+}
+```
+
+And just like that, we have a new movie in the database (remember to do auth check and data validation before persisting the data), with the updated data reflected on the client in a single request. No event handlers, no state management and the best part is, this code works without JavaScript on the client (progressive enhancement). There are other ways to define and invoke Server Actions, which are explained in greater detail [here](https://react.dev/reference/rsc/server-actions).
+
+If you’ve carefully observed the `revalidatePath` function in the server action, it regenerates the RSC payload for a given path and returns the updated payload to the client. Then, React on the client side re-renders the app with this new RSC payload without losing any React state (`useState` values) or browser state like scroll position. When I first understood this capability, it blew my mind. It's such a wonderful and seamless coordination between the client and server.
+
+## Large Language Models
+
+Let's discuss the capabilities of LLMs. We already know that when given a prompt, and when the LLM is trained on context related to that prompt, it is very good at generating responses. However, LLMs don’t have up-to-date information, and even when data is available, one of the pitfalls of LLMs is that they tend to hallucinate more often. We can reduce this hallucination by fine-tuning the prompt and providing enough context instead of using a generic prompt. We can also leverage Retrieval-Augmented Generation (RAG) to mitigate this issue.
+
+Another notable functionality of LLMs is **Tool/Function Calling**. Along with the prompt, we can instruct the LLM to call a user-defined function to extend its capabilities. This function helps the LLM during content generation by providing information or enabling actions that the LLM cannot perform on its own.
+
+### A Simple Example to Get Stock Price Using Tool Call
+
+```ts filename="app/ai.ts"
+import { OpenAI } from 'openai';
+
+const openai = new OpenAI();
+
+// Define the tool function to mock real-time stock prices
+export async function getStockPrice(symbol: string) {
+  const randomValue = (min: number, max: number) =>
+    (Math.random() * (max - min) + min).toFixed(2);
+
+  await new Promise((res) =>
+    setTimeout(res, Math.floor(Math.random() * 10000))
+  );
+
+  const stockData = {
+    symbol: symbol,
+    companyName: `${symbol.toUpperCase()} Corp.`,
+    currentPrice: randomValue(100, 500),
+    openingPrice: randomValue(95, 120),
+    highestPrice: randomValue(110, 550),
+    lowestPrice: randomValue(90, 100),
+    previousClose: randomValue(98, 115),
+    volume: Math.floor(Math.random() * 10000000),
+    marketCap: Math.floor(Math.random() * 10000000000),
+    peRatio: randomValue(10, 40),
+    dividendYield: randomValue(1, 5),
+    lastUpdated: new Date().toISOString(),
+  };
+
+  return stockData;
+}
+
+// Function that makes the API call to OpenAI with function calling enabled
+export async function askAI(prompt: string) {
+  // Call the OpenAI API with the prompt and function calling enabled
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o-mini-2024-07-18',
+    messages: [
+      {
+        role: 'system',
+        content: `You are a highly knowledgeable financial assistant. 
+                  Your role is to provide accurate financial insights, explain concepts in simple terms, 
+                  and assist users with stock-related queries. You have access to a function for fetching 
+                  real-time stock prices based on the symbol provided by the user.
+                  If a user asks for specific stock data,
+                  ensure you call the correct function and provide the information concisely. 
+                  Be polite, professional, and focused on finance-related topics.`,
+      },
+      { role: 'user', content: prompt },
+    ],
+    tools: [
+      {
+        function: {
+          name: 'getStockPrice',
+          description:
+            'Fetches the current stock price of a given stock symbol.',
+          parameters: {
+            type: 'object',
+            properties: {
+              symbol: {
+                type: 'string',
+                description:
+                  'The stock symbol (e.g., AAPL, TSLA) to fetch the price for.',
+              },
+            },
+            required: ['symbol'],
+          },
+        },
+        type: 'function',
+      },
+    ],
+  });
+
+  return response;
+}
+
+async function main(prompt: string) {
+  const completion = await askAI(prompt);
+
+  // Check if the response includes a function call
+  const functionCall = completion.choices[0].message.tool_calls?.[0].function;
+
+  if (functionCall && functionCall.name === 'getStockPrice') {
+    const { symbol } = JSON.parse(functionCall.arguments);
+
+    // Call the function manually (since the API doesn't actually run the function for you)
+    const stockData = await getStockPrice(symbol);
+    console.log(
+      `The current stock price of ${symbol} is ${stockData.currentPrice}`
+    );
+  } else {
+    // The LLM responded directly without calling a function
+    console.log(completion.choices[0].message?.content);
+  }
+}
+
+const prompt = 'What is the current stock price of AAPL?';
+
+main(prompt);
+```
+
+The `getStockPrice` function is defined to simulate an API request that fetches stock prices based on a provided symbol. The model is provided with this function so that it can call it when appropriate. After receiving the response from the LLM, we check if the model requested a function call. If the model requested the stock price function, we call `getStockPrice` and return the result. If the model responds without needing the function call, we simply output the LLM's content.
+
+## The Elephant in the Room
+
+> Okay! RSCs, Server Actions and LLMs, these technologies are all great. But LLMs and React on the server are two different topics, right? Why are we discussing them together? I bet these are the questions currently bothering you.
+
+Ready for the reveal? Drum roll, please 🥁🥁🥁...
+
+The answer is **GENERATIVE UI**.
+
+> Now you might be thinking: "Ohh! Wait a second, I know or have heard of GENERATIVE **AI**. What the heck is GENERATIVE **UI**???"
+
+The best parts of LLMs and RSCs come together in what is called GENERATIVE UI. Didn’t get it? Let’s dive deeper.
+
+> **Note📝:** The next section is filled with code blocks to show you how to implement a basic MVP of Generative UI. Even if you don't fully understand the code, you’ll still be able to see how it works in action.
+
+## GENERATIVE UI
+
+Let's revisit the tool-calling example above. If you observe closely, the LLM doesn't actually execute the function itself. Instead, it provides all the necessary details to invoke that function, and we manually call the function once we receive the response, checking if the LLM has requested a tool call.
+
+Technically, we can do whatever we want with the information (parameters) provided by the LLM in the function. We know that LLMs can only produce plain text, markdown, and structured output, but we can leverage this structured output to create the UI we need, instead of just displaying plain text to the user, leading to a much better user experience.
+
+So how do we achieve this? Let's enhance the example from plain text to a generative UI.
+
+```tsx filename="app/page.tsx" lineNumbers
+'use client';
+
+import { useState, useTransition, type FormEvent, type ReactNode } from 'react';
+
+import { continueConversation } from './actions';
+
+export interface Message {
+  id: string;
+  role: 'user' | 'bot';
+  display: ReactNode;
+}
+
+export default function GenUI() {
+  const [messages, setMessages] = useState([] as Message[]);
+  const [isPending, startTransition] = useTransition();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const query = formData.get('query')?.toString()?.trim();
+    e.currentTarget.reset();
+    if (!query) return;
+
+    setMessages((prev) => {
+      const id = (Math.random() * 1000).toString();
+      return [...prev, { id, role: 'user', display: <div>{query}</div> }];
+    });
+
+    startTransition(async () => {
+      const response = await continueConversation(query);
+      setMessages((prev) => {
+        return [...prev, response];
+      });
+    });
+  };
+
+  return (
+    <section className=' w-full p-4 border bg-background rounded-lg shadow-lg'>
+      <ul className='space-y-4 mb-4 p-4 h-[60vh] overflow-auto relative rounded-lg'>
+        {messages.length === 0 ? (
+          <li className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground'>
+            No Conversation
+          </li>
+        ) : (
+          messages.map((message) => (
+            <li key={message.id} className=' w-full border-b py-4'>
+              {message.role.toUpperCase()}: {message.display}
+            </li>
+          ))
+        )}
+        {isPending ? <li className='w-full'>Thinking...</li> : null}
+      </ul>
+      <form className='grid gap-4 grid-cols-8' onSubmit={handleSubmit}>
+        <input
+          type='text'
+          name='query'
+          className='flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 col-span-6'
+          placeholder='Enter your message...'
+        />
+        <button
+          type='submit'
+          disabled={isPending}
+          className='p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none disabled:bg-blue-300 col-span-2'
+        >
+          Ask
+        </button>
+      </form>
+    </section>
+  );
+}
+```
+
+The above code snippet sets up a basic chat interface. If you look closely, in the `messages` state variable, we are storing React Nodes instead of plain text or markdown. The `continueConversation` function is the server action used to call the LLM and return an RSC payload as the response, instead of just plain text.
+
+When the user submits a query, we add a new entry to the `messages` state with the user's query and then call the server action within a transition.
+
+> Hot Take🔥: If you observed `handleSubmit` event handler which calls the server action, it is not a async function. Yes that is a valid event handler. Until React 19, making event handlers async was the only option to perform data mutation. Event handlers were never supposed to be async because the DOM doesn't wait for your asynchronous event handlers to complete. But now, with first-class support for async transitions, also known as actions, React manages pending states and resolves all the awkward race conditions. Please use actions.
+
+Once we receive the RSC payload from the server action, we update the UI. And that's it—with just 83 lines of code, our frontend is ready! Now, let's take a closer look at the `continueConversation` server action.
+
+```tsx filename="app/actions.tsx" lineNumbers
+'use server';
+
+import { Suspense } from 'react';
+import Markdown from 'react-markdown';
+
+import { Spinner } from '@/components/spinner';
+
+import { askAI, getStockPrice } from './ai';
+import type { Message } from './page';
+import { StockDisplay } from './stock-display';
+
+async function StockCard({ symbol }: { symbol: string }) {
+  const stockDetails = await getStockPrice(symbol);
+  return <StockDisplay {...stockDetails} />;
+}
+
+export async function continueConversation(query: string): Promise<Message> {
+  const completion = await askAI(query);
+
+  // Check if the response includes a function call
+  const functionCall = completion.choices[0].message.tool_calls?.[0].function;
+
+  if (functionCall && functionCall.name === 'getStockPrice') {
+    const { symbol } = JSON.parse(functionCall.arguments);
+    return {
+      id: (Math.random() * 1000).toString(),
+      role: 'bot',
+      display: (
+        <Suspense
+          fallback={
+            <div className='flex items-center gap-2'>
+              <span>{`Fetching current stock price of ${symbol}`}</span>
+              <Spinner />
+            </div>
+          }
+        >
+          <StockCard symbol={symbol} />
+        </Suspense>
+      ),
+    };
+  } else {
+    return {
+      id: (Math.random() * 1000).toString(),
+      role: 'bot',
+      display: <Markdown>{completion.choices[0].message?.content}</Markdown>,
+    };
+  }
+}
+```
+
+The `continueConversation` server action takes the user input as a query and calls the `askAI` function, which we defined earlier. Once the LLM generates a response, we check if it requested a function call, specifically for `getStockPrice`.
+
+- **LLM requests `getStockPrice`:** If the LLM requests the function call for `getStockPrice`, we extract the `symbol` from the function call's arguments and pass it to the `StockCard` component as a prop. `StockCard` is an asynchronous React Server Component (RSC) that fetches stock information based on the symbol and returns the `StockDisplay` component which displays all the relevant data along with some client side interactivity. We wrap the `StockCard` in a `Suspense` boundary and provide a fallback message while the stock information is being fetched. This improves user experience by showing a loading state instead of a blank screen.
+
+Below is the `StockDisplay` Component code and its preview
+
+<CodeBlock>
+<Snippet>
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+interface StockDataProps {
+  symbol: string;
+  companyName: string;
+  currentPrice: string;
+  openingPrice: string;
+  highestPrice: string;
+  lowestPrice: string;
+  previousClose: string;
+  volume: number;
+  marketCap: number;
+  peRatio: string;
+  dividendYield: string;
+  lastUpdated: string;
+}
+
+export function StockDisplay({
+  symbol,
+  companyName,
+  currentPrice,
+  openingPrice,
+  highestPrice,
+  lowestPrice,
+  previousClose,
+  volume,
+  marketCap,
+  peRatio,
+  dividendYield,
+  lastUpdated,
+}: StockDataProps) {
+  const [showDetails, setShowDetails] = useState(false);
+  const [compareSymbol, setCompareSymbol] = useState('');
+  const [showComparison, setShowComparison] = useState(false);
+
+  // Example function to simulate stock comparison (for demonstration purposes)
+  const compareStock = (symbol: string) => {
+    // Simulate fetching data for comparison
+    console.log(`Comparing ${symbol} with ${compareSymbol}`);
+    // Set show comparison to true (for demo purposes)
+    setShowComparison(true);
+  };
+
+  return (
+    <div className='p-6 border mt-2 rounded-md'>
+      <h2 className='text-xl font-bold mb-2'>
+        {companyName} ({symbol})
+      </h2>
+      <p className='text-sm mb-4'>
+        Last Updated: {new Date(lastUpdated).toLocaleString()}
+      </p>
+
+      <div className='space-y-2'>
+        <p>
+          <span className='font-semibold'>Current Price:</span> ${currentPrice}
+        </p>
+        <p>
+          <span className='font-semibold'>Opening Price:</span> ${openingPrice}
+        </p>
+        <p>
+          <span className='font-semibold'>Highest Price:</span> ${highestPrice}
+        </p>
+        <p>
+          <span className='font-semibold'>Lowest Price:</span> ${lowestPrice}
+        </p>
+        <p>
+          <span className='font-semibold'>Previous Close:</span> $
+          {previousClose}
+        </p>
+        <p>
+          <span className='font-semibold'>Volume:</span>{' '}
+          {volume.toLocaleString()}
+        </p>
+        <p>
+          <span className='font-semibold'>Market Cap:</span> $
+          {marketCap.toLocaleString()}
+        </p>
+        <p>
+          <span className='font-semibold'>P/E Ratio:</span> {peRatio}
+        </p>
+        <p>
+          <span className='font-semibold'>Dividend Yield:</span> {dividendYield}
+          %
+        </p>
+      </div>
+
+      <div className='mt-4'>
+        <button
+          className='px-4 py-2 bg-blue-500 text-white rounded'
+          onClick={() => setShowDetails(!showDetails)}
+        >
+          {showDetails ? 'Hide Financial Metrics' : 'Show Additional Metrics'}
+        </button>
+
+        {showDetails && (
+          <div className='mt-4 bg-gray-100 dark:bg-gray-800 p-4 rounded text-foreground'>
+            <h3 className='font-semibold'>Additional Financial Metrics:</h3>
+            <p>
+              Details about financial metrics and other insights would be
+              displayed here.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className='mt-4'>
+        <h3 className='font-semibold mb-2'>Compare with Another Stock</h3>
+        <input
+          type='text'
+          value={compareSymbol}
+          onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
+          placeholder='Enter stock symbol'
+          className='border px-2 py-1 rounded text-foreground'
+        />
+        <button
+          className='ml-2 px-4 py-1 bg-green-500 text-white rounded'
+          onClick={() => compareStock(compareSymbol)}
+        >
+          Compare
+        </button>
+
+        {showComparison && (
+          <div className='mt-4 bg-zinc-800 dark:bg-zinc-300 text-primary-foreground p-4 rounded'>
+            <h4 className='font-semibold'>Comparison Results:</h4>
+            <p>
+              Comparison details between {symbol} and {compareSymbol} would be
+              displayed here. This interaction can call the
+              `continueConversation` server action and we can add one more tool
+              call for stock comparison
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+</Snippet>
+<Preview>
+<StockDisplayDemo />
+</Preview>
+</CodeBlock>
+
+- **LLM responds without a function call:** If the LLM responds without requiring a function call, we simply render the response content using the `Markdown` component. This allows us to handle structured text or markdown-based responses from the LLM in a user-friendly way.
+
+With this approach, we successfully transform plain text into a **Generative UI**, providing a rich and modern user experience. Instead of just text-based responses, users are presented with dynamic content that is generated in real-time, offering an interactive interface powered by both LLMs and React's server-side capabilities.
+
+This implementation not only improves user interaction but also showcases the potential of combining LLMs with React for building **Generative UIs**—creating more immersive web experiences.
+
+**Exciting, right?** ✨  
+Try out the demo below and experience the magic of Generative UI for yourself! 🎨🚀
+
+<section className='not-prose'>
+  <GenUI />
+</section>
+
+> Note📝: The example above is just a made up use case for educational purpose to demonstrate the coordination between RSCs and LLMs.
+
+> If you are still not convinced that GENERATIVE UI is awesome, try out [**v0.dev**](https://v0.dev) by Vercel. I'm sure you'll be amazed!
+
+## Considerations for Scaling Generative UI
+
+Now, you might be thinking: _"We can just import this component into the chat interface and use it directly. So, where's the novelty in this approach?"_ Good question! In this demo, there’s only one component. But what if there were 1,000 different possible function calls and 1,000 corresponding UIs? Your JavaScript bundle would explode, and the user experience would suffer drastically.
+
+Another key aspect here is that we’re fetching the required data inside the component. By using `Suspense`, we’re able to provide a useful fallback while the UI is being prepared.
+
+Remember earlier when I mentioned that RSCs can be streamed to the client? Well, you can technically _stream the UI_ just like an LLM would stream a response.
+
+However, don’t use the approach I’ve shown so far in real projects. I built it from scratch purely for educational purposes.
+
+For production applications, use [AI SDK RSC](https://sdk.vercel.ai/docs/ai-sdk-rsc) to implement Generative UI. It handles all the heavy lifting, including function calls, streaming RSCs, and provides a very intuitive API to work with.
+
+Special thanks to [Lars Grammel](https://x.com/lgrammel) and [Vercel (The ▲ Company)](https://vercel.com/home) for making `AI SDK` possible.
+
+## Wrapping Up
+
+I know this was a long post, so if you've made it all the way to the end, I really appreciate your time. There is no better time than now to build AI Applications. As promised, I hope I’ve convinced you about the intriguing title "LLM and RSC: A Match Made in Heaven." If not, feel free to hit me up in the comments or on social media—I’d be happy to discuss it further. I’d also love to hear about your experiences and any feedback you have. Thank you so much for your time, and I’ll see you in the next one!
+
+> Before you go, I had an alternate title in mind: "LLM Weds RSC: The Birth of GENERATIVE UI." I know it sounds even creepier, and it also gives away the main concept of this post, so I went with "LLM and RSC: A Match Made in Heaven" instead.

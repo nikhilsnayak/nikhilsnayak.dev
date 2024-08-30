@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Eye } from 'lucide-react';
 
@@ -25,7 +26,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }: BlogProps) {
+export function generateMetadata({ params }: BlogProps): Metadata {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
   if (!post) {
     return {};
@@ -47,6 +48,7 @@ export function generateMetadata({ params }: BlogProps) {
       title,
       description,
       type: 'article',
+      siteName: 'Nikhil S - Blog',
       publishedTime,
       url: `${BASE_URL}/blogs/${post.slug}`,
       images: [
@@ -64,12 +66,27 @@ export function generateMetadata({ params }: BlogProps) {
   };
 }
 
-export default function Blog({ params }: Readonly<BlogProps>) {
+export default async function Blog({ params }: Readonly<BlogProps>) {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
 
   if (!post) {
     notFound();
   }
+
+  const { metadata } = post;
+  const components: Record<string, any> = {};
+
+  if (metadata.components) {
+    const parsedJSON = JSON.parse(metadata.components);
+    if (Array.isArray(parsedJSON)) {
+      for (let component of parsedJSON as string[]) {
+        components[component] = (
+          await import(`../../../content/components/${component}`)
+        ).default;
+      }
+    }
+  }
+
   const blogTitle = post.metadata.title;
   return (
     <section>
@@ -125,7 +142,7 @@ export default function Blog({ params }: Readonly<BlogProps>) {
         />
       </div>
       <article className='prose min-w-full dark:prose-invert'>
-        <CustomMDX source={post.content} />
+        <CustomMDX source={post.content} components={components} />
       </article>
       <div className='mt-8'>
         <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>

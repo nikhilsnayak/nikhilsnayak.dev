@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description: 'Software Engineer from India',
     url: BASE_URL,
     siteName: 'Nikhil S',
-    locale: 'en_US',
+    locale: 'en_IN',
     type: 'website',
   },
   robots: {

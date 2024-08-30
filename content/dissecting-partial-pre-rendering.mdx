@@ -241,7 +241,7 @@ Now let's increase the complexity a bit more. We need to add a customer review s
 
 The tricky part here is that the reviews get added and edited very often since our platform is very popular. Therefore, the reviews must be dynamically generated for each request.
 
-To make this use case even more interesting, we need to show an edit and delete button for the review that the currently logged-in user has added. We might also need to show a text area to add review in the first place if the user is logged in. I will leave this part as an excersise. I hope this use case makes sense.
+To make this use case even more interesting, we need to show an edit and delete button for the review that the currently logged-in user has added. We might also need to show a text area to add review in the first place if the user is logged in. I will leave this part as an exercise. I hope this use case makes sense.
 
 Let's update our JSX to include this dynamic review section:
 
@@ -279,7 +279,7 @@ export default function Home() {
 }
 ```
 
-How it currently works is that, all the content until the `Suspense` boundary along with the fallback UI provided to Suspense is returned and immediatly when a request is made. In the meantime the suspended children in our case the `Reviews` component will start resolving the promises. Once the promises are resolved the UI for the suspened children gets streamed in the same response. On Client side react will seamlessly swap the fallback UI with the streamed content.
+How it currently works is that, all the content until the `Suspense` boundary along with the fallback UI provided to Suspense is returned and immediately when a request is made. In the meantime the suspended children in our case the `Reviews` component will start resolving the promises. Once the promises are resolved the UI for the suspended children gets streamed in the same response. On Client side react will seamlessly swap the fallback UI with the streamed content.
 
 Remember everything here happens in single Request-Response Cycle so no client waterfall. And you have all the meaningful content on your page in a **SINGLE** Request.
 
@@ -304,7 +304,7 @@ PPR takes this `Suspense` with the streaming model to the next level:
 
 3. **Streaming to Client:** Once the suspended children resolve, the UI is streamed to the client in the same response. On the client side, React swaps the fallbacks with the streamed content.
 
-So How do we achive this?
+So How do we achieve this?
 
 Simple updated your `next.config.js` file to have the experimental ppr turned on (Make sure you are on either next@canary or next@rc)
 
