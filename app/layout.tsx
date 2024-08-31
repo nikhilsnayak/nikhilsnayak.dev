@@ -2,22 +2,20 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
-import { ThemeProvider } from '@/providers/theme-provider';
 import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
+import { ThemeProvider } from 'next-themes';
 
-import { BASE_URL } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/sonner';
-import { BotLink } from '@/components/bot-link';
-import { NavLink } from '@/components/nav-link';
+import { AI } from '~/lib/ai';
+import { BASE_URL } from '~/lib/constants';
+import { cn } from '~/lib/utils';
+import { Toaster } from '~/components/ui/sonner';
+import { BotLink, NavLink } from '~/components/links';
 
-import { AI } from './bot/actions';
-
-const ThemeToggle = dynamic(() => import('@/components/theme-toggle'), {
+const ThemeToggle = dynamic(() => import('~/components/theme-toggle'), {
   ssr: false,
 });
 
@@ -124,7 +122,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={cn(GeistSans.variable, GeistMono.variable, 'font-sans')}>
+      <body
+        className={cn(
+          GeistSans.variable,
+          GeistMono.variable,
+          'font-sans flex min-h-dvh flex-col justify-between gap-8'
+        )}
+      >
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
@@ -132,15 +136,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Toaster richColors />
-          <div className='flex min-h-dvh flex-col justify-between gap-8'>
-            <AI>
-              <Header />
-              <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
-                {children}
-              </main>
-              <Footer />
-            </AI>
-          </div>
+          <AI>
+            <Header />
+            <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
+              {children}
+            </main>
+            <Footer />
+          </AI>
         </ThemeProvider>
         <SpeedInsights />
         <Analytics />

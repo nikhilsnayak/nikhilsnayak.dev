@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
+import { Button } from '~/components/ui/button';
+import { Slider } from '~/components/ui/slider';
 
 interface AudioPlayerProps {
   src: string;

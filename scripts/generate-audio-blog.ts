@@ -2,7 +2,7 @@ import { put } from '@vercel/blob';
 import { config } from 'dotenv';
 import OpenAI from 'openai';
 
-import { getBlogPosts } from '@/lib/utils/server';
+import { getBlogPosts } from '~/lib/utils/server';
 
 config({
   path: '.env.local',

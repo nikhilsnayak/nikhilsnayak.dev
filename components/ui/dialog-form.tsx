@@ -2,7 +2,7 @@
 
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '~/lib/utils';
 
 import { Dialog, DialogContent, DialogTrigger } from './dialog';
 import { Form, FormProps } from './form';

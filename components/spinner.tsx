@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 import { Loader } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '~/lib/utils';
 
 interface SpinnerProps extends ComponentProps<'svg'> {
   variant?: 'ring' | 'ellipsis';

@@ -3,8 +3,8 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { unstable_after as after } from 'next/server';
 import { eq } from 'drizzle-orm';
 
-import { db } from '@/lib/db';
-import { views as viewsTable } from '@/lib/db/schema';
+import { db } from '~/lib/db';
+import { views as viewsTable } from '~/lib/db/schema';
 
 interface ViewsProps {
   slug: string;

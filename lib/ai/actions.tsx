@@ -1,53 +1,16 @@
-import { ComponentProps, ReactNode } from 'react';
+'use server';
+
 import { headers } from 'next/headers';
 import { openai } from '@ai-sdk/openai';
 import { Ratelimit } from '@upstash/ratelimit';
 import { kv } from '@vercel/kv';
 import { generateId } from 'ai';
-import { createAI, getMutableAIState, streamUI } from 'ai/rsc';
-import Markdown from 'react-markdown';
+import { getMutableAIState, streamUI } from 'ai/rsc';
 
-import { findRelevantContent } from '@/lib/ai/embedding';
+import { findRelevantContent } from '~/lib/ai/embedding';
+import { BotMessage } from '~/components/messages';
 
-export type ServerMessage = {
-  role: 'user' | 'assistant';
-  content: string;
-};
-
-export type ClientMessage = {
-  id: string;
-  role: 'user' | 'assistant';
-  display: ReactNode;
-};
-
-export type AIState = ServerMessage[];
-export type UIState = ClientMessage[];
-
-function CustomLink(props: ComponentProps<'a'>) {
-  return (
-    <a {...props} className='text-green-500 hover:underline' target='_blank' />
-  );
-}
-
-function BotMessage({
-  children,
-}: Readonly<{
-  children: string;
-}>) {
-  return (
-    <div className='max-w-full'>
-      <div className='max-w-max whitespace-pre-wrap rounded-md bg-gray-100 p-4 dark:bg-gray-800'>
-        <Markdown
-          components={{
-            a: CustomLink,
-          }}
-        >
-          {children}
-        </Markdown>
-      </div>
-    </div>
-  );
-}
+import { AI, ClientMessage } from './index';
 
 const ratelimit = new Ratelimit({
   redis: kv,
@@ -57,8 +20,6 @@ const ratelimit = new Ratelimit({
 export async function continueConversation(
   message: string
 ): Promise<ClientMessage | { error: string }> {
-  'use server';
-
   try {
     const headersList = headers();
     const ip =
@@ -130,6 +91,8 @@ export async function continueConversation(
       display: result.value,
     };
   } catch (error) {
+    console.log({ error });
+
     if (error instanceof Error) {
       return { error: error.message };
     } else {
@@ -137,11 +100,3 @@ export async function continueConversation(
     }
   }
 }
-
-export const AI = createAI({
-  initialAIState: [] as AIState,
-  initialUIState: [] as UIState,
-  actions: {
-    continueConversation,
-  },
-});

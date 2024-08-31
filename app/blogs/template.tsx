@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { getBreadCrumbItems } from '@/lib/utils';
+import { getBreadCrumbItems } from '~/lib/utils';
 import {
   BreadcrumbItem,
   BreadcrumbLink,
@@ -12,7 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbRoot,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from '~/components/ui/breadcrumb';
 
 interface BreadcrumbResponsiveProps {
   items: Array<{ label: string; href?: string }>;
