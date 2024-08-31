@@ -107,19 +107,21 @@ export function StockDisplay({
 
       <div className='mt-4'>
         <h3 className='font-semibold mb-2'>Compare with Another Stock</h3>
-        <input
-          type='text'
-          value={compareSymbol}
-          onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
-          placeholder='Enter stock symbol'
-          className='border px-2 py-1 rounded text-foreground'
-        />
-        <button
-          className='ml-2 px-4 py-1 bg-green-500 text-white rounded'
-          onClick={() => compareStock(compareSymbol)}
-        >
-          Compare
-        </button>
+        <div className=' flex flex-col md:flex-row gap-2'>
+          <input
+            type='text'
+            value={compareSymbol}
+            onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
+            placeholder='Enter stock symbol'
+            className='border px-2 py-1 rounded text-foreground'
+          />
+          <button
+            className='px-4 py-1 bg-green-500 text-white rounded'
+            onClick={() => compareStock(compareSymbol)}
+          >
+            Compare
+          </button>
+        </div>
 
         {showComparison && (
           <div className='mt-4 bg-zinc-800 dark:bg-zinc-300 text-primary-foreground p-4 rounded'>
