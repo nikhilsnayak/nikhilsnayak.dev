@@ -3,8 +3,8 @@ import path from 'path';
 import { sql } from '@vercel/postgres';
 import { drizzle } from 'drizzle-orm/vercel-postgres';
 
-import { generateEmbeddings } from '@/lib/ai/embedding';
-import { embeddings as embeddingsTable } from '@/lib/db/schema';
+import { generateEmbeddings } from '~/lib/ai/embedding';
+import { embeddings as embeddingsTable } from '~/lib/db/schema';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 

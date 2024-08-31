@@ -8,7 +8,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
 import { highlight } from 'sugar-high';
 
-import { cn, slugify } from '@/lib/utils';
+import { cn, slugify } from '~/lib/utils';
 
 import { Spinner } from './spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';

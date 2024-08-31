@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { Source_Code_Pro } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
-import { profile } from '@/assets/images';
 import {
   SiJavascript,
   SiNestjs,
@@ -11,13 +10,14 @@ import {
   SiTailwindcss,
   SiTypescript,
 } from '@icons-pack/react-simple-icons';
+import { profile } from '~/assets/images';
 import { ArrowUpRight } from 'lucide-react';
 
-import { cn, formatDate } from '@/lib/utils';
-import { getBlogPosts } from '@/lib/utils/server';
-import { Badge } from '@/components/ui/badge';
-import { PostViewsCount } from '@/components/post-views';
-import { Spinner } from '@/components/spinner';
+import { cn, formatDate } from '~/lib/utils';
+import { getBlogPosts } from '~/lib/utils/server';
+import { Badge } from '~/components/ui/badge';
+import { PostViewsCount } from '~/components/post-views';
+import { Spinner } from '~/components/spinner';
 
 const skills = [
   {

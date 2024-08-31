@@ -6,10 +6,10 @@ import { generateId } from 'ai';
 import { useActions, useUIState } from 'ai/rsc';
 import { toast } from 'sonner';
 
-import { LoadingButton } from '@/components/ui/loading-button';
-import { Spinner } from '@/components/spinner';
-import { AI } from '@/app/bot/actions';
-import { UserMessage } from '@/app/bot/chat';
+import { AI } from '~/lib/ai';
+import { LoadingButton } from '~/components/ui/loading-button';
+import { UserMessage } from '~/components/messages';
+import { Spinner } from '~/components/spinner';
 
 export function SummarizeButton({
   blogTitle,

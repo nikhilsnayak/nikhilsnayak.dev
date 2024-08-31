@@ -4,9 +4,9 @@ import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { createSelectSchema } from 'drizzle-zod';
 
-import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { comments } from '@/lib/db/schema';
+import { auth } from '~/lib/auth';
+import { db } from '~/lib/db';
+import { comments } from '~/lib/db/schema';
 
 const commentSchema = createSelectSchema(comments);
 

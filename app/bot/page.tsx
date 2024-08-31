@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { zoro } from '@/assets/images';
+import { zoro } from '~/assets/images';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 
 import { Chat } from './chat';
 

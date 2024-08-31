@@ -4,8 +4,8 @@ import { PropsWithChildren } from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { cn } from '~/lib/utils';
+import { Button } from '~/components/ui/button';
 
 interface ThemeButtonProps extends PropsWithChildren {
   type: 'light' | 'dark' | 'system';

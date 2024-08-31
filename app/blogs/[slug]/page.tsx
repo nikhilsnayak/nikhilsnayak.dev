@@ -3,13 +3,13 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Eye } from 'lucide-react';
 
-import { BASE_URL, BLOB_STORAGE_URL } from '@/lib/constants';
-import { formatDate } from '@/lib/utils';
-import { getBlogPosts } from '@/lib/utils/server';
-import { AudioPlayer } from '@/components/audio-player';
-import { CustomMDX } from '@/components/mdx';
-import { PostViewsCount } from '@/components/post-views';
-import { Spinner } from '@/components/spinner';
+import { BASE_URL, BLOB_STORAGE_URL } from '~/lib/constants';
+import { formatDate } from '~/lib/utils';
+import { getBlogPosts } from '~/lib/utils/server';
+import { AudioPlayer } from '~/components/audio-player';
+import { CustomMDX } from '~/components/mdx';
+import { PostViewsCount } from '~/components/post-views';
+import { Spinner } from '~/components/spinner';
 
 import { CommentsSection } from './comments';
 import { SummarizeButton } from './summarize-button';

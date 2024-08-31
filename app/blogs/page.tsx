@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 
-import { formatDate } from '@/lib/utils';
-import { getBlogPosts } from '@/lib/utils/server';
+import { formatDate } from '~/lib/utils';
+import { getBlogPosts } from '~/lib/utils/server';
 
 export const dynamic = 'force-static';
 

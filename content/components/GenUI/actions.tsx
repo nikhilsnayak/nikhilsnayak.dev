@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import Markdown from 'react-markdown';
 
-import { Spinner } from '@/components/spinner';
+import { Spinner } from '~/components/spinner';
 
 import type { Message } from '.';
 import { askAI, getStockPrice } from './ai';

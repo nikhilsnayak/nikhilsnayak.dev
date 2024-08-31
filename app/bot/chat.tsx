@@ -1,34 +1,17 @@
 'use client';
 
-import {
-  Fragment,
-  PropsWithChildren,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from 'react';
+import { Fragment, useEffect, useRef, useState, useTransition } from 'react';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
 import { LucideTrash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Spinner } from '@/components/spinner';
-
-import { AI } from './actions';
-
-export function UserMessage({ children }: PropsWithChildren) {
-  return (
-    <div className='max-w-full'>
-      <p className='ml-auto max-w-max whitespace-pre-wrap rounded-md bg-gray-800 p-2 text-gray-100 dark:bg-gray-100 dark:text-gray-800'>
-        {children}
-      </p>
-    </div>
-  );
-}
+import { AI } from '~/lib/ai';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { ScrollArea } from '~/components/ui/scroll-area';
+import { UserMessage } from '~/components/messages';
+import { Spinner } from '~/components/spinner';
 
 export function Chat() {
   const [input, setInput] = useState<string>('');
