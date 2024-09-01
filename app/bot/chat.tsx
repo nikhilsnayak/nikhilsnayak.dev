@@ -1,9 +1,9 @@
 'use client';
 
-import { Fragment, useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
-import { LucideTrash2 } from 'lucide-react';
+import { Bot, CircleUserRound, LucideTrash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { AI } from '~/lib/ai';
@@ -51,7 +51,17 @@ export function Chat() {
           <div className='p-4 text-sm'>
             <div className='grid gap-4'>
               {conversation.map((message) => (
-                <Fragment key={message.id}>{message.display}</Fragment>
+                <div
+                  key={message.id}
+                  className='max-w-full border-b p-4 flex gap-2 items-start'
+                >
+                  {message.role === 'user' ? (
+                    <CircleUserRound className='size-5' />
+                  ) : (
+                    <Bot className='size-5' />
+                  )}
+                  {message.display}
+                </div>
               ))}
               {isPending ? <Spinner variant='ellipsis' /> : null}
             </div>

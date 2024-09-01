@@ -106,7 +106,7 @@ function Pre(
 
       ${highlightLinesDarkMode} {
         background-color: #171717;
-      }`;
+      }`.trim();
   }
 
   return (

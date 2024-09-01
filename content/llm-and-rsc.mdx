@@ -366,15 +366,14 @@ When the user submits a query, we add a new entry to the `messages` state with t
 
 > Hot Take🔥: If you observed `handleSubmit` event handler which calls the server action, it is not a async function. Yes that is a valid event handler. Until React 19, making event handlers async was the only option to perform data mutation. Event handlers were never supposed to be async because the DOM doesn't wait for your asynchronous event handlers to complete. But now, with first-class support for async transitions, also known as actions, React manages pending states and resolves all the awkward race conditions. Please use actions.
 
-Once we receive the RSC payload from the server action, we update the UI. And that's it—with just 83 lines of code, our frontend is ready! Now, let's take a closer look at the `continueConversation` server action.
+Once we receive the RSC payload from the server action, we update the UI. And that's it—with just 70 lines of code, our frontend is ready! Now, let's take a closer look at the `continueConversation` server action.
 
 ```tsx filename="app/actions.tsx" lineNumbers
 'use server';
 
 import { Suspense } from 'react';
-import Markdown from 'react-markdown';
-
 import { Spinner } from '@/components/spinner';
+import Markdown from 'react-markdown';
 
 import { askAI, getStockPrice } from './ai';
 import type { Message } from './page';
