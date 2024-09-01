@@ -53,14 +53,18 @@ export function Chat() {
               {conversation.map((message) => (
                 <div
                   key={message.id}
-                  className='max-w-full border-b p-4 flex gap-2 items-start'
+                  className='max-w-full border-b p-4 flex gap-4 items-start'
                 >
-                  {message.role === 'user' ? (
-                    <CircleUserRound className='size-5' />
-                  ) : (
-                    <Bot className='size-5' />
-                  )}
-                  {message.display}
+                  <div>
+                    {message.role === 'user' ? (
+                      <CircleUserRound className='size-5' />
+                    ) : (
+                      <Bot className='size-5' />
+                    )}
+                  </div>
+                  <div className='prose dark:prose-invert'>
+                    {message.display}
+                  </div>
                 </div>
               ))}
               {isPending ? <Spinner variant='ellipsis' /> : null}
