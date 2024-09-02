@@ -17,6 +17,11 @@ export const views = pgTable('views', {
   count: integer('count').notNull().default(0),
 });
 
+export const hearts = pgTable('hearts', {
+  slug: varchar('slug', { length: 255 }).primaryKey(),
+  count: integer('count').notNull().default(0),
+});
+
 export const users = pgTable('user', {
   id: text('id')
     .primaryKey()

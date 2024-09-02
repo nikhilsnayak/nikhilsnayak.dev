@@ -43,6 +43,13 @@
       "when": 1722954566011,
       "tag": "0005_bizarre_mentallo",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1725296352868,
+      "tag": "0006_red_the_santerians",
+      "breakpoints": true
     }
   ]
 }
