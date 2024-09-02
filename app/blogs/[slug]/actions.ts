@@ -1,12 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { createSelectSchema } from 'drizzle-zod';
 
 import { auth } from '~/lib/auth';
 import { db } from '~/lib/db';
-import { comments } from '~/lib/db/schema';
+import { comments, hearts } from '~/lib/db/schema';
 
 const commentSchema = createSelectSchema(comments);
 
@@ -145,4 +145,37 @@ export async function deleteComment(
   }
 
   revalidatePath('/blogs/[slug]', 'page');
+}
+
+export async function addHeart(prev: number | undefined, formData: FormData) {
+  const slug = formData.get('slug')?.toString();
+  if (!slug) {
+    return prev;
+  }
+
+  try {
+    if (prev === undefined) {
+      const updatedHearts = await db
+        .insert(hearts)
+        .values({ slug, count: 1 })
+        .returning()
+        .then((val) => val[0]);
+
+      return updatedHearts.count;
+    } else {
+      const updatedHearts = await db
+        .update(hearts)
+        .set({
+          count: sql`${hearts.count} + 1`,
+        })
+        .where(eq(hearts.slug, slug))
+        .returning()
+        .then((val) => val[0]);
+
+      return updatedHearts.count;
+    }
+  } catch (error) {
+    console.log(error);
+    return prev;
+  }
 }

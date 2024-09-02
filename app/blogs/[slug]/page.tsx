@@ -1,9 +1,11 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import { unstable_noStore as noStore } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { Eye } from 'lucide-react';
 
 import { BASE_URL, BLOB_STORAGE_URL } from '~/lib/constants';
+import { db } from '~/lib/db';
 import { formatDate } from '~/lib/utils';
 import { getBlogPosts } from '~/lib/utils/server';
 import { AudioPlayer } from '~/components/audio-player';
@@ -11,7 +13,9 @@ import { CustomMDX } from '~/components/mdx';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
 
+import { AddHeartForm } from './add-heart-form';
 import { CommentsSection } from './comments';
+import { HeartButton } from './heart-button';
 import { SummarizeButton } from './summarize-button';
 
 interface BlogProps {
@@ -64,6 +68,14 @@ export function generateMetadata({ params }: BlogProps): Metadata {
       images: [ogImage],
     },
   };
+}
+
+export async function Hearts({ slug }: { slug: string }) {
+  noStore();
+  const hearts = await db.query.hearts.findFirst({
+    where: (hearts, { eq }) => eq(hearts.slug, slug),
+  });
+  return <AddHeartForm initialValue={hearts?.count} slug={slug} />;
 }
 
 export default async function Blog({ params }: Readonly<BlogProps>) {
@@ -144,6 +156,11 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} components={components} />
       </article>
+      <div className='mt-8'>
+        <Suspense fallback={<HeartButton count={0} />}>
+          <Hearts slug={post.slug} />
+        </Suspense>
+      </div>
       <div className='mt-8'>
         <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>
           Comments
