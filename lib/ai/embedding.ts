@@ -7,78 +7,9 @@ import { embeddings } from '../db/schema';
 
 const embeddingModel = openai.embedding('text-embedding-ada-002');
 
-function generatePlainTextChunks(input: string): string[] {
-  return input
-    .trim()
-    .split('.')
-    .filter((i) => i !== '');
-}
-
-function generateMarkdownChunks(
-  input: string,
-  maxChunkSize: number = 1000
-): string[] {
-  const lines = input.split('\n');
-
-  const isHeader = (line: string): boolean => /^#{1,6}\s/.test(line);
-
-  const isCodeBlock = (line: string): boolean => line.startsWith('```');
-
-  let chunks: string[] = [];
-  let currentChunk: string[] = [];
-  let inCodeBlock = false;
-
-  for (const line of lines) {
-    if (isCodeBlock(line)) {
-      inCodeBlock = !inCodeBlock;
-    }
-
-    if (isHeader(line) && !inCodeBlock) {
-      if (currentChunk.length > 0) {
-        chunks.push(currentChunk.join('\n').trim());
-        currentChunk = [];
-      }
-    }
-
-    currentChunk.push(line);
-
-    if (currentChunk.join('\n').length > maxChunkSize) {
-      chunks.push(currentChunk.join('\n').trim());
-      currentChunk = [];
-    }
-  }
-
-  if (currentChunk.length > 0) {
-    chunks.push(currentChunk.join('\n').trim());
-  }
-
-  return chunks.map((chunk) => JSON.stringify(chunk));
-}
-
-function generateChunks({
-  value,
-  contentType,
-}: {
-  value: string;
-  contentType: 'plainText' | 'markdown';
-}) {
-  switch (contentType) {
-    case 'plainText':
-      return generatePlainTextChunks(value);
-    case 'markdown':
-      return generateMarkdownChunks(value);
-  }
-}
-
-export async function generateEmbeddings({
-  value,
-  contentType,
-}: {
-  value: string;
-  contentType: 'plainText' | 'markdown';
-}): Promise<Array<{ embedding: number[]; content: string }>> {
-  const chunks = generateChunks({ value, contentType });
-
+export async function generateEmbeddings(
+  chunks: string[]
+): Promise<Array<{ embedding: number[]; content: string }>> {
   const { embeddings } = await embedMany({
     model: embeddingModel,
     values: chunks,
@@ -86,7 +17,7 @@ export async function generateEmbeddings({
   return embeddings.map((e, i) => ({ content: chunks[i], embedding: e }));
 }
 
-export async function generateEmbedding(value: string): Promise<number[]> {
+async function generateEmbedding(value: string): Promise<number[]> {
   const input = value.replaceAll('\\n', ' ');
   const { embedding } = await embed({
     model: embeddingModel,
@@ -104,7 +35,7 @@ export async function findRelevantContent(userQuery: string) {
   return db
     .select({ name: embeddings.content, similarity })
     .from(embeddings)
-    .where(gt(similarity, 0.5))
+    .where(gt(similarity, 0.7))
     .orderBy((t) => desc(t.similarity))
     .limit(10);
 }
