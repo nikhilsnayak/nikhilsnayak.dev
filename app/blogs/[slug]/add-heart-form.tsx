@@ -20,7 +20,6 @@ export function AddHeartForm({
         setOptimisticHearts((prev) => prev + 1);
         addHeartAction(formData);
       }}
-      className='inline-block'
     >
       <input type='text' name='slug' hidden readOnly value={slug} />
       <HeartButton count={optimisticHearts} />
