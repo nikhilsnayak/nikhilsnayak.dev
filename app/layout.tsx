@@ -54,7 +54,7 @@ export const metadata: Metadata = {
 function Header() {
   return (
     <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur'>
-      <nav className='mx-auto flex max-w-screen-lg items-center justify-between p-4'>
+      <nav className='mx-auto flex max-w-[1024px] items-center justify-between p-4'>
         <ul className='flex gap-4'>
           <li>
             <NavLink href='/'>home</NavLink>
@@ -108,7 +108,7 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className='mx-auto mb-8 flex w-full max-w-screen-lg items-center justify-between border-t p-4'>
+    <footer className='mx-auto mb-8 flex w-full max-w-[1024px] items-center justify-between border-t p-4'>
       <BotLink />
       <ThemeToggle />
     </footer>
@@ -138,7 +138,7 @@ export default function RootLayout({
           <Toaster richColors />
           <AI>
             <Header />
-            <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
+            <main className='mx-auto w-full max-w-[1024px] flex-grow px-4 py-2'>
               {children}
             </main>
             <Footer />
