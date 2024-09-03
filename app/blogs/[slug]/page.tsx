@@ -16,6 +16,7 @@ import { Spinner } from '~/components/spinner';
 import { AddHeartForm } from './add-heart-form';
 import { CommentsSection } from './comments';
 import { HeartButton } from './heart-button';
+import { SocialShare } from './social-share';
 import { SummarizeButton } from './summarize-button';
 
 interface BlogProps {
@@ -156,10 +157,17 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} components={components} />
       </article>
-      <div className='mt-8'>
-        <Suspense fallback={<HeartButton count={0} />}>
-          <Hearts slug={post.slug} />
-        </Suspense>
+      <div className='mt-8 space-y-4'>
+        <p className='text-[#D4AF37] text-lg'>
+          If you enjoyed this blog, drop some hearts below and share this blog
+          on social media to help others find it too.
+        </p>
+        <div className='flex gap-4 items-center'>
+          <Suspense fallback={<HeartButton count={0} />}>
+            <Hearts slug={post.slug} />
+          </Suspense>
+          <SocialShare title={post.metadata.title} slug={post.slug} />
+        </div>
       </div>
       <div className='mt-8'>
         <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>
