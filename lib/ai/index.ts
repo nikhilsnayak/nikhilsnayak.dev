@@ -1,12 +1,13 @@
 import { ReactNode } from 'react';
+import { CoreAssistantMessage, CoreToolMessage, CoreUserMessage } from 'ai';
 import { createAI } from 'ai/rsc';
 
 import { continueConversation } from './actions';
 
-export type ServerMessage = {
-  role: 'user' | 'assistant';
-  content: string;
-};
+export type ServerMessage =
+  | CoreUserMessage
+  | CoreAssistantMessage
+  | CoreToolMessage;
 
 export type ClientMessage = {
   id: string;

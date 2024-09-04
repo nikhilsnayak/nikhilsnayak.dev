@@ -72,3 +72,14 @@ export function formatDate(date: string, includeRelative = false) {
 
   return `${fullDate} (${formattedDate})`;
 }
+
+export function executeAsyncFnWithoutBlocking(
+  fn: () => Promise<void>,
+  options?: {
+    onError?: (error: any) => void;
+  }
+) {
+  fn().catch((error) => {
+    options?.onError?.(error);
+  });
+}
