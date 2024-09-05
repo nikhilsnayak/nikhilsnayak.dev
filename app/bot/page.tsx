@@ -14,7 +14,7 @@ export const maxDuration = 30;
 
 export default async function BotPage() {
   return (
-    <section className='space-y-4'>
+    <section className='space-y-6'>
       <header className='flex items-center gap-3'>
         <Avatar className='ring ring-green-500 sm:h-12 sm:w-12'>
           <AvatarImage alt='zoro' src={zoro.src} />

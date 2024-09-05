@@ -83,11 +83,12 @@ html {
   scroll-padding-top: 5rem;
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-.prose .anchor {
+article.prose .anchor {
   @apply invisible absolute no-underline;
 
   margin-left: -1em;
@@ -97,28 +98,28 @@ body::-webkit-scrollbar {
   cursor: pointer;
 }
 
-.anchor:hover {
+article.anchor:hover {
   @apply visible;
 }
 
-.prose .anchor:after {
+article.prose .anchor:after {
   @apply text-neutral-300 dark:text-neutral-700;
   content: '#';
 }
 
-.prose *:hover > .anchor {
+article.prose *:hover > .anchor {
   @apply visible;
 }
 
-.prose pre {
+article.prose pre {
   @apply bg-neutral-200 dark:bg-neutral-800;
 }
 
-.prose pre[data-line-numbers='true'] code {
+article.prose pre[data-line-numbers='true'] code {
   counter-reset: sh-line-number;
 }
 
-.prose pre[data-line-numbers='true'] .sh__line::before {
+article.prose pre[data-line-numbers='true'] .sh__line::before {
   counter-increment: sh-line-number 1;
   content: counter(sh-line-number);
   display: inline-block;
@@ -126,10 +127,10 @@ body::-webkit-scrollbar {
   color: #a4a4a4;
 }
 
-.prose pre code {
+article.prose pre code {
   @apply my-2 block w-full min-w-max;
 }
 
-.prose pre code .sh__line {
+article.prose pre code .sh__line {
   @apply inline-block w-full px-4;
 }

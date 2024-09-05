@@ -108,7 +108,7 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className='mx-auto mb-8 flex w-full max-w-screen-lg items-center justify-between border-t p-4'>
+    <footer className='mx-auto flex w-full max-w-screen-lg items-center justify-between border-t p-4'>
       <BotLink />
       <ThemeToggle />
     </footer>
@@ -126,7 +126,7 @@ export default function RootLayout({
         className={cn(
           GeistSans.variable,
           GeistMono.variable,
-          'font-sans flex min-h-dvh flex-col justify-between gap-8'
+          'font-sans flex min-h-dvh flex-col'
         )}
       >
         <ThemeProvider
@@ -138,7 +138,7 @@ export default function RootLayout({
           <Toaster richColors />
           <AI>
             <Header />
-            <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2'>
+            <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2 my-4'>
               {children}
             </main>
             <Footer />

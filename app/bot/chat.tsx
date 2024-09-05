@@ -3,13 +3,12 @@
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
-import { Bot, CircleUserRound, LucideTrash2 } from 'lucide-react';
+import { BotIcon, CircleUserRound, LucideTrash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { AI } from '~/lib/ai';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
-import { ScrollArea } from '~/components/ui/scroll-area';
 import { UserMessage } from '~/components/messages';
 import { Spinner } from '~/components/spinner';
 
@@ -20,8 +19,8 @@ export function Chat() {
   const { continueConversation } = useActions<typeof AI>();
 
   const [isPending, startTransition] = useTransition();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLLIElement>(null);
+  const scrollAreaRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     const scrollArea = scrollAreaRef.current;
@@ -42,47 +41,31 @@ export function Chat() {
   }, []);
 
   return (
-    <div className='flex h-[55dvh] w-full flex-col gap-4'>
-      <div className='flex-1 overflow-auto'>
-        <ScrollArea
-          className='h-full w-full rounded-md border'
-          ref={scrollAreaRef}
-        >
-          <div className='p-4 text-sm'>
-            <div className='grid gap-4'>
-              {conversation.map((message) => (
-                <div
-                  key={message.id}
-                  className='max-w-full border-b p-4 flex gap-4 items-start'
-                >
-                  <div>
-                    {message.role === 'user' ? (
-                      <CircleUserRound className='size-5' />
-                    ) : (
-                      <Bot className='size-5' />
-                    )}
-                  </div>
-                  <div className='prose dark:prose-invert'>
-                    {message.display}
-                  </div>
-                </div>
-              ))}
-              {isPending ? <Spinner variant='ellipsis' /> : null}
+    <section className='h-[65dvh] space-y-4'>
+      <ul
+        ref={scrollAreaRef}
+        className='h-[85%] border rounded overflow-y-auto p-4 space-y-4 no-scrollbar'
+      >
+        {conversation.map((message) => (
+          <li key={message.id} className='border-b pb-4 flex gap-4 items-start'>
+            <div>
+              {message.role === 'user' ? <CircleUserRound /> : <BotIcon />}
             </div>
-          </div>
-          <div ref={messagesEndRef} />
-        </ScrollArea>
-      </div>
+            <div className='prose prose-sm min-w-0 break-words dark:prose-invert overflow-x-auto'>
+              {message.display}
+            </div>
+          </li>
+        ))}
+        {isPending ? <Spinner variant='ellipsis' /> : null}
+        <li ref={messagesEndRef} />
+      </ul>
       <form
         className='flex items-center gap-3'
         onSubmit={async (e) => {
           e.preventDefault();
-
           const value = input.trim();
           setInput('');
-
           if (!value) return;
-
           setConversation((currentConversation) => [
             ...currentConversation,
             {
@@ -133,6 +116,6 @@ export function Chat() {
           <span className='sr-only'>clear chat</span>
         </Button>
       </form>
-    </div>
+    </section>
   );
 }
