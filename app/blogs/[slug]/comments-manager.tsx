@@ -3,6 +3,7 @@
 import {
   ComponentRef,
   createContext,
+  startTransition,
   use,
   useActionState,
   useCallback,
@@ -253,9 +254,13 @@ export function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
   return (
     <form
       ref={formRef}
-      action={(formData) => {
-        addCommentFormAction(formData);
+      onSubmit={(e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
         formRef.current.reset();
+        startTransition(() => {
+          addCommentFormAction(formData);
+        });
       }}
       className='flex flex-col gap-2'
     >
