@@ -1,64 +1,57 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { eq, sql } from 'drizzle-orm';
-import { createSelectSchema } from 'drizzle-zod';
 
 import { auth } from '~/lib/auth';
 import { db } from '~/lib/db';
-import { comments, hearts } from '~/lib/db/schema';
+import {
+  addCommentSchema,
+  comments,
+  deleteCommentSchema,
+  editCommentSchema,
+  hearts,
+} from '~/lib/db/schema';
 
-const commentSchema = createSelectSchema(comments);
+import { CommentWithUser } from './types';
 
-const addCommentSchema = commentSchema.pick({
-  content: true,
-  slug: true,
-});
-
-const editCommentSchema = commentSchema.pick({
-  id: true,
-  content: true,
-});
-
-const deleteCommentSchema = commentSchema.pick({
-  id: true,
-});
-
-export async function addComment(prev: string | undefined, formData: FormData) {
+export async function addComment(
+  formData: FormData
+): Promise<CommentWithUser | { error: string }> {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return 'Unauthorized';
+    return { error: 'Unauthorized' };
   }
 
   const parsedResult = addCommentSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsedResult.success) {
-    return 'Invalid input';
+    return { error: 'Invalid input' };
   }
 
   const { slug, content } = parsedResult.data;
 
   try {
-    await db
+    const newComment = await db
       .insert(comments)
-      .values({ slug, content, userId: session.user.id });
+      .values({ slug, content, userId: session.user.id })
+      .returning()
+      .then((res) => res[0]);
+
+    return { ...newComment, user: session.user };
   } catch (error) {
     console.log(error);
-    return 'Server error';
+    return { error: 'Server error' };
   }
-
-  revalidatePath('/blogs/[slug]', 'page');
 }
 
 export async function editComment(
-  prev: string | undefined,
   formData: FormData
-) {
+): Promise<CommentWithUser | { error: string }> {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return 'Unauthorized';
+    return { error: 'Unauthorized' };
   }
 
   const parsedResult = editCommentSchema.safeParse(
@@ -66,7 +59,7 @@ export async function editComment(
   );
 
   if (!parsedResult.success) {
-    return 'Invalid input';
+    return { error: 'Invalid input' };
   }
 
   const { data: updatedComment } = parsedResult;
@@ -83,36 +76,37 @@ export async function editComment(
     });
 
     if (!existingComment) {
-      return 'Comment not found';
+      return { error: 'Comment not found' };
     }
 
     if (existingComment.content.trim() === updatedComment.content.trim()) {
-      return 'You are updating the same comment';
+      return { error: 'You are updating the same comment' };
     }
 
-    await db
+    const updatedCommentFromDb = await db
       .update(comments)
       .set({
         ...existingComment,
         content: updatedComment.content,
       })
-      .where(eq(comments.id, updatedComment.id));
+      .where(eq(comments.id, updatedComment.id))
+      .returning()
+      .then((res) => res[0]);
+
+    return { ...updatedCommentFromDb, user: session.user };
   } catch (error) {
     console.log(error);
-    return 'Server error';
+    return { error: 'Server error' };
   }
-
-  revalidatePath('/blogs/[slug]', 'page');
 }
 
 export async function deleteComment(
-  prev: string | undefined,
   formData: FormData
-) {
+): Promise<CommentWithUser | { error: string }> {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return 'Unauthorized';
+    return { error: 'Unauthorized' };
   }
 
   const parsedResult = deleteCommentSchema.safeParse(
@@ -120,7 +114,7 @@ export async function deleteComment(
   );
 
   if (!parsedResult.success) {
-    return 'Invalid input';
+    return { error: 'Invalid input' };
   }
 
   const {
@@ -134,17 +128,20 @@ export async function deleteComment(
   });
 
   if (!existingComment) {
-    return 'Comment not found';
+    return { error: 'Comment not found' };
   }
 
   try {
-    await db.delete(comments).where(eq(comments.id, commentId));
+    const deletedComment = await db
+      .delete(comments)
+      .where(eq(comments.id, commentId))
+      .returning()
+      .then((res) => res[0]);
+    return { ...deletedComment, user: session.user };
   } catch (error) {
     console.log(error);
-    return 'Server error';
+    return { error: 'Server error' };
   }
-
-  revalidatePath('/blogs/[slug]', 'page');
 }
 
 export async function addHeart(prev: number | undefined, formData: FormData) {

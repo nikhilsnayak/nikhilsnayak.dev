@@ -2,19 +2,23 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { unstable_noStore as noStore } from 'next/cache';
 import { notFound } from 'next/navigation';
-import { Eye } from 'lucide-react';
+import { SiGithub } from '@icons-pack/react-simple-icons';
+import { Eye, LogOut } from 'lucide-react';
 
+import { auth, signIn, signOut } from '~/lib/auth';
 import { BASE_URL, BLOB_STORAGE_URL } from '~/lib/constants';
 import { db } from '~/lib/db';
 import { formatDate } from '~/lib/utils';
 import { getBlogPosts } from '~/lib/utils/server';
+import { Form, FormSubmit } from '~/components/ui/form';
+import { Skeleton } from '~/components/ui/skeleton';
 import { AudioPlayer } from '~/components/audio-player';
 import { CustomMDX } from '~/components/mdx';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
 
 import { AddHeartForm } from './add-heart-form';
-import { CommentsSection } from './comments';
+import { CommentsManager } from './comments-manager';
 import { HeartButton } from './heart-button';
 import { SocialShare } from './social-share';
 import { SummarizeButton } from './summarize-button';
@@ -71,12 +75,82 @@ export function generateMetadata({ params }: BlogProps): Metadata {
   };
 }
 
-export async function Hearts({ slug }: { slug: string }) {
+async function Hearts({ slug }: Readonly<{ slug: string }>) {
   noStore();
   const hearts = await db.query.hearts.findFirst({
     where: (hearts, { eq }) => eq(hearts.slug, slug),
   });
   return <AddHeartForm initialValue={hearts?.count} slug={slug} />;
+}
+
+function CommentsSkeleton() {
+  return new Array(3).fill(0).map((_, i) => (
+    <div key={i} className='flex items-start gap-4'>
+      <Skeleton className='h-10 w-10 rounded-full' />
+      <div className='space-y-2'>
+        <Skeleton className='h-4 w-[120px]' />
+        <Skeleton className='h-4 w-[300px]' />
+      </div>
+    </div>
+  ));
+}
+
+export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
+  const commentsPromise = db.query.comments.findMany({
+    where: (commentsTable, { eq }) => eq(commentsTable.slug, slug),
+    with: {
+      user: true,
+    },
+    orderBy: (commentsTable, { desc }) => [desc(commentsTable.createdAt)],
+  });
+
+  const session = await auth();
+
+  return (
+    <div className='space-y-8'>
+      {!session?.user ? (
+        <div className='space-y-2'>
+          <p>Please sign in to comment.</p>
+          <Form
+            action={async () => {
+              'use server';
+              return await signIn('github', {
+                redirectTo: `/blogs/${slug}#comments`,
+              });
+            }}
+          >
+            <FormSubmit pendingFallback={<Spinner />}>
+              <span className='flex items-center gap-2'>
+                <SiGithub />
+                <span>Sign in with GitHub</span>
+              </span>
+            </FormSubmit>
+          </Form>
+        </div>
+      ) : (
+        <div className='flex items-center gap-2'>
+          <p>You are signed in as {session.user.name}.</p>
+          <Form
+            action={async () => {
+              'use server';
+              return await signOut();
+            }}
+          >
+            <FormSubmit pendingFallback={<Spinner />}>
+              <LogOut />
+            </FormSubmit>
+          </Form>
+        </div>
+      )}
+      <Suspense fallback={<CommentsSkeleton />}>
+        <CommentsManager
+          session={session}
+          slug={slug}
+          initialCommentsPromise={commentsPromise}
+        />
+      </Suspense>
+    </div>
+  );
 }
 
 export default async function Blog({ params }: Readonly<BlogProps>) {
@@ -170,7 +244,10 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
         </div>
       </div>
       <div className='mt-8'>
-        <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl'>
+        <h2
+          className='mb-4 font-mono text-xl font-bold sm:text-2xl'
+          id='comments'
+        >
           Comments
         </h2>
         <Suspense fallback={<Spinner variant='ellipsis' />}>
