@@ -13,6 +13,7 @@ import { getBlogPosts } from '~/lib/utils/server';
 import { Form, FormSubmit } from '~/components/ui/form';
 import { Skeleton } from '~/components/ui/skeleton';
 import { AudioPlayer } from '~/components/audio-player';
+import { ErrorBoundary } from '~/components/error-boundary';
 import { CustomMDX } from '~/components/mdx';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
@@ -209,15 +210,17 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
           </p>
           <SummarizeButton blogTitle={blogTitle} />
         </div>
-        <Suspense fallback={<Spinner variant='ellipsis' />}>
-          <PostViewsCount slug={post.slug} updateViews>
-            {(count) => (
-              <span className='flex items-center gap-2'>
-                <Eye /> {count}
-              </span>
-            )}
-          </PostViewsCount>
-        </Suspense>
+        <ErrorBoundary fallback={<span>{"Couldn't load views"}</span>}>
+          <Suspense fallback={<Spinner variant='ellipsis' />}>
+            <PostViewsCount slug={post.slug} updateViews>
+              {(count) => (
+                <span className='flex items-center gap-2'>
+                  <Eye /> {count}
+                </span>
+              )}
+            </PostViewsCount>
+          </Suspense>
+        </ErrorBoundary>
       </div>
       <div className='mb-8'>
         <h2 className='mb-4'>
@@ -237,9 +240,11 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
           on social media to help others find it too.
         </p>
         <div className='flex gap-4 items-center'>
-          <Suspense fallback={<HeartButton count={0} />}>
-            <Hearts slug={post.slug} />
-          </Suspense>
+          <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
+            <Suspense fallback={<HeartButton count={0} />}>
+              <Hearts slug={post.slug} />
+            </Suspense>
+          </ErrorBoundary>
           <SocialShare title={post.metadata.title} slug={post.slug} />
         </div>
       </div>
@@ -250,9 +255,11 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
         >
           Comments
         </h2>
-        <Suspense fallback={<Spinner variant='ellipsis' />}>
-          <CommentsSection slug={post.slug} />
-        </Suspense>
+        <ErrorBoundary fallback={<span>{"Couldn't load comments"}</span>}>
+          <Suspense fallback={<Spinner variant='ellipsis' />}>
+            <CommentsSection slug={post.slug} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </section>
   );

@@ -52,6 +52,7 @@
     "openai": "^4.55.3",
     "react": "^19.0.0-rc-4c58fce7-20240904",
     "react-dom": "^19.0.0-rc-4c58fce7-20240904",
+    "react-error-boundary": "^4.0.13",
     "react-markdown": "^9.0.1",
     "rehype-mdx-code-props": "^3.0.1",
     "server-only": "^0.0.1",

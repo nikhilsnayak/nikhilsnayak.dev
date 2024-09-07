@@ -214,24 +214,32 @@ function CommentsList() {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 divide-y-2 max-w-sm'>
       {comments.map((comment) => (
-        <div key={comment.id} className='flex items-start gap-4'>
-          <Avatar className='h-10 w-10 border'>
-            <AvatarImage
-              alt={comment.user.name ?? ''}
-              src={comment.user.image ?? ''}
-            />
-            <AvatarFallback>{comment.user.name?.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div className='flex flex-col gap-2'>
-            <div>
-              <h3 className='font-bold'>{comment.user.name}</h3>
-              <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-                {formatDate(comment.createdAt.toISOString())}
-              </span>
+        <div key={comment.id} className='pt-4'>
+          <div className='flex justify-between items-center'>
+            <div className='flex gap-2'>
+              <Avatar className='h-10 w-10 border'>
+                <AvatarImage
+                  alt={comment.user.name ?? ''}
+                  src={comment.user.image ?? ''}
+                />
+                <AvatarFallback>{comment.user.name?.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className=' flex items-center gap-2'>
+                  <span className='font-bold'>{comment.user.name}</span>
+                  {session?.user?.id === comment.userId ? (
+                    <span className='text-[10px] bg-muted-foreground rounded py-0.5 px-1'>
+                      You
+                    </span>
+                  ) : null}
+                </h3>
+                <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                  {formatDate(comment.createdAt.toISOString())}
+                </span>
+              </div>
             </div>
-            <p>{comment.content}</p>
             {session?.user?.id === comment.userId ? (
               <div className='flex items-center gap-2'>
                 <EditCommentControl
@@ -242,6 +250,7 @@ function CommentsList() {
               </div>
             ) : null}
           </div>
+          <p className='mt-2'>{comment.content}</p>
         </div>
       ))}
     </div>
@@ -290,7 +299,7 @@ function EditCommentControl({
           className={cn(!commentId && 'opacity-50')}
           disabled={!commentId}
         >
-          <Pencil className='text-blue-400' />
+          <Pencil className='text-blue-400 size-4' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
@@ -330,7 +339,7 @@ function DeleteCommentControl({ commentId }: Readonly<{ commentId?: string }>) {
           className={cn(!commentId && 'opacity-50')}
           disabled={!commentId}
         >
-          <Trash2 className='text-red-400' />
+          <Trash2 className='text-red-400  size-4' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
