@@ -2,11 +2,11 @@ import React, { PropsWithChildren, ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Slot } from '@radix-ui/react-slot';
+import { highlight } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
-import { highlight } from 'sugar-high';
 
 import { cn, slugify } from '~/lib/utils';
 
