@@ -29,12 +29,10 @@ export async function addComment(
     return { error: 'Invalid input' };
   }
 
-  const { slug, content } = parsedResult.data;
-
   try {
     const newComment = await db
       .insert(comments)
-      .values({ slug, content, userId: session.user.id })
+      .values({ ...parsedResult.data, userId: session.user.id })
       .returning()
       .then((res) => res[0]);
 
