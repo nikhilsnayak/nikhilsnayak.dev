@@ -16,6 +16,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { cn, formatDate } from '~/lib/utils';
 import { getBlogPosts } from '~/lib/utils/server';
 import { Badge } from '~/components/ui/badge';
+import { ErrorBoundary } from '~/components/error-boundary';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
 
@@ -130,11 +131,13 @@ export default function HomePage() {
                     {post.metadata.title}
                   </h2>
                 </div>
-                <Suspense fallback={<Spinner variant='ellipsis' />}>
-                  <PostViewsCount slug={post.slug}>
-                    {(count) => <p>{count} views</p>}
-                  </PostViewsCount>
-                </Suspense>
+                <ErrorBoundary fallback={<span>{"Couldn't load views"}</span>}>
+                  <Suspense fallback={<Spinner variant='ellipsis' />}>
+                    <PostViewsCount slug={post.slug}>
+                      {(count) => <p>{count} views</p>}
+                    </PostViewsCount>
+                  </Suspense>
+                </ErrorBoundary>
               </div>
             </Link>
           ))}
