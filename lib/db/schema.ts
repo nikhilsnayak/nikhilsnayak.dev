@@ -128,6 +128,7 @@ export type Comment = typeof comments.$inferSelect;
 const commentSchema = createSelectSchema(comments);
 
 export const addCommentSchema = commentSchema.pick({
+  id: true,
   content: true,
   slug: true,
 });

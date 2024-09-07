@@ -10,6 +10,7 @@ import {
   useOptimistic,
   useRef,
 } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Pencil, Trash2 } from 'lucide-react';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
@@ -19,7 +20,7 @@ import {
   deleteCommentSchema,
   editCommentSchema,
 } from '~/lib/db/schema';
-import { cn, formatDate } from '~/lib/utils';
+import { formatDate } from '~/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
 import {
@@ -38,10 +39,10 @@ import { CommentWithUser } from './types';
 
 type FormAction = (formData: FormData) => void;
 
-type OptimisticCommentWithUser = Omit<CommentWithUser, 'id'> & { id?: string };
+type OptimisticCommentWithUser = CommentWithUser & { isPending?: true };
 
 interface CommentsManagerContext {
-  comments: (CommentWithUser | OptimisticCommentWithUser)[];
+  comments: OptimisticCommentWithUser[];
   session?: Session | null;
   addCommentFormAction: FormAction;
   editCommentFormAction: FormAction;
@@ -110,6 +111,9 @@ export function CommentsManager({
 
   const addCommentFormAction = useCallback(
     (formData: FormData) => {
+      const id = crypto.randomUUID();
+      formData.append('id', id);
+
       const parsedResult = addCommentSchema.safeParse(
         Object.fromEntries(formData)
       );
@@ -121,11 +125,13 @@ export function CommentsManager({
       const { content, slug } = parsedResult.data;
 
       const newOptimisticComment: OptimisticCommentWithUser = {
-        userId: session.user.id,
+        id,
         content,
-        createdAt: new Date(),
         slug,
+        createdAt: new Date(),
+        userId: session.user.id,
         user: session.user,
+        isPending: true,
       };
 
       setOptimisticComments((prev) => [newOptimisticComment, ...prev]);
@@ -149,7 +155,8 @@ export function CommentsManager({
 
       setOptimisticComments((prev) =>
         prev.map((comment) => {
-          if (comment.id === id) return { ...comment, content };
+          if (comment.id === id)
+            return { ...comment, content, isPending: true };
           return comment;
         })
       );
@@ -209,51 +216,85 @@ function useCommentsManager() {
 function CommentsList() {
   const { comments, session } = useCommentsManager();
 
-  if (comments.length === 0) {
-    return <p>No comments yet.</p>;
-  }
-
   return (
-    <div className='space-y-6 divide-y-2 max-w-sm'>
-      {comments.map((comment) => (
-        <div key={comment.id} className='pt-4'>
-          <div className='flex justify-between items-center'>
-            <div className='flex gap-2'>
-              <Avatar className='h-10 w-10 border'>
-                <AvatarImage
-                  alt={comment.user.name ?? ''}
-                  src={comment.user.image ?? ''}
-                />
-                <AvatarFallback>{comment.user.name?.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <h3 className=' flex items-center gap-2'>
-                  <span className='font-bold'>{comment.user.name}</span>
-                  {session?.user?.id === comment.userId ? (
-                    <span className='text-[10px] bg-muted-foreground rounded py-0.5 px-1'>
-                      You
-                    </span>
-                  ) : null}
-                </h3>
-                <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-                  {formatDate(comment.createdAt.toISOString())}
-                </span>
-              </div>
-            </div>
-            {session?.user?.id === comment.userId ? (
-              <div className='flex items-center gap-2'>
-                <EditCommentControl
-                  content={comment.content}
-                  commentId={comment.id}
-                />
-                <DeleteCommentControl commentId={comment.id} />
-              </div>
-            ) : null}
-          </div>
-          <p className='mt-2'>{comment.content}</p>
-        </div>
-      ))}
-    </div>
+    <AnimatePresence initial={false}>
+      {comments.length === 0 ? (
+        <motion.p
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+        >
+          No comments yet.
+        </motion.p>
+      ) : (
+        <motion.ul
+          layout
+          className='max-w-sm overflow-hidden'
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{
+            layout: {
+              type: 'spring',
+            },
+          }}
+        >
+          <AnimatePresence initial={false}>
+            {comments.map((comment) => (
+              <motion.li
+                key={comment.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{
+                  opacity: { duration: 0.3 },
+                }}
+              >
+                <div className='py-4'>
+                  <div className='flex justify-between items-center'>
+                    <div className='flex gap-2'>
+                      <Avatar className='h-10 w-10 border'>
+                        <AvatarImage
+                          alt={comment.user.name ?? ''}
+                          src={comment.user.image ?? ''}
+                        />
+                        <AvatarFallback>
+                          {comment.user.name?.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h3 className=' flex items-center gap-2'>
+                          <span className='font-bold'>{comment.user.name}</span>
+                          {session?.user?.id === comment.userId ? (
+                            <span className='text-[10px] bg-muted-foreground rounded py-0.5 px-1'>
+                              You
+                            </span>
+                          ) : null}
+                        </h3>
+                        <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                          {formatDate(comment.createdAt.toISOString())}
+                        </span>
+                      </div>
+                    </div>
+                    {session?.user?.id === comment.userId &&
+                    !comment.isPending ? (
+                      <div className='flex items-center gap-2'>
+                        <EditCommentControl
+                          content={comment.content}
+                          commentId={comment.id}
+                        />
+                        <DeleteCommentControl commentId={comment.id} />
+                      </div>
+                    ) : null}
+                  </div>
+                  <p className='mt-2'>{comment.content}</p>
+                </div>
+              </motion.li>
+            ))}
+          </AnimatePresence>
+        </motion.ul>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -288,17 +329,12 @@ export function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
 function EditCommentControl({
   commentId,
   content,
-}: Readonly<{ commentId?: string; content: string }>) {
+}: Readonly<{ commentId: string; content: string }>) {
   const { editCommentFormAction } = useCommentsManager();
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          size='icon'
-          variant='ghost'
-          className={cn(!commentId && 'opacity-50')}
-          disabled={!commentId}
-        >
+        <Button size='icon' variant='ghost'>
           <Pencil className='text-blue-400 size-4' />
         </Button>
       </DialogTrigger>
@@ -317,9 +353,7 @@ function EditCommentControl({
           />
           <DialogFooter>
             <DialogClose asChild>
-              <Button type='submit' disabled={!commentId}>
-                Save changes
-              </Button>
+              <Button type='submit'>Save changes</Button>
             </DialogClose>
           </DialogFooter>
         </form>
@@ -328,17 +362,12 @@ function EditCommentControl({
   );
 }
 
-function DeleteCommentControl({ commentId }: Readonly<{ commentId?: string }>) {
+function DeleteCommentControl({ commentId }: Readonly<{ commentId: string }>) {
   const { deleteCommentFormAction } = useCommentsManager();
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          size='icon'
-          variant='ghost'
-          className={cn(!commentId && 'opacity-50')}
-          disabled={!commentId}
-        >
+        <Button size='icon' variant='ghost'>
           <Trash2 className='text-red-400  size-4' />
         </Button>
       </DialogTrigger>
@@ -351,7 +380,7 @@ function DeleteCommentControl({ commentId }: Readonly<{ commentId?: string }>) {
           <p>Are you sure you want to delete this comment?</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type='submit' variant='destructive' disabled={!commentId}>
+              <Button type='submit' variant='destructive'>
                 Continue
               </Button>
             </DialogClose>
