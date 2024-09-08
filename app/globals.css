@@ -25,15 +25,15 @@
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
     --fluorescent: #2feeee;
-    --sh-class: #e67c73;
-    --sh-identifier: #2c3e50;
-    --sh-sign: #7f8c8d;
-    --sh-string: #27ae60;
-    --sh-keyword: #d35400;
-    --sh-comment: #95a5a6;
-    --sh-jsxliterals: #8e44ad;
-    --sh-property: #c0392b;
-    --sh-entity: #e67e22;
+    --css-class: #e67c73;
+    --css-identifier: #2c3e50;
+    --css-sign: #7f8c8d;
+    --css-string: #27ae60;
+    --css-keyword: #d35400;
+    --css-comment: #95a5a6;
+    --css-jsxliterals: #8e44ad;
+    --css-property: #c0392b;
+    --css-entity: #e67e22;
   }
 
   .dark {
@@ -56,15 +56,15 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-    --sh-class: #9b59b6;
-    --sh-identifier: #ecf0f1;
-    --sh-keyword: #e74c3c;
-    --sh-string: #2ecc71;
-    --sh-sign: #bdc3c7;
-    --sh-comment: #7f8c8d;
-    --sh-jsxliterals: #3498db;
-    --sh-property: #e67e22;
-    --sh-entity: #f39c12;
+    --css-class: #9b59b6;
+    --css-identifier: #ecf0f1;
+    --css-keyword: #e74c3c;
+    --css-string: #2ecc71;
+    --css-sign: #bdc3c7;
+    --css-comment: #7f8c8d;
+    --css-jsxliterals: #3498db;
+    --css-property: #e67e22;
+    --css-entity: #f39c12;
   }
 }
 
@@ -116,12 +116,12 @@ article.prose pre {
 }
 
 article.prose pre[data-line-numbers='true'] code {
-  counter-reset: sh-line-number;
+  counter-reset: css-line-number;
 }
 
-article.prose pre[data-line-numbers='true'] .sh__line::before {
-  counter-increment: sh-line-number 1;
-  content: counter(sh-line-number);
+article.prose pre[data-line-numbers='true'] .css__line::before {
+  counter-increment: css-line-number 1;
+  content: counter(css-line-number);
   display: inline-block;
   width: 2rem;
   color: #a4a4a4;
@@ -131,6 +131,6 @@ article.prose pre code {
   @apply my-2 block w-full min-w-max;
 }
 
-article.prose pre code .sh__line {
+article.prose pre code .css__line {
   @apply inline-block w-full px-4;
 }
