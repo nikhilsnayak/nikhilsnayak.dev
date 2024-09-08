@@ -38,7 +38,7 @@
     "ai": "^3.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "code-syntactic-sugar": "^0.0.1",
+    "code-syntactic-sugar": "^1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
     "drizzle-zod": "^0.5.1",
