@@ -9,6 +9,7 @@ import {
   useCallback,
   useOptimistic,
   useRef,
+  useState,
 } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -33,6 +34,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog';
 import { Textarea } from '~/components/ui/textarea';
+import { Spinner } from '~/components/spinner';
 
 import { addComment, deleteComment, editComment } from './actions';
 import { CommentWithUser } from './types';
@@ -251,7 +253,7 @@ function CommentsList() {
                 }}
               >
                 <div className='py-4'>
-                  <div className='flex justify-between items-center'>
+                  <div className='flex justify-between items-start'>
                     <div className='flex gap-2'>
                       <Avatar className='h-10 w-10 border'>
                         <AvatarImage
@@ -266,19 +268,22 @@ function CommentsList() {
                         <h3 className=' flex items-center gap-2'>
                           <span className='font-bold'>{comment.user.name}</span>
                           {session?.user?.id === comment.userId ? (
-                            <span className='text-[10px] bg-muted-foreground rounded py-0.5 px-1'>
+                            <span className='text-[10px] bg-muted text-muted-foreground rounded py-0.5 px-1'>
                               You
                             </span>
                           ) : null}
+                          {comment.isPending ? (
+                            <Spinner className='size-4' />
+                          ) : null}
                         </h3>
-                        <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                        <span className='text-sm text-muted-foreground'>
                           {formatDate(comment.createdAt.toISOString())}
                         </span>
                       </div>
                     </div>
                     {session?.user?.id === comment.userId &&
                     !comment.isPending ? (
-                      <div className='flex items-center gap-2'>
+                      <div className='flex items-center gap-2 mr-2'>
                         <EditCommentControl
                           content={comment.content}
                           commentId={comment.id}
@@ -331,15 +336,22 @@ function EditCommentControl({
   content,
 }: Readonly<{ commentId: string; content: string }>) {
   const { editCommentFormAction } = useCommentsManager();
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size='icon' variant='ghost'>
           <Pencil className='text-blue-400 size-4' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
-        <form action={editCommentFormAction} className='space-y-4'>
+        <form
+          action={(formData) => {
+            setOpen(false);
+            editCommentFormAction(formData);
+          }}
+          className='space-y-4'
+        >
           <DialogHeader>
             <DialogTitle>Edit Comment</DialogTitle>
           </DialogHeader>
@@ -352,9 +364,7 @@ function EditCommentControl({
             defaultValue={content}
           />
           <DialogFooter>
-            <DialogClose asChild>
-              <Button type='submit'>Save changes</Button>
-            </DialogClose>
+            <Button type='submit'>Save changes</Button>
           </DialogFooter>
         </form>
       </DialogContent>
