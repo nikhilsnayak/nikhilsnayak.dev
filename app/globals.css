@@ -134,3 +134,11 @@ article.prose pre code {
 article.prose pre code .css__line {
   @apply inline-block w-full px-4;
 }
+
+article.prose pre code .css__line[data-highlighted-line] {
+  background-color: #d4d4d4;
+}
+
+.dark article.prose pre code .css__line[data-highlighted-line] {
+  background-color: #171717;
+}
