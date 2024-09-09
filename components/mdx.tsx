@@ -1,10 +1,8 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Slot } from '@radix-ui/react-slot';
 import { highlight } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
-import { nanoid } from 'nanoid';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
 
@@ -69,58 +67,54 @@ function RoundedImage({
   return <Image alt={alt} className={cn('rounded-lg', className)} {...props} />;
 }
 
-function Code({ children, ...props }: any) {
-  const codeHTML = highlight(children);
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+interface CodeProps {
+  children: string;
+  highlightedLineNumbers?: [number, ...number[]];
 }
 
-function Pre(
-  props: Readonly<{
-    children: ReactNode;
-    filename?: string;
-    lineNumbers?: boolean;
-    highlightLines?: string;
-  }>
-) {
+function Code({ children, highlightedLineNumbers }: Readonly<CodeProps>) {
+  const codeHTML = highlight(children, {
+    modifiers: {
+      highlightedLines: highlightedLineNumbers,
+    },
+  });
+  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} />;
+}
+
+interface PreProps {
+  children: ReactElement<CodeProps, 'code'>;
+  filename?: string;
+  lineNumbers?: boolean;
+  highlightLines?: string;
+}
+
+function Pre(props: Readonly<PreProps>) {
   const { children, filename, lineNumbers, highlightLines } = props;
 
-  const id = nanoid();
+  const getHighlightedLineNumbers = () => {
+    const highlightedLineNumbers = highlightLines
+      ?.trim()
+      ?.split(',')
+      ?.map((line) => Number(line));
 
-  const highlightLineNumbers = highlightLines?.trim()?.split(',');
+    if (!highlightedLineNumbers || highlightedLineNumbers.length === 0) return;
 
-  const highlightLinesLightMode = highlightLineNumbers
-    ?.map((line) => `#${id} .sh__line:nth-child(${line})`)
-    ?.join(',\n');
-
-  const highlightLinesDarkMode = highlightLineNumbers
-    ?.map((line) => `.dark #${id} .sh__line:nth-child(${line})`)
-    ?.join(',\n');
-
-  let highlightLinesStyles: string | undefined;
-
-  if (highlightLines) {
-    highlightLinesStyles = `
-      ${highlightLinesLightMode} {
-        background-color: #d4d4d4;
-      }
-
-      ${highlightLinesDarkMode} {
-        background-color: #171717;
-      }`.trim();
-  }
+    return highlightedLineNumbers as [number, ...number[]];
+  };
 
   return (
     <pre
       className='relative border-2 dark:border-neutral-600 border-neutral-400 p-0'
       data-line-numbers={lineNumbers}
     >
-      {highlightLinesStyles ? <style>{highlightLinesStyles}</style> : null}
       {filename ? (
         <h6 className='sticky top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
           {filename}
         </h6>
       ) : null}
-      <Slot id={id}>{children}</Slot>
+      {React.cloneElement(children, {
+        highlightedLineNumbers: getHighlightedLineNumbers(),
+      })}
     </pre>
   );
 }
