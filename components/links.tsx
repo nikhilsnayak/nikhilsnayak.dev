@@ -8,7 +8,7 @@ import { zoro } from '~/assets/images';
 
 import { cn } from '~/lib/utils';
 
-interface NavLinkProps extends ComponentPropsWithoutRef<typeof Link> {}
+type NavLinkProps = ComponentPropsWithoutRef<typeof Link>;
 
 export function NavLink({ className, href, ...props }: NavLinkProps) {
   const path = usePathname();

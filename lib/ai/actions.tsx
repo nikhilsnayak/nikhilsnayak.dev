@@ -115,7 +115,7 @@ export async function continueConversation(
         });
 
         let text = '';
-        for await (let chunk of result.textStream) {
+        for await (const chunk of result.textStream) {
           text += chunk;
           stream.update(<BotMessage>{text}</BotMessage>);
         }

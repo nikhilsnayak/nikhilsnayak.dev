@@ -4,6 +4,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { Eye, LogOut } from 'lucide-react';
+import { MDXRemoteProps } from 'next-mdx-remote/rsc';
 
 import { auth, signIn, signOut } from '~/lib/auth';
 import { BASE_URL, BLOB_STORAGE_URL } from '~/lib/constants';
@@ -162,16 +163,19 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
   }
 
   const { metadata } = post;
-  const components: Record<string, any> = {};
+  let components: MDXRemoteProps['components'] = null;
 
   if (metadata.components) {
-    const parsedJSON = JSON.parse(metadata.components);
-    if (Array.isArray(parsedJSON)) {
-      for (let component of parsedJSON as string[]) {
-        components[component] = (
-          await import(`../../../content/components/${component}`)
-        ).default;
-      }
+    const componentNames = JSON.parse(metadata.components);
+
+    if (Array.isArray(componentNames)) {
+      const importedComponents = await Promise.all(
+        (componentNames as string[]).map(async (name) => {
+          const mod = await import(`../../../content/components/${name}`);
+          return { [name]: mod.default };
+        })
+      );
+      components = Object.assign({}, ...importedComponents);
     }
   }
 
