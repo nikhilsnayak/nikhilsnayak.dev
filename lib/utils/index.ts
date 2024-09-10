@@ -76,7 +76,7 @@ export function formatDate(date: string, includeRelative = false) {
 export function executeAsyncFnWithoutBlocking(
   fn: () => Promise<void>,
   options?: {
-    onError?: (error: any) => void;
+    onError?: (error: unknown) => void;
   }
 ) {
   fn().catch((error) => {

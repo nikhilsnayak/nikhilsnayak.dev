@@ -1,4 +1,10 @@
-import React, { PropsWithChildren, ReactElement } from 'react';
+import {
+  cloneElement,
+  ComponentProps,
+  createElement,
+  PropsWithChildren,
+  ReactElement,
+} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { highlight } from 'code-syntactic-sugar';
@@ -41,10 +47,10 @@ function Table({
   );
 }
 
-function CustomLink(props: any) {
+function CustomLink(props: ComponentProps<'a'>) {
   const href = props.href;
 
-  if (href.startsWith('/')) {
+  if (href?.startsWith('/')) {
     return (
       <Link href={href} {...props}>
         {props.children}
@@ -52,7 +58,7 @@ function CustomLink(props: any) {
     );
   }
 
-  if (href.startsWith('#')) {
+  if (href?.startsWith('#')) {
     return <a {...props} />;
   }
 
@@ -112,7 +118,7 @@ function Pre(props: Readonly<PreProps>) {
           {filename}
         </h6>
       ) : null}
-      {React.cloneElement(children, {
+      {cloneElement(children, {
         highlightedLineNumbers: getHighlightedLineNumbers(),
       })}
     </pre>
@@ -122,11 +128,11 @@ function Pre(props: Readonly<PreProps>) {
 function createHeading(level: number) {
   const Heading = ({ children }: { children: string }) => {
     const slug = slugify(children);
-    return React.createElement(
+    return createElement(
       `h${level}`,
       { id: slug },
       [
-        React.createElement('a', {
+        createElement('a', {
           href: `#${slug}`,
           key: `link-${slug}`,
           className: 'anchor',
