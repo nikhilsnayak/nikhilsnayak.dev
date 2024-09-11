@@ -6,10 +6,10 @@ import {
   ReactElement,
 } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { highlight } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import { Link } from 'next-view-transitions';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
 
 import { cn, slugify } from '~/lib/utils';

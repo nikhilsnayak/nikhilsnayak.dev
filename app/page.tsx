@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { Source_Code_Pro } from 'next/font/google';
 import Image from 'next/image';
-import Link from 'next/link';
 import {
   SiJavascript,
   SiNestjs,
@@ -12,6 +11,7 @@ import {
 } from '@icons-pack/react-simple-icons';
 import { profile } from '~/assets/images';
 import { ArrowUpRight } from 'lucide-react';
+import { Link } from 'next-view-transitions';
 
 import { cn, formatDate } from '~/lib/utils';
 import { getBlogPosts } from '~/lib/utils/server';

@@ -8,6 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
+import { ViewTransitions } from 'next-view-transitions';
 
 import { AI } from '~/lib/ai';
 import { BASE_URL } from '~/lib/constants';
@@ -121,32 +122,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
-      <body
-        className={cn(
-          GeistSans.variable,
-          GeistMono.variable,
-          'font-sans flex min-h-dvh flex-col'
-        )}
-      >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
+    <ViewTransitions>
+      <html lang='en' suppressHydrationWarning>
+        <body
+          className={cn(
+            GeistSans.variable,
+            GeistMono.variable,
+            'font-sans flex min-h-dvh flex-col'
+          )}
         >
-          <Toaster richColors />
-          <AI>
-            <Header />
-            <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2 my-4'>
-              {children}
-            </main>
-            <Footer />
-          </AI>
-        </ThemeProvider>
-        <SpeedInsights />
-        <Analytics />
-      </body>
-    </html>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster richColors />
+            <AI>
+              <Header />
+              <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2 my-4'>
+                {children}
+              </main>
+              <Footer />
+            </AI>
+          </ThemeProvider>
+          <SpeedInsights />
+          <Analytics />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }
