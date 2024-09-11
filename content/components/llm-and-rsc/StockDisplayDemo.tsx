@@ -1,4 +1,4 @@
-import { StockDisplay } from './GenUI/stock-display';
+import { StockDisplay } from './stock-display';
 
 export default function StockDisplayDemo() {
   const sampleStockData = {

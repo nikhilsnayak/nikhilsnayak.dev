@@ -98,10 +98,24 @@ function Pre(props: Readonly<PreProps>) {
   const { children, filename, lineNumbers, highlightLines } = props;
 
   const getHighlightedLineNumbers = () => {
+    const rangeArray = (numbers: number[]) => {
+      if (numbers.length === 1) {
+        return [numbers[0]];
+      }
+      const [start, end] = numbers;
+      const result = [];
+      for (let i = start; i <= end; i++) {
+        result.push(i);
+      }
+      return result;
+    };
+
     const highlightedLineNumbers = highlightLines
       ?.trim()
       ?.split(',')
-      ?.map((line) => Number(line));
+      ?.flatMap((range) =>
+        rangeArray(range.split('-').map((line) => Number(line)))
+      );
 
     if (!highlightedLineNumbers || highlightedLineNumbers.length === 0) return;
 
@@ -173,6 +187,19 @@ function Preview({ children }: PropsWithChildren) {
   return <TabsContent value='preview'>{children}</TabsContent>;
 }
 
+interface CollapsibleContentProps extends PropsWithChildren {
+  summary: string;
+}
+
+function CollapsibleContent({ summary, children }: CollapsibleContentProps) {
+  return (
+    <details className='my-4'>
+      <summary className='cursor-pointer'>{summary}</summary>
+      <div>{children}</div>
+    </details>
+  );
+}
+
 const components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -189,6 +216,7 @@ const components = {
   CodeBlock,
   Snippet,
   Preview,
+  CollapsibleContent,
 };
 
 export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {

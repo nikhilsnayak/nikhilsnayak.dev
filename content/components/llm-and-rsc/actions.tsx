@@ -5,8 +5,8 @@ import Markdown from 'react-markdown';
 
 import { Spinner } from '~/components/spinner';
 
-import type { Message } from '.';
 import { askAI, getStockPrice } from './ai';
+import type { Message } from './GenUI';
 import { StockDisplay } from './stock-display';
 
 async function StockCard({ symbol }: { symbol: string }) {

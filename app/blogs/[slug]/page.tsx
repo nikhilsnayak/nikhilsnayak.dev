@@ -167,16 +167,15 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
 
   if (metadata.components) {
     const componentNames = JSON.parse(metadata.components);
-
-    if (Array.isArray(componentNames)) {
-      const importedComponents = await Promise.all(
-        (componentNames as string[]).map(async (name) => {
-          const mod = await import(`../../../content/components/${name}`);
-          return { [name]: mod.default };
-        })
-      );
-      components = Object.assign({}, ...importedComponents);
-    }
+    const importedComponents = await Promise.all(
+      (componentNames as string[]).map(async (name) => {
+        const mod = await import(
+          `../../../content/components/${post.slug}/${name}`
+        );
+        return { [name]: mod.default };
+      })
+    );
+    components = Object.assign({}, ...importedComponents);
   }
 
   const blogTitle = post.metadata.title;
