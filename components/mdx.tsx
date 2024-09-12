@@ -6,7 +6,7 @@ import {
   ReactElement,
 } from 'react';
 import Image from 'next/image';
-import { highlight } from 'code-syntactic-sugar';
+import { highlight, LineNumbers } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Link } from 'next-view-transitions';
@@ -75,16 +75,18 @@ function RoundedImage({
 
 interface CodeProps {
   children: string;
-  highlightedLineNumbers?: [number, ...number[]];
+  highlightedLineNumbers?: LineNumbers;
 }
 
 function Code({ children, highlightedLineNumbers }: Readonly<CodeProps>) {
-  const codeHTML = highlight(children, {
+  const codeLines = highlight(children, {
     modifiers: {
       highlightedLines: highlightedLineNumbers,
     },
+    experimental: { outputMode: 'react-element' },
   });
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} />;
+
+  return <code>{codeLines}</code>;
 }
 
 interface PreProps {
@@ -119,7 +121,7 @@ function Pre(props: Readonly<PreProps>) {
 
     if (!highlightedLineNumbers || highlightedLineNumbers.length === 0) return;
 
-    return highlightedLineNumbers as [number, ...number[]];
+    return highlightedLineNumbers as LineNumbers;
   };
 
   return (
