@@ -26,7 +26,7 @@ export default function WorkPage() {
       <hr className='my-6 border-foreground/20' />
       <section>
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
-          Experience
+          Experience:
         </h2>
         <h3 className='mb-2 inline-block font-mono text-xl font-medium tracking-tighter hover:underline hover:opacity-70'>
           <a
@@ -44,11 +44,6 @@ export default function WorkPage() {
             Trainee Engineer - Software Development{' '}
           </span>
           <span>(Aug 2023 - Present)</span>
-        </p>
-        <p className='my-4'>
-          CodeCraft is an award-winning creative engineering company where
-          super-talented designers and engineers work closely and bring to life,
-          user-focused solutions.
         </p>
         <p className='my-4 *:align-middle'>
           <span>
@@ -99,7 +94,7 @@ export default function WorkPage() {
       </section>
       <section className='mt-12'>
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
-          Other Activites
+          Other Activities:
         </h2>
         <div className='flex flex-col gap-4 md:flex-row md:items-center'>
           <div className='space-y-2'>
@@ -107,9 +102,9 @@ export default function WorkPage() {
               Jan 14 2024
             </span>
             <p>
-              Delivered a captivating session on React Server Components, Server
-              Actions, and Full-Stack Development using Next.js 14 at Mangalore
-              Tech Day 2024 hosted by{' '}
+              Delivered a Talk on React Server Components, Server Actions, and
+              Full-Stack Development using Next.js 14 at Mangalore Tech Day 2024
+              hosted by{' '}
               <a
                 href='https://mangaloreinfotech.in/'
                 target='_blank'
