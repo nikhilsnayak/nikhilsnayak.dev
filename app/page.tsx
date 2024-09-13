@@ -1,11 +1,14 @@
-import { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Source_Code_Pro } from 'next/font/google';
 import Image from 'next/image';
 import {
-  SiJavascript,
-  SiNestjs,
+  SiBun,
+  SiDrizzle,
   SiNextdotjs,
+  SiPostgresql,
+  SiRadixui,
   SiReact,
+  SiShadcnui,
   SiTailwindcss,
   SiTypescript,
 } from '@icons-pack/react-simple-icons';
@@ -15,42 +18,40 @@ import { Link } from 'next-view-transitions';
 
 import { cn, formatDate } from '~/lib/utils';
 import { getBlogPosts } from '~/lib/utils/server';
-import { Badge } from '~/components/ui/badge';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
-
-const skills = [
-  {
-    name: 'JavaScript',
-    Icon: SiJavascript,
-  },
-  {
-    name: 'TypeScript',
-    Icon: SiTypescript,
-  },
-  {
-    name: 'Tailwind CSS',
-    Icon: SiTailwindcss,
-  },
-  {
-    name: 'React',
-    Icon: SiReact,
-  },
-  {
-    name: 'Next.js',
-    Icon: SiNextdotjs,
-  },
-  {
-    name: 'NestJS',
-    Icon: SiNestjs,
-  },
-] as const;
 
 const sourceCodePro = Source_Code_Pro({
   weight: ['600'],
   subsets: ['latin'],
 });
+
+function Tech({
+  href,
+  icon,
+  name,
+  className,
+}: {
+  name: string;
+  icon: ReactNode;
+  href: string;
+  className?: string;
+}) {
+  return (
+    <span className={className}>
+      {icon}
+      <a
+        href={href}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='font-medium underline ml-1'
+      >
+        {name}
+      </a>
+    </span>
+  );
+}
 
 export default function HomePage() {
   const recentBlogs = getBlogPosts()
@@ -64,13 +65,13 @@ export default function HomePage() {
   return (
     <section>
       <header className='relative'>
-        <h1 className='mb-[0.25em] text-3xl font-light sm:text-5xl'>
+        <h1 className='mb-3 text-3xl font-light sm:text-5xl'>
           {"Hi, I'm"}
           <strong className='block font-extrabold'>Nikhil S</strong>
         </h1>
         <p
           className={cn(
-            'mb-[1em] bg-fluorescent px-[1em] py-[0.25em] text-lg font-semibold text-slate-800 sm:text-xl',
+            'mb-4 bg-fluorescent px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
             sourceCodePro.className
           )}
         >
@@ -84,33 +85,95 @@ export default function HomePage() {
           placeholder='blur'
         />
       </header>
-      <section className='mt-20 space-y-4'>
-        <p className='text-lg sm:text-xl'>
-          I am a passionate and driven software engineer with expertise in both
-          front-end and back-end development. My skills include:
-        </p>
-        <ul className='flex flex-wrap items-center gap-4'>
-          {skills.map(({ Icon, name }) => (
-            <li key={name}>
-              <Badge asChild className='cursor-default'>
-                <div className='flex items-center gap-1'>
-                  <Icon className='w-3 sm:w-4' />
-                  <span className='text-xs sm:text-sm'>{name}</span>
-                </div>
-              </Badge>
-            </li>
-          ))}
+      <section className='mt-8 space-y-4'>
+        <h2 className='mb-4 font-mono text-2xl font-medium tracking-tighter underline'>
+          Tech Stack:
+        </h2>
+        <ul className='space-y-2 list-disc px-4'>
+          <li>
+            <Tech
+              name='Bun'
+              href='https://bun.sh/'
+              icon={
+                <SiBun className='inline size-3 fill-amber-300 dark:fill-[#f9f1e1]' />
+              }
+              className='mr-2'
+            />
+            +
+            <Tech
+              name='Typescript'
+              href='https://www.typescriptlang.org/'
+              icon={<SiTypescript className='inline size-3 fill-[#3178c6]' />}
+              className='mx-2'
+            />
+            for blazingly fast ⚡ dev exp and full stack type safety
+          </li>
+          <li>
+            <Tech
+              name='React'
+              href='https://react.dev/'
+              icon={<SiReact className='inline size-3 fill-[#58c4dc]' />}
+              className='mr-2'
+            />
+            +
+            <Tech
+              name='Next.js (App Router)'
+              href='https://nextjs.org/'
+              icon={<SiNextdotjs className='inline size-3' />}
+              className='mx-2'
+            />
+            for powering interactive UIs at scale
+          </li>
+          <li>
+            <Tech
+              name='TailwindCSS'
+              href='https://tailwindcss.com/'
+              icon={<SiTailwindcss className='inline size-3 fill-[#0ea5e9]' />}
+              className='mr-2'
+            />
+            +
+            <Tech
+              name='Radix UI'
+              href='https://www.radix-ui.com/'
+              icon={<SiRadixui className='inline size-3' />}
+              className='mx-2'
+            />
+            =
+            <Tech
+              name='Shadcn UI'
+              href='https://ui.shadcn.com/'
+              icon={<SiShadcnui className='inline size-3' />}
+              className='mx-2'
+            />
+            for consistent and accessible web 🌐
+          </li>
+          <li>
+            <Tech
+              name='PostgreSQL'
+              href='https://www.postgresql.org/'
+              icon={<SiPostgresql className='inline size-3 fill-[#699dc9]' />}
+              className='mr-2'
+            />
+            +
+            <Tech
+              name='Drizzle ORM'
+              href='https://orm.drizzle.team/'
+              icon={<SiDrizzle className='inline size-3 dark:fill-[#c5f74f]' />}
+              className='mx-2'
+            />
+            for flexible and type safe data storage
+          </li>
         </ul>
         <p className='text-lg sm:text-xl'>
-          Constantly seeking to learn and adapt, I strive to enhance my skills
-          through continuous development.
-        </p>
-        <p className='text-lg sm:text-xl'>
-          In my free time, I write about the technologies that excite me. I
-          enjoy breaking down complex concepts from the ground up.
+          In my free time, I{' '}
+          <Link href='/blogs' className='underline'>
+            write
+          </Link>{' '}
+          about these technologies, breaking down complex concepts from the
+          ground up.
         </p>
       </section>
-      <section className='mt-10'>
+      <section className='mt-8'>
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
           Recent Posts:
         </h2>
@@ -131,7 +194,7 @@ export default function HomePage() {
                     {post.metadata.title}
                   </h2>
                 </div>
-                <ErrorBoundary fallback={<span>{"Couldn't load views"}</span>}>
+                <ErrorBoundary fallback={<p>{"Couldn't load views"}</p>}>
                   <Suspense fallback={<Spinner variant='ellipsis' />}>
                     <PostViewsCount slug={post.slug}>
                       {(count) => <p>{count} views</p>}
