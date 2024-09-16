@@ -121,7 +121,7 @@ article.prose pre[data-line-numbers='true'] code {
 
 article.prose pre[data-line-numbers='true'] .css__line::before {
   counter-increment: css-line-number 1;
-  content: counter(css-line-number);
+  content: counter(css-line-number, decimal-leading-zero);
   display: inline-block;
   width: 2rem;
   color: #a4a4a4;
