@@ -238,7 +238,7 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
         <CustomMDX source={post.content} components={components} />
       </article>
       <div className='mt-8 space-y-4'>
-        <p className='text-[#D4AF37] text-lg'>
+        <p className='text-amber-600 dark:text-amber-400'>
           If you enjoyed this blog, drop some hearts below and share this blog
           on social media to help others find it too.
         </p>
