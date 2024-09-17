@@ -83,7 +83,6 @@ function Code({ children, highlightedLineNumbers }: Readonly<CodeProps>) {
     modifiers: {
       highlightedLines: highlightedLineNumbers,
     },
-    experimental: { outputMode: 'react-element' },
   });
 
   return <code>{codeLines}</code>;
