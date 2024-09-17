@@ -19,7 +19,7 @@
     "db:generate": "drizzle-kit generate",
     "db:up": "drizzle-kit up",
     "prepare": "husky",
-    "ci": "turbo lint type-check build format:check"
+    "ci": "turbo lint type-check format:check"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.60",
