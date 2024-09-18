@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import { unstable_noStore as noStore } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { Eye, LogOut } from 'lucide-react';
@@ -19,9 +18,7 @@ import { CustomMDX } from '~/components/mdx';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
 
-import { AddHeartForm } from './add-heart-form';
 import { CommentsManager } from './comments-manager';
-import { HeartButton } from './heart-button';
 import { SocialShare } from './social-share';
 import { SummarizeButton } from './summarize-button';
 
@@ -77,13 +74,13 @@ export function generateMetadata({ params }: BlogProps): Metadata {
   };
 }
 
-async function Hearts({ slug }: Readonly<{ slug: string }>) {
-  noStore();
-  const hearts = await db.query.hearts.findFirst({
-    where: (hearts, { eq }) => eq(hearts.slug, slug),
-  });
-  return <AddHeartForm initialValue={hearts?.count} slug={slug} />;
-}
+// async function Hearts({ slug }: Readonly<{ slug: string }>) {
+//   noStore();
+//   const hearts = await db.query.hearts.findFirst({
+//     where: (hearts, { eq }) => eq(hearts.slug, slug),
+//   });
+//   return <AddHeartForm initialValue={hearts?.count} slug={slug} />;
+// }
 
 function CommentsSkeleton() {
   return new Array(3).fill(0).map((_, i) => (
@@ -239,17 +236,17 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
       </article>
       <div className='mt-8 space-y-4'>
         <p className='text-amber-600 dark:text-amber-400'>
-          If you enjoyed this blog, drop some hearts below and share this blog
-          on social media to help others find it too.
+          If you enjoyed this blog, share it on social media to help others find
+          it too
+          <SocialShare title={post.metadata.title} slug={post.slug} />
         </p>
-        <div className='flex gap-4 items-center'>
+        {/* <div className='flex gap-4 items-center'>
           <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
             <Suspense fallback={<HeartButton count={0} />}>
               <Hearts slug={post.slug} />
             </Suspense>
           </ErrorBoundary>
-          <SocialShare title={post.metadata.title} slug={post.slug} />
-        </div>
+        </div> */}
       </div>
       <div className='mt-8'>
         <h2
