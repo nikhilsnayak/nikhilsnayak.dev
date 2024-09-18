@@ -18,7 +18,10 @@ export function SocialShare({ slug, title }: { slug: string; title: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={'ghost'} size={'icon'}>
+        <Button
+          variant='ghost'
+          className='size-4 p-0 align-text-bottom ml-2 text-foreground'
+        >
           <ShareIcon />
         </Button>
       </DropdownMenuTrigger>
