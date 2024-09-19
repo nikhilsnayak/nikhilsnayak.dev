@@ -22,11 +22,12 @@ export const views = pgTable('views', {
 export const hearts = pgTable(
   'hearts',
   {
-    slug: varchar('slug', { length: 255 }).primaryKey(),
+    slug: varchar('slug', { length: 255 }).notNull(),
     count: integer('count').notNull().default(0),
     clientIdentifier: varchar('client_identifier').notNull(),
   },
   (t) => ({
+    pk: primaryKey({ columns: [t.slug, t.clientIdentifier] }),
     slugClientIdentifierUnique: unique()
       .on(t.slug, t.clientIdentifier)
       .nullsNotDistinct(),
