@@ -2,6 +2,7 @@
 
 // Error boundaries must be Client Components
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '~/components/ui/button';
 
@@ -12,6 +13,7 @@ export default function ErrorFallback({
   error: Error & { digest?: string };
   reset: () => void;
 }>) {
+  const router = useRouter();
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error);
@@ -26,7 +28,10 @@ export default function ErrorFallback({
         <Button
           onClick={
             // Attempt to recover by trying to re-render the segment
-            () => reset()
+            () => {
+              reset();
+              router.refresh();
+            }
           }
         >
           Try again
