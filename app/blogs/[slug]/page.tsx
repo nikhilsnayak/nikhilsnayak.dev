@@ -9,7 +9,7 @@ import { auth, signIn, signOut } from '~/lib/auth';
 import { BASE_URL, BLOB_STORAGE_URL } from '~/lib/constants';
 import { db } from '~/lib/db';
 import { formatDate } from '~/lib/utils';
-import { getBlogPosts } from '~/lib/utils/server';
+import { getBlogPosts, getIP } from '~/lib/utils/server';
 import { Form, FormSubmit } from '~/components/ui/form';
 import { Skeleton } from '~/components/ui/skeleton';
 import { AudioPlayer } from '~/components/audio-player';
@@ -18,7 +18,9 @@ import { CustomMDX } from '~/components/mdx';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
 
+import { AddHeartForm } from './add-heart-form';
 import { CommentsManager } from './comments-manager';
+import { HeartButton } from './heart-button';
 import { SocialShare } from './social-share';
 import { SummarizeButton } from './summarize-button';
 
@@ -74,13 +76,28 @@ export function generateMetadata({ params }: BlogProps): Metadata {
   };
 }
 
-// async function Hearts({ slug }: Readonly<{ slug: string }>) {
-//   noStore();
-//   const hearts = await db.query.hearts.findFirst({
-//     where: (hearts, { eq }) => eq(hearts.slug, slug),
-//   });
-//   return <AddHeartForm initialValue={hearts?.count} slug={slug} />;
-// }
+async function Hearts({ slug }: Readonly<{ slug: string }>) {
+  const ip = getIP();
+
+  const hearts = await db.query.hearts.findMany({
+    where: (hearts, { eq }) => eq(hearts.slug, slug),
+  });
+
+  const total = hearts.reduce((acc, cv) => acc + cv.count, 0);
+
+  const currentClientHeartsCount =
+    hearts.find((heart) => heart.clientIdentifier === ip)?.count ?? 0;
+
+  return (
+    <AddHeartForm
+      initialValue={{
+        total,
+        currentClientHeartsCount,
+      }}
+      slug={slug}
+    />
+  );
+}
 
 function CommentsSkeleton() {
   return new Array(3).fill(0).map((_, i) => (
@@ -240,13 +257,11 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
           it too
           <SocialShare title={post.metadata.title} slug={post.slug} />
         </p>
-        {/* <div className='flex gap-4 items-center'>
-          <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
-            <Suspense fallback={<HeartButton count={0} />}>
-              <Hearts slug={post.slug} />
-            </Suspense>
-          </ErrorBoundary>
-        </div> */}
+        <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
+          <Suspense fallback={<HeartButton />}>
+            <Hearts slug={post.slug} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
       <div className='mt-8'>
         <h2

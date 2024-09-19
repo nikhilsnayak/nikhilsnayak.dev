@@ -50,6 +50,34 @@
       "when": 1725296352868,
       "tag": "0006_red_the_santerians",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1726726274036,
+      "tag": "0007_watery_dexter_bennett",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1726727470890,
+      "tag": "0008_lethal_demogoblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1726733910496,
+      "tag": "0009_aromatic_tana_nile",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1726733998288,
+      "tag": "0010_silent_lady_deathstrike",
+      "breakpoints": true
     }
   ]
 }

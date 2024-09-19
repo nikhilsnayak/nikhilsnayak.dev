@@ -4,25 +4,31 @@ import { useActionState, useOptimistic } from 'react';
 
 import { addHeart } from './actions';
 import { HeartButton } from './heart-button';
+import { HeartsInfo } from './types';
 
 export function AddHeartForm({
   initialValue,
   slug,
 }: {
-  initialValue?: number;
+  initialValue: HeartsInfo;
   slug: string;
 }) {
-  const [hearts, addHeartAction] = useActionState(addHeart, initialValue);
-  const [optimisticHearts, setOptimisticHearts] = useOptimistic(hearts ?? 0);
+  const [heartsInfo, addHeartAction] = useActionState(addHeart, initialValue);
+  const [optimisticHeartsInfo, setOptimisticHeartsInfo] =
+    useOptimistic(heartsInfo);
+
   return (
     <form
       action={(formData) => {
-        setOptimisticHearts((prev) => prev + 1);
+        setOptimisticHeartsInfo(({ currentClientHeartsCount, total }) => ({
+          currentClientHeartsCount: currentClientHeartsCount + 1,
+          total: total + 1,
+        }));
         addHeartAction(formData);
       }}
     >
       <input type='text' name='slug' hidden readOnly value={slug} />
-      <HeartButton count={optimisticHearts} />
+      <HeartButton heartsInfo={optimisticHeartsInfo} />
     </form>
   );
 }

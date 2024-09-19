@@ -7,6 +7,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   varchar,
   vector,
 } from 'drizzle-orm/pg-core';
@@ -18,10 +19,19 @@ export const views = pgTable('views', {
   count: integer('count').notNull().default(0),
 });
 
-export const hearts = pgTable('hearts', {
-  slug: varchar('slug', { length: 255 }).primaryKey(),
-  count: integer('count').notNull().default(0),
-});
+export const hearts = pgTable(
+  'hearts',
+  {
+    slug: varchar('slug', { length: 255 }).primaryKey(),
+    count: integer('count').notNull().default(0),
+    clientIdentifier: varchar('client_identifier').notNull(),
+  },
+  (t) => ({
+    slugClientIdentifierUnique: unique()
+      .on(t.slug, t.clientIdentifier)
+      .nullsNotDistinct(),
+  })
+);
 
 export const users = pgTable('user', {
   id: text('id')

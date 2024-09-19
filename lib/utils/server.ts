@@ -2,6 +2,7 @@ import 'server-only';
 
 import fs from 'fs';
 import path from 'path';
+import { headers } from 'next/headers';
 
 type BlogMetadata = {
   title: string;
@@ -54,4 +55,9 @@ function getMDXData(dir: string) {
 
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'content'));
+}
+
+export function getIP() {
+  const $h = headers();
+  return $h.get('x-forwarded-for') ?? $h.get('x-real-ip');
 }

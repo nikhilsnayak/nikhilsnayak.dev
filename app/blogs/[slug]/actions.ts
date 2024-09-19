@@ -11,8 +11,9 @@ import {
   editCommentSchema,
   hearts,
 } from '~/lib/db/schema';
+import { getIP } from '~/lib/utils/server';
 
-import { CommentWithUser } from './types';
+import { CommentWithUser, HeartsInfo } from './types';
 
 export async function addComment(
   formData: FormData
@@ -142,35 +143,45 @@ export async function deleteComment(
   }
 }
 
-export async function addHeart(prev: number | undefined, formData: FormData) {
+export async function addHeart(
+  prevState: HeartsInfo,
+  formData: FormData
+): Promise<HeartsInfo> {
   const slug = formData.get('slug')?.toString();
   if (!slug) {
-    return prev;
+    return prevState;
   }
 
+  const ip = getIP() ?? 'UNKNOWN';
+
   try {
-    if (prev === undefined) {
-      const updatedHearts = await db
-        .insert(hearts)
-        .values({ slug, count: 1 })
-        .returning()
-        .then((val) => val[0]);
+    const updatedHearts = await db
+      .insert(hearts)
+      .values({
+        clientIdentifier: ip,
+        slug,
+        count: 1,
+      })
+      .onConflictDoUpdate({
+        target: [hearts.clientIdentifier, hearts.slug],
+        set: { count: sql`${hearts.count} + 1` },
+      })
+      .returning()
+      .then((res) => res[0]);
 
-      return updatedHearts.count;
-    } else {
-      const updatedHearts = await db
-        .update(hearts)
-        .set({
-          count: sql`${hearts.count} + 1`,
-        })
-        .where(eq(hearts.slug, slug))
-        .returning()
-        .then((val) => val[0]);
-
-      return updatedHearts.count;
+    if (ip === 'UNKNOWN') {
+      return {
+        currentClientHeartsCount: prevState.currentClientHeartsCount + 1,
+        total: prevState.total + 1,
+      };
     }
+
+    return {
+      total: prevState.total + 1,
+      currentClientHeartsCount: updatedHearts.count,
+    };
   } catch (error) {
     console.log(error);
-    return prev;
+    return prevState;
   }
 }
