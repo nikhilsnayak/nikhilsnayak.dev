@@ -1,5 +1,6 @@
 import 'server-only';
 
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { headers } from 'next/headers';
@@ -57,7 +58,19 @@ export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'content'));
 }
 
-export function getIP() {
+export function getIPHash() {
   const $h = headers();
-  return $h.get('x-forwarded-for') ?? $h.get('x-real-ip');
+  const ip = $h.get('x-forwarded-for') ?? $h.get('x-real-ip');
+
+  if (!ip) {
+    return null;
+  }
+
+  const secret = process.env.HASH_SECRET;
+
+  if (!secret) {
+    throw new Error('HASH_SECRET env is required');
+  }
+
+  return crypto.createHmac('sha256', secret).update(ip).digest('hex');
 }

@@ -9,7 +9,7 @@ import { auth, signIn, signOut } from '~/lib/auth';
 import { BASE_URL, BLOB_STORAGE_URL } from '~/lib/constants';
 import { db } from '~/lib/db';
 import { formatDate } from '~/lib/utils';
-import { getBlogPosts, getIP } from '~/lib/utils/server';
+import { getBlogPosts, getIPHash } from '~/lib/utils/server';
 import { Form, FormSubmit } from '~/components/ui/form';
 import { Skeleton } from '~/components/ui/skeleton';
 import { AudioPlayer } from '~/components/audio-player';
@@ -77,7 +77,7 @@ export function generateMetadata({ params }: BlogProps): Metadata {
 }
 
 async function Hearts({ slug }: Readonly<{ slug: string }>) {
-  const ip = getIP();
+  const ip = getIPHash();
 
   const hearts = await db.query.hearts.findMany({
     where: (hearts, { eq }) => eq(hearts.slug, slug),

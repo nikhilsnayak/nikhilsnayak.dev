@@ -11,7 +11,7 @@ import {
   editCommentSchema,
   hearts,
 } from '~/lib/db/schema';
-import { getIP } from '~/lib/utils/server';
+import { getIPHash } from '~/lib/utils/server';
 
 import { CommentWithUser, HeartsInfo } from './types';
 
@@ -152,7 +152,7 @@ export async function addHeart(
     return prevState;
   }
 
-  const ip = getIP() ?? 'UNKNOWN';
+  const ip = getIPHash() ?? 'UNKNOWN';
 
   try {
     const updatedHearts = await db
