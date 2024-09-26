@@ -1,6 +1,6 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
@@ -30,7 +30,15 @@ function ThemeButton({ type, children }: Readonly<ThemeButtonProps>) {
   );
 }
 
-function ThemeToggle() {
+export function ThemeToggle() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <div className='flex gap-2 rounded-full border bg-muted'>
       <span className='sr-only'>Toggle theme</span>
@@ -46,5 +54,3 @@ function ThemeToggle() {
     </div>
   );
 }
-
-export default ThemeToggle;

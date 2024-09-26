@@ -1,7 +1,6 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -15,10 +14,7 @@ import { BASE_URL } from '~/lib/constants';
 import { cn } from '~/lib/utils';
 import { Toaster } from '~/components/ui/sonner';
 import { BotLink, NavLink } from '~/components/links';
-
-const ThemeToggle = dynamic(() => import('~/components/theme-toggle'), {
-  ssr: false,
-});
+import { ThemeToggle } from '~/components/theme-toggle';
 
 export const metadata: Metadata = {
   title: {

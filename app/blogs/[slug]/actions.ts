@@ -152,7 +152,7 @@ export async function addHeart(
     return prevState;
   }
 
-  const ip = getIPHash() ?? 'UNKNOWN';
+  const ip = (await getIPHash()) ?? 'UNKNOWN';
 
   try {
     const updatedHearts = await db

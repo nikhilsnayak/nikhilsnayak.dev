@@ -58,8 +58,8 @@ export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'content'));
 }
 
-export function getIPHash() {
-  const $h = headers();
+export async function getIPHash() {
+  const $h = await headers();
   const ip = $h.get('x-forwarded-for') ?? $h.get('x-real-ip');
 
   if (!ip) {

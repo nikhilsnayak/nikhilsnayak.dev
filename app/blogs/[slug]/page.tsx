@@ -25,7 +25,7 @@ import { SocialShare } from './social-share';
 import { SummarizeButton } from './summarize-button';
 
 interface BlogProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -36,8 +36,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }: BlogProps): Metadata {
-  const post = getBlogPosts().find((post) => post.slug === params.slug);
+export async function generateMetadata({
+  params,
+}: BlogProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getBlogPosts().find((post) => post.slug === slug);
   if (!post) {
     return {};
   }
@@ -77,7 +80,7 @@ export function generateMetadata({ params }: BlogProps): Metadata {
 }
 
 async function Hearts({ slug }: Readonly<{ slug: string }>) {
-  const ip = getIPHash();
+  const ip = await getIPHash();
 
   const hearts = await db.query.hearts.findMany({
     where: (hearts, { eq }) => eq(hearts.slug, slug),
@@ -170,7 +173,8 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
 }
 
 export default async function Blog({ params }: Readonly<BlogProps>) {
-  const post = getBlogPosts().find((post) => post.slug === params.slug);
+  const { slug } = await params;
+  const post = getBlogPosts().find((post) => post.slug === slug);
 
   if (!post) {
     notFound();
