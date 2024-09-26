@@ -1,6 +1,5 @@
 'use server';
 
-import { headers } from 'next/headers';
 import { openai } from '@ai-sdk/openai';
 import { Ratelimit } from '@upstash/ratelimit';
 import { kv } from '@vercel/kv';
@@ -12,6 +11,7 @@ import { findRelevantContent } from '~/lib/ai/embedding';
 import { BotMessage } from '~/components/messages';
 
 import { executeAsyncFnWithoutBlocking } from '../utils';
+import { getIPHash } from '../utils/server';
 import { AI, ClientMessage } from './index';
 
 const ratelimit = new Ratelimit({
@@ -23,11 +23,7 @@ export async function continueConversation(
   message: string
 ): Promise<ClientMessage | { error: string }> {
   try {
-    const headersList = headers();
-    const ip =
-      headersList.get('x-forwarded-for') ??
-      headersList.get('x-real-ip') ??
-      'Unknown';
+    const ip = (await getIPHash()) ?? 'UNKNOWN';
 
     const { success } = await ratelimit.limit(ip);
     if (!success) {
