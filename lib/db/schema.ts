@@ -3,6 +3,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgTable,
   primaryKey,
   text,
@@ -153,8 +154,8 @@ export const deleteCommentSchema = commentSchema.pick({
   id: true,
 });
 
-export const embeddings = pgTable(
-  'embeddings',
+export const documents = pgTable(
+  'document',
   {
     id: varchar('id', { length: 191 })
       .primaryKey()
@@ -162,6 +163,7 @@ export const embeddings = pgTable(
 
     content: text('content').notNull(),
     embedding: vector('embedding', { dimensions: 1536 }).notNull(),
+    metadata: jsonb('metadata'),
   },
   (table) => ({
     embeddingIndex: index('embeddingIndex').using(

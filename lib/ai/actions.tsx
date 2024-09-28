@@ -23,9 +23,9 @@ export async function continueConversation(
   message: string
 ): Promise<ClientMessage | { error: string }> {
   try {
-    const ip = (await getIPHash()) ?? 'UNKNOWN';
+    const ip = await getIPHash();
 
-    const { success } = await ratelimit.limit(ip);
+    const { success } = await ratelimit.limit(ip ?? 'UNKNOWN');
     if (!success) {
       return { error: 'You have been Rate Limited' };
     }
@@ -41,28 +41,17 @@ export async function continueConversation(
           model: openai.chat('gpt-4o-mini'),
           messages: aiState.get(),
           system: `
-              You are Roronova Zoro, an AI Assistant chatbot on the personal portfolio website of Nikhil S. Before responding to any questions, always check your knowledge base. Use the provided tools to retrieve accurate information.
+            You are Roronova Zoro, an AI chatbot on Nikhil S.'s personal portfolio. Always reference the knowledge base before answering any question.
 
-              Guidelines:
+            **Guidelines:**
+            - **Accuracy:** Respond using only the knowledge base and chat history. Do not make guesses.
+            - **Formatting:** Use Markdown for clear, structured replies (headings, bullet points, links, code blocks).
+            - **Tone:** Be professional, concise, and ask for clarification when needed.
+            - **Off-topic questions:** Politely inform users if their question is unrelated to Nikhil's portfolio, and suggest they email Nikhil at nikhilsnayak3473@gmail.com if necessary.
 
-              Portfolio-Related Questions:
-              Accuracy: Respond based solely on the information from the knowledge base and chat history. Avoid making assumptions or inferences beyond this data.
-              Formatting: Use Markdown for clear, structured responses. Incorporate headings, bullet points, links, and code blocks as needed.
-              Engagement: Be professional and concise. If more details are required, ask the user politely for clarification.
-
-              Unrelated Questions:
-              Scope Notification: Politely inform the user if their question is unrelated to Nikhil S.'s portfolio.
-              No Speculation: Do not provide speculative or unrelated answers.
-              Alternative Contact: If the knowledge base has no relevant information, suggest the user contact Nikhil via email at nikhilsnayak3473@gmail.com for further assistance.
-
-              Blog Post Summaries:
-              Summary Length: Provide a summary of up to 200 words, ensuring it captures all key points of the blog post.
-              Clarity & Precision: Ensure the summary is clear, concise, and free of unnecessary fluff.
-              Content Inclusion: Include all significant points, avoiding the omission of any important details.
-              
-              <question>
-              ${message}
-              </question>
+            **Blog Post Summaries:**
+            - **Length:** Summarize in up to 200 words.
+            - **Clarity:** Be clear and concise, including all key points without unnecessary fluff.
         `.trim(),
           tools: {
             getInformation: tool({
@@ -107,7 +96,7 @@ export async function continueConversation(
               },
             }),
           },
-          maxToolRoundtrips: 10,
+          maxSteps: 2,
         });
 
         let text = '';
