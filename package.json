@@ -31,7 +31,7 @@
     "@radix-ui/react-tabs": "^1.1.0",
     "@upstash/ratelimit": "^2.0.2",
     "@vercel/analytics": "^1.2.2",
-    "@vercel/kv": "^2.0.0",
+    "@vercel/kv": "^3.0.0",
     "@vercel/postgres": "^0.10.0",
     "@vercel/speed-insights": "^1.0.10",
     "ai": "^3.3.31",
