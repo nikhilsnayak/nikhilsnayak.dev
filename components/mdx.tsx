@@ -125,11 +125,11 @@ function Pre(props: Readonly<PreProps>) {
 
   return (
     <pre
-      className='relative border-2 dark:border-neutral-600 border-neutral-400 p-0'
+      className='relative border-2 border-neutral-400 p-0 dark:border-neutral-600'
       data-line-numbers={lineNumbers}
     >
       {filename ? (
-        <h6 className='sticky top-0 left-0 right-0 text-foreground overflow-hidden border-b-2 border-neutral-400 dark:border-neutral-600 px-2 py-1'>
+        <h6 className='sticky left-0 right-0 top-0 overflow-hidden border-b-2 border-neutral-400 px-2 py-1 text-foreground dark:border-neutral-600'>
           {filename}
         </h6>
       ) : null}

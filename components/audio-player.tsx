@@ -104,20 +104,20 @@ export function AudioPlayer({
   const currentFormattedTime = formatTime(currentTime);
 
   return (
-    <div className='bg-background rounded-lg border p-4 max-w-md w-full'>
+    <div className='w-full max-w-md rounded-lg border bg-background p-4'>
       <audio ref={audioRef} src={src} preload='metadata'></audio>
-      <div className='flex items-center justify-between mb-4'>
+      <div className='mb-4 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Button
             variant='ghost'
             size='icon'
-            className='w-8 h-8'
+            className='h-8 w-8'
             onClick={handlePlayPause}
           >
             {isPlaying ? (
-              <Pause className='w-5 h-5' />
+              <Pause className='h-5 w-5' />
             ) : (
-              <Play className='w-5 h-5' />
+              <Play className='h-5 w-5' />
             )}
           </Button>
           <div className='text-lg font-medium'>{title}</div>
@@ -126,13 +126,13 @@ export function AudioPlayer({
           <Button
             variant='ghost'
             size='icon'
-            className='w-8 h-8'
+            className='h-8 w-8'
             onClick={toggleMute}
           >
             {isMuted || volume === 0 ? (
-              <VolumeX className='w-5 h-5' />
+              <VolumeX className='h-5 w-5' />
             ) : (
-              <Volume2 className='w-5 h-5' />
+              <Volume2 className='h-5 w-5' />
             )}
           </Button>
           <Slider

@@ -253,7 +253,7 @@ function CommentsList() {
                 }}
               >
                 <div className='py-4'>
-                  <div className='flex justify-between items-start'>
+                  <div className='flex items-start justify-between'>
                     <div className='flex gap-2'>
                       <Avatar className='h-10 w-10 border'>
                         <AvatarImage
@@ -265,10 +265,10 @@ function CommentsList() {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className=' flex items-center gap-2'>
+                        <h3 className='flex items-center gap-2'>
                           <span className='font-bold'>{comment.user.name}</span>
                           {session?.user?.id === comment.userId ? (
-                            <span className='text-[10px] bg-muted text-muted-foreground rounded py-0.5 px-1'>
+                            <span className='rounded bg-muted px-1 py-0.5 text-[10px] text-muted-foreground'>
                               You
                             </span>
                           ) : null}
@@ -283,7 +283,7 @@ function CommentsList() {
                     </div>
                     {session?.user?.id === comment.userId &&
                     !comment.isPending ? (
-                      <div className='flex items-center gap-2 mr-2'>
+                      <div className='mr-2 flex items-center gap-2'>
                         <EditCommentControl
                           content={comment.content}
                           commentId={comment.id}
@@ -341,7 +341,7 @@ function EditCommentControl({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size='icon' variant='ghost'>
-          <Pencil className='text-blue-400 size-4' />
+          <Pencil className='size-4 text-blue-400' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
@@ -378,7 +378,7 @@ function DeleteCommentControl({ commentId }: Readonly<{ commentId: string }>) {
     <Dialog>
       <DialogTrigger asChild>
         <Button size='icon' variant='ghost'>
-          <Trash2 className='text-red-400  size-4' />
+          <Trash2 className='size-4 text-red-400' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>

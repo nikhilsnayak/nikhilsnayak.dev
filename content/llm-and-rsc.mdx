@@ -61,29 +61,29 @@ export default async function Page(props: {
   if (!movies || movies.length === 0) return 'No Movies';
 
   return (
-    <ul className='space-y-6 mt-6'>
+    <ul className='mt-6 space-y-6'>
       {movies.map(
         ({ id, title, director, releaseYear, genre, rating, cast }) => (
           <li
             key={id}
-            className='p-6 bg-white shadow-lg rounded-lg hover:bg-gray-100 transition-colors'
+            className='rounded-lg bg-white p-6 shadow-lg transition-colors hover:bg-gray-100'
           >
-            <h2 className='text-2xl font-semibold text-gray-800 mb-2'>
+            <h2 className='mb-2 text-2xl font-semibold text-gray-800'>
               {title}
             </h2>
-            <p className='text-gray-600 mb-1'>
+            <p className='mb-1 text-gray-600'>
               <strong>Director:</strong> {director}
             </p>
-            <p className='text-gray-600 mb-1'>
+            <p className='mb-1 text-gray-600'>
               <strong>Release Year:</strong> {releaseYear}
             </p>
-            <p className='text-gray-600 mb-1'>
+            <p className='mb-1 text-gray-600'>
               <strong>Genre:</strong> {genre}
             </p>
-            <p className='text-gray-600 mb-1'>
+            <p className='mb-1 text-gray-600'>
               <strong>Rating:</strong> {rating}/10
             </p>
-            <p className='text-gray-600 mb-1'>
+            <p className='mb-1 text-gray-600'>
               <strong>Cast:</strong> {cast.join(', ')}
             </p>
           </li>
@@ -122,9 +122,9 @@ export default function Page() {
 
   return (
     <main>
-      <h1 className='mx-auto text-center mb-8'>Add New Movie</h1>
+      <h1 className='mx-auto mb-8 text-center'>Add New Movie</h1>
       {/* `action` attribute automatically invokes server action on the client when form is submitted */}
-      <form action={addMovie} className='max-w-lg mx-auto p-4 space-y-4'>
+      <form action={addMovie} className='mx-auto max-w-lg space-y-4 p-4'>
         {formFields.map((field) => (
           <div key={field.name}>
             <label className='block text-sm font-medium text-gray-700'>
@@ -133,14 +133,14 @@ export default function Page() {
             <input
               type={field.type}
               name={field.name}
-              className='mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
+              className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
               required
             />
           </div>
         ))}
         <button
           type='submit'
-          className='w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+          className='w-full rounded-md bg-indigo-600 px-4 py-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
         >
           Add Movie
         </button>
@@ -325,32 +325,32 @@ export default function GenUI() {
   };
 
   return (
-    <section className=' w-full p-4 border bg-background rounded-lg shadow-lg'>
-      <ul className='space-y-4 mb-4 p-4 h-[60vh] overflow-auto relative rounded-lg'>
+    <section className='w-full rounded-lg border bg-background p-4 shadow-lg'>
+      <ul className='relative mb-4 h-[60vh] space-y-4 overflow-auto rounded-lg p-4'>
         {messages.length === 0 ? (
-          <li className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground'>
+          <li className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground'>
             No Conversation
           </li>
         ) : (
           messages.map((message) => (
-            <li key={message.id} className=' w-full border-b py-4'>
+            <li key={message.id} className='w-full border-b py-4'>
               {message.role.toUpperCase()}: {message.display}
             </li>
           ))
         )}
         {isPending ? <li className='w-full'>Thinking...</li> : null}
       </ul>
-      <form className='grid gap-4 grid-cols-8' onSubmit={handleSubmit}>
+      <form className='grid grid-cols-8 gap-4' onSubmit={handleSubmit}>
         <input
           type='text'
           name='query'
-          className='flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 col-span-6'
+          className='col-span-6 flex-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-none'
           placeholder='Enter your message...'
         />
         <button
           type='submit'
           disabled={isPending}
-          className='p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none disabled:bg-blue-300 col-span-2'
+          className='col-span-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-none disabled:bg-blue-300'
         >
           Ask
         </button>
@@ -474,11 +474,11 @@ export function StockDisplay({
   };
 
   return (
-    <div className='p-6 border mt-2 rounded-md'>
-      <h2 className='text-xl font-bold mb-2'>
+    <div className='mt-2 rounded-md border p-6'>
+      <h2 className='mb-2 text-xl font-bold'>
         {companyName} ({symbol})
       </h2>
-      <p className='text-sm mb-4'>
+      <p className='mb-4 text-sm'>
         Last Updated: {new Date(lastUpdated).toLocaleString()}
       </p>
 
@@ -518,14 +518,14 @@ export function StockDisplay({
 
       <div className='mt-4'>
         <button
-          className='px-4 py-2 bg-blue-500 text-white rounded'
+          className='rounded bg-blue-500 px-4 py-2 text-white'
           onClick={() => setShowDetails(!showDetails)}
         >
           {showDetails ? 'Hide Financial Metrics' : 'Show Additional Metrics'}
         </button>
 
         {showDetails && (
-          <div className='mt-4 bg-gray-100 dark:bg-gray-800 p-4 rounded text-foreground'>
+          <div className='mt-4 rounded bg-gray-100 p-4 text-foreground dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
             <p>
               Details about financial metrics and other insights would be
@@ -536,17 +536,17 @@ export function StockDisplay({
       </div>
 
       <div className='mt-4'>
-        <h3 className='font-semibold mb-2'>Compare with Another Stock</h3>
-        <div className=' flex flex-col md:flex-row gap-2'>
+        <h3 className='mb-2 font-semibold'>Compare with Another Stock</h3>
+        <div className='flex flex-col gap-2 md:flex-row'>
           <input
             type='text'
             value={compareSymbol}
             onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
             placeholder='Enter stock symbol'
-            className='border px-2 py-1 rounded text-foreground'
+            className='rounded border px-2 py-1 text-foreground'
           />
           <button
-            className='px-4 py-1 bg-green-500 text-white rounded'
+            className='rounded bg-green-500 px-4 py-1 text-white'
             onClick={() => compareStock(compareSymbol)}
           >
             Compare
@@ -554,7 +554,7 @@ export function StockDisplay({
         </div>
 
         {showComparison && (
-          <div className='mt-4 bg-zinc-800 dark:bg-zinc-300 text-primary-foreground p-4 rounded'>
+          <div className='mt-4 rounded bg-zinc-800 p-4 text-primary-foreground dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
               Comparison details between {symbol} and {compareSymbol} would be

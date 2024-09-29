@@ -44,14 +44,14 @@ export function Chat() {
     <section className='h-[65dvh] space-y-4'>
       <ul
         ref={scrollAreaRef}
-        className='h-[85%] border rounded overflow-y-auto p-4 space-y-4 no-scrollbar'
+        className='no-scrollbar h-[85%] space-y-4 overflow-y-auto rounded border p-4'
       >
         {conversation.map((message) => (
-          <li key={message.id} className='border-b pb-4 flex gap-4 items-start'>
+          <li key={message.id} className='flex items-start gap-4 border-b pb-4'>
             <div>
               {message.role === 'user' ? <CircleUserRound /> : <BotIcon />}
             </div>
-            <div className='prose prose-sm min-w-0 break-words dark:prose-invert overflow-x-auto'>
+            <div className='prose prose-sm min-w-0 overflow-x-auto break-words dark:prose-invert'>
               {message.display}
             </div>
           </li>

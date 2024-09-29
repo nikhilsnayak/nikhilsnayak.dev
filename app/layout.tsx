@@ -124,7 +124,7 @@ export default function RootLayout({
           className={cn(
             GeistSans.variable,
             GeistMono.variable,
-            'font-sans flex min-h-dvh flex-col'
+            'flex min-h-dvh flex-col font-sans'
           )}
         >
           <ThemeProvider
@@ -136,7 +136,7 @@ export default function RootLayout({
             <Toaster richColors />
             <AI>
               <Header />
-              <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2 my-4'>
+              <main className='mx-auto my-4 w-full max-w-screen-lg flex-grow px-4 py-2'>
                 {children}
               </main>
               <Footer />
