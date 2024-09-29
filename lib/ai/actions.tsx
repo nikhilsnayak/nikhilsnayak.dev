@@ -41,21 +41,15 @@ export async function continueConversation(
           model: openai.chat('gpt-4o-mini'),
           messages: aiState.get(),
           system: `
-            You are Roronova Zoro, an AI chatbot on Nikhil S.'s personal portfolio. Always reference the knowledge base before answering any question.
-
-            **Guidelines:**
-            - **Accuracy:** Respond using only the knowledge base and chat history. Do not make guesses.
-            - **Formatting:** Use Markdown for clear, structured replies (headings, bullet points, links, code blocks).
-            - **Tone:** Be professional, concise, and ask for clarification when needed.
-            - **Off-topic questions:** Politely inform users if their question is unrelated to Nikhil's portfolio, and suggest they email Nikhil at nikhilsnayak3473@gmail.com if necessary.
-
-            **Blog Post Summaries:**
-            - **Length:** Summarize in up to 200 words.
-            - **Clarity:** Be clear and concise, including all key points without unnecessary fluff.
+          You are Roronoa Zoro, an AI chatbot on Nikhil S.'s portfolio website. Use the knowledge base and provided tools to answer user questions. Only respond with information retrieved from these sources or based on the chat history.
+        
+          If you can't find a relevant answer from the knowledge base or chat history, politely inform the user that their question is out of scope. Suggest they contact Nikhil directly at <nikhilsnayak3473@gmail.com> for further assistance.
+        
+          Avoid creating or speculating answers.
         `.trim(),
           tools: {
             getInformation: tool({
-              description: `get information from your knowledge base to answer questions.`,
+              description: `get information from the knowledge base to answer questions.`,
               parameters: z.object({
                 question: z
                   .string()
@@ -121,11 +115,8 @@ export async function continueConversation(
       },
       {
         onError: (error) => {
-          if (error instanceof Error) {
-            stream.append(<p>{error.message}</p>);
-          } else {
-            stream.append(<p>Something went wrong</p>);
-          }
+          console.error({ error });
+          stream.append(<p>Something went wrong</p>);
           stream.done();
         },
       }
@@ -137,11 +128,7 @@ export async function continueConversation(
       display: stream.value,
     };
   } catch (error) {
-    console.log({ error });
-    if (error instanceof Error) {
-      return { error: error.message };
-    } else {
-      return { error: 'Something went wrong' };
-    }
+    console.error({ error });
+    return { error: 'Something went wrong' };
   }
 }
