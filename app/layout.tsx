@@ -13,6 +13,7 @@ import { AI } from '~/lib/ai';
 import { BASE_URL } from '~/lib/constants';
 import { cn } from '~/lib/utils';
 import { Toaster } from '~/components/ui/sonner';
+import { CarbonBadge } from '~/components/carbon-badge';
 import { BotLink, NavLink } from '~/components/links';
 import { ThemeToggle } from '~/components/theme-toggle';
 
@@ -63,7 +64,10 @@ function Header() {
             <NavLink href='/blogs'>blogs</NavLink>
           </li>
         </ul>
-        <ul className='flex gap-4'>
+        <ul className='flex items-center gap-4'>
+          <li>
+            <BotLink />
+          </li>
           <li className='hover:opacity-70'>
             <a
               href='https://x.com/_nikhilsnayak_'
@@ -105,8 +109,8 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className='mx-auto flex w-full max-w-screen-lg items-center justify-between border-t p-4'>
-      <BotLink />
+    <footer className='mx-auto flex w-full max-w-screen-lg items-start justify-between border-t p-4'>
+      <CarbonBadge />
       <ThemeToggle />
     </footer>
   );
@@ -124,7 +128,7 @@ export default function RootLayout({
           className={cn(
             GeistSans.variable,
             GeistMono.variable,
-            'font-sans flex min-h-dvh flex-col'
+            'flex min-h-dvh flex-col font-sans'
           )}
         >
           <ThemeProvider
@@ -136,7 +140,7 @@ export default function RootLayout({
             <Toaster richColors />
             <AI>
               <Header />
-              <main className='mx-auto w-full max-w-screen-lg flex-grow px-4 py-2 my-4'>
+              <main className='mx-auto my-4 w-full max-w-screen-lg flex-grow px-4 py-2'>
                 {children}
               </main>
               <Footer />

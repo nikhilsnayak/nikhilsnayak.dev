@@ -16,7 +16,7 @@ export default function StockDisplayDemo() {
     lastUpdated: new Date().toISOString(),
   };
   return (
-    <div className='rounded-lg mx-auto not-prose mt-6 min-w-full'>
+    <div className='not-prose mx-auto mt-6 min-w-full rounded-lg'>
       <StockDisplay {...sampleStockData} />
     </div>
   );

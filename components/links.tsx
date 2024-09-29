@@ -40,7 +40,6 @@ export function BotLink() {
         )}
         priority
       />
-      <span className='px-2'>zoro</span>
     </Link>
   );
 }

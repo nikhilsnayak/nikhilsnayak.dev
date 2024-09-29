@@ -45,7 +45,7 @@ function Tech({
         href={href}
         target='_blank'
         rel='noopener noreferrer'
-        className='font-medium underline ml-1'
+        className='ml-1 font-medium underline'
       >
         {name}
       </a>
@@ -89,7 +89,7 @@ export default function HomePage() {
         <h2 className='mb-4 font-mono text-2xl font-medium tracking-tighter underline'>
           Tech Stack:
         </h2>
-        <ul className='space-y-2 list-disc px-4'>
+        <ul className='list-disc space-y-2 px-4'>
           <li>
             <Tech
               name='Bun'

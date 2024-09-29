@@ -44,11 +44,11 @@ export function StockDisplay({
   };
 
   return (
-    <div className='p-6 border mt-2 rounded-md'>
-      <h2 className='text-xl font-bold mb-2'>
+    <div className='mt-2 rounded-md border p-6'>
+      <h2 className='mb-2 text-xl font-bold'>
         {companyName} ({symbol})
       </h2>
-      <p className='text-sm mb-4'>
+      <p className='mb-4 text-sm'>
         Last Updated: {new Date(lastUpdated).toLocaleString()}
       </p>
 
@@ -88,14 +88,14 @@ export function StockDisplay({
 
       <div className='mt-4'>
         <button
-          className='px-4 py-2 bg-blue-500 text-white rounded'
+          className='rounded bg-blue-500 px-4 py-2 text-white'
           onClick={() => setShowDetails(!showDetails)}
         >
           {showDetails ? 'Hide Financial Metrics' : 'Show Additional Metrics'}
         </button>
 
         {showDetails && (
-          <div className='mt-4 bg-gray-100 dark:bg-gray-800 p-4 rounded text-foreground'>
+          <div className='mt-4 rounded bg-gray-100 p-4 text-foreground dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
             <p>
               Details about financial metrics and other insights would be
@@ -106,17 +106,17 @@ export function StockDisplay({
       </div>
 
       <div className='mt-4'>
-        <h3 className='font-semibold mb-2'>Compare with Another Stock</h3>
-        <div className=' flex flex-col md:flex-row gap-2'>
+        <h3 className='mb-2 font-semibold'>Compare with Another Stock</h3>
+        <div className='flex flex-col gap-2 md:flex-row'>
           <input
             type='text'
             value={compareSymbol}
             onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
             placeholder='Enter stock symbol'
-            className='border px-2 py-1 rounded text-foreground'
+            className='rounded border px-2 py-1 text-foreground'
           />
           <button
-            className='px-4 py-1 bg-green-500 text-white rounded'
+            className='rounded bg-green-500 px-4 py-1 text-white'
             onClick={() => compareStock(compareSymbol)}
           >
             Compare
@@ -124,7 +124,7 @@ export function StockDisplay({
         </div>
 
         {showComparison && (
-          <div className='mt-4 bg-zinc-800 dark:bg-zinc-300 text-primary-foreground p-4 rounded'>
+          <div className='mt-4 rounded bg-zinc-800 p-4 text-primary-foreground dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
               Comparison details between {symbol} and {compareSymbol} would be

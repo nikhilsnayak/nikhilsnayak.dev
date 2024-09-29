@@ -24,7 +24,7 @@ export function HeartButton({ heartsInfo }: { heartsInfo?: HeartsInfo }) {
 
   return (
     <button
-      className='flex items-center gap-1 rounded-full  p-2 text-[red] cursor-pointer bg-red-100 transition-colors hover:bg-red-200'
+      className='flex cursor-pointer items-center gap-1 rounded-full bg-red-100 p-2 text-[red] transition-colors hover:bg-red-200'
       aria-label={`Like. Current likes: ${heartsInfo?.total ?? 0}`}
       disabled={!heartsInfo || fillPercentage === 100}
     >

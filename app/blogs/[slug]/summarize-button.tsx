@@ -51,7 +51,7 @@ export function SummarizeButton({
     <LoadingButton
       isLoading={isPending}
       loadingIndicator={<Spinner />}
-      className='text-green-500 rounded-full'
+      className='rounded-full text-green-500'
       variant={'outline'}
       onClick={handleClick}
     >

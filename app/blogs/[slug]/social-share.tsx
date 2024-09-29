@@ -20,7 +20,7 @@ export function SocialShare({ slug, title }: { slug: string; title: string }) {
       <DropdownMenuTrigger asChild>
         <Button
           variant='ghost'
-          className='size-4 p-0 align-text-bottom ml-2 text-foreground'
+          className='ml-2 size-4 p-0 align-text-bottom text-foreground'
         >
           <ShareIcon />
         </Button>
@@ -28,7 +28,7 @@ export function SocialShare({ slug, title }: { slug: string; title: string }) {
       <DropdownMenuContent side='right'>
         <DropdownMenuItem>
           <CopyToClipBoard
-            className='flex items-center gap-2 w-full'
+            className='flex w-full items-center gap-2'
             content={postLink}
           >
             <Link className='size-3' /> <span>Copy link</span>
@@ -38,7 +38,7 @@ export function SocialShare({ slug, title }: { slug: string; title: string }) {
         <DropdownMenuItem>
           <a
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this blog post: ${title} - ${postLink} by @_nikhilsnayak_`)}`}
-            className='flex items-center gap-2 w-full'
+            className='flex w-full items-center gap-2'
             target='_blank'
             rel='noopener noreferrer'
           >
@@ -48,7 +48,7 @@ export function SocialShare({ slug, title }: { slug: string; title: string }) {
         <DropdownMenuItem>
           <a
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postLink)}`}
-            className='flex items-center gap-2 w-full'
+            className='flex w-full items-center gap-2'
             target='_blank'
             rel='noopener noreferrer'
           >
