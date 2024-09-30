@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
+    "source.fixAll.eslint": "always",
     "source.removeUnusedImports": "always"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",

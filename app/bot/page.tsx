@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { zoro } from '~/assets/images';
 
+import { getSuggestedQuestions } from '~/lib/ai/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 
 import { Chat } from './chat';
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 export const maxDuration = 30;
 
 export default async function BotPage() {
+  const suggestedQuestions = await getSuggestedQuestions();
   return (
     <section className='space-y-6'>
       <header className='flex items-center gap-3'>
@@ -24,7 +26,7 @@ export default async function BotPage() {
           Zoro
         </h1>
       </header>
-      <Chat />
+      <Chat suggestedQuestions={suggestedQuestions} />
     </section>
   );
 }
