@@ -1,6 +1,5 @@
 import React from 'react';
-import { unstable_noStore as noStore } from 'next/cache';
-import { unstable_after as after } from 'next/server';
+import { unstable_after as after, connection } from 'next/server';
 import { eq } from 'drizzle-orm';
 
 import { db } from '~/lib/db';
@@ -17,7 +16,7 @@ export async function PostViewsCount({
   children,
   updateViews = false,
 }: ViewsProps) {
-  noStore();
+  await connection();
   const views = await db.query.views.findFirst({
     where: (views, { eq }) => eq(views.slug, slug),
   });
