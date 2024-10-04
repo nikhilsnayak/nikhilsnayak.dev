@@ -4,7 +4,6 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { generateId } from 'ai';
 import { useActions, useUIState } from 'ai/rsc';
-import { toast } from 'sonner';
 
 import { AI } from '~/lib/ai';
 import { LoadingButton } from '~/components/ui/loading-button';
@@ -33,17 +32,11 @@ export function SummarizeButton({
           display: <UserMessage>{prompt}</UserMessage>,
         },
       ]);
-
       const response = await continueConversation(prompt);
-
-      if ('error' in response) {
-        toast.error(response.error);
-      } else {
-        setConversation((currentConversation) => [
-          ...currentConversation,
-          response,
-        ]);
-      }
+      setConversation((currentConversation) => [
+        ...currentConversation,
+        response,
+      ]);
     });
   };
 

@@ -12,7 +12,8 @@ import { BotMessage } from '~/components/messages';
 
 import { executeAsyncFnWithoutBlocking } from '../utils';
 import { getIPHash } from '../utils/server';
-import { AI, ClientMessage } from './index';
+import { AI } from './index';
+import { ClientMessage } from './types';
 
 const ratelimit = new Ratelimit({
   redis: kv,
@@ -21,33 +22,36 @@ const ratelimit = new Ratelimit({
 
 export async function continueConversation(
   message: string
-): Promise<ClientMessage | { error: string }> {
-  try {
-    const ip = await getIPHash();
+): Promise<ClientMessage> {
+  const stream = createStreamableUI(<BotMessage>Thinking...</BotMessage>);
 
-    const { success } = await ratelimit.limit(ip ?? 'UNKNOWN');
-    if (!success) {
-      return { error: 'You have been Rate Limited' };
-    }
+  const aiState = getMutableAIState<typeof AI>();
 
-    const stream = createStreamableUI(<BotMessage>Thinking...</BotMessage>);
-
-    executeAsyncFnWithoutBlocking(
-      async () => {
-        const aiState = getMutableAIState<typeof AI>();
+  executeAsyncFnWithoutBlocking(
+    async () => {
+      const ip = await getIPHash();
+      const { success } = await ratelimit.limit(ip ?? 'UNKNOWN');
+      if (!success) {
+        stream.update(
+          <p className='text-red-500'>
+            You have been Rate Limited. Try again after sometime
+          </p>
+        );
+        stream.done();
+      } else {
         aiState.update([...aiState.get(), { role: 'user', content: message }]);
-
         const result = await streamText({
           model: openai.chat('gpt-4o-mini'),
           messages: aiState.get(),
           system: `
-          You are **Roronoa Zoro**, an AI chatbot featured on Nikhil S.'s portfolio website. Your role is to assist users by answering questions based strictly on the knowledge base of Nikhil's blog posts and the ongoing chat history.
-
-          - **Respond only** with information retrieved from the sources using provided tools.
-          - If you cannot find a relevant answer, politely inform the user that their question is beyond your scope, and suggest they contact Nikhil at **nikhilsnayak3473@gmail.com** for further assistance.
-          - **Do not create or speculate** on answers outside the provided content.
-          - Always cite the **reference document** used, converting the path to a URL. For example, \`content/llm-and-rsc.mdx\` becomes \`blogs/llm-and-rsc\`
-        `.trim(),
+            You are **Roronoa Zoro**, an AI chatbot featured on Nikhil S.'s portfolio website. Your role is to assist users by answering questions based strictly on the knowledge base of Nikhil's blog posts and the ongoing chat history.
+  
+            - **Respond only** with information retrieved from the sources using provided tools.
+            - If you cannot find a relevant answer, politely inform the user that their question is beyond your scope, and suggest they contact Nikhil at **nikhilsnayak3473@gmail.com** for further assistance.
+            - **Do not create or speculate** on answers outside the provided content.
+            - Always cite the **reference document** used, converting the path to a URL.
+                For example, \`content/llm-and-rsc.mdx\` becomes \`blogs/llm-and-rsc\`
+          `.trim(),
           tools: {
             getInformation: tool({
               description: `get information from the knowledge base to answer questions.`,
@@ -113,23 +117,32 @@ export async function continueConversation(
             ],
           },
         ]);
-      },
-      {
-        onError: (error) => {
-          console.error({ error });
-          stream.append(<p>Something went wrong</p>);
-          stream.done();
-        },
       }
-    );
+    },
+    {
+      onError(error) {
+        console.error({ error });
+        stream.update(<p className='text-red-500'>Something went wrong</p>);
+        stream.done();
+        aiState.done([
+          ...aiState.get(),
+          {
+            role: 'assistant',
+            content: [
+              {
+                type: 'text',
+                text: 'Something went wrong during response generation',
+              },
+            ],
+          },
+        ]);
+      },
+    }
+  );
 
-    return {
-      id: generateId(),
-      role: 'assistant',
-      display: stream.value,
-    };
-  } catch (error) {
-    console.error({ error });
-    return { error: 'Something went wrong' };
-  }
+  return {
+    id: generateId(),
+    role: 'assistant',
+    display: stream.value,
+  };
 }
