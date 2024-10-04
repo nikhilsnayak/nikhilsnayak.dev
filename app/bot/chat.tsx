@@ -1,16 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { startTransition, useEffect, useRef, useState } from 'react';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
 import { BotIcon, CircleUserRound, LucideTrash2 } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { AI } from '~/lib/ai';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { UserMessage } from '~/components/messages';
-import { Spinner } from '~/components/spinner';
 
 export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
   const [input, setInput] = useState<string>('');
@@ -18,7 +16,6 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
   const [messages, setMessages] = useAIState<typeof AI>();
   const { continueConversation } = useActions<typeof AI>();
 
-  const [isPending, startTransition] = useTransition();
   const messagesEndRef = useRef<HTMLLIElement>(null!);
   const scrollAreaRef = useRef<HTMLUListElement>(null!);
 
@@ -42,11 +39,10 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
 
   const handleSubmit = (value: string) => {
     if (!value.trim()) return;
-    const id = generateId();
     setConversation((currentConversation) => [
       ...currentConversation,
       {
-        id,
+        id: generateId(),
         role: 'user',
         display: <UserMessage>{value}</UserMessage>,
       },
@@ -54,14 +50,10 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
 
     startTransition(async () => {
       const response = await continueConversation(value);
-      if ('error' in response) {
-        toast.error(response.error);
-      } else {
-        setConversation((currentConversation) => [
-          ...currentConversation,
-          response,
-        ]);
-      }
+      setConversation((currentConversation) => [
+        ...currentConversation,
+        response,
+      ]);
     });
   };
 
@@ -105,7 +97,6 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
             </li>
           ))
         )}
-        {isPending ? <Spinner variant='ellipsis' /> : null}
         <li ref={messagesEndRef} />
       </ul>
       <form
