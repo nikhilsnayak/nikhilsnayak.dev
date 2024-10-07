@@ -1,0 +1,465 @@
+---
+title: 'The True Nature of useActionState'
+publishedAt: 'TODO'
+summary: 'TODO'
+components: '["TodoBasic", "TodoAsync"]'
+---
+
+## Background
+
+When I first started learning about the `useActionState` hook in React 19, I understood that it dealt with the return value of React Actions. However, what didn't sit well with me about this new hook was that when I passed a function to it, the function's signature changed from taking one parameter to two, with the first being the `prevState`. Additionally, we need to provide an `initialValue` as the second argument to `useActionState`.
+
+Let’s look at an example to better understand this:
+
+```tsx filename="app/page.tsx" lineNumbers
+export default function Page() {
+  const subscribe = async (formData: FormData) => {
+    'use server';
+    const email = formData.get('email')?.toString();
+    if (!email) {
+      return 'Please enter a valid email';
+    }
+    // persist email in database
+    return 'Subscribed successfully';
+  };
+
+  return (
+    <form action={subscribe}>
+      <input type='email' placeholder='Enter your email...' name='email' />
+      <button type='submit'>Subscribe</button>
+    </form>
+  );
+}
+```
+
+The issue with this approach is that the return values from server functions are not accessible. So, `useActionState` was introduced to manage return values from server functions.
+
+Since hooks are client-specific features, we cannot colocate the server function with the form. Instead, we need to define the server function in a separate module.
+
+The refactored version of the above example looks like this:
+
+```tsx filename="app/functions.ts" highlight="3" lineNumbers
+'use server';
+
+export async function subscribe(prevState: string, formData: FormData) => {
+  const email = formData.get('email')?.toString();
+  if (!email) {
+    return 'Please enter a valid email';
+  }
+  // persist email in database
+  return 'Subscribed successfully';
+}
+```
+
+```tsx filename="app/page.tsx" lineNumbers addition="1-5,17,19,20,25" deletion="8-16"
+'use client';
+
+import { useActionState } from 'react';
+
+import { subscribe as subscribeFn } from './functions';
+
+export default function Page() {
+  const subscribe = async (formData: FormData) => {
+    'use server';
+    const email = formData.get('email')?.toString();
+    if (!email) {
+      return 'Please enter a valid email';
+    }
+    // persist email in database
+    return 'Subscribed successfully';
+  };
+  const [message, subscribe] = useActionState(subscribeFn, '');
+  return (
+    <>
+      {message ? <p>{message}</p> : null}
+      <form action={subscribe}>
+        <input type='email' placeholder='Enter your email...' name='email' />
+        <button type='submit'>Subscribe</button>
+      </form>
+    </>
+  );
+}
+```
+
+As you can see, the server function's signature changes from one parameter to two, and we also need to pass an empty string as the second argument to `useActionState`. In this case, the return value is a simple `string`, but if you want to return something more complex, you'll have a harder time satisfying TypeScript. You'll need to do some type gymnastics to make everything work correctly.
+
+> `useActionState` doesn't require you to use a specific framework. The function passed to `useActionState` can be a server function declared with the `'use server'` directive or a normal async function that runs entirely on the client without any server features.
+
+> **Note:** Until September 2024, server functions were referred to as Server Actions. [Link to PR](https://github.com/reactjs/react.dev/pull/7180)
+
+## Something Familiar
+
+Alright, let's kick off this journey by revisiting something we all know. To do that, let’s build something very familiar: a TODO App. Don’t worry, I won’t bore you with yet another TODO app tutorial. Instead, I’ve already built the V0 of our app using something familiar to all of us.
+
+<TodoBasic />
+
+The familiar thing I’m referring to is `useReducer`. Let’s take a look at its signature:
+
+```ts
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+The signature of the reducer function looks like this:
+
+```ts
+function reducer(state: State, action: Action): State {
+  // reduces the state to a new state based on the action and returns it
+  return state;
+}
+```
+
+<CollapsibleContent summary="Complete Source Code of the above Example">
+
+```tsx lineNumbers filename="App.tsx" highlight="11"
+import { FormEvent, useCallback, useReducer } from 'react';
+
+import { AddTodoForm } from './add-todo-form';
+import { TodoItem, TodoList } from './todo-list';
+import { todosReducer } from './todos-reducer';
+import { Todo } from './types';
+
+const initialTodos: Todo[] = [];
+
+function App() {
+  const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+
+  const handleAddTodo = useCallback((e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const title = formData.get('title')!.toString();
+    dispatch({
+      type: 'add',
+      payload: {
+        todo: {
+          title,
+          done: false,
+        },
+      },
+    });
+    form.reset();
+  }, []);
+
+  const handleStatusChange = useCallback((todo: Todo) => {
+    return (done: boolean) => {
+      dispatch({
+        type: 'edit',
+        payload: {
+          id: todo.id,
+          updatedTodo: {
+            ...todo,
+            done,
+          },
+        },
+      });
+    };
+  }, []);
+
+  const handleDelete = useCallback((todo: Todo) => {
+    return () => {
+      dispatch({
+        type: 'delete',
+        payload: {
+          id: todo.id,
+        },
+      });
+    };
+  }, []);
+
+  return (
+    <section>
+      <AddTodoForm onSubmit={handleAddTodo} />
+      <TodoList>
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onStatusChange={handleStatusChange(todo)}
+            onDelete={handleDelete(todo)}
+          />
+        ))}
+      </TodoList>
+    </section>
+  );
+}
+```
+
+```tsx lineNumbers filename="add-todo-form.tsx"
+import { FormEvent } from 'react';
+
+export function AddTodoForm({ onSubmit }: { onSubmit?: (e) => void }) {
+  return (
+    <form onSubmit={onSubmit} className='mb-2 flex gap-2'>
+      <input
+        type='text'
+        name='title'
+        required
+        minLength={3}
+        placeholder='Add a todo'
+        className='flex-1 rounded border px-2 py-1'
+      />
+      <button
+        type='submit'
+        className='min-w-10 shrink-0 rounded bg-blue-500 p-1 text-white'
+      >
+        +
+      </button>
+    </form>
+  );
+}
+```
+
+```tsx lineNumbers filename="todo-list.tsx"
+import { ComponentProps } from 'react';
+
+import { Todo } from './types';
+
+export function TodoList(props: ComponentProps<'ul'>) {
+  return <ul className='max-h-60 space-y-1 overflow-auto p-1' {...props} />;
+}
+
+export function TodoItem({
+  todo,
+  onStatusChange,
+  onDelete,
+}: {
+  todo: Todo;
+  onStatusChange?: (status: boolean) => void;
+  onDelete?: () => void;
+}) {
+  return (
+    <li
+      key={todo.id}
+      className='flex items-center justify-between gap-2 border-b p-1'
+    >
+      <span
+        className={`overflow-hidden overflow-ellipsis ${todo.done ? 'line-through' : ''}`}
+      >
+        {todo.title}
+      </span>
+      <span className='flex shrink-0 items-center gap-1'>
+        <input
+          type='checkbox'
+          checked={todo.done}
+          className='size-5'
+          onChange={(e) => onStatusChange?.(e.target.checked)}
+        />
+        <button
+          className='flex size-5 items-center justify-center rounded bg-red-500 text-white'
+          onClick={onDelete}
+        >
+          -
+        </button>
+      </span>
+    </li>
+  );
+}
+```
+
+```ts lineNumber filename="todos-reducer.ts"
+import { Todo, TodoAction } from './types';
+
+export function todosReducer(state: Todo[], action: TodoAction): Todo[] {
+  switch (action.type) {
+    case 'add':
+      const id = Math.floor(Math.random() * 1000);
+      return [{ id, ...action.payload.todo }, ...state];
+    case 'edit':
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) return action.payload.updatedTodo;
+        return todo;
+      });
+    case 'delete':
+      return state.filter((todo) => todo.id !== action.payload.id);
+    default:
+      return state;
+  }
+}
+```
+
+```ts lineNumber filename="types.ts"
+export interface Todo {
+  id: number;
+  title: string;
+  done: boolean;
+}
+
+export type TodoAction =
+  | { type: 'add'; payload: { todo: Omit<Todo, 'id'> } }
+  | { type: 'edit'; payload: { id: number; updatedTodo: Todo } }
+  | { type: 'delete'; payload: { id: number } };
+```
+
+Honestly, if we ignore the TypeScript parts of the code above, most React developers would have written similar logic using `useReducer` at least 50 times in their careers. `useReducer` is an intuitive API to work with: you dispatch an action with the necessary payload, and the state is updated to its desired form based on the action type. (This is one of the best parts of Redux).
+
+</CollapsibleContent>
+
+Notice something? The signature of `reducer` and `useReducer` may feel familiar. That’s because it looks very similar to the signature of `useActionState` and the server function we discussed in the previous section. Once I made this connection, half of my confusion about `useActionState` was resolved 😅.
+
+But wait, there’s more! With this powerful hook, we can do many amazing things. One use case we've already discussed is accessing the return value of a server function.
+
+Everything is working flawlessly but we have one problem with our app. If you refresh this page all your efforts in adding all those valuable todos are gone because we don't have a permanent data storage currently. So let's fix it.
+
+## The Persistence
+
+> We're now stepping away from using framework implemented features like server functions because, honestly, you don’t need a framework to fully utilize this hook.
+
+Since we want to persist the todos in our backend (which involves calling an API endpoint, an async operation), we can’t use our reducer directly to update the state because reducers can’t be async. The typical approach would be to call the API inside the event handler, wait for the response, and then dispatch the action with the returned value.
+
+However, there’s a problem with this. React doesn’t await your async event handlers. This can lead to all kinds of race conditions and weird bugs, which result in a poor user experience (UX).
+
+### A Naive Approach
+
+One lazy and naïve approach to fix this problem is to disable user interaction while the async operation is in progress. For example, you could prevent the user from marking a todo as done if another todo is in the process of being marked as done. Or maybe you could disable the form to add a new todo while another todo is being added. The gist is that you would block user interaction until the API response is received.
+
+### But We Can Do Better
+
+While the above approach works, it’s not ideal. Disabling the entire app for every async operation leads to a sluggish experience. Instead, we can achieve a smoother, more seamless interaction by adopting a more refined strategy. Here's how we can address these issues more effectively:
+
+- **State synchronization**: Keep track of ongoing async operations, showing visual feedback while the operation is pending, rather than blocking all user interactions.
+- **Optimistic UI updates**: Immediately update the UI to reflect the change, assuming the API call will succeed. If the call fails, you can revert the UI back to its previous state.
+
+The best part is react now has builtin support to do these things natively.
+
+Let’s implement these strategies next!
+
+> I won't be using a real backend for persisting todos. Wrapping `localStorage` in a promise doesn't sit right with me either. That's why I'll be using [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API). It functions like a relational database and is async by nature. For convenience, I’ve wrapped its callback-based API with promises.
+
+## Introducing useAsyncReducer
+
+<Row>
+<Column>
+
+<Image
+  src='/blogs/the-true-nature-of-use-action-state/use-action-state-meme.png'
+  alt='useActionState Meme'
+  width={368}
+  height={492}
+  className='m-0 w-full'
+/>
+
+</Column>
+<Column>
+
+> Note: This is just a meme and this behavior of `useActionState` as `useAsyncReducer` isn't officially documented anywhere. But from my experience working with it, `useActionState` operates similarly to `useReducer`, with the key difference being that the reducer is async and comes with some additional superpowers, which we’ll discuss.
+
+</Column>
+</Row>
+
+Let's update our example so that the todos are persisted and see `useAsyncReducer` aka `useActionState` do the magic for us.
+
+```tsx lineNumbers filename="App.tsx" addition="2,5,11-15,19,26,36,42,53,59,66" deletion="1,10,18"
+import { FormEvent, useCallback, useReducer } from 'react';
+import { FormEvent, useActionState, useCallback } from 'react';
+
+import { AddTodoForm } from './add-todo-form';
+import { getTodos } from './db/queries';
+import { TodoItem, TodoList } from './todo-list';
+import { todosReducer } from './todos-reducer';
+import { Todo } from './types';
+
+const initialTodos: Todo[] = [];
+/*
+ Using top level await for simplicity.
+ Recommended to use framework provided data fetching mechanism or RSC to get the Initial Data
+*/
+const initialTodos = await getTodos();
+
+function App() {
+  const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+  const [todos, dispatch] = useActionState(todosReducer, initialTodos);
+
+  const handleAddTodo = useCallback((e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const title = formData.get('title')!.toString();
+    startTransition(() => {
+      dispatch({
+        type: 'add',
+        payload: {
+          todo: {
+            title,
+            done: false,
+          },
+        },
+      });
+    });
+    form.reset();
+  }, []);
+
+  const handleStatusChange = useCallback((todo: Todo) => {
+    return (done: boolean) => {
+      startTransition(() => {
+        dispatch({
+          type: 'edit',
+          payload: {
+            id: todo.id,
+            updatedTodo: {
+              ...todo,
+              done,
+            },
+          },
+        });
+      });
+    };
+  }, []);
+
+  const handleDelete = useCallback((todo: Todo) => {
+    return () => {
+      startTransition(() => {
+        dispatch({
+          type: 'delete',
+          payload: {
+            id: todo.id,
+          },
+        });
+      });
+    };
+  }, []);
+
+  return (
+    <section>
+      <AddTodoForm onSubmit={handleAddTodo} />
+      <TodoList>
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onStatusChange={handleStatusChange(todo)}
+            onDelete={handleDelete(todo)}
+          />
+        ))}
+      </TodoList>
+    </section>
+  );
+}
+```
+
+```ts lineNumber filename="todos-reducer.ts" addition="1,5-8" deletion="4"
+import { createTodo, deleteTodo, updateTodo } from './db/mutations';
+import { Todo, TodoAction } from './types';
+
+export function todosReducer(state: Todo[], action: TodoAction): Todo[] {}
+export async function todosReducerAsync(
+  state: Todo[],
+  action: TodoAction
+): Promise<Todo[]> {
+  switch (action.type) {
+    case 'add':
+      const id = Math.floor(Math.random() * 1000);
+      return [{ id, ...action.payload.todo }, ...state];
+    case 'edit':
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) return action.payload.updatedTodo;
+        return todo;
+      });
+    case 'delete':
+      return state.filter((todo) => todo.id !== action.payload.id);
+    default:
+      return state;
+  }
+}
+```
+
+<TodoAsync />

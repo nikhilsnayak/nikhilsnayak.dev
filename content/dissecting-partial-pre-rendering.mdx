@@ -113,7 +113,7 @@ import Image from 'next/image';
 export default function Home() {
   return (
     <div className='flex min-h-[100dvh] flex-col'>
-      <section className='w-full bg-muted py-12 md:py-24 lg:py-32'>
+      <section className='bg-muted w-full py-12 md:py-24 lg:py-32'>
         <div className='container m-auto px-4 md:px-6'>
           <div className='grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]'>
             <div className='flex flex-col justify-center space-y-4'>
@@ -121,7 +121,7 @@ export default function Home() {
                 <h1 className='text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none'>
                   Mastering React: A Comprehensive Course
                 </h1>
-                <p className='max-w-[600px] text-muted-foreground md:text-xl'>
+                <p className='text-muted-foreground max-w-[600px] md:text-xl'>
                   Dive deep into the world of React and become a proficient
                   frontend developer. This course covers everything from
                   fundamental concepts to advanced techniques.
@@ -148,7 +148,7 @@ export default function Home() {
               <h2 className='text-3xl font-bold tracking-tighter'>
                 Course Curriculum
               </h2>
-              <div className='mt-6 space-y-4 text-muted-foreground'>
+              <div className='text-muted-foreground mt-6 space-y-4'>
                 <div>
                   <h3 className='text-xl font-bold'>Introduction to React</h3>
                   <p>
@@ -178,7 +178,7 @@ export default function Home() {
               <h2 className='text-3xl font-bold tracking-tighter'>
                 About the Instructor
               </h2>
-              <div className='mt-6 space-y-4 text-muted-foreground'>
+              <div className='text-muted-foreground mt-6 space-y-4'>
                 <div className='flex items-center gap-4'>
                   <div className='flex h-16 w-16 items-center justify-center rounded-full border'>
                     <Image
@@ -308,7 +308,7 @@ So How do we achieve this?
 
 Simple updated your `next.config.js` file to have the experimental ppr turned on (Make sure you are on either next@canary or next@rc)
 
-```js highlightLines="3,4,5" filename="next.config.js" lineNumbers
+```js addition="3,4,5" filename="next.config.js" lineNumbers
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
