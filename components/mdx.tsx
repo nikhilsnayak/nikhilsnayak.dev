@@ -75,13 +75,22 @@ function RoundedImage({
 
 interface CodeProps {
   children: string;
-  highlightedLineNumbers?: LineNumbers;
+  highlightedLines?: LineNumbers;
+  addedLines?: LineNumbers;
+  removedLines?: LineNumbers;
 }
 
-function Code({ children, highlightedLineNumbers }: Readonly<CodeProps>) {
+function Code({
+  children,
+  highlightedLines,
+  addedLines,
+  removedLines,
+}: Readonly<CodeProps>) {
   const codeLines = highlight(children, {
     modifiers: {
-      highlightedLines: highlightedLineNumbers,
+      highlightedLines,
+      addedLines,
+      removedLines,
     },
   });
 
@@ -92,13 +101,16 @@ interface PreProps {
   children: ReactElement<CodeProps, 'code'>;
   filename?: string;
   lineNumbers?: boolean;
-  highlightLines?: string;
+  highlight?: string;
+  addition?: string;
+  deletion?: string;
 }
 
 function Pre(props: Readonly<PreProps>) {
-  const { children, filename, lineNumbers, highlightLines } = props;
+  const { children, filename, lineNumbers, highlight, addition, deletion } =
+    props;
 
-  const getHighlightedLineNumbers = () => {
+  const getLineNumbers = (rawString?: string) => {
     const rangeArray = (numbers: number[]) => {
       if (numbers.length === 1) {
         return [numbers[0]];
@@ -111,16 +123,16 @@ function Pre(props: Readonly<PreProps>) {
       return result;
     };
 
-    const highlightedLineNumbers = highlightLines
+    const lineNumbers = rawString
       ?.trim()
       ?.split(',')
       ?.flatMap((range) =>
         rangeArray(range.split('-').map((line) => Number(line)))
       );
 
-    if (!highlightedLineNumbers || highlightedLineNumbers.length === 0) return;
+    if (!lineNumbers || lineNumbers.length === 0) return;
 
-    return highlightedLineNumbers as LineNumbers;
+    return lineNumbers as LineNumbers;
   };
 
   return (
@@ -134,7 +146,9 @@ function Pre(props: Readonly<PreProps>) {
         </h6>
       ) : null}
       {cloneElement(children, {
-        highlightedLineNumbers: getHighlightedLineNumbers(),
+        highlightedLines: getLineNumbers(highlight),
+        addedLines: getLineNumbers(addition),
+        removedLines: getLineNumbers(deletion),
       })}
     </pre>
   );
@@ -201,6 +215,14 @@ function CollapsibleContent({ summary, children }: CollapsibleContentProps) {
   );
 }
 
+function Row({ children }: PropsWithChildren) {
+  return <div className='grid gap-4 sm:grid-cols-2'>{children}</div>;
+}
+
+function Column({ children }: PropsWithChildren) {
+  return <div className='grid place-items-center'>{children}</div>;
+}
+
 const components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -218,6 +240,8 @@ const components = {
   Snippet,
   Preview,
   CollapsibleContent,
+  Row,
+  Column,
 };
 
 export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {

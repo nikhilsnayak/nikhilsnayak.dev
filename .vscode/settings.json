@@ -7,7 +7,8 @@
   "editor.formatOnSave": true,
   "workbench.editor.customLabels.patterns": {
     "**/app/**/page.tsx": "${dirname} - page.tsx",
-    "**/app/**/layout.tsx": "${dirname} - layout.tsx"
+    "**/app/**/layout.tsx": "${dirname} - layout.tsx",
+    "**/app/**/route.ts": "${dirname} - route.ts"
   },
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
