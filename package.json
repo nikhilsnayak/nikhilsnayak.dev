@@ -67,7 +67,7 @@
     "@types/node": "^20.16.5",
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc",
-    "@vercel/blob": "^0.24.0",
+    "@vercel/blob": "^0.25.0",
     "autoprefixer": "^10.0.1",
     "babel-plugin-react-compiler": "^0.0.0-experimental-b12479e-20240926",
     "drizzle-kit": "^0.25.0",
