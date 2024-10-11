@@ -210,7 +210,7 @@ function CollapsibleContent({ summary, children }: CollapsibleContentProps) {
   return (
     <details className='my-4'>
       <summary className='cursor-pointer'>{summary}</summary>
-      <div>{children}</div>
+      <div className='mt-2'>{children}</div>
     </details>
   );
 }

@@ -1,9 +1,9 @@
 'use client';
 
-import { FormEvent, useCallback, useReducer } from 'react';
+import { FormEvent, useReducer } from 'react';
 
-import { AddTodoForm } from './add-todo-form';
-import { TodoItem, TodoList } from './todo-list';
+import { List } from './list';
+import { AddTodoForm, TodoItem } from './todo';
 import { todosReducer } from './todos-reducer';
 import { Todo } from './types';
 
@@ -12,62 +12,45 @@ const initialTodos: Todo[] = [];
 export default function TodoBasic() {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos);
 
-  const handleAddTodo = useCallback((e: FormEvent<HTMLFormElement>) => {
+  const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
     const title = formData.get('title')!.toString();
-    dispatch({
-      type: 'add',
-      payload: {
-        todo: {
-          title,
-          done: false,
-        },
-      },
-    });
+    const id = crypto.randomUUID();
+    const todo = { id, title, done: false };
+    dispatch({ type: 'add', payload: { todo } });
     form.reset();
-  }, []);
+  };
 
-  const handleStatusChange = useCallback((todo: Todo) => {
+  const getHandleStatusChange = (todo: Todo) => {
     return (done: boolean) => {
-      dispatch({
-        type: 'edit',
-        payload: {
-          id: todo.id,
-          updatedTodo: {
-            ...todo,
-            done,
-          },
-        },
-      });
+      const payload = { id: todo.id, updatedTodo: { ...todo, done } };
+      dispatch({ type: 'edit', payload });
     };
-  }, []);
+  };
 
-  const handleDelete = useCallback((todo: Todo) => {
+  const getHandleDelete = (todo: Todo) => {
     return () => {
-      dispatch({
-        type: 'delete',
-        payload: {
-          id: todo.id,
-        },
-      });
+      const payload = { id: todo.id };
+      dispatch({ type: 'delete', payload });
     };
-  }, []);
+  };
 
   return (
     <section className='not-prose'>
       <AddTodoForm onSubmit={handleAddTodo} />
-      <TodoList>
-        {todos.map((todo) => (
+      <List items={todos}>
+        {(todo) => (
           <TodoItem
-            key={todo.id}
-            todo={todo}
-            onStatusChange={handleStatusChange(todo)}
-            onDelete={handleDelete(todo)}
-          />
-        ))}
-      </TodoList>
+            done={todo.done}
+            onStatusChange={getHandleStatusChange(todo)}
+            onDelete={getHandleDelete(todo)}
+          >
+            {todo.title}
+          </TodoItem>
+        )}
+      </List>
     </section>
   );
 }

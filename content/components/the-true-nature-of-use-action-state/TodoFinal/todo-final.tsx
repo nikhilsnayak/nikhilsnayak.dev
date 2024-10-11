@@ -1,17 +1,26 @@
 'use client';
 
-import { FormEvent, startTransition, useActionState } from 'react';
+import {
+  FormEvent,
+  startTransition,
+  useActionState,
+  useOptimistic,
+} from 'react';
 
 import { getTodos } from '../db/queries';
 import { List } from '../list';
 import { AddTodoForm, TodoItem } from '../todo';
-import { todosReducerAsync } from '../todos-reducer';
+import { todosReducerFinal } from '../todos-reducer';
 import { Todo } from '../types';
 
 const initialTodos = await getTodos();
 
-export default function TodoAsync() {
-  const [todos, dispatch] = useActionState(todosReducerAsync, initialTodos);
+export default function TodoFinal() {
+  const [todos, dispatch, isPending] = useActionState(
+    todosReducerFinal,
+    initialTodos
+  );
+  const [optimisticTodos, setOptimisticTodos] = useOptimistic(todos);
 
   const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,6 +30,7 @@ export default function TodoAsync() {
     const id = crypto.randomUUID();
     const todo = { id, title, done: false };
     startTransition(() => {
+      setOptimisticTodos((prev) => [todo, ...prev]);
       dispatch({ type: 'add', payload: { todo } });
     });
     form.reset();
@@ -30,6 +40,9 @@ export default function TodoAsync() {
     return (done: boolean) => {
       const payload = { id: todo.id, updatedTodo: { ...todo, done } };
       startTransition(() => {
+        setOptimisticTodos((prev) =>
+          prev.map((item) => (item.id === todo.id ? { ...item, done } : item))
+        );
         dispatch({ type: 'edit', payload });
       });
     };
@@ -39,15 +52,19 @@ export default function TodoAsync() {
     return () => {
       const payload = { id: todo.id };
       startTransition(() => {
+        setOptimisticTodos((prev) =>
+          prev.filter((item) => item.id !== todo.id)
+        );
         dispatch({ type: 'delete', payload });
       });
     };
   };
 
   return (
-    <section className='not-prose space-y-4'>
+    <section className='not-prose mt-8 space-y-4'>
+      <p className={isPending ? 'visible' : 'invisible'}>Updates in progress</p>
       <AddTodoForm onSubmit={handleAddTodo} />
-      <List items={todos}>
+      <List items={optimisticTodos}>
         {(todo) => (
           <TodoItem
             done={todo.done}

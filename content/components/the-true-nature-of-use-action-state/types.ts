@@ -1,11 +1,10 @@
 export interface Todo {
-  id: number;
+  id: string;
   title: string;
   done: boolean;
 }
 
 export type TodoAction =
-  | { type: 'add'; payload: { todo: Omit<Todo, 'id'> } }
-  | { type: 'edit'; payload: { id: number; updatedTodo: Todo } }
-  | { type: 'delete'; payload: { id: number } }
-  | { type: 'set'; payload: Todo[] };
+  | { type: 'add'; payload: { todo: Todo } }
+  | { type: 'edit'; payload: { id: string; updatedTodo: Todo } }
+  | { type: 'delete'; payload: { id: string } };

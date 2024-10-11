@@ -1,7 +1,7 @@
 import { getDBConnection } from '.';
 import { Todo } from '../types';
 
-export async function createTodo(todo: Omit<Todo, 'id'>): Promise<Todo> {
+export async function createTodo(todo: Todo): Promise<Todo> {
   const db = await getDBConnection();
 
   return new Promise((resolve, reject) => {
@@ -10,16 +10,13 @@ export async function createTodo(todo: Omit<Todo, 'id'>): Promise<Todo> {
     const request = store.add(todo);
 
     request.onsuccess = () =>
-      resolve({ ...todo, id: request.result as number });
+      resolve({ ...todo, id: request.result as string });
     request.onerror = () => reject('Failed to create todo');
   });
 }
 
 // Update an existing todo by ID
-export async function updateTodo(
-  id: number,
-  updatedTodo: Omit<Todo, 'id'>
-): Promise<Todo> {
+export async function updateTodo(id: string, updatedTodo: Todo): Promise<Todo> {
   const db = await getDBConnection();
 
   return new Promise((resolve, reject) => {
@@ -33,7 +30,7 @@ export async function updateTodo(
 }
 
 // Delete a todo by ID
-export async function deleteTodo(id: number): Promise<number> {
+export async function deleteTodo(id: string): Promise<string> {
   const db = await getDBConnection();
 
   return new Promise((resolve, reject) => {

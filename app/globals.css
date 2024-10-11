@@ -135,26 +135,26 @@ article.prose pre code .css__line {
   @apply inline-block w-full px-4;
 }
 
-article.prose pre code .css__line[data-highlighted-line] {
-  background-color: #d4d4d4;
+article.prose pre code .css__line[data-removed-line] {
+  background-color: #ff000020;
 }
 
 article.prose pre code .css__line[data-added-line] {
   background-color: #00ff0020;
 }
 
-article.prose pre code .css__line[data-removed-line] {
-  background-color: #ff000020;
+article.prose pre code .css__line[data-highlighted-line] {
+  background-color: #0000ff20;
 }
 
-.dark article.prose pre code .css__line[data-highlighted-line] {
-  background-color: #171717;
+.dark article.prose pre code .css__line[data-removed-line] {
+  background-color: #ff000010;
 }
 
 .dark article.prose pre code .css__line[data-added-line] {
   background-color: #00ff0010;
 }
 
-.dark article.prose pre code .css__line[data-removed-line] {
-  background-color: #ff000010;
+.dark article.prose pre code .css__line[data-highlighted-line] {
+  background-color: #0000ff20;
 }

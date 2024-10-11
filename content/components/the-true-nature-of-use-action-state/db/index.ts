@@ -12,7 +12,7 @@ export const getDBConnection = (function () {
       request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
         const db = (event.target as IDBOpenDBRequest).result;
         if (!db.objectStoreNames.contains('todos')) {
-          db.createObjectStore('todos', { keyPath: 'id', autoIncrement: true });
+          db.createObjectStore('todos', { keyPath: 'id' });
         }
       };
 
