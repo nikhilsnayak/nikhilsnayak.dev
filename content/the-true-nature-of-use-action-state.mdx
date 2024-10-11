@@ -496,6 +496,30 @@ export async function todosReducer(state: Todo[], action: TodoAction) {
 }
 ```
 
+Let's review what has changed compared to previous implementation:
+
+1. We are now accessing `isPending` from `useActionState` and using it to display a message (line 61) when there are ongoing updates. This informs the user that updates are happening in the background, enhancing the user experience by providing immediate visual feedback.
+
+2. We introduced the `useOptimistic` hook, which works similarly to `useState`. This hook takes a state value (in this case, the todos returned by `useActionState`) and allows us to optimistically update it.
+
+   When using `useOptimistic`, we can update the state immediately before calling `dispatch`, giving the user instant feedback. It's important to note that these optimistic updates must be done inside the _Action Context_ for the hook to function properly.
+
+   Once all transitions complete, the state from `useActionState` will synchronize with the optimistic state, ensuring any failed updates are automatically reverted, providing a seamless user experience.
+
+3. We wrapped the reducer logic in a `try-catch` block to handle potential errors gracefully. If an error occurs, a toast message displays the error details, and the state reverts to its previous value. This ensures that users receive feedback when an error occurs without disrupting the app’s functionality.
+
 <Controls />
 
 <TodoFinal />
+
+Explore the final version of our TODO App and experience the combined power of `useActionState` and `useOptimistic` for a smooth and responsive user experience.
+
+### Closing Remarks
+
+In this post, we transformed a simple in-memory TODO app into a persistent and robust version, offering a much-improved user experience. We covered handling async operations, applying optimistic updates, and managing errors effectively.
+
+While I believe we've addressed most of the important cases, I still feel there's always room for improvement. One of my favorite quotes captures this idea perfectly:
+
+> "Just because something works, it doesn’t mean it cannot be improved."
+
+If you spot any potential enhancements, I’d love to hear about them! Thank you so much for your time, and until next post keep improving! 😊
