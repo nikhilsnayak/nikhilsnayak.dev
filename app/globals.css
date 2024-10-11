@@ -24,7 +24,9 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
+
     --fluorescent: #2feeee;
+
     --css-class: #e67c73;
     --css-identifier: #2c3e50;
     --css-sign: #7f8c8d;
@@ -34,6 +36,10 @@
     --css-jsxliterals: #8e44ad;
     --css-property: #c0392b;
     --css-entity: #e67e22;
+
+    --highlighted-line: #0000ff20;
+    --added-line: #00ff0020;
+    --removed-line: #ff000020;
   }
 
   .dark {
@@ -56,6 +62,7 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+
     --css-class: #9b59b6;
     --css-identifier: #ecf0f1;
     --css-keyword: #e74c3c;
@@ -65,6 +72,10 @@
     --css-jsxliterals: #3498db;
     --css-property: #e67e22;
     --css-entity: #f39c12;
+
+    --highlighted-line: #0000ff10;
+    --added-line: #00ff0010;
+    --removed-line: #ff000010;
   }
 }
 
@@ -135,26 +146,14 @@ article.prose pre code .css__line {
   @apply inline-block w-full px-4;
 }
 
-article.prose pre code .css__line[data-removed-line] {
-  background-color: #ff000020;
+article.prose pre code .css__line[data-highlighted-line] {
+  background-color: var(--highlighted-line);
 }
 
 article.prose pre code .css__line[data-added-line] {
-  background-color: #00ff0020;
+  background-color: var(--added-line);
 }
 
-article.prose pre code .css__line[data-highlighted-line] {
-  background-color: #0000ff20;
-}
-
-.dark article.prose pre code .css__line[data-removed-line] {
-  background-color: #ff000010;
-}
-
-.dark article.prose pre code .css__line[data-added-line] {
-  background-color: #00ff0010;
-}
-
-.dark article.prose pre code .css__line[data-highlighted-line] {
-  background-color: #0000ff20;
+article.prose pre code .css__line[data-removed-line] {
+  background-color: var(--removed-line);
 }
