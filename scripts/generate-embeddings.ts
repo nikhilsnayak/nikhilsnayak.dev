@@ -12,9 +12,18 @@ const CONTENT_DIR = path.join(process.cwd(), 'content');
 
 const db = drizzle(sql);
 
-const loader = new DirectoryLoader(CONTENT_DIR, {
-  '.mdx': (path) => new TextLoader(path),
-});
+function getLoader() {
+  const slug = process.argv.at(2);
+  if (slug) {
+    return new TextLoader(path.join(CONTENT_DIR, `${slug}.mdx`));
+  }
+
+  return new DirectoryLoader(CONTENT_DIR, {
+    '.mdx': (path) => new TextLoader(path),
+  });
+}
+
+const loader = getLoader();
 
 const content = await loader.load();
 

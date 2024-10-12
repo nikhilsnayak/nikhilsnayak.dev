@@ -2,26 +2,29 @@ import { put } from '@vercel/blob';
 import { config } from 'dotenv';
 import OpenAI from 'openai';
 
-import { getBlogPosts } from '~/lib/utils/server';
+import { getBlogPost } from '~/lib/utils/server';
 
 config({
   path: '.env.local',
 });
 
-const posts = getBlogPosts();
+const slug = process.argv.at(2);
+
+if (!slug) process.exit(1);
+
+const post = getBlogPost(slug);
 
 const openai = new OpenAI();
 
-for (let post of posts) {
-  const speechFile = `${post.slug}.mp3`;
+const speechFile = `${slug}.mp3`;
 
-  const trucatedContent = await openai.chat.completions
-    .create({
-      model: 'gpt-4o-mini-2024-07-18',
-      messages: [
-        {
-          role: 'system',
-          content: `
+const truncatedContent = await openai.chat.completions
+  .create({
+    model: 'gpt-4o-mini-2024-07-18',
+    messages: [
+      {
+        role: 'system',
+        content: `
             You are an expert content editor for audio presentations. Please perform the following tasks on the provided content:
             1. Remove all code blocks, technical jargon, and inline code.
             2. Remove any URLs, links, images, or references to websites.
@@ -32,26 +35,25 @@ for (let post of posts) {
 
             Content: ${post.content}
             `,
-        },
-      ],
-    })
-    .then((res) => res.choices[0].message.content);
+      },
+    ],
+  })
+  .then((res) => res.choices[0].message.content);
 
-  if (!trucatedContent) continue;
+if (!truncatedContent) process.exit(1);
 
-  const mp3 = await openai.audio.speech.create({
-    model: 'tts-1-hd',
-    voice: 'alloy',
-    input: trucatedContent,
-  });
+const mp3 = await openai.audio.speech.create({
+  model: 'tts-1-hd',
+  voice: 'alloy',
+  input: truncatedContent,
+});
 
-  console.log(speechFile);
-  const buffer = Buffer.from(await mp3.arrayBuffer());
-  const blob = await put(speechFile, buffer, {
-    multipart: true,
-    access: 'public',
-    addRandomSuffix: false,
-  });
+console.log(speechFile);
+const buffer = Buffer.from(await mp3.arrayBuffer());
+const blob = await put(speechFile, buffer, {
+  multipart: true,
+  access: 'public',
+  addRandomSuffix: false,
+});
 
-  console.log({ blob });
-}
+console.log({ blob });

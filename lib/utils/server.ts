@@ -1,5 +1,3 @@
-import 'server-only';
-
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
@@ -56,6 +54,10 @@ function getMDXData(dir: string) {
 
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'content'));
+}
+
+export function getBlogPost(slug: string) {
+  return readMDXFile(path.join(process.cwd(), 'content', `${slug}.mdx`));
 }
 
 export async function getIPHash() {
