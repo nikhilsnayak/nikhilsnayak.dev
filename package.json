@@ -43,7 +43,7 @@
     "drizzle-zod": "^0.5.1",
     "framer-motion": "12.0.0-alpha.1",
     "geist": "^1.3.0",
-    "lucide-react": "^0.451.0",
+    "lucide-react": "^0.452.0",
     "next": "15.0.0-canary.183",
     "next-auth": "5.0.0-beta.22",
     "next-mdx-remote": "^5.0.0",
