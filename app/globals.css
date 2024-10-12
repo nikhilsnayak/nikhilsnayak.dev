@@ -37,9 +37,9 @@
     --css-property: #c0392b;
     --css-entity: #e67e22;
 
-    --highlighted-line: #0000ff20;
-    --added-line: #00ff0020;
-    --removed-line: #ff000020;
+    --highlighted-line: 0, 0, 200;
+    --added-line: 0, 200, 0;
+    --removed-line: 200, 0, 0;
   }
 
   .dark {
@@ -72,10 +72,6 @@
     --css-jsxliterals: #3498db;
     --css-property: #e67e22;
     --css-entity: #f39c12;
-
-    --highlighted-line: #0000ff10;
-    --added-line: #00ff0010;
-    --removed-line: #ff000010;
   }
 }
 
@@ -143,17 +139,20 @@ article.prose pre code {
 }
 
 article.prose pre code .css__line {
-  @apply inline-block w-full px-4;
+  @apply inline-block w-full border-l-4 border-transparent px-4;
 }
 
 article.prose pre code .css__line[data-highlighted-line] {
-  background-color: var(--highlighted-line);
+  background-color: rgba(var(--highlighted-line), 0.1);
+  border-color: rgba(var(--highlighted-line), 0.5);
 }
 
 article.prose pre code .css__line[data-added-line] {
-  background-color: var(--added-line);
+  background-color: rgba(var(--added-line), 0.1);
+  border-color: rgba(var(--added-line), 0.5);
 }
 
 article.prose pre code .css__line[data-removed-line] {
-  background-color: var(--removed-line);
+  background-color: rgba(var(--removed-line), 0.1);
+  border-color: rgba(var(--removed-line), 0.5);
 }

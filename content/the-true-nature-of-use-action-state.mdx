@@ -1,7 +1,7 @@
 ---
 title: 'The True Nature of useActionState'
-publishedAt: 'TODO'
-summary: 'Transforming user experience through seamless state management and optimistic updates in modern web applications'
+publishedAt: '2024-10-12'
+summary: 'Unlocking powerful async control and state synchronization for smooth UI transitions'
 components: '["TodoBasic", "TodoAsync", "TodoFinal", "Controls"]'
 ---
 
@@ -193,13 +193,11 @@ function reducer(state: State, action: Action): State {
 
 Notice something? The signatures of the `reducer` and `useReducer` may feel familiar because they closely resemble the signatures of `useActionState` and the server function we discussed earlier. Once I made this connection, half of my confusion about `useActionState` was resolved 😅.
 
-Everything works perfectly in the above example, but there’s one issue. If you refresh the page, all the todos you’ve added disappear because we currently don’t have permanent data storage. So, let’s fix that next.
+Okay, coming back to our TODO App everything works perfectly, but there’s one issue. If you refresh the page, all the todos you’ve added disappear because we currently don’t have permanent data storage. So, let’s fix that next.
 
 ## The Persistence
 
-> We're now stepping away from using framework-implemented features like server functions because, honestly, you don’t need a framework to fully utilize the potential of this hook.
-
-Since we want to persist the todos in our backend (which involves calling an API endpoint, an async operation), we can’t use our reducer directly to update the state because reducers can’t be async. The typical approach would be to call the API inside the event handler, wait for the response, and then dispatch the action with respect to the API response.
+Since we want to persist the todos in our backend (which involves calling an API endpoint, an async operation), we can’t use our reducer directly to call the API's because reducers can’t be async. The typical approach would be to call the API inside the event handler, wait for the response, and then dispatch the action with respect to the API response.
 
 However, there’s a problem with this approach. React doesn’t await your async event handlers. This can lead to all kinds of race conditions and weird bugs, which result in a poor user experience.
 
@@ -209,12 +207,12 @@ One lazy and naïve approach to fix this problem is to disable user interaction 
 
 ### We Can Do Better
 
-While the above approach works, it’s not ideal. Disabling the entire app for every async operation leads to a sluggish experience. Instead, we can achieve a smoother, more seamless interaction by adopting a more refined strategy. Here's how we can address these issues more effectively:
+While the above approach works, it’s not ideal. Blocking user interactions for every async operation leads to a sluggish experience. Instead, we can achieve a smoother, more seamless interaction by adopting a more refined strategy. Here's how we can address these issues more effectively:
 
-- **State synchronization**: Keep track of ongoing async operations, showing visual feedback while the operation is pending, rather than blocking all user interactions.
+- **State Synchronization**: Keep track of ongoing async operations, showing visual feedback while the operation is pending, rather than blocking all user interactions.
 - **Optimistic UI updates**: Immediately update the UI to reflect the change, assuming the API call will succeed. If the call fails, you can revert the UI back to its previous state.
 
-The best part is React now has built-in support to do these things natively.
+The best part is React now has built-in support to do these things natively using `useActionState`.
 
 Let's update our example so that the todos are persisted and see `useActionState` do the magic for us.
 
@@ -352,7 +350,7 @@ Use the controls below to simulate these conditions and observe how the app beha
 
 <Controls />
 
-When we apply some delay, you'll notice the lagging experience—it significantly hampers user experience (UX) since we don’t receive instant feedback that something is happening. Additionally, if the error control is activated, the app will crash because we’re not currently handling errors effectively.
+When we apply some delay, you'll notice the lagging experience—it significantly hampers user experience (UX) since we don’t receive instant feedback that something is happening. Additionally, if the error control is activated, the app will crash because we’re not currently handling errors.
 
 Let’s address these issues next.
 
@@ -506,7 +504,7 @@ Let's review what has changed compared to previous implementation:
 
    Once all transitions complete, the state from `useActionState` will synchronize with the optimistic state, ensuring any failed updates are automatically reverted, providing a seamless user experience.
 
-3. We wrapped the reducer logic in a `try-catch` block to handle potential errors gracefully. If an error occurs, a toast message displays the error details, and the state reverts to its previous value. This ensures that users receive feedback when an error occurs without disrupting the app’s functionality.
+3. We wrapped the reducer logic in a `try-catch` block to handle potential errors gracefully. If an error occurs, a toast message displays the error details, and simply return the previous state. This ensures that users receive feedback when an error occurs without disrupting the app’s functionality.
 
 <Controls />
 
@@ -516,10 +514,12 @@ Explore the final version of our TODO App and experience the combined power of `
 
 ### Closing Remarks
 
-In this post, we transformed a simple in-memory TODO app into a persistent and robust version, offering a much-improved user experience. We covered handling async operations, applying optimistic updates, and managing errors effectively.
+In this post, we transformed a simple in-memory TODO app into a robust and persistent version, significantly enhancing the user experience. We explored handling async operations, applying optimistic updates, and managing errors effectively using the `useActionState` and `useOptimistic` hooks.
 
-While I believe we've addressed most of the important cases, I still feel there's always room for improvement. One of my favorite quotes captures this idea perfectly:
+While we’ve covered the most critical aspects, there’s always room for improvement. One of my favorite quotes reflects this perfectly:
 
-> Just because something works, it doesn’t mean it cannot be improved.
+> "Just because something works, it doesn’t mean it cannot be improved."
 
-If you spot any potential enhancements, I’d love to hear about them! Thank you so much for your time, and until next post keep improving! 😊
+If you notice any areas for enhancement, I’d love to hear your thoughts! Thank you for your time, and until the next post—keep improving! 😊
+
+> Oh, and by the way, the comments section below is built using the techniques we’ve covered. Feel free to experiment with it too! 😅

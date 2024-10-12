@@ -62,7 +62,9 @@ export default function TodoFinal() {
 
   return (
     <section className='not-prose mt-8 space-y-4'>
-      <p className={isPending ? 'visible' : 'invisible'}>Updates in progress</p>
+      <p className={isPending ? 'visible' : 'invisible'}>
+        Updates in progress...
+      </p>
       <AddTodoForm onSubmit={handleAddTodo} />
       <List items={optimisticTodos}>
         {(todo) => (
