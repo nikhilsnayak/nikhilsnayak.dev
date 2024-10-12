@@ -6,13 +6,12 @@ import { Eye, LogOut } from 'lucide-react';
 import { MDXRemoteProps } from 'next-mdx-remote/rsc';
 
 import { auth, signIn, signOut } from '~/lib/auth';
-import { BASE_URL, BLOB_STORAGE_URL } from '~/lib/constants';
+import { BASE_URL } from '~/lib/constants';
 import { db } from '~/lib/db';
 import { formatDate } from '~/lib/utils';
 import { getBlogPosts, getIPHash } from '~/lib/utils/server';
 import { Form, FormSubmit } from '~/components/ui/form';
 import { Skeleton } from '~/components/ui/skeleton';
-import { AudioPlayer } from '~/components/audio-player';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { CustomMDX } from '~/components/mdx';
 import { PostViewsCount } from '~/components/post-views';
@@ -243,7 +242,7 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className='mb-8'>
+      {/* <div className='mb-8'>
         <h2 className='mb-4'>
           {"Don't have enough time? Listen the audio version!!!"}
         </h2>
@@ -251,7 +250,7 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
           src={`${BLOB_STORAGE_URL}/${post.slug}.mp3`}
           title={post.metadata.title}
         />
-      </div>
+      </div> */}
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} components={components} />
       </article>
