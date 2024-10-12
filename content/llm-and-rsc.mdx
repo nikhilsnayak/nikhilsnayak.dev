@@ -304,7 +304,7 @@ export default function GenUI() {
   const [messages, setMessages] = useState([] as Message[]);
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const query = formData.get('query')?.toString()?.trim();
@@ -384,7 +384,7 @@ async function StockCard({ symbol }: { symbol: string }) {
   return <StockDisplay {...stockDetails} />;
 }
 
-export async function continueConversation(query: string): Promise<Message> {
+export async function continueConversation(query: string) {
   const completion = await askAI(query);
 
   // Check if the response includes a function call

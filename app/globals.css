@@ -24,7 +24,9 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
+
     --fluorescent: #2feeee;
+
     --css-class: #e67c73;
     --css-identifier: #2c3e50;
     --css-sign: #7f8c8d;
@@ -34,6 +36,10 @@
     --css-jsxliterals: #8e44ad;
     --css-property: #c0392b;
     --css-entity: #e67e22;
+
+    --highlighted-line: 0, 0, 200;
+    --added-line: 0, 200, 0;
+    --removed-line: 200, 0, 0;
   }
 
   .dark {
@@ -56,6 +62,7 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+
     --css-class: #9b59b6;
     --css-identifier: #ecf0f1;
     --css-keyword: #e74c3c;
@@ -132,13 +139,20 @@ article.prose pre code {
 }
 
 article.prose pre code .css__line {
-  @apply inline-block w-full px-4;
+  @apply inline-block w-full border-l-4 border-transparent px-4;
 }
 
 article.prose pre code .css__line[data-highlighted-line] {
-  background-color: #d4d4d4;
+  background-color: rgba(var(--highlighted-line), 0.1);
+  border-color: rgba(var(--highlighted-line), 0.5);
 }
 
-.dark article.prose pre code .css__line[data-highlighted-line] {
-  background-color: #171717;
+article.prose pre code .css__line[data-added-line] {
+  background-color: rgba(var(--added-line), 0.1);
+  border-color: rgba(var(--added-line), 0.5);
+}
+
+article.prose pre code .css__line[data-removed-line] {
+  background-color: rgba(var(--removed-line), 0.1);
+  border-color: rgba(var(--removed-line), 0.5);
 }

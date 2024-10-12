@@ -1,0 +1,525 @@
+---
+title: 'The True Nature of useActionState'
+publishedAt: '2024-10-12'
+summary: 'Unlocking powerful async control and state synchronization for smooth UI transitions'
+components: '["TodoBasic", "TodoAsync", "TodoFinal", "Controls"]'
+---
+
+## Background
+
+When I first started learning about the `useActionState` hook in React 19, I understood that it dealt with the return value of React Actions. However, what didn't sit well with me about this new hook was that when I passed a function to it, the function's signature changed from taking one parameter to two, with the first being the `prevState`. Additionally, we need to provide an `initialValue` as the second argument to `useActionState`.
+
+Let’s look at an example to better understand this:
+
+```tsx filename="app/page.tsx" lineNumbers
+export default function Page() {
+  const subscribe = async (formData: FormData) => {
+    'use server';
+    const email = formData.get('email')?.toString();
+    if (!email) {
+      return 'Please enter a valid email';
+    }
+    // persist email in database
+    return 'Subscribed successfully';
+  };
+
+  return (
+    <form action={subscribe}>
+      <input type='email' placeholder='Enter your email...' name='email' />
+      <button type='submit'>Subscribe</button>
+    </form>
+  );
+}
+```
+
+The issue with this approach is that the return values from server functions are not accessible. So, `useActionState` was introduced to manage return values from server functions.
+
+Since hooks are client-specific features, we cannot colocate the server function with the form. Instead, we need to define the server function in a separate module.
+
+The refactored version of the above example looks like this:
+
+```tsx filename="app/functions.ts" highlight="3" lineNumbers
+'use server';
+
+export async function subscribe(prevState: string, formData: FormData) => {
+  const email = formData.get('email')?.toString();
+  if (!email) {
+    return 'Please enter a valid email';
+  }
+  // persist email in database
+  return 'Subscribed successfully';
+}
+```
+
+```tsx filename="app/page.tsx" lineNumbers addition="1-5,17,19,20,25" deletion="8-16"
+'use client';
+
+import { useActionState } from 'react';
+
+import { subscribe as subscribeFn } from './functions';
+
+export default function Page() {
+  const subscribe = async (formData: FormData) => {
+    'use server';
+    const email = formData.get('email')?.toString();
+    if (!email) {
+      return 'Please enter a valid email';
+    }
+    // persist email in database
+    return 'Subscribed successfully';
+  };
+  const [message, subscribe] = useActionState(subscribeFn, '');
+  return (
+    <>
+      {message ? <p>{message}</p> : null}
+      <form action={subscribe}>
+        <input type='email' placeholder='Enter your email...' name='email' />
+        <button type='submit'>Subscribe</button>
+      </form>
+    </>
+  );
+}
+```
+
+As you can see, the server function's signature changes from one parameter to two, and we also need to pass an empty string as the second argument to `useActionState`. In this case, the return value is a simple `string`, but if you want to return something more complex, you'll have a harder time satisfying TypeScript. You'll need to do some type gymnastics to make everything work correctly.
+
+> `useActionState` doesn't require you to use a specific framework. The function passed to `useActionState` can be a server function declared with the `'use server'` directive or a normal async function that runs entirely on the client without any server features.
+
+> **Note:** Until September 2024, server functions were referred to as Server Actions. [Link to PR](https://github.com/reactjs/react.dev/pull/7180)
+
+## Something Familiar
+
+Alright, let's kick off this journey by revisiting something familiar to all of us: a **TODO App**. Don’t worry, I’m not going to bore you with yet another typical tutorial. Instead, I’ve already built V0 of our app using a concept we’re all _familiar_ with.
+
+<TodoBasic />
+
+Here’s the important piece of code for our TODO app:
+
+```tsx lineNumbers filename="App.tsx" highlight="11"
+import { FormEvent, useReducer } from 'react';
+
+import { List } from './list';
+import { AddTodoForm, TodoItem } from './todo';
+import { todosReducer } from './todos-reducer';
+import { Todo } from './types';
+
+const initialTodos: Todo[] = [];
+
+function App() {
+  const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+
+  const handleAddTodo = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const title = formData.get('title')!.toString();
+    const id = crypto.randomUUID();
+    const todo = { id, title, done: false };
+    dispatch({ type: 'add', payload: { todo } });
+    form.reset();
+  };
+
+  const getHandleStatusChange = (todo: Todo) => {
+    return (done: boolean) => {
+      const payload = { id: todo.id, updatedTodo: { ...todo, done } };
+      dispatch({ type: 'edit', payload });
+    };
+  };
+
+  const getHandleDelete = (todo: Todo) => {
+    return () => {
+      const payload = { id: todo.id };
+      dispatch({ type: 'delete', payload });
+    };
+  };
+
+  return (
+    <section>
+      <AddTodoForm onSubmit={handleAddTodo} />
+      <List items={todos}>
+        {(todo) => (
+          <TodoItem
+            done={todo.done}
+            onStatusChange={getHandleStatusChange(todo)}
+            onDelete={getHandleDelete(todo)}
+          >
+            {todo.title}
+          </TodoItem>
+        )}
+      </List>
+    </section>
+  );
+}
+```
+
+And here’s the reducer:
+
+```ts lineNumbers filename="todos-reducer.ts"
+import { Todo, TodoAction } from './types';
+
+export function todosReducer(state: Todo[], action: TodoAction) {
+  switch (action.type) {
+    case 'add':
+      return [action.payload.todo, ...state];
+    case 'edit':
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return action.payload.updatedTodo;
+        }
+        return todo;
+      });
+    case 'delete':
+      return state.filter((todo) => todo.id !== action.payload.id);
+    default:
+      throw new Error('Invalid action type');
+  }
+}
+```
+
+The familiar concept I’m referring to is `useReducer`. Let’s take a look at its signature:
+
+```ts
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+The reducer function itself looks like this:
+
+```ts
+function reducer(state: State, action: Action): State {
+  // Reduces the state based on the action and returns a new state
+  return state;
+}
+```
+
+Notice something? The signatures of the `reducer` and `useReducer` may feel familiar because they closely resemble the signatures of `useActionState` and the server function we discussed earlier. Once I made this connection, half of my confusion about `useActionState` was resolved 😅.
+
+Okay, coming back to our TODO App everything works perfectly, but there’s one issue. If you refresh the page, all the todos you’ve added disappear because we currently don’t have permanent data storage. So, let’s fix that next.
+
+## The Persistence
+
+Since we want to persist the todos in our backend (which involves calling an API endpoint, an async operation), we can’t use our reducer directly to call the API's because reducers can’t be async. The typical approach would be to call the API inside the event handler, wait for the response, and then dispatch the action with respect to the API response.
+
+However, there’s a problem with this approach. React doesn’t await your async event handlers. This can lead to all kinds of race conditions and weird bugs, which result in a poor user experience.
+
+### A Naive Approach
+
+One lazy and naïve approach to fix this problem is to disable user interaction while the async operation is in progress. For example, you could prevent the user from marking a todo as done if another todo is in the process of being marked as done. Or maybe you could disable the form to add a new todo while another todo is being added. The gist is that you would block user interaction until the API response is received.
+
+### We Can Do Better
+
+While the above approach works, it’s not ideal. Blocking user interactions for every async operation leads to a sluggish experience. Instead, we can achieve a smoother, more seamless interaction by adopting a more refined strategy. Here's how we can address these issues more effectively:
+
+- **State Synchronization**: Keep track of ongoing async operations, showing visual feedback while the operation is pending, rather than blocking all user interactions.
+- **Optimistic UI updates**: Immediately update the UI to reflect the change, assuming the API call will succeed. If the call fails, you can revert the UI back to its previous state.
+
+The best part is React now has built-in support to do these things natively using `useActionState`.
+
+Let's update our example so that the todos are persisted and see `useActionState` do the magic for us.
+
+> I won't be using a real backend for persisting todos. Wrapping `localStorage` in a promise doesn't sit right with me either. That's why I'll be using [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API). It functions like a relational database and is async by nature. For convenience, I’ve wrapped its callback-based API with promises.
+
+```tsx lineNumbers filename="App.tsx" addition="2,4,11-15,19,28,30,37,39,46,48" deletion="1,10,18"
+import { FormEvent, useReducer } from 'react';
+import { FormEvent, startTransition, useActionState } from 'react';
+
+import { getTodos } from './db/queries';
+import { List } from './list';
+import { AddTodoForm, TodoItem } from './todo';
+import { todosReducer } from './todos-reducer';
+import { Todo } from './types';
+
+const initialTodos: Todo[] = [];
+/*
+ Using top level await for simplicity.
+ Recommended to use framework provided data fetching mechanism or RSC to get the Initial Data
+*/
+const initialTodos = await getTodos();
+
+function App() {
+  const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+  const [todos, dispatch] = useActionState(todosReducer, initialTodos);
+
+  const handleAddTodo = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const title = formData.get('title')!.toString();
+    const id = crypto.randomUUID();
+    const todo = { id, title, done: false };
+    startTransition(() => {
+      dispatch({ type: 'add', payload: { todo } });
+    });
+    form.reset();
+  };
+
+  const getHandleStatusChange = (todo: Todo) => {
+    return (done: boolean) => {
+      const payload = { id: todo.id, updatedTodo: { ...todo, done } };
+      startTransition(() => {
+        dispatch({ type: 'edit', payload });
+      });
+    };
+  };
+
+  const getHandleDelete = (todo: Todo) => {
+    return () => {
+      const payload = { id: todo.id };
+      startTransition(() => {
+        dispatch({ type: 'delete', payload });
+      });
+    };
+  };
+
+  return (
+    <section>
+      <AddTodoForm onSubmit={handleAddTodo} />
+      <List items={todos}>
+        {(todo) => (
+          <TodoItem
+            done={todo.done}
+            onStatusChange={getHandleStatusChange(todo)}
+            onDelete={getHandleDelete(todo)}
+          >
+            {todo.title}
+          </TodoItem>
+        )}
+      </List>
+    </section>
+  );
+}
+```
+
+```ts lineNumbers filename="todos-reducer.ts" addition="1,5,9,10,12-15,19,24,26" deletion="4,8,9,18,25"
+import { createTodo, deleteTodo, updateTodo } from './db/mutations';
+import { Todo, TodoAction } from './types';
+
+export function todosReducer(state: Todo[], action: TodoAction) {
+export async function todosReducer(state: Todo[], action: TodoAction) {
+  switch (action.type) {
+    case 'add':
+      return [action.payload.todo, ...state];
+      const newTodo = await createTodo(action.payload.todo);
+      return [newTodo, ...state];
+    case 'edit':
+      const updatedTodo = await updateTodo(
+        action.payload.id,
+        action.payload.updatedTodo
+      );
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return action.payload.updatedTodo;
+          return updatedTodo
+        };
+        return todo;
+      });
+    case 'delete':
+      const deletedId = await deleteTodo(action.payload.id);
+      return state.filter((todo) => todo.id !== action.payload.id);
+      return state.filter((todo) => todo.id !== deletedId);
+    default:
+      throw new Error('Invalid action type');
+  }
+}
+```
+
+Let's go over the diff and understand what has changed:
+
+1. Instead of initializing `initialTodos` with an empty array, we are now fetching the todos that are persisted in our "db" using the `getTodos` function. Here, I am using top-level `await` for simplicity, but you should typically use the framework-provided data-fetching mechanism to get the initial data.
+
+2. We have swapped `useReducer` with `useActionState`, and the reducer function is now **async**, utilizing helper functions like `createTodo`, `deleteTodo`, and `updateTodo` to perform the respective actions.
+
+   With these changes, everything should work fine. But if you check the console, React will yell at you with the following error message:
+
+   > An async function was passed to useActionState, but it was dispatched outside of an action context. This is likely not what you intended. Either pass the dispatch function to an `action` prop, or dispatch manually inside `startTransition`.
+
+   From the error message, we understand that calling our `dispatch` function directly isn’t allowed. The correct approach is to call the `dispatch` function inside an **Action Context**, which is essentially a **Transition**. If we pass the `dispatch` function to the `action` prop of the `form` component or the `formAction` prop of the `input` component provided by React, an action context will be automatically created for us.
+
+   The argument for our `dispatch` function is of type `TodoAction`. However, if we pass the `dispatch` function to the `action` or `formAction` prop, the argument will be of type `FormData` (automatically provided by React). Since we need to pass our own custom argument to the `dispatch` function, we use `startTransition` to manually create an Action Context. This is why all the `dispatch` calls are wrapped inside `startTransition` in the updated example.
+
+With these very little changes, persistence is achieved!
+
+<TodoAsync />
+
+Add some Todos, play around with them, and refresh the page.
+
+Your Todos state is persisted! 🎉.
+
+If there were a real backend involved in our implementation, the behavior would be quite different. APIs might fail to respond, return error responses, and take a considerable amount of time to complete the network round trip.
+
+Use the controls below to simulate these conditions and observe how the app behaves.
+
+<Controls />
+
+When we apply some delay, you'll notice the lagging experience—it significantly hampers user experience (UX) since we don’t receive instant feedback that something is happening. Additionally, if the error control is activated, the app will crash because we’re not currently handling errors.
+
+Let’s address these issues next.
+
+### The Super Powers of useActionState
+
+1. **Pending State**:  
+   If there's any action executing, we need to inform the user that something is happening in the background. You might be tempted to add another state variable to track this. Luckily, we don't have to go through that mess because `useActionState` does the job for us.
+
+   It provides a third value in its return, typically called `isPending`, which is `true` when there are ongoing transitions. It automatically switches back to `false` once all transitions within that particular _Action Context_ are complete. (Ahh!! this feels soo good TBH 😌)
+
+2. **State Synchronization**:  
+   Imagine there are three todos, and the delay is set to 2 seconds. If you attempt to mark all three todos as done, you'll notice that they all get marked at the same time, even though you clicked them sequentially. This happens because `useActionState` waits for all transitions to settle before updating the state, preventing intermediate flashes of unwanted content.
+
+   Additionally, since the reducer is asynchronous, you might expect all actions to be processed concurrently (finishing in about 2 seconds). However, it actually takes around 6 seconds—2 seconds for each action. `useActionState` processes actions sequentially, maintaining the exact order in which they were invoked. This ensures the `prevState` parameter is predictable and consistent.
+
+   While this sequential processing might seem like a footgun, it’s intentional. The goal is to make sure the state updates correctly based on `prevState`. If you’re not using `prevState` properly, it’s a sign that `useActionState` might not be suitable for your use case. Although this approach ensures accuracy, it can cause a delay in updates. We can address this using Optimistic Updates.
+
+3. **Optimistic State**:  
+   Instead of waiting for the server response, we can optimistically assume the user action will succeed and provide immediate feedback. If the async operation eventually succeeds, everything remains as is. If it fails, we revert to the previous state.  
+   To implement this, we use the `useOptimistic` hook, which integrates seamlessly with `useActionState` to manage optimistic updates effectively.
+
+With these concepts in mind, let's update our TODO example to implement these techniques for a more responsive and seamless user experience.
+
+```tsx lineNumbers filename="App.tsx" addition="2,18,19,29,39-41,51-53,61,64" deletion="1,17,63"
+import { FormEvent, startTransition, useActionState } from 'react';
+import { FormEvent, startTransition, useActionState, useOptimistic } from 'react';
+
+import { getTodos } from './db/queries';
+import { List } from './list';
+import { AddTodoForm, TodoItem } from './todo';
+import { todosReducer } from './todos-reducer';
+import { Todo } from './types';
+
+/*
+ Using top level await for simplicity.
+ Recommended to use framework provided data fetching mechanism or RSC to get the Initial Data
+*/
+const initialTodos = await getTodos();
+
+function App() {
+  const [todos, dispatch] = useActionState(todosReducer, initialTodos);
+  const [todos, dispatch, isPending] = useActionState(todosReducer, initialTodos);
+  const [optimisticTodos, setOptimisticTodos] = useOptimistic(todos);
+
+  const handleAddTodo = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const title = formData.get('title')!.toString();
+    const id = crypto.randomUUID();
+    const todo = { id, title, done: false };
+    startTransition(() => {
+      setOptimisticTodos((prev) => [todo, ...prev]);
+      dispatch({ type: 'add', payload: { todo } });
+    });
+    form.reset();
+  };
+
+  const getHandleStatusChange = (todo: Todo) => {
+    return (done: boolean) => {
+      const payload = { id: todo.id, updatedTodo: { ...todo, done } };
+      startTransition(() => {
+        setOptimisticTodos((prev) =>
+          prev.map((item) => (item.id === todo.id ? { ...item, done } : item))
+        );
+        dispatch({ type: 'edit', payload });
+      });
+    };
+  };
+
+  const getHandleDelete = (todo: Todo) => {
+    return () => {
+      const payload = { id: todo.id };
+      startTransition(() => {
+        setOptimisticTodos((prev) =>
+          prev.filter((item) => item.id !== todo.id)
+        );
+        dispatch({ type: 'delete', payload });
+      });
+    };
+  };
+
+  return (
+    <section>
+      <p className={isPending ? 'visible' : 'invisible'}>Updates in progress...</p>
+      <AddTodoForm onSubmit={handleAddTodo} />
+      <List items={todos}>
+      <List items={optimisticTodos}>
+        {(todo) => (
+          <TodoItem
+            done={todo.done}
+            onStatusChange={getHandleStatusChange(todo)}
+            onDelete={getHandleDelete(todo)}
+          >
+            {todo.title}
+          </TodoItem>
+        )}
+      </List>
+    </section>
+  );
+}
+```
+
+```ts lineNumbers filename="todos-reducer.ts" addition="1,7,29-36"
+import { toast } from 'your-toast-lib';
+
+import { createTodo, deleteTodo, updateTodo } from './db/mutations';
+import { Todo, TodoAction } from './types';
+
+export async function todosReducer(state: Todo[], action: TodoAction) {
+  try {
+    switch (action.type) {
+      case 'add':
+        const newTodo = await createTodo(action.payload.todo);
+        return [newTodo, ...state];
+      case 'edit':
+        const updatedTodo = await updateTodo(
+          action.payload.id,
+          action.payload.updatedTodo
+        );
+        return state.map((todo) => {
+          if (todo.id === action.payload.id) {
+            return updatedTodo;
+          }
+          return todo;
+        });
+      case 'delete':
+        const deletedId = await deleteTodo(action.payload.id);
+        return state.filter((todo) => todo.id !== deletedId);
+      default:
+        throw new Error('Invalid action type');
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+    } else {
+      toast.error('Something went wrong');
+    }
+    return state;
+  }
+}
+```
+
+Let's review what has changed compared to previous implementation:
+
+1. We are now accessing `isPending` from `useActionState` and using it to display a message (line 61) when there are ongoing updates. This informs the user that updates are happening in the background, enhancing the user experience by providing immediate visual feedback.
+
+2. We introduced the `useOptimistic` hook, which works similarly to `useState`. This hook takes a state value (in this case, the todos returned by `useActionState`) and allows us to optimistically update it.
+
+   When using `useOptimistic`, we can update the state immediately before calling `dispatch`, giving the user instant feedback. It's important to note that these optimistic updates must be done inside the _Action Context_ for the hook to function properly.
+
+   Once all transitions complete, the state from `useActionState` will synchronize with the optimistic state, ensuring any failed updates are automatically reverted, providing a seamless user experience.
+
+3. We wrapped the reducer logic in a `try-catch` block to handle potential errors gracefully. If an error occurs, a toast message displays the error details, and simply return the previous state. This ensures that users receive feedback when an error occurs without disrupting the app’s functionality.
+
+<Controls />
+
+<TodoFinal />
+
+Explore the final version of our TODO App and experience the combined power of `useActionState` and `useOptimistic` for a smooth and responsive user experience.
+
+### Closing Remarks
+
+In this post, we transformed a simple in-memory TODO app into a robust and persistent version, significantly enhancing the user experience. We explored handling async operations, applying optimistic updates, and managing errors effectively using the `useActionState` and `useOptimistic` hooks.
+
+While we’ve covered the most critical aspects, there’s always room for improvement. One of my favorite quotes reflects this perfectly:
+
+> "Just because something works, it doesn’t mean it cannot be improved."
+
+If you notice any areas for enhancement, I’d love to hear your thoughts! Thank you for your time, and until the next post—keep improving! 😊
+
+> Oh, and by the way, the comments section below is built using the techniques we’ve covered. Feel free to experiment with it too! 😅
