@@ -3,12 +3,36 @@
 import { startTransition, useEffect, useRef, useState } from 'react';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
-import { BotIcon, CircleUserRound, LucideTrash2 } from 'lucide-react';
+import {
+  BotIcon,
+  CircleUserRound,
+  LucideTrash2,
+  RefreshCw,
+} from 'lucide-react';
+import { useFormStatus } from 'react-dom';
 
 import { AI } from '~/lib/ai';
+import { cn } from '~/lib/utils';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { UserMessage } from '~/components/messages';
+
+import { refreshQuestions } from './functions';
+
+function RefreshButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      variant={'ghost'}
+      size={'icon'}
+      disabled={pending}
+      className={cn(pending && 'animate-spin')}
+    >
+      <RefreshCw />
+    </Button>
+  );
+}
 
 export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
   const [input, setInput] = useState<string>('');
@@ -65,7 +89,12 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
       >
         {conversation.length === 0 ? (
           <li className='text-center text-gray-500'>
-            <p className='mb-4'>No messages yet. Try asking a question!</p>
+            <div className='mb-3 flex items-center justify-center gap-3'>
+              <p>No messages yet. Try asking a question!</p>
+              <form action={refreshQuestions}>
+                <RefreshButton />
+              </form>
+            </div>
             <div className='grid gap-2 md:grid-cols-2'>
               {suggestedQuestions.map((question, index) => (
                 <Button
