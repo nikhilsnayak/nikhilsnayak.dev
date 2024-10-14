@@ -116,8 +116,8 @@ async function LatestCommit() {
       rel='noopener noreferrer'
       className='block tracking-tighter underline dark:text-fluorescent'
     >
-      Latest commit: {latestCommit.message} by {latestCommit.author} on{' '}
-      {latestCommit.date}
+      Latest commit: {latestCommit.message.split('\n')[0]} by{' '}
+      {latestCommit.author} on {latestCommit.date}
     </a>
   );
 }
