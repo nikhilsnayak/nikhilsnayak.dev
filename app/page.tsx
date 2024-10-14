@@ -190,7 +190,12 @@ export default function HomePage() {
                     <span>{formatDate(post.metadata.publishedAt)}</span>
                     <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
                   </p>
-                  <h2 className='font-mono text-xl font-semibold'>
+                  <h2
+                    className='font-mono text-xl font-semibold'
+                    style={{
+                      viewTransitionName: post.slug,
+                    }}
+                  >
                     {post.metadata.title}
                   </h2>
                 </div>

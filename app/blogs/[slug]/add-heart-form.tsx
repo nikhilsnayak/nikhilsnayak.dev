@@ -2,7 +2,7 @@
 
 import { useActionState, useOptimistic } from 'react';
 
-import { addHeart } from './actions';
+import { addHeart } from './functions';
 import { HeartButton } from './heart-button';
 import { HeartsInfo } from './types';
 

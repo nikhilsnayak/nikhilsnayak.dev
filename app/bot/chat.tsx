@@ -5,6 +5,7 @@ import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
 import {
   BotIcon,
+  CircleAlert,
   CircleUserRound,
   LucideTrash2,
   RefreshCw,
@@ -27,7 +28,7 @@ function RefreshButton() {
       variant={'ghost'}
       size={'icon'}
       disabled={pending}
-      className={cn(pending && 'animate-spin')}
+      className={cn(pending && 'animate-spin', 'rounded-full')}
     >
       <RefreshCw />
     </Button>
@@ -85,7 +86,7 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
     <section className='h-[65dvh] space-y-4'>
       <ul
         ref={scrollAreaRef}
-        className='no-scrollbar h-[85%] space-y-4 overflow-y-auto rounded border p-4'
+        className='no-scrollbar h-[80%] space-y-4 overflow-y-auto rounded border p-4'
       >
         {conversation.length === 0 ? (
           <li className='text-center text-gray-500'>
@@ -93,6 +94,7 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
               <p>No messages yet. Try asking a question!</p>
               <form action={refreshQuestions}>
                 <RefreshButton />
+                <span className='sr-only'>refresh questions</span>
               </form>
             </div>
             <div className='grid gap-2 md:grid-cols-2'>
@@ -164,6 +166,11 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
           <span className='sr-only'>clear chat</span>
         </Button>
       </form>
+      <p className='text-center text-yellow-600'>
+        <CircleAlert className='mr-2 inline-block size-4 align-text-bottom' />
+        Zoro has a poor sense of direction and can get lost sometimes. Please
+        verify the sources.
+      </p>
     </section>
   );
 }

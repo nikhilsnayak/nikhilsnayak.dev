@@ -49,6 +49,7 @@
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.2",
+    "octokit": "^4.0.2",
     "openai": "^4.65.0",
     "react": "^19.0.0-rc-70fb1363-20241010",
     "react-dom": "^19.0.0-rc-70fb1363-20241010",
