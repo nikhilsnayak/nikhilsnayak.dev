@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { db } from '../db';
 import { documents } from '../db/schema';
 
-async function INTERNAL_getSuggestedQuestions() {
+async function INTERNAL__getSuggestedQuestions() {
   const randomDocs = await db
     .select()
     .from(documents)
@@ -29,7 +29,7 @@ async function INTERNAL_getSuggestedQuestions() {
 }
 
 export const getSuggestedQuestions = unstable_cache(
-  INTERNAL_getSuggestedQuestions,
+  INTERNAL__getSuggestedQuestions,
   ['getSuggestedQuestions'],
   {
     revalidate: 24 * 60 * 60,

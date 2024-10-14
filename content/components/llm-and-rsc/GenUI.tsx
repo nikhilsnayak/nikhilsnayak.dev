@@ -2,7 +2,7 @@
 
 import { useState, useTransition, type FormEvent, type ReactNode } from 'react';
 
-import { continueConversation } from './actions';
+import { continueConversation } from './functions';
 
 export interface Message {
   id: string;

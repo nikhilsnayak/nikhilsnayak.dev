@@ -1,6 +1,6 @@
 import { createAI } from 'ai/rsc';
 
-import { continueConversation } from './actions';
+import { continueConversation } from './functions';
 import { AIState, UIState } from './types';
 
 export const AI = createAI({

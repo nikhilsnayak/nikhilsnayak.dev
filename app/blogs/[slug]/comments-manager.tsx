@@ -36,7 +36,7 @@ import {
 import { Textarea } from '~/components/ui/textarea';
 import { Spinner } from '~/components/spinner';
 
-import { addComment, deleteComment, editComment } from './actions';
+import { addComment, deleteComment, editComment } from './functions';
 import { CommentWithUser } from './types';
 
 type FormAction = (formData: FormData) => void;

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Rss } from 'lucide-react';
 import { Link } from 'next-view-transitions';
 
 import { formatDate } from '~/lib/utils';
@@ -22,9 +22,20 @@ export default function BlogsPage() {
 
   return (
     <section>
-      <h1 className='mb-6 font-mono text-2xl font-medium tracking-tighter'>
-        My Blogs
-      </h1>
+      <div className='mb-6 flex items-center justify-between'>
+        <h1 className='font-mono text-2xl font-medium tracking-tighter'>
+          My Blogs
+        </h1>
+        <a
+          href='/rss.xml'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='hover:opacity-70'
+        >
+          <Rss />
+        </a>
+      </div>
+
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
         {allBlogs.map((post) => (
           <Link
@@ -37,7 +48,12 @@ export default function BlogsPage() {
                 <span>{formatDate(post.metadata.publishedAt)}</span>
                 <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
               </p>
-              <h2 className='font-mono text-lg font-semibold'>
+              <h2
+                className='font-mono text-lg font-semibold'
+                style={{
+                  viewTransitionName: post.slug,
+                }}
+              >
                 {post.metadata.title}
               </h2>
               <p className='text-sm'>{post.metadata.summary}</p>

@@ -220,7 +220,12 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
           }),
         }}
       />
-      <h1 className='title font-mono text-2xl font-semibold tracking-tighter'>
+      <h1
+        className='font-mono text-2xl font-semibold tracking-tighter'
+        style={{
+          viewTransitionName: post.slug,
+        }}
+      >
         {post.metadata.title}
       </h1>
       <div className='mb-8 mt-4 flex flex-col justify-between gap-3 text-sm sm:flex-row sm:items-center'>
@@ -255,7 +260,7 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
         <CustomMDX source={post.content} components={components} />
       </article>
       <div className='mt-8 space-y-4'>
-        <p className='text-amber-600 dark:text-amber-400'>
+        <p className='dark:text-fluorescent'>
           If you enjoyed this blog, share it on social media to help others find
           it too
           <SocialShare title={post.metadata.title} slug={post.slug} />
