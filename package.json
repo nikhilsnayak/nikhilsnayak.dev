@@ -72,7 +72,7 @@
     "@vercel/blob": "^0.25.1",
     "autoprefixer": "^10.0.1",
     "babel-plugin-react-compiler": "^0.0.0-experimental-fa06e2c-20241014",
-    "drizzle-kit": "^0.25.0",
+    "drizzle-kit": "^0.26.0",
     "eslint": "^9.12.0",
     "eslint-config-next": "15.0.0-canary.191",
     "eslint-config-prettier": "^9.1.0",
