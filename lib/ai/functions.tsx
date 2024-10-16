@@ -7,13 +7,13 @@ import { generateId, streamText, tool } from 'ai';
 import { createStreamableUI, getMutableAIState } from 'ai/rsc';
 import { z } from 'zod';
 
-import { findRelevantContent } from '~/lib/ai/embedding';
 import { BotMessage } from '~/components/messages';
 
 import { executeAsyncFnWithoutBlocking } from '../utils';
 import { getIPHash } from '../utils/server';
 import { AI } from './index';
 import { ClientMessage } from './types';
+import { findRelevantContent } from './utils';
 
 const ratelimit = new Ratelimit({
   redis: kv,

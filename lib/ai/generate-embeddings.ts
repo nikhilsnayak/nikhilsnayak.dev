@@ -1,19 +1,15 @@
 import path from 'path';
-import { sql } from '@vercel/postgres';
-import { drizzle } from 'drizzle-orm/vercel-postgres';
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
 import { TextLoader } from 'langchain/document_loaders/fs/text';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
-import { generateEmbeddings } from '~/lib/ai/embedding';
-import { documents as documentsTable } from '~/lib/db/schema';
-
-const CONTENT_DIR = path.join(process.cwd(), 'content');
-
-const db = drizzle(sql);
+import { db } from '../db';
+import { documents as documentsTable } from '../db/schema';
+import { generateEmbeddings } from './utils';
 
 function getLoader() {
   const slug = process.argv.at(2);
+  const CONTENT_DIR = path.join(process.cwd(), 'content');
   if (slug) {
     return new TextLoader(path.join(CONTENT_DIR, `${slug}.mdx`));
   }
