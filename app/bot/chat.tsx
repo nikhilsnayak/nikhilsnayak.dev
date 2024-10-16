@@ -83,7 +83,7 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
   };
 
   return (
-    <section className='h-[75dvh] space-y-4'>
+    <section className='h-[75vh] space-y-4'>
       <ul
         ref={scrollAreaRef}
         className='no-scrollbar h-[85%] space-y-4 overflow-y-auto rounded border p-4'
