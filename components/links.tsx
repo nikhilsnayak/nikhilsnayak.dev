@@ -62,7 +62,7 @@ export function SourceLink() {
   return (
     <a
       href={href}
-      className='block tracking-tighter underline dark:text-fluorescent'
+      className='block text-xs tracking-tighter underline dark:text-fluorescent'
       target='_blank'
       rel='noopener noreferrer'
       aria-label='source code'

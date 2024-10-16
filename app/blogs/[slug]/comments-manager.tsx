@@ -303,7 +303,7 @@ function CommentsList() {
   );
 }
 
-export function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
+function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
   const { addCommentFormAction } = useCommentsManager();
   const formRef = useRef<ComponentRef<'form'>>(null!);
   return (

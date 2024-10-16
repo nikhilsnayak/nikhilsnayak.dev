@@ -10,9 +10,9 @@ import { BASE_URL } from '~/lib/constants';
 import { db } from '~/lib/db';
 import { formatDate } from '~/lib/utils';
 import { getBlogPosts, getIPHash } from '~/lib/utils/server';
-import { Form, FormSubmit } from '~/components/ui/form';
 import { Skeleton } from '~/components/ui/skeleton';
 import { ErrorBoundary } from '~/components/error-boundary';
+import { FormSubmit } from '~/components/form-submit';
 import { CustomMDX } from '~/components/mdx';
 import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
@@ -129,7 +129,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
       {!session?.user ? (
         <div className='space-y-2'>
           <p>Please sign in to comment.</p>
-          <Form
+          <form
             action={async () => {
               'use server';
               return await signIn('github', {
@@ -143,12 +143,12 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
                 <span>Sign in with GitHub</span>
               </span>
             </FormSubmit>
-          </Form>
+          </form>
         </div>
       ) : (
         <div className='flex items-center gap-2'>
           <p>You are signed in as {session.user.name}.</p>
-          <Form
+          <form
             action={async () => {
               'use server';
               return await signOut();
@@ -157,7 +157,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
             <FormSubmit pendingFallback={<Spinner />}>
               <LogOut />
             </FormSubmit>
-          </Form>
+          </form>
         </div>
       )}
       <Suspense fallback={<CommentsSkeleton />}>
@@ -247,15 +247,6 @@ export default async function Blog({ params }: Readonly<BlogProps>) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      {/* <div className='mb-8'>
-        <h2 className='mb-4'>
-          {"Don't have enough time? Listen the audio version!!!"}
-        </h2>
-        <AudioPlayer
-          src={`${BLOB_STORAGE_URL}/${post.slug}.mp3`}
-          title={post.metadata.title}
-        />
-      </div> */}
       <article className='prose min-w-full dark:prose-invert'>
         <CustomMDX source={post.content} components={components} />
       </article>

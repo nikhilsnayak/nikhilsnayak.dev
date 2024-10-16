@@ -22,7 +22,7 @@ function parseFrontmatter(fileContent: string) {
   frontMatterLines.forEach((line) => {
     const [key, ...valueArr] = line.split(': ');
     let value = valueArr.join(': ').trim();
-    value = value.replace(/^['"](.*)['"]$/, '$1'); // Remove quotes
+    value = value.replace(/^['"](.*)['"]$/, '$1');
     metadata[key.trim() as keyof BlogMetadata] = value;
   });
 
@@ -54,10 +54,6 @@ function getMDXData(dir: string) {
 
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'content'));
-}
-
-export function getBlogPost(slug: string) {
-  return readMDXFile(path.join(process.cwd(), 'content', `${slug}.mdx`));
 }
 
 export async function getIPHash() {
