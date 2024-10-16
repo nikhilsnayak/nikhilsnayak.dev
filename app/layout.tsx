@@ -167,13 +167,15 @@ async function LanguageStats() {
 
 function Footer() {
   return (
-    <footer className='mx-auto flex w-full max-w-screen-lg items-start justify-between gap-6 border-t p-4'>
-      <div className='space-y-4'>
-        <SourceLink />
-        <LatestCommit />
-        <LanguageStats />
+    <footer className='mx-auto w-full max-w-screen-lg space-y-6 border-t p-4'>
+      <div className='flex items-center justify-between gap-6'>
+        <div className='space-y-2'>
+          <SourceLink />
+          <LatestCommit />
+        </div>
+        <ThemeToggle />
       </div>
-      <ThemeToggle />
+      <LanguageStats />
     </footer>
   );
 }
