@@ -86,7 +86,7 @@ export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
     <section className='h-[75vh] space-y-4'>
       <ul
         ref={scrollAreaRef}
-        className='no-scrollbar h-[85%] space-y-4 overflow-y-auto rounded border p-4'
+        className='styled-scrollbar h-[85%] space-y-4 overflow-y-auto rounded border p-4'
       >
         {conversation.length === 0 ? (
           <li className='text-center text-gray-500'>

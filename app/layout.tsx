@@ -187,7 +187,7 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang='en' suppressHydrationWarning>
+      <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
         <body
           className={cn(
             GeistSans.variable,

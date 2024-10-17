@@ -85,14 +85,54 @@
 }
 
 html {
-  scrollbar-width: none;
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
 }
 
-body::-webkit-scrollbar,
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+.styled-scrollbar {
+  scrollbar-width: thin;
+
+  scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--secondary));
+}
+
+.styled-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+  border-radius: var(--radius);
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--muted-foreground));
+  border-radius: var(--radius);
+  border: 2px solid hsl(var(--secondary));
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--accent-foreground));
+}
+
+/* Dark mode styles */
+.dark .styled-scrollbar {
+  scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--secondary));
+}
+
+.dark .styled-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+}
+
+.dark .styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--muted-foreground));
+  border-color: hsl(var(--secondary));
+}
+
+.dark .styled-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--accent-foreground));
 }
 
 article.prose .anchor {
