@@ -20,7 +20,7 @@
     "db:up": "drizzle-kit up"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.67",
+    "@ai-sdk/openai": "^0.0.68",
     "@auth/drizzle-adapter": "^1.7.0",
     "@icons-pack/react-simple-icons": "^10.0.0",
     "@radix-ui/react-avatar": "^1.1.1",
