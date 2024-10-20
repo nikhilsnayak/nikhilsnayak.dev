@@ -9,13 +9,15 @@ import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
 import { ViewTransitions } from 'next-view-transitions';
 
-import { AI } from '~/lib/ai';
 import { BASE_URL } from '~/lib/constants';
-import { getLanguages, getLatestCommit } from '~/lib/github';
 import { cn } from '~/lib/utils';
 import { Toaster } from '~/components/ui/sonner';
-import { BotLink, NavLink, SourceLink } from '~/components/links';
+import { BotLink, NavLink } from '~/components/navigation';
 import { ThemeToggle } from '~/components/theme-toggle';
+import { AI } from '~/features/ai';
+import { LanguageStats } from '~/features/github/components/language-stats';
+import { LatestCommit } from '~/features/github/components/latest-commit';
+import { SourceLink } from '~/features/github/components/source-link';
 
 export const metadata: Metadata = {
   title: {
@@ -48,6 +50,44 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
   },
 };
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <ViewTransitions>
+      <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
+        <body
+          className={cn(
+            GeistSans.variable,
+            GeistMono.variable,
+            'flex min-h-dvh flex-col font-sans'
+          )}
+        >
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster richColors />
+            <AI>
+              <Header />
+              <main className='mx-auto my-4 w-full max-w-screen-lg flex-grow px-4 py-2'>
+                {children}
+              </main>
+              <Footer />
+            </AI>
+          </ThemeProvider>
+          <SpeedInsights />
+          <Analytics />
+        </body>
+      </html>
+    </ViewTransitions>
+  );
+}
 
 function Header() {
   return (
@@ -107,64 +147,6 @@ function Header() {
   );
 }
 
-async function LatestCommit() {
-  const latestCommit = await getLatestCommit();
-  return (
-    <a
-      href={latestCommit.url}
-      target='_blank'
-      rel='noopener noreferrer'
-      className='block text-xs tracking-tighter underline dark:text-fluorescent'
-    >
-      Latest commit: {latestCommit.message.split('\n')[0]} by{' '}
-      {latestCommit.author} on {latestCommit.date}
-    </a>
-  );
-}
-
-async function LanguageStats() {
-  const languages = await getLanguages();
-
-  const colorMap: Record<string, string> = {
-    TypeScript: '#3178C6',
-    MDX: '#F9AC00',
-    CSS: '#563D7C',
-    JavaScript: '#F1E05A',
-  };
-
-  return (
-    <div className='max-w-xs text-sm'>
-      <h3 className='mb-2 font-semibold'>Languages</h3>
-      <div className='mb-2 flex h-2 overflow-hidden rounded-full'>
-        {languages.map((lang) => (
-          <div
-            key={lang.name}
-            style={{
-              width: `${lang.percentage}%`,
-              backgroundColor: colorMap[lang.name] ?? '#808080',
-            }}
-            className='h-full'
-          />
-        ))}
-      </div>
-      <div className='flex flex-wrap gap-x-4 gap-y-1 text-xs'>
-        {languages.map((lang) => (
-          <div key={lang.name} className='flex items-center'>
-            <span
-              className='mr-1 h-2 w-2 rounded-full'
-              style={{ backgroundColor: colorMap[lang.name] ?? '#808080' }}
-            />
-            <span>{lang.name}</span>
-            <span className='ml-1 text-gray-400'>
-              {lang.percentage.toFixed(1)}%
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Footer() {
   return (
     <footer className='mx-auto w-full max-w-screen-lg space-y-6 border-t p-4'>
@@ -177,43 +159,5 @@ function Footer() {
       </div>
       <LanguageStats />
     </footer>
-  );
-}
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <ViewTransitions>
-      <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
-        <body
-          className={cn(
-            GeistSans.variable,
-            GeistMono.variable,
-            'flex min-h-dvh flex-col font-sans'
-          )}
-        >
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster richColors />
-            <AI>
-              <Header />
-              <main className='mx-auto my-4 w-full max-w-screen-lg flex-grow px-4 py-2'>
-                {children}
-              </main>
-              <Footer />
-            </AI>
-          </ThemeProvider>
-          <SpeedInsights />
-          <Analytics />
-        </body>
-      </html>
-    </ViewTransitions>
   );
 }

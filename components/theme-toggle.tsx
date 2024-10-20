@@ -1,6 +1,6 @@
 'use client';
 
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { useEffect, useState, type PropsWithChildren } from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 

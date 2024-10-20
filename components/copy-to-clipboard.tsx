@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, startTransition } from 'react';
+import { startTransition, type ComponentProps } from 'react';
 import { toast } from 'sonner';
 
 interface CopyToClipBoardProps

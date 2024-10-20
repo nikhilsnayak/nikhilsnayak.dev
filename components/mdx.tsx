@@ -1,12 +1,12 @@
 import {
   cloneElement,
-  ComponentProps,
   createElement,
-  PropsWithChildren,
-  ReactElement,
+  type ComponentProps,
+  type PropsWithChildren,
+  type ReactElement,
 } from 'react';
 import Image from 'next/image';
-import { highlight, LineNumbers } from 'code-syntactic-sugar';
+import { highlight, type LineNumbers } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Link } from 'next-view-transitions';

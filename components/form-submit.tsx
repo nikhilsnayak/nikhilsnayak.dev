@@ -1,9 +1,9 @@
 'use client';
 
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import { ButtonProps } from './ui/button';
+import type { ButtonProps } from './ui/button';
 import { LoadingButton } from './ui/loading-button';
 
 interface FormSubmitProps extends Omit<ButtonProps, 'type' | 'disabled'> {

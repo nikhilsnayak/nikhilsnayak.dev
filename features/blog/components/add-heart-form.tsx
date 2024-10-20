@@ -2,9 +2,9 @@
 
 import { useActionState, useOptimistic } from 'react';
 
-import { addHeart } from './functions';
+import { addHeart } from '../functions/mutations';
+import type { HeartsInfo } from '../types';
 import { HeartButton } from './heart-button';
-import { HeartsInfo } from './types';
 
 export function AddHeartForm({
   initialValue,

@@ -1,7 +1,9 @@
+import 'server-only';
+
 import { unstable_cache } from 'next/cache';
 import { Octokit } from 'octokit';
 
-import { formatDate } from './utils';
+import { formatDate } from '~/lib/utils';
 
 const octokit = new Octokit({ auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN });
 const owner = 'nikhilsnayak';

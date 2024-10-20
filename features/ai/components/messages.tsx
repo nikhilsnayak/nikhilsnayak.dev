@@ -1,4 +1,4 @@
-import { ComponentProps, PropsWithChildren } from 'react';
+import type { ComponentProps, PropsWithChildren } from 'react';
 import Markdown from 'react-markdown';
 
 export function UserMessage({ children }: PropsWithChildren) {
