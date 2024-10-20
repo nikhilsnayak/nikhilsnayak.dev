@@ -9,10 +9,10 @@ import { HeartButton } from './heart-button';
 export function AddHeartForm({
   initialValue,
   slug,
-}: {
+}: Readonly<{
   initialValue: HeartsInfo;
   slug: string;
-}) {
+}>) {
   const [heartsInfo, addHeartAction] = useActionState(addHeart, initialValue);
   const [optimisticHeartsInfo, setOptimisticHeartsInfo] =
     useOptimistic(heartsInfo);

@@ -36,10 +36,10 @@ export async function getBlogPosts() {
   });
 }
 
-export function getBlogPostBySlug(slug: string) {
+export async function getBlogPostBySlug(slug: string) {
   const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
   try {
-    return readAndParseMDXFile(filePath);
+    return await readAndParseMDXFile(filePath);
   } catch {
     throw new Error(`Blog post with slug "${slug}" not found.`);
   }

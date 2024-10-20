@@ -35,7 +35,9 @@ function RefreshButton() {
   );
 }
 
-export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
+export function Chat({
+  suggestedQuestions,
+}: Readonly<{ suggestedQuestions: string[] }>) {
   const [input, setInput] = useState<string>('');
   const [conversation, setConversation] = useUIState<typeof AI>();
   const [messages, setMessages] = useAIState<typeof AI>();

@@ -5,7 +5,9 @@ import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
 
 import type { HeartsInfo } from '../types';
 
-export function HeartButton({ heartsInfo }: { heartsInfo?: HeartsInfo }) {
+export function HeartButton({
+  heartsInfo,
+}: Readonly<{ heartsInfo?: HeartsInfo }>) {
   const controls = useAnimationControls();
 
   const fillPercentage = Math.min(

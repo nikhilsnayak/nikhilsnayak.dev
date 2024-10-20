@@ -105,7 +105,7 @@ export function CommentsManager({
   initialCommentsPromise,
   session,
   slug,
-}: CommentsManagerProps) {
+}: Readonly<CommentsManagerProps>) {
   const initialComments = use(initialCommentsPromise);
   const [state, formAction] = useActionState(commentsAction, initialComments);
   const [comments, setOptimisticComments] =
