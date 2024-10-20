@@ -1,8 +1,6 @@
 import { BASE_URL } from '~/lib/constants';
 import { getBlogPosts } from '~/lib/utils/server';
 
-export const dynamic = 'force-static';
-
 export async function GET() {
   const allBlogs = getBlogPosts();
 
