@@ -1,5 +1,8 @@
 'use server';
 
+import 'server-only';
+
+import { revalidateTag } from 'next/cache';
 import { openai } from '@ai-sdk/openai';
 import { Ratelimit } from '@upstash/ratelimit';
 import { kv } from '@vercel/kv';
@@ -7,13 +10,13 @@ import { generateId, streamText, tool } from 'ai';
 import { createStreamableUI, getMutableAIState } from 'ai/rsc';
 import { z } from 'zod';
 
-import { BotMessage } from '~/components/messages';
+import { executeAsyncFnWithoutBlocking } from '~/lib/utils';
+import { getIPHash } from '~/lib/utils/server';
 
-import { executeAsyncFnWithoutBlocking } from '../utils';
-import { getIPHash } from '../utils/server';
-import { AI } from './index';
-import { ClientMessage } from './types';
-import { findRelevantContent } from './utils';
+import type { AI } from '..';
+import { BotMessage } from '../components/messages';
+import type { ClientMessage } from '../types';
+import { findRelevantContent } from './queries';
 
 const ratelimit = new Ratelimit({
   redis: kv,
@@ -145,4 +148,8 @@ export async function continueConversation(
     role: 'assistant',
     display: stream.value,
   };
+}
+
+export async function refreshQuestions() {
+  revalidateTag('getSuggestedQuestions');
 }

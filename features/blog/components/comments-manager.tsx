@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ComponentRef,
   createContext,
   startTransition,
   use,
@@ -10,17 +9,13 @@ import {
   useOptimistic,
   useRef,
   useState,
+  type ComponentRef,
 } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Pencil, Trash2 } from 'lucide-react';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 
-import {
-  addCommentSchema,
-  deleteCommentSchema,
-  editCommentSchema,
-} from '~/lib/db/schema';
 import { formatDate } from '~/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
@@ -36,8 +31,13 @@ import {
 import { Textarea } from '~/components/ui/textarea';
 import { Spinner } from '~/components/spinner';
 
-import { addComment, deleteComment, editComment } from './functions';
-import { CommentWithUser } from './types';
+import { addComment, deleteComment, editComment } from '../functions/mutations';
+import {
+  addCommentSchema,
+  deleteCommentSchema,
+  editCommentSchema,
+} from '../schema';
+import type { CommentWithUser } from '../types';
 
 type FormAction = (formData: FormData) => void;
 
@@ -105,7 +105,7 @@ export function CommentsManager({
   initialCommentsPromise,
   session,
   slug,
-}: CommentsManagerProps) {
+}: Readonly<CommentsManagerProps>) {
   const initialComments = use(initialCommentsPromise);
   const [state, formAction] = useActionState(commentsAction, initialComments);
   const [comments, setOptimisticComments] =

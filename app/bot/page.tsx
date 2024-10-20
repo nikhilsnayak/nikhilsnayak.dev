@@ -1,17 +1,14 @@
 import type { Metadata } from 'next';
 import { zoro } from '~/assets/images';
 
-import { getSuggestedQuestions } from '~/lib/ai/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-
-import { Chat } from './chat';
+import { Chat } from '~/features/ai/components/chat';
+import { getSuggestedQuestions } from '~/features/ai/functions/queries';
 
 export const metadata: Metadata = {
   title: 'Bot',
   description: 'My personal AI Chat Bot called Zoro which speaks about me',
 };
-
-export const maxDuration = 30;
 
 export default async function BotPage() {
   const suggestedQuestions = await getSuggestedQuestions();

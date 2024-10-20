@@ -12,13 +12,13 @@ import {
 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 
-import { AI } from '~/lib/ai';
 import { cn } from '~/lib/utils';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
-import { UserMessage } from '~/components/messages';
 
-import { refreshQuestions } from './functions';
+import type { AI } from '..';
+import { refreshQuestions } from '../functions/mutations';
+import { UserMessage } from './messages';
 
 function RefreshButton() {
   const { pending } = useFormStatus();
@@ -35,7 +35,9 @@ function RefreshButton() {
   );
 }
 
-export function Chat({ suggestedQuestions }: { suggestedQuestions: string[] }) {
+export function Chat({
+  suggestedQuestions,
+}: Readonly<{ suggestedQuestions: string[] }>) {
   const [input, setInput] = useState<string>('');
   const [conversation, setConversation] = useUIState<typeof AI>();
   const [messages, setMessages] = useAIState<typeof AI>();

@@ -3,7 +3,7 @@ import { ArrowUpRight, Rss } from 'lucide-react';
 import { Link } from 'next-view-transitions';
 
 import { formatDate } from '~/lib/utils';
-import { getBlogPosts } from '~/lib/utils/server';
+import { getBlogPosts } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
@@ -12,13 +12,8 @@ export const metadata: Metadata = {
   description: 'A list of blog posts where I document my learnings',
 };
 
-export default function BlogsPage() {
-  const allBlogs = getBlogPosts().toSorted((a, b) => {
-    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-      return -1;
-    }
-    return 1;
-  });
+export default async function BlogsPage() {
+  const allBlogs = await getBlogPosts();
 
   return (
     <section>

@@ -1,19 +1,80 @@
 'use server';
 
+import 'server-only';
+
 import { eq, sql } from 'drizzle-orm';
 
 import { auth } from '~/lib/auth';
 import { db } from '~/lib/db';
-import {
-  addCommentSchema,
-  comments,
-  deleteCommentSchema,
-  editCommentSchema,
-  hearts,
-} from '~/lib/db/schema';
+import { comments, hearts, views } from '~/lib/db/schema';
 import { getIPHash } from '~/lib/utils/server';
 
-import { CommentWithUser, HeartsInfo } from './types';
+import {
+  addCommentSchema,
+  deleteCommentSchema,
+  editCommentSchema,
+} from '../schema';
+import type { CommentWithUser, HeartsInfo } from '../types';
+
+export async function updateViewsBySlug(slug: string) {
+  try {
+    await db
+      .insert(views)
+      .values({
+        slug,
+        count: 1,
+      })
+      .onConflictDoUpdate({
+        target: [views.slug],
+        set: { count: sql`${views.count} + 1` },
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function addHeart(
+  prevState: HeartsInfo,
+  formData: FormData
+): Promise<HeartsInfo> {
+  const slug = formData.get('slug')?.toString();
+  if (!slug) {
+    return prevState;
+  }
+
+  const ip = (await getIPHash()) ?? 'UNKNOWN';
+
+  try {
+    const updatedHearts = await db
+      .insert(hearts)
+      .values({
+        clientIdentifier: ip,
+        slug,
+        count: 1,
+      })
+      .onConflictDoUpdate({
+        target: [hearts.clientIdentifier, hearts.slug],
+        set: { count: sql`${hearts.count} + 1` },
+      })
+      .returning()
+      .then((res) => res[0]);
+
+    if (ip === 'UNKNOWN') {
+      return {
+        currentClientHeartsCount: prevState.currentClientHeartsCount + 1,
+        total: prevState.total + 1,
+      };
+    }
+
+    return {
+      total: prevState.total + 1,
+      currentClientHeartsCount: updatedHearts.count,
+    };
+  } catch (error) {
+    console.log(error);
+    return prevState;
+  }
+}
 
 export async function addComment(
   formData: FormData
@@ -140,48 +201,5 @@ export async function deleteComment(
   } catch (error) {
     console.log(error);
     return { error: 'Server error' };
-  }
-}
-
-export async function addHeart(
-  prevState: HeartsInfo,
-  formData: FormData
-): Promise<HeartsInfo> {
-  const slug = formData.get('slug')?.toString();
-  if (!slug) {
-    return prevState;
-  }
-
-  const ip = (await getIPHash()) ?? 'UNKNOWN';
-
-  try {
-    const updatedHearts = await db
-      .insert(hearts)
-      .values({
-        clientIdentifier: ip,
-        slug,
-        count: 1,
-      })
-      .onConflictDoUpdate({
-        target: [hearts.clientIdentifier, hearts.slug],
-        set: { count: sql`${hearts.count} + 1` },
-      })
-      .returning()
-      .then((res) => res[0]);
-
-    if (ip === 'UNKNOWN') {
-      return {
-        currentClientHeartsCount: prevState.currentClientHeartsCount + 1,
-        total: prevState.total + 1,
-      };
-    }
-
-    return {
-      total: prevState.total + 1,
-      currentClientHeartsCount: updatedHearts.count,
-    };
-  } catch (error) {
-    console.log(error);
-    return prevState;
   }
 }

@@ -12,7 +12,6 @@ import {
   varchar,
   vector,
 } from 'drizzle-orm/pg-core';
-import { createSelectSchema } from 'drizzle-zod';
 import type { AdapterAccountType } from 'next-auth/adapters';
 
 export const views = pgTable('views', {
@@ -134,25 +133,6 @@ export const commentsRelations = relations(comments, ({ one }) => ({
     references: [users.id],
   }),
 }));
-
-export type Comment = typeof comments.$inferSelect;
-
-const commentSchema = createSelectSchema(comments);
-
-export const addCommentSchema = commentSchema.pick({
-  id: true,
-  content: true,
-  slug: true,
-});
-
-export const editCommentSchema = commentSchema.pick({
-  id: true,
-  content: true,
-});
-
-export const deleteCommentSchema = commentSchema.pick({
-  id: true,
-});
 
 export const documents = pgTable(
   'document',

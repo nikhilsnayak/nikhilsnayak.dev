@@ -12,7 +12,10 @@ import {
 } from '~/components/ui/dropdown-menu';
 import { CopyToClipBoard } from '~/components/copy-to-clipboard';
 
-export function SocialShare({ slug, title }: { slug: string; title: string }) {
+export function SocialShare({
+  slug,
+  title,
+}: Readonly<{ slug: string; title: string }>) {
   const postLink = `${BASE_URL}/blogs/${slug}`;
 
   return (

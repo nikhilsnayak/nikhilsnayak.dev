@@ -1,13 +1,15 @@
-import { ComponentProps, PropsWithChildren } from 'react';
+import type { ComponentProps, PropsWithChildren } from 'react';
 import Markdown from 'react-markdown';
 
 export function UserMessage({ children }: PropsWithChildren) {
   return <p>{children}</p>;
 }
 
-function CustomLink(props: ComponentProps<'a'>) {
+function CustomLink({ children, ...rest }: ComponentProps<'a'>) {
   return (
-    <a {...props} className='text-green-500 hover:underline' target='_blank' />
+    <a {...rest} className='text-green-500 hover:underline' target='_blank'>
+      {children}
+    </a>
   );
 }
 

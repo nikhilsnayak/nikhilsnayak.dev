@@ -3,9 +3,11 @@
 import { useEffect } from 'react';
 import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
 
-import { HeartsInfo } from './types';
+import type { HeartsInfo } from '../types';
 
-export function HeartButton({ heartsInfo }: { heartsInfo?: HeartsInfo }) {
+export function HeartButton({
+  heartsInfo,
+}: Readonly<{ heartsInfo?: HeartsInfo }>) {
   const controls = useAnimationControls();
 
   const fillPercentage = Math.min(
@@ -15,7 +17,7 @@ export function HeartButton({ heartsInfo }: { heartsInfo?: HeartsInfo }) {
 
   useEffect(() => {
     if (fillPercentage === 100) {
-      controls.start({
+      void controls.start({
         scale: [1, 1.2, 1],
         transition: { duration: 0.5, repeat: Infinity, repeatDelay: 0.5 },
       });

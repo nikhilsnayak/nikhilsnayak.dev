@@ -1,10 +1,10 @@
 import { BASE_URL } from '~/lib/constants';
-import { getBlogPosts } from '~/lib/utils/server';
+import { getBlogPosts } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
 export async function GET() {
-  const allBlogs = getBlogPosts();
+  const allBlogs = await getBlogPosts();
 
   const itemsXml = allBlogs
     .sort((a, b) => {

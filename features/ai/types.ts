@@ -1,5 +1,9 @@
-import { ReactNode } from 'react';
-import { CoreAssistantMessage, CoreToolMessage, CoreUserMessage } from 'ai';
+import type { ReactNode } from 'react';
+import type {
+  CoreAssistantMessage,
+  CoreToolMessage,
+  CoreUserMessage,
+} from 'ai';
 
 export type ServerMessage =
   | CoreUserMessage

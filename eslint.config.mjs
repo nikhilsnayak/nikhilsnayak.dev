@@ -15,6 +15,20 @@ const compat = new FlatCompat({
 const config = [
   ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-exports': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+    },
+  },
+  {
     plugins: {
       'react-compiler': reactCompiler,
     },

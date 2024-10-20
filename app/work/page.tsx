@@ -101,7 +101,7 @@ export default function WorkPage() {
             <span className='text-sm text-muted-foreground underline'>
               Jan 14 2024
             </span>
-            <p>
+            <p className='text-balance'>
               Delivered a Talk on React Server Components, Server Actions, and
               Full-Stack Development using Next.js 14 at Mangalore Tech Day 2024
               hosted by{' '}

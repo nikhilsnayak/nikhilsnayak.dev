@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { generateId } from 'ai';
 import { useActions, useUIState } from 'ai/rsc';
 
-import { AI } from '~/lib/ai';
 import { LoadingButton } from '~/components/ui/loading-button';
-import { UserMessage } from '~/components/messages';
 import { Spinner } from '~/components/spinner';
+
+import type { AI } from '..';
+import { UserMessage } from '../components/messages';
 
 export function SummarizeButton({
   blogTitle,

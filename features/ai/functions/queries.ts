@@ -1,11 +1,13 @@
+import 'server-only';
+
 import { unstable_cache } from 'next/cache';
 import { openai } from '@ai-sdk/openai';
 import { embed, embedMany, generateObject } from 'ai';
 import { cosineDistance, desc, gt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { db } from '../db';
-import { documents } from '../db/schema';
+import { db } from '~/lib/db';
+import { documents } from '~/lib/db/schema';
 
 async function INTERNAL__getSuggestedQuestions() {
   const randomDocs = await db

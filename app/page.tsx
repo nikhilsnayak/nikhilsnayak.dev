@@ -1,4 +1,4 @@
-import { ReactNode, Suspense } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import { Source_Code_Pro } from 'next/font/google';
 import Image from 'next/image';
 import {
@@ -17,51 +17,19 @@ import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'next-view-transitions';
 
 import { cn, formatDate } from '~/lib/utils';
-import { getBlogPosts } from '~/lib/utils/server';
 import { ErrorBoundary } from '~/components/error-boundary';
-import { PostViewsCount } from '~/components/post-views';
 import { Spinner } from '~/components/spinner';
+import { BlogViewsCount } from '~/features/blog/components/views';
+import { getBlogPosts } from '~/features/blog/functions/queries';
 
 const sourceCodePro = Source_Code_Pro({
   weight: ['600'],
   subsets: ['latin'],
 });
 
-function Tech({
-  href,
-  icon,
-  name,
-  className,
-}: {
-  name: string;
-  icon: ReactNode;
-  href: string;
-  className?: string;
-}) {
-  return (
-    <span className={className}>
-      {icon}
-      <a
-        href={href}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='ml-1 font-medium underline'
-      >
-        {name}
-      </a>
-    </span>
-  );
-}
+export default async function HomePage() {
+  const recentBlogs = await getBlogPosts();
 
-export default function HomePage() {
-  const recentBlogs = getBlogPosts()
-    .toSorted((a, b) => {
-      if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-        return -1;
-      }
-      return 1;
-    })
-    .slice(0, 2);
   return (
     <section>
       <header className='relative'>
@@ -178,7 +146,7 @@ export default function HomePage() {
           Recent Posts:
         </h2>
         <div className='space-y-8'>
-          {recentBlogs.map((post) => (
+          {recentBlogs.slice(0, 2).map((post) => (
             <Link
               key={post.slug}
               href={`/blogs/${post.slug}`}
@@ -201,9 +169,9 @@ export default function HomePage() {
                 </div>
                 <ErrorBoundary fallback={<p>{"Couldn't load views"}</p>}>
                   <Suspense fallback={<Spinner variant='ellipsis' />}>
-                    <PostViewsCount slug={post.slug}>
+                    <BlogViewsCount slug={post.slug}>
                       {(count) => <p>{count} views</p>}
-                    </PostViewsCount>
+                    </BlogViewsCount>
                   </Suspense>
                 </ErrorBoundary>
               </div>
@@ -212,5 +180,31 @@ export default function HomePage() {
         </div>
       </section>
     </section>
+  );
+}
+
+function Tech({
+  href,
+  icon,
+  name,
+  className,
+}: {
+  name: string;
+  icon: ReactNode;
+  href: string;
+  className?: string;
+}) {
+  return (
+    <span className={className}>
+      {icon}
+      <a
+        href={href}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='ml-1 font-medium underline'
+      >
+        {name}
+      </a>
+    </span>
   );
 }

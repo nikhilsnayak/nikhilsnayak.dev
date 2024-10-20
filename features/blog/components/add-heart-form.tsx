@@ -2,17 +2,17 @@
 
 import { useActionState, useOptimistic } from 'react';
 
-import { addHeart } from './functions';
+import { addHeart } from '../functions/mutations';
+import type { HeartsInfo } from '../types';
 import { HeartButton } from './heart-button';
-import { HeartsInfo } from './types';
 
 export function AddHeartForm({
   initialValue,
   slug,
-}: {
+}: Readonly<{
   initialValue: HeartsInfo;
   slug: string;
-}) {
+}>) {
   const [heartsInfo, addHeartAction] = useActionState(addHeart, initialValue);
   const [optimisticHeartsInfo, setOptimisticHeartsInfo] =
     useOptimistic(heartsInfo);
