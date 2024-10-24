@@ -10,6 +10,7 @@ import { CONTENT_DIR } from '../constants';
 import { readAndParseMDXFile } from '../utils';
 
 export async function getBlogPosts() {
+  'use cache';
   const files = await fs.readdir(CONTENT_DIR);
 
   const posts = await Promise.all(

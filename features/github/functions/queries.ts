@@ -1,6 +1,5 @@
 import 'server-only';
 
-import { unstable_cache } from 'next/cache';
 import { Octokit } from 'octokit';
 
 import { formatDate } from '~/lib/utils';
@@ -9,7 +8,9 @@ const octokit = new Octokit({ auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN });
 const owner = 'nikhilsnayak';
 const repo = 'nikhilsnayak.dev';
 
-async function INTERNAL__getLatestCommit() {
+export async function getLatestCommit() {
+  'use cache';
+
   const response = await octokit.rest.repos.listCommits({
     owner,
     repo,
@@ -29,7 +30,9 @@ async function INTERNAL__getLatestCommit() {
   };
 }
 
-async function INTERNAL__getLanguages() {
+export async function getLanguages() {
+  'use cache';
+
   const response = await octokit.rest.repos.listLanguages({
     owner,
     repo,
@@ -45,19 +48,3 @@ async function INTERNAL__getLanguages() {
 
   return languageStats.sort((a, b) => b.percentage - a.percentage);
 }
-
-export const getLatestCommit = unstable_cache(
-  INTERNAL__getLatestCommit,
-  ['getLatestCommit'],
-  {
-    tags: ['getLatestCommit'],
-  }
-);
-
-export const getLanguages = unstable_cache(
-  INTERNAL__getLanguages,
-  ['getLanguages'],
-  {
-    tags: ['getLanguages'],
-  }
-);

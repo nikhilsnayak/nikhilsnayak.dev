@@ -1,3 +1,5 @@
+'use cache';
+
 import { getLatestCommit } from '../functions/queries';
 
 export async function LatestCommit() {

@@ -1,3 +1,5 @@
+'use cache';
+
 import { colorMap } from '../constants';
 import { getLanguages } from '../functions/queries';
 
