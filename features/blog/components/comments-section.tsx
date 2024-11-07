@@ -21,9 +21,9 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
         <div className='space-y-2'>
           <p>Please sign in to comment.</p>
           <form
-            action={() => {
+            action={async () => {
               'use server';
-              return signIn('github', {
+              return await signIn('github', {
                 redirectTo: `/blogs/${slug}#comments`,
               });
             }}
@@ -40,9 +40,9 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
         <div className='flex items-center gap-2'>
           <p>You are signed in as {session.user.name}.</p>
           <form
-            action={() => {
+            action={async () => {
               'use server';
-              return signOut();
+              return await signOut();
             }}
           >
             <FormSubmit pendingFallback={<Spinner />}>
