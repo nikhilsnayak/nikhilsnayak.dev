@@ -5,11 +5,8 @@ import {
   startTransition,
   use,
   useActionState,
-  useCallback,
   useOptimistic,
-  useRef,
   useState,
-  type ComponentRef,
 } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -55,7 +52,7 @@ const CommentsManagerContext = createContext<CommentsManagerContext | null>(
   null
 );
 
-async function commentsAction(
+async function commentsReducer(
   state: CommentWithUser[],
   { formData, type }: { formData: FormData; type: 'add' | 'edit' | 'delete' }
 ) {
@@ -107,87 +104,76 @@ export function CommentsManager({
   slug,
 }: Readonly<CommentsManagerProps>) {
   const initialComments = use(initialCommentsPromise);
-  const [state, formAction] = useActionState(commentsAction, initialComments);
+  const [state, dispatch] = useActionState(commentsReducer, initialComments);
   const [comments, setOptimisticComments] =
     useOptimistic<OptimisticCommentWithUser[]>(state);
 
-  const addCommentFormAction = useCallback(
-    (formData: FormData) => {
-      const id = crypto.randomUUID();
-      formData.append('id', id);
+  const addCommentFormAction = (formData: FormData) => {
+    const id = crypto.randomUUID();
+    formData.append('id', id);
 
-      const parsedResult = addCommentSchema.safeParse(
-        Object.fromEntries(formData)
-      );
+    const parsedResult = addCommentSchema.safeParse(
+      Object.fromEntries(formData)
+    );
 
-      if (!parsedResult.success || !session?.user?.id) {
-        toast.error('Invalid data');
-        return;
-      }
-      const { content, slug } = parsedResult.data;
+    if (!parsedResult.success || !session?.user?.id) {
+      toast.error('Invalid data');
+      return;
+    }
+    const { content, slug } = parsedResult.data;
 
-      const newOptimisticComment: OptimisticCommentWithUser = {
-        id,
-        content,
-        slug,
-        createdAt: new Date(),
-        userId: session.user.id,
-        user: session.user,
-        isPending: true,
-      };
+    const newOptimisticComment: OptimisticCommentWithUser = {
+      id,
+      content,
+      slug,
+      createdAt: new Date(),
+      userId: session.user.id,
+      user: session.user,
+      isPending: true,
+    };
 
-      setOptimisticComments((prev) => [newOptimisticComment, ...prev]);
+    setOptimisticComments((prev) => [newOptimisticComment, ...prev]);
+    dispatch({ type: 'add', formData });
+  };
 
-      formAction({ type: 'add', formData });
-    },
-    [formAction, setOptimisticComments, session?.user]
-  );
+  const editCommentFormAction = (formData: FormData) => {
+    const parsedResult = editCommentSchema.safeParse(
+      Object.fromEntries(formData)
+    );
 
-  const editCommentFormAction = useCallback(
-    (formData: FormData) => {
-      const parsedResult = editCommentSchema.safeParse(
-        Object.fromEntries(formData)
-      );
+    if (!parsedResult.success) {
+      toast.error('Invalid data');
+      return;
+    }
+    const { content, id } = parsedResult.data;
 
-      if (!parsedResult.success) {
-        toast.error('Invalid data');
-        return;
-      }
-      const { content, id } = parsedResult.data;
+    setOptimisticComments((prev) =>
+      prev.map((comment) => {
+        if (comment.id === id) return { ...comment, content, isPending: true };
+        return comment;
+      })
+    );
 
-      setOptimisticComments((prev) =>
-        prev.map((comment) => {
-          if (comment.id === id)
-            return { ...comment, content, isPending: true };
-          return comment;
-        })
-      );
+    dispatch({ type: 'edit', formData });
+  };
 
-      formAction({ type: 'edit', formData });
-    },
-    [formAction, setOptimisticComments]
-  );
+  const deleteCommentFormAction = (formData: FormData) => {
+    const parsedResult = deleteCommentSchema.safeParse(
+      Object.fromEntries(formData)
+    );
 
-  const deleteCommentFormAction = useCallback(
-    (formData: FormData) => {
-      const parsedResult = deleteCommentSchema.safeParse(
-        Object.fromEntries(formData)
-      );
+    if (!parsedResult.success) {
+      toast.error('Invalid data');
+      return;
+    }
+    const { id } = parsedResult.data;
 
-      if (!parsedResult.success) {
-        toast.error('Invalid data');
-        return;
-      }
-      const { id } = parsedResult.data;
+    setOptimisticComments((prev) =>
+      prev.filter((comment) => comment.id !== id)
+    );
 
-      setOptimisticComments((prev) =>
-        prev.filter((comment) => comment.id !== id)
-      );
-
-      formAction({ type: 'delete', formData });
-    },
-    [formAction, setOptimisticComments]
-  );
+    dispatch({ type: 'delete', formData });
+  };
 
   return (
     <CommentsManagerContext
@@ -305,14 +291,13 @@ function CommentsList() {
 
 function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
   const { addCommentFormAction } = useCommentsManager();
-  const formRef = useRef<ComponentRef<'form'>>(null!);
   return (
     <form
-      ref={formRef}
       onSubmit={(e) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        formRef.current.reset();
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+        form.reset();
         startTransition(() => {
           addCommentFormAction(formData);
         });

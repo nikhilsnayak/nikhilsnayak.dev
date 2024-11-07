@@ -18,9 +18,7 @@ export async function BlogViewsCount({
   await connection();
   const views = await getBlogViewsBySlug(slug);
   if (process.env.NODE_ENV === 'production' && update) {
-    after(async () => {
-      await updateViewsBySlug(slug);
-    });
+    after(() => updateViewsBySlug(slug));
   }
 
   return children(views?.count ?? 0);
