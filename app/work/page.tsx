@@ -39,12 +39,24 @@ export default function WorkPage() {
             CodeCraft Technologies <ArrowUpRight className='w-4' />
           </a>
         </h3>
-        <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
-          <span className='font-medium'>
-            Trainee Engineer - Software Development{' '}
-          </span>
-          <span>(Aug 2023 - Present)</span>
-        </p>
+        <ul className='ml-4 list-disc'>
+          <li>
+            <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
+              <span className='font-medium'>
+                Engineer - Software Development{' '}
+              </span>
+              <span>(Nov 2024 - Present)</span>
+            </p>
+          </li>
+          <li>
+            <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
+              <span className='font-medium'>
+                Trainee Engineer - Software Development{' '}
+              </span>
+              <span>(Aug 2023 - Nov 2024)</span>
+            </p>
+          </li>
+        </ul>
         <p className='my-4 *:align-middle'>
           <span>
             At CodeCraft I contribute to projects using modern frameworks such
