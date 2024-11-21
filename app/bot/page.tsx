@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: 'My personal AI Chat Bot called Zoro which speaks about me',
 };
 
+export const maxDuration = 60;
+
 export default async function BotPage() {
   const suggestedQuestions = await getSuggestedQuestions();
   return (
