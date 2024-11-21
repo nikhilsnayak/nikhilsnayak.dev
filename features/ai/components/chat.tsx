@@ -1,6 +1,6 @@
 'use client';
 
-import { startTransition, useEffect, useRef, useState } from 'react';
+import { startTransition, useState } from 'react';
 import { generateId } from 'ai';
 import { useActions, useAIState, useUIState } from 'ai/rsc';
 import {
@@ -15,6 +15,7 @@ import { useFormStatus } from 'react-dom';
 import { cn } from '~/lib/utils';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
+import { AutoScrollList } from '~/components/auto-scroll-list';
 
 import type { AI } from '..';
 import { refreshQuestions } from '../functions/mutations';
@@ -43,27 +44,6 @@ export function Chat({
   const [messages, setMessages] = useAIState<typeof AI>();
   const { continueConversation } = useActions<typeof AI>();
 
-  const messagesEndRef = useRef<HTMLLIElement>(null!);
-  const scrollAreaRef = useRef<HTMLUListElement>(null!);
-
-  useEffect(() => {
-    const scrollArea = scrollAreaRef.current;
-    const messagesEnd = messagesEndRef.current;
-
-    const observer = new MutationObserver(() => {
-      messagesEnd.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    });
-
-    observer.observe(scrollArea, {
-      childList: true,
-      subtree: true,
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
   const handleSubmit = (value: string) => {
     if (!value.trim()) return;
     setConversation((currentConversation) => [
@@ -86,10 +66,7 @@ export function Chat({
 
   return (
     <section className='h-[75vh] space-y-4'>
-      <ul
-        ref={scrollAreaRef}
-        className='styled-scrollbar h-[85%] space-y-4 overflow-y-auto rounded border p-4'
-      >
+      <AutoScrollList className='styled-scrollbar h-[85%] space-y-4 overflow-y-auto rounded border p-4'>
         {conversation.length === 0 ? (
           <li className='text-center text-gray-500'>
             <div className='mb-3 flex items-center justify-center gap-3'>
@@ -130,8 +107,7 @@ export function Chat({
             </li>
           ))
         )}
-        <li ref={messagesEndRef} />
-      </ul>
+      </AutoScrollList>
       <form
         className='flex items-center gap-3'
         onSubmit={(e) => {
