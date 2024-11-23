@@ -1,0 +1,389 @@
+---
+title: 'The AutoScrollList Component'
+publishedAt: '2024-11-24'
+summary: 'Building a robust, user-friendly auto-scroll component for dynamic UIs with React!'
+components: '["ChatUI","V1", "V2","V3"]'
+---
+
+## How it started
+
+[Skip the story](#requirement)
+
+On Nov 20, 2024, I discovered this tweet by [@TkDodo](https://x.com/TkDodo).
+
+<Tweet id='1859260272105435210' />
+
+It's a pretty interesting thread, and the answer to all the questions involving the `useRef` + `useEffect` combination for imperative DOM manipulation is to use [Callback Refs](https://tkdodo.eu/blog/avoiding-use-effect-with-callback-refs).
+
+I had the same use case: implementing auto-scroll to the bottom for my RAG chatbot [zoro](/bot). However, one gotcha with callback refs is that, unlike `useEffect`, we can't return a cleanup function. Instead, when the component unmounts from the DOM, the callback ref will be called with a `null` value, which you can check to perform the cleanup. This felt a bit cumbersome to me.
+
+Luckily, [React 19 fixes this](https://react.dev/blog/2024/04/25/react-19#cleanup-functions-for-refs). With React 19, we can return a cleanup function that behaves exactly like the cleanup function of `useEffect`.
+
+Since everything was in my favor, I gave this approach a shot—and I loved it instantly. I also added one more behavior apart from my initial implementation: respecting user interaction and pausing the auto-scroll behavior. This idea was taught by [@samselikoff](https://x.com/samselikoff) in [Distinguishing Between Human and Programmatic Scrolling](https://youtu.be/3saFasHrnEg?si=rmRvuAZz9-9gHk2N). I [posted](https://x.com/_nikhilsnayak_/status/1859548189235524010) this approach on 𝕏, and, just like me, many React devs seemed to like it.
+
+So, let's build `AutoScrollList` from scratch! I recommend going through the resources linked above to better understand this post.
+
+---
+
+## Requirement
+
+First, let's understand the end goal. We need a component that automatically scrolls to the bottom whenever the content in the list changes—for example, when a new list item is added or an existing list item is updated. Additionally, we need to respect user interaction with the interface. If the user scrolls upward, the auto-scroll behavior should pause. However, if they scroll downward again, the auto-scroll behavior should resume.
+
+Here is the Chat UI that we will be enhancing:
+
+<CodeBlock>  
+<Snippet>
+
+```tsx lineNumbers filename="App.tsx"
+import { AssistantMessage, UserMessage } from './message';
+import { useContinueConversation } from './use-continue-conversation';
+import { UserInput } from './user-input';
+
+export default function App() {
+  const { messages, continueConversation, isPending } =
+    useContinueConversation();
+
+  return (
+    <div>
+      <ul className='mb-4 h-[50vh] space-y-4 overflow-auto p-4'>
+        {messages.map((message) => {
+          return (
+            <li key={message.id}>
+              {message.role === 'assistant' ? (
+                <AssistantMessage>{message.value}</AssistantMessage>
+              ) : (
+                <UserMessage>{message.value}</UserMessage>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      <UserInput action={continueConversation} isPending={isPending} />
+    </div>
+  );
+}
+```
+
+</Snippet>  
+<Preview>  
+<ChatUI />  
+</Preview>  
+</CodeBlock>
+
+> You don't need to worry about any of the implementation details in the code above. It's just the boilerplate to help us get started with our scroll component. This is a simulated generative AI chat interface.
+
+The `messages` array holds all the data, and we map each message into either `AssistantMessage` or `UserMessage` accordingly. Currently, the Chat UI doesn't have any auto-scroll behavior.
+
+With all the housekeeping out of the way, let's dive into the fun part!
+
+---
+
+## Version 1 (My Initial Implementation)
+
+There are many ways to address our requirement. One approach is to add a `useEffect` with `messages` as a dependency, so that whenever the messages change, we trigger auto-scrolling. However, we’ll take a different route by using `MutationObserver` to listen for DOM mutations and trigger the scroll behavior.
+
+Let’s modify the `ChatUI` component and walk through the implementation:
+
+<CodeBlock>  
+<Snippet>
+
+```tsx lineNumbers filename="App.tsx" addition="1,11-28,33" deletion="32"
+import { useEffect, useRef } from 'react';
+
+import { AssistantMessage, UserMessage } from './message';
+import { useContinueConversation } from './use-continue-conversation';
+import { UserInput } from './user-input';
+
+export default function App() {
+  const { messages, continueConversation, isPending } =
+    useContinueConversation();
+
+  const autoScrollListRef = useRef(null);
+
+  useEffect(() => {
+    const list = autoScrollListRef.current;
+    if (!list) return;
+
+    const observer = new MutationObserver(() => {
+      list.scrollTo({ top: list.scrollHeight });
+    });
+
+    observer.observe(list, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div>
+      <ul className='mb-4 h-[50vh] space-y-4 overflow-auto p-4'>
+      <ul ref={autoScrollListRef} className='mb-4 h-[50vh] space-y-4 overflow-y-auto p-4'>
+        {messages.map((message) => {
+          return (
+            <li key={message.id}>
+              {message.role === 'assistant' ? (
+                <AssistantMessage>{message.value}</AssistantMessage>
+              ) : (
+                <UserMessage>{message.value}</UserMessage>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      <UserInput action={continueConversation} isPending={isPending} />
+    </div>
+  );
+}
+```
+
+</Snippet>  
+<Preview>  
+<V1 />  
+</Preview>  
+</CodeBlock>
+
+We’ve attached a `ref` (`autoScrollListRef`) to the `ul` element. It’s important that the `ul` element has a fixed height, and `overflow-y` is set to either `auto` or `scroll`. All the scrolling magic happens inside the `useEffect`.
+
+Here’s what happens:
+
+- We set up a `MutationObserver` with a callback to scroll the list to the bottom.
+- The observer is configured to watch for mutations to the `ul` element extracted from the `autoScrollListRef` using the following options:
+
+  ```ts
+  const options = {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  };
+  ```
+
+  - Setting `childList` to `true` ensures the target observes changes to its immediate children. For example, when a new message is added, the callback fires, and the scroll behavior is triggered.
+  - Setting `subtree` to `true` ensures the target observes its descendants as well. This is necessary because responses from the LLM are streamed and may contain markdown. Whenever a mutation occurs in a descendant, the callback is triggered to handle auto-scrolling.
+  - Setting `characterData` to `true` ensures that changes to `textContent` also trigger the callback, enabling auto-scroll even for minor content updates.
+
+This approach works, but it has a major issue: it doesn’t respect user interactions. If a user scrolls up, auto-scroll will still force the view to the bottom, which can be frustrating. Additionally, we’re using the `useRef` + `useEffect` combination for imperative DOM manipulation, which is a good sign to use Callback Ref.
+
+You can learn more about why callback refs are better from the article linked above.
+
+Let’s fix these issues in the next version.
+
+---
+
+## Version 2 (Callback Ref + Pausing Auto-Scroll Behavior)
+
+Now that we understand how the `ChatUI` works, let’s focus on building the core part of the auto-scroll behavior in the `AutoScrollList` component.
+
+<CodeBlock>  
+<Snippet>
+
+```tsx lineNumbers filename="AutoScrollList.tsx" highlight="4,6-23,25-36"
+import { useCallback, useState } from 'react';
+
+export function AutoScrollList({ className, ...rest }) {
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+
+  const autoScrollListRef = useCallback(
+    (list) => {
+      const observer = new MutationObserver(() => {
+        if (shouldAutoScroll) {
+          list.scrollTo({ top: list.scrollHeight });
+        }
+      });
+
+      observer.observe(list, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+      });
+
+      return () => observer.disconnect();
+    },
+    [shouldAutoScroll]
+  );
+
+  const handleUserInteraction = (e) => {
+    const { scrollHeight, clientHeight, scrollTop } = e.currentTarget;
+    const maxScrollHeight = scrollHeight - clientHeight;
+
+    if (e.deltaY < 0) {
+      setShouldAutoScroll(false);
+    } else if (
+      e.deltaY > 0 &&
+      maxScrollHeight - scrollTop <= maxScrollHeight / 2
+    ) {
+      setShouldAutoScroll(true);
+    }
+  };
+
+  return (
+    <ul
+      ref={autoScrollListRef}
+      className={`overflow-y-auto ${className}`}
+      onWheel={handleUserInteraction}
+      {...rest}
+    />
+  );
+}
+```
+
+</Snippet>  
+<Preview>  
+<V2 />  
+</Preview>  
+</CodeBlock>
+
+### Callback Ref for DOM Access
+
+In lines 6–23, the auto-scroll logic remains almost the same as before, except it now respects the `shouldAutoScroll` state. The major difference is the use of **callback refs** instead of `useRef` and `useEffect`.
+
+With callback refs:
+
+- The `MutationObserver` is set up directly when the `ul` element is mounted.
+- This eliminates the need for `useEffect` to handle imperative DOM manipulation.
+
+The `useCallback` wrapper around `autoScrollListRef` ensures the callback is not recreated on every render. This is critical because callback refs depend on referential equality; recreating them unnecessarily could lead to repeated execution.
+
+In contrast, with the `useRef` + `useEffect` approach, the `MutationObserver` setup happens when the `AutoScrollList` component is mounted—not when the DOM node is available. This subtle distinction makes callback refs cleaner and more efficient in this case.
+
+For a deeper dive into why callback refs are preferable here, check out this excellent [article](https://tkdodo.eu/blog/avoiding-use-effect-with-callback-refs).
+
+### Respecting User Interaction
+
+To handle user interaction and pause auto-scroll when needed, we use the `wheel` event, as taught by [@samselikoff](https://x.com/samselikoff) in [Distinguishing Between Human and Programmatic Scrolling](https://youtu.be/3saFasHrnEg?si=rmRvuAZz9-9gHk2N).
+
+Here’s how the `handleUserInteraction` function works:
+
+- **On scroll up (`e.deltaY < 0`)**: The user is scrolling upward, so we disable auto-scroll by setting `shouldAutoScroll` to `false`.
+- **On scroll down (`e.deltaY > 0`)**: If the user scrolls downward and is close to the bottom (within half the maximum scroll height), auto-scroll is re-enabled by setting `shouldAutoScroll` to `true`.
+
+The `shouldAutoScroll` state is included in the dependency array of the `useCallback`, ensuring that the callback ref is updated whenever the state changes, keeping the behavior consistent.
+
+While this version addresses some key issues, it introduces two challenges:
+
+1. **Memoization Issues**  
+   Relying on memoization for correctness may cause unexpected behavior, particularly with the React Compiler. For more insights, check out this [thread](https://bsky.app/profile/gsathya.bsky.social/post/3lbjpdhqxzk24).
+
+2. **Lack of Mobile Support**  
+   The `wheel` event doesn’t fire on touch devices. This means the `handleUserInteraction` callback won’t work on mobile, leaving those interactions unhandled.
+
+Let’s address these issues in the final version to build a robust and versatile `AutoScrollList` component! 🚀
+
+---
+
+## Version 3 (The Endgame)
+
+With this version, you don't need `useCallback` or `useState` because we are stepping outside of the React world and hand-rolling everything with vanilla DOM APIs like a caveman. The `AutoScrollList` component itself is a React component, but the logic for controlling the scroll behavior is implemented outside of React. Let's look at the code and discuss what we have changed.
+
+<CodeBlock>  
+<Snippet>
+
+```tsx lineNumbers filename="AutoScrollList.tsx" highlight="11-77"
+export function AutoScrollList({ className, ...rest }) {
+  return (
+    <ul
+      ref={autoScrollListRef}
+      className={`overflow-y-auto ${className}`}
+      {...rest}
+    />
+  );
+}
+
+function autoScrollListRef(list: HTMLUListElement) {
+  let shouldAutoScroll = true;
+  let touchStartY = 0;
+  let lastScrollTop = 0;
+
+  const checkScrollPosition = () => {
+    const { scrollHeight, clientHeight, scrollTop } = list;
+    const maxScrollHeight = scrollHeight - clientHeight;
+    const scrollThreshold = maxScrollHeight / 2;
+
+    if (scrollTop < lastScrollTop) {
+      shouldAutoScroll = false;
+    } else if (maxScrollHeight - scrollTop <= scrollThreshold) {
+      shouldAutoScroll = true;
+    }
+
+    lastScrollTop = scrollTop;
+  };
+
+  const handleWheel = (e: WheelEvent) => {
+    if (e.deltaY < 0) {
+      shouldAutoScroll = false;
+    } else {
+      checkScrollPosition();
+    }
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartY = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touchEndY = e.touches[0].clientY;
+    const deltaY = touchStartY - touchEndY;
+
+    if (deltaY < 0) {
+      shouldAutoScroll = false;
+    } else {
+      checkScrollPosition();
+    }
+
+    touchStartY = touchEndY;
+  };
+
+  list.addEventListener('wheel', handleWheel);
+  list.addEventListener('touchstart', handleTouchStart);
+  list.addEventListener('touchmove', handleTouchMove);
+
+  const observer = new MutationObserver(() => {
+    if (shouldAutoScroll) {
+      list.scrollTo({ top: list.scrollHeight });
+    }
+  });
+
+  observer.observe(list, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
+
+  return () => {
+    observer.disconnect();
+    list.removeEventListener('wheel', handleWheel);
+    list.removeEventListener('touchstart', handleTouchStart);
+    list.removeEventListener('touchmove', handleTouchMove);
+  };
+}
+```
+
+</Snippet>  
+<Preview>  
+<V3 />  
+</Preview>  
+</CodeBlock>
+
+1. The `autoScrollListRef` function is now scoped outside the `AutoScrollList` component, which eliminates concerns about referential stability. This change removes the need for `useCallback` and avoids unnecessary re-creation of the callback ref during re-renders.
+
+2. Since this approach operates outside the React world, we use a simple variable `shouldAutoScroll` instead of React state. This eliminates the need for `useState` and avoids unnecessary state re-renders, making the logic more lightweight.
+
+3. To handle touch devices, we utilize the `touchmove` event. Unlike the `wheel` event, the `touchmove` event does not provide a `deltaY` value for determining the scroll direction. Instead, we calculate it manually by listening to the `touchstart` event and applying straightforward logic.
+
+Give it a try in the **Preview** tab, and let me know what you think of this approach! 😊
+
+---
+
+## Conclusion
+
+In this journey of building the `AutoScrollList` component, we explored multiple approaches, starting with a basic `useRef` and `useEffect` combination, progressing to `useCallback` with improved handling of user interactions, and finally settling on a robust vanilla DOM-based solution. Each iteration addressed limitations and improved functionality, with the final version offering better performance, simplicity, and cross-device compatibility.
+
+By understanding the trade-offs and leveraging the right tools for the job, we created a highly efficient and user-friendly auto-scroll behavior that respects user interactions. Whether you’re building a chat UI or any dynamic content list, this approach ensures a smooth and seamless user experience.
+
+You can copy paste this component to your project from [here](https://github.com/nikhilsnayak/nikhilsnayak.dev/blob/main/components/auto-scroll-list.tsx)
+
+Until next time, Happy scrolling! 😊
+
+---

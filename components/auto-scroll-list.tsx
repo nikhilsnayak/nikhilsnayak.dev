@@ -3,7 +3,6 @@ import { ComponentProps } from 'react';
 import { cn } from '~/lib/utils';
 
 export function AutoScrollList({
-  children,
   className,
   ...rest
 }: Omit<ComponentProps<'ul'>, 'ref'>) {
@@ -12,16 +11,11 @@ export function AutoScrollList({
       ref={scrollAreaRef}
       className={cn('overflow-y-auto', className)}
       {...rest}
-    >
-      {children}
-      <li data-list-end />
-    </ul>
+    />
   );
 }
 
 function scrollAreaRef(list: HTMLUListElement) {
-  if (!list) return;
-
   let shouldAutoScroll = true;
   let touchStartY = 0;
   let lastScrollTop = 0;
@@ -65,25 +59,20 @@ function scrollAreaRef(list: HTMLUListElement) {
     touchStartY = touchEndY;
   };
 
-  const handleScroll = () => {
-    checkScrollPosition();
-  };
+  list.addEventListener('wheel', handleWheel);
+  list.addEventListener('touchstart', handleTouchStart);
+  list.addEventListener('touchmove', handleTouchMove);
 
-  list.addEventListener('wheel', handleWheel, { passive: true });
-  list.addEventListener('touchstart', handleTouchStart, { passive: true });
-  list.addEventListener('touchmove', handleTouchMove, { passive: true });
-  list.addEventListener('scroll', handleScroll, { passive: true });
-
-  const listEnd = list.querySelector('li[data-list-end]');
   const observer = new MutationObserver(() => {
     if (shouldAutoScroll) {
-      listEnd?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      list.scrollTo({ top: list.scrollHeight });
     }
   });
 
   observer.observe(list, {
     childList: true,
     subtree: true,
+    characterData: true,
   });
 
   return () => {
@@ -91,6 +80,5 @@ function scrollAreaRef(list: HTMLUListElement) {
     list.removeEventListener('wheel', handleWheel);
     list.removeEventListener('touchstart', handleTouchStart);
     list.removeEventListener('touchmove', handleTouchMove);
-    list.removeEventListener('scroll', handleScroll);
   };
 }
