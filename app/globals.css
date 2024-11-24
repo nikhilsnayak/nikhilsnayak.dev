@@ -37,7 +37,7 @@
     --css-property: #c0392b;
     --css-entity: #e67e22;
 
-    --highlighted-line: 0, 0, 200;
+    --highlighted-line: 150, 200, 250;
     --added-line: 0, 200, 0;
     --removed-line: 200, 0, 0;
   }

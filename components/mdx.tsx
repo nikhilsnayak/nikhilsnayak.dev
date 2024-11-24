@@ -10,6 +10,7 @@ import { highlight, type LineNumbers } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Link } from 'next-view-transitions';
+import { Tweet as ReactTweet, TweetProps } from 'react-tweet';
 import rehypeMdxCodeProps from 'rehype-mdx-code-props';
 
 import { cn, slugify } from '~/lib/utils';
@@ -223,6 +224,14 @@ function Column({ children }: PropsWithChildren) {
   return <div className='grid place-items-center'>{children}</div>;
 }
 
+function Tweet(props: TweetProps) {
+  return (
+    <div className='not-prose'>
+      <ReactTweet {...props} />
+    </div>
+  );
+}
+
 const components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -242,6 +251,7 @@ const components = {
   CollapsibleContent,
   Row,
   Column,
+  Tweet,
 };
 
 export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {
