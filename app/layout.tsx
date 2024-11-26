@@ -1,11 +1,10 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { GeistMono } from 'geist/font/mono';
-import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
 import { ViewTransitions } from 'next-view-transitions';
 
@@ -18,6 +17,16 @@ import { AI } from '~/features/ai';
 import { LanguageStats } from '~/features/github/components/language-stats';
 import { LatestCommit } from '~/features/github/components/latest-commit';
 import { SourceLink } from '~/features/github/components/source-link';
+
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+});
+
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -61,8 +70,8 @@ export default function RootLayout({
       <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
         <body
           className={cn(
-            GeistSans.variable,
-            GeistMono.variable,
+            geistSans.variable,
+            geistMono.variable,
             'flex min-h-dvh flex-col font-sans'
           )}
         >
