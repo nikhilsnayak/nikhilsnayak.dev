@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import {
   boolean,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -26,12 +27,10 @@ export const hearts = pgTable(
     count: integer('count').notNull().default(0),
     clientIdentifier: varchar('client_identifier').notNull(),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.slug, t.clientIdentifier] }),
-    slugClientIdentifierUnique: unique()
-      .on(t.slug, t.clientIdentifier)
-      .nullsNotDistinct(),
-  })
+  (t) => [
+    primaryKey({ columns: [t.slug, t.clientIdentifier] }),
+    unique().on(t.slug, t.clientIdentifier).nullsNotDistinct(),
+  ]
 );
 
 export const users = pgTable('user', {
@@ -61,11 +60,11 @@ export const accounts = pgTable(
     id_token: text('id_token'),
     session_state: text('session_state'),
   },
-  (account) => ({
-    compoundKey: primaryKey({
+  (account) => [
+    primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  ]
 );
 
 export const sessions = pgTable('session', {
@@ -83,11 +82,11 @@ export const verificationTokens = pgTable(
     token: text('token').notNull(),
     expires: timestamp('expires', { mode: 'date' }).notNull(),
   },
-  (verificationToken) => ({
-    compositePk: primaryKey({
+  (verificationToken) => [
+    primaryKey({
       columns: [verificationToken.identifier, verificationToken.token],
     }),
-  })
+  ]
 );
 
 export const authenticators = pgTable(
@@ -104,33 +103,51 @@ export const authenticators = pgTable(
     credentialBackedUp: boolean('credentialBackedUp').notNull(),
     transports: text('transports'),
   },
-  (authenticator) => ({
-    compositePK: primaryKey({
+  (authenticator) => [
+    primaryKey({
       columns: [authenticator.userId, authenticator.credentialID],
     }),
-  })
+  ]
 );
 
-export const comments = pgTable('comment', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  slug: varchar('slug', { length: 255 }).notNull(),
-  userId: text('userId')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  content: text('content').notNull(),
-  createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-});
+export const comments = pgTable(
+  'comment',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    slug: varchar('slug', { length: 255 }).notNull(),
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    parentId: text('parent_id'),
+    content: text('content').notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.parentId],
+      foreignColumns: [table.id],
+    }).onDelete('cascade'),
+  ]
+);
 
 export const usersRelations = relations(users, ({ many }) => ({
   comments: many(comments),
 }));
 
-export const commentsRelations = relations(comments, ({ one }) => ({
+export const commentsRelations = relations(comments, ({ one, many }) => ({
   user: one(users, {
     fields: [comments.userId],
     references: [users.id],
+  }),
+  parent: one(comments, {
+    relationName: 'repliesRelation',
+    fields: [comments.parentId],
+    references: [comments.id],
+  }),
+  replies: many(comments, {
+    relationName: 'repliesRelation',
   }),
 }));
 
@@ -145,10 +162,10 @@ export const documents = pgTable(
     embedding: vector('embedding', { dimensions: 1536 }).notNull(),
     metadata: jsonb('metadata'),
   },
-  (table) => ({
-    embeddingIndex: index('embeddingIndex').using(
+  (table) => [
+    index('embeddingIndex').using(
       'hnsw',
       table.embedding.op('vector_cosine_ops')
     ),
-  })
+  ]
 );

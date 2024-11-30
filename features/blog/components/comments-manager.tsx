@@ -6,10 +6,8 @@ import {
   use,
   useActionState,
   useOptimistic,
-  useState,
 } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Reply, Trash2 } from 'lucide-react';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 
@@ -26,6 +24,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog';
 import { Textarea } from '~/components/ui/textarea';
+import { List } from '~/components/list';
 import { Spinner } from '~/components/spinner';
 
 import { addComment, deleteComment, editComment } from '../functions/mutations';
@@ -34,14 +33,14 @@ import {
   deleteCommentSchema,
   editCommentSchema,
 } from '../schema';
-import type { CommentWithUser } from '../types';
+import type { Comment } from '../types';
 
 type FormAction = (formData: FormData) => void;
 
-type OptimisticCommentWithUser = CommentWithUser & { isPending?: true };
+type OptimisticComment = Comment & { isPending?: true };
 
 interface CommentsManagerContext {
-  comments: OptimisticCommentWithUser[];
+  comments: OptimisticComment[];
   session?: Session | null;
   addCommentFormAction: FormAction;
   editCommentFormAction: FormAction;
@@ -52,10 +51,29 @@ const CommentsManagerContext = createContext<CommentsManagerContext | null>(
   null
 );
 
+const updateNestedReplies = (
+  comments: Comment[],
+  parentId: string | null,
+  callback: (comment: Comment) => Comment
+): Comment[] => {
+  return comments.map((comment) => {
+    if (comment.id === parentId) {
+      return callback(comment);
+    }
+    if (comment.replies.length > 0) {
+      return {
+        ...comment,
+        replies: updateNestedReplies(comment.replies, parentId, callback),
+      };
+    }
+    return comment;
+  });
+};
+
 async function commentsReducer(
-  state: CommentWithUser[],
+  state: Comment[],
   { formData, type }: { formData: FormData; type: 'add' | 'edit' | 'delete' }
-) {
+): Promise<Comment[]> {
   switch (type) {
     case 'add': {
       const res = await addComment(formData);
@@ -63,7 +81,20 @@ async function commentsReducer(
         toast.error(res.error);
         return state;
       }
-      return [res, ...state];
+
+      const newComment: Comment = {
+        ...res,
+        replies: [],
+      };
+
+      if (res.parentId === null) {
+        return [newComment, ...state];
+      } else {
+        return updateNestedReplies(state, res.parentId, (parent) => ({
+          ...parent,
+          replies: [newComment, ...parent.replies],
+        }));
+      }
     }
 
     case 'edit': {
@@ -72,10 +103,24 @@ async function commentsReducer(
         toast.error(res.error);
         return state;
       }
-      return state.map((comment) => {
-        if (comment.id === res.id) return res;
-        return comment;
-      });
+
+      if (res.parentId === null) {
+        return state.map((comment) =>
+          comment.id === res.id
+            ? {
+                ...comment,
+                ...res,
+              }
+            : comment
+        );
+      } else {
+        return updateNestedReplies(state, res.parentId, (parent) => ({
+          ...parent,
+          replies: parent.replies.map((reply) =>
+            reply.id === res.id ? { ...reply, ...res } : reply
+          ),
+        }));
+      }
     }
 
     case 'delete': {
@@ -84,7 +129,15 @@ async function commentsReducer(
         toast.error(res.error);
         return state;
       }
-      return state.filter((comment) => comment.id !== res.id);
+
+      if (res.parentId === null) {
+        return state.filter((comment) => comment.id !== res.id);
+      } else {
+        return updateNestedReplies(state, res.parentId, (parent) => ({
+          ...parent,
+          replies: parent.replies.filter((reply) => reply.id !== res.id),
+        }));
+      }
     }
 
     default:
@@ -93,7 +146,7 @@ async function commentsReducer(
 }
 
 interface CommentsManagerProps {
-  initialCommentsPromise: Promise<CommentWithUser[]>;
+  initialCommentsPromise: Promise<Comment[]>;
   session?: Session | null;
   slug: string;
 }
@@ -106,7 +159,7 @@ export function CommentsManager({
   const initialComments = use(initialCommentsPromise);
   const [state, dispatch] = useActionState(commentsReducer, initialComments);
   const [comments, setOptimisticComments] =
-    useOptimistic<OptimisticCommentWithUser[]>(state);
+    useOptimistic<OptimisticComment[]>(state);
 
   const addCommentFormAction = (formData: FormData) => {
     const id = crypto.randomUUID();
@@ -120,19 +173,30 @@ export function CommentsManager({
       toast.error('Invalid data');
       return;
     }
-    const { content, slug } = parsedResult.data;
 
-    const newOptimisticComment: OptimisticCommentWithUser = {
-      id,
-      content,
-      slug,
+    const newOptimisticComment: OptimisticComment = {
+      ...parsedResult.data,
+      replies: [],
       createdAt: new Date(),
       userId: session.user.id,
       user: session.user,
       isPending: true,
     };
 
-    setOptimisticComments((prev) => [newOptimisticComment, ...prev]);
+    setOptimisticComments((prev) => {
+      if (newOptimisticComment.parentId === null) {
+        return [newOptimisticComment, ...prev];
+      } else {
+        return updateNestedReplies(
+          prev,
+          newOptimisticComment.parentId,
+          (parent) => ({
+            ...parent,
+            replies: [newOptimisticComment, ...parent.replies],
+          })
+        );
+      }
+    });
     dispatch({ type: 'add', formData });
   };
 
@@ -145,15 +209,24 @@ export function CommentsManager({
       toast.error('Invalid data');
       return;
     }
-    const { content, id } = parsedResult.data;
+    const { content, id, parentId } = parsedResult.data;
 
-    setOptimisticComments((prev) =>
-      prev.map((comment) => {
-        if (comment.id === id) return { ...comment, content, isPending: true };
-        return comment;
-      })
-    );
-
+    setOptimisticComments((prev) => {
+      if (parentId === null) {
+        return prev.map((comment) => {
+          if (comment.id === id)
+            return { ...comment, content, isPending: true };
+          return comment;
+        });
+      } else {
+        return updateNestedReplies(state, parentId, (parent) => ({
+          ...parent,
+          replies: parent.replies.map((reply) =>
+            reply.id === id ? { ...reply, content } : reply
+          ),
+        }));
+      }
+    });
     dispatch({ type: 'edit', formData });
   };
 
@@ -166,12 +239,18 @@ export function CommentsManager({
       toast.error('Invalid data');
       return;
     }
-    const { id } = parsedResult.data;
+    const { id, parentId } = parsedResult.data;
 
-    setOptimisticComments((prev) =>
-      prev.filter((comment) => comment.id !== id)
-    );
-
+    setOptimisticComments((prev) => {
+      if (parentId === null) {
+        return prev.filter((comment) => comment.id !== id);
+      } else {
+        return updateNestedReplies(state, parentId, (parent) => ({
+          ...parent,
+          replies: parent.replies.filter((reply) => reply.id !== id),
+        }));
+      }
+    });
     dispatch({ type: 'delete', formData });
   };
 
@@ -202,90 +281,82 @@ function useCommentsManager() {
 }
 
 function CommentsList() {
-  const { comments, session } = useCommentsManager();
+  const { comments } = useCommentsManager();
 
   return (
-    <AnimatePresence initial={false}>
-      {comments.length === 0 ? (
-        <motion.p
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
+    <List
+      className='max-w-screen-sm space-y-4 overflow-hidden'
+      items={comments}
+      emptyListFallback={<p>No comments yet.</p>}
+    >
+      {(comment) => {
+        return <CommentThread comment={comment} />;
+      }}
+    </List>
+  );
+}
+
+function CommentThread({ comment }: { comment: OptimisticComment }) {
+  const { session } = useCommentsManager();
+
+  return (
+    <div className='py-2'>
+      <div className='flex flex-col items-start justify-between sm:flex-row'>
+        <div className='flex items-start gap-3 sm:gap-4'>
+          <Avatar className='h-10 w-10 border'>
+            <AvatarImage
+              alt={comment.user.name ?? ''}
+              src={comment.user.image ?? ''}
+            />
+            <AvatarFallback>{comment.user.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className='flex items-center gap-2'>
+              <span className='font-bold'>{comment.user.name}</span>
+              {session?.user?.id === comment.userId && (
+                <span className='rounded bg-muted px-1 py-0.5 text-[10px] text-muted-foreground'>
+                  You
+                </span>
+              )}
+              {comment.isPending && <Spinner className='size-4' />}
+            </h3>
+            <span className='text-sm text-muted-foreground'>
+              {formatDate(comment.createdAt.toISOString())}
+            </span>
+          </div>
+        </div>
+        {session?.user?.id && !comment.isPending && (
+          <div className='mt-2 flex items-center space-x-2 sm:mt-0'>
+            <AddReplyControl parentId={comment.id} slug={comment.slug} />
+            {session.user.id === comment.userId && (
+              <>
+                <EditCommentControl
+                  content={comment.content}
+                  commentId={comment.id}
+                  parentId={comment.parentId}
+                />
+                <DeleteCommentControl
+                  commentId={comment.id}
+                  parentId={comment.parentId}
+                />
+              </>
+            )}
+          </div>
+        )}
+      </div>
+      <p className='my-2 break-words'>{comment.content}</p>
+
+      {comment.replies.length > 0 && (
+        <List
+          className='mt-4 w-full space-y-4 overflow-hidden border-l pl-4'
+          items={comment.replies}
         >
-          No comments yet.
-        </motion.p>
-      ) : (
-        <motion.ul
-          layout
-          className='max-w-sm overflow-hidden'
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{
-            layout: {
-              type: 'spring',
-            },
+          {(reply) => {
+            return <CommentThread comment={reply} />;
           }}
-        >
-          <AnimatePresence initial={false}>
-            {comments.map((comment) => (
-              <motion.li
-                key={comment.id}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{
-                  opacity: { duration: 0.3 },
-                }}
-              >
-                <div className='py-4'>
-                  <div className='flex items-start justify-between'>
-                    <div className='flex gap-2'>
-                      <Avatar className='h-10 w-10 border'>
-                        <AvatarImage
-                          alt={comment.user.name ?? ''}
-                          src={comment.user.image ?? ''}
-                        />
-                        <AvatarFallback>
-                          {comment.user.name?.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h3 className='flex items-center gap-2'>
-                          <span className='font-bold'>{comment.user.name}</span>
-                          {session?.user?.id === comment.userId ? (
-                            <span className='rounded bg-muted px-1 py-0.5 text-[10px] text-muted-foreground'>
-                              You
-                            </span>
-                          ) : null}
-                          {comment.isPending ? (
-                            <Spinner className='size-4' />
-                          ) : null}
-                        </h3>
-                        <span className='text-sm text-muted-foreground'>
-                          {formatDate(comment.createdAt.toISOString())}
-                        </span>
-                      </div>
-                    </div>
-                    {session?.user?.id === comment.userId &&
-                    !comment.isPending ? (
-                      <div className='mr-2 flex items-center gap-2'>
-                        <EditCommentControl
-                          content={comment.content}
-                          commentId={comment.id}
-                        />
-                        <DeleteCommentControl commentId={comment.id} />
-                      </div>
-                    ) : null}
-                  </div>
-                  <p className='mt-2'>{comment.content}</p>
-                </div>
-              </motion.li>
-            ))}
-          </AnimatePresence>
-        </motion.ul>
+        </List>
       )}
-    </AnimatePresence>
+    </div>
   );
 }
 
@@ -319,28 +390,32 @@ function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
 function EditCommentControl({
   commentId,
   content,
-}: Readonly<{ commentId: string; content: string }>) {
+  parentId,
+}: Readonly<{ commentId: string; content: string; parentId: string | null }>) {
   const { editCommentFormAction } = useCommentsManager();
-  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button size='icon' variant='ghost'>
           <Pencil className='size-4 text-blue-400' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
-        <form
-          action={(formData) => {
-            setOpen(false);
-            editCommentFormAction(formData);
-          }}
-          className='space-y-4'
-        >
+        <form action={editCommentFormAction} className='space-y-4'>
           <DialogHeader>
             <DialogTitle>Edit Comment</DialogTitle>
           </DialogHeader>
           <input type='text' name='id' value={commentId} hidden readOnly />
+          {parentId && (
+            <input
+              type='text'
+              name='parentId'
+              value={parentId}
+              hidden
+              readOnly
+            />
+          )}
           <Textarea
             name='content'
             placeholder='Write a comment...'
@@ -349,7 +424,9 @@ function EditCommentControl({
             defaultValue={content}
           />
           <DialogFooter>
-            <Button type='submit'>Save changes</Button>
+            <DialogClose asChild>
+              <Button type='submit'>Save changes</Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -357,8 +434,12 @@ function EditCommentControl({
   );
 }
 
-function DeleteCommentControl({ commentId }: Readonly<{ commentId: string }>) {
+function DeleteCommentControl({
+  commentId,
+  parentId,
+}: Readonly<{ commentId: string; parentId: string | null }>) {
   const { deleteCommentFormAction } = useCommentsManager();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -372,12 +453,58 @@ function DeleteCommentControl({ commentId }: Readonly<{ commentId: string }>) {
             <DialogTitle>Delete Comment</DialogTitle>
           </DialogHeader>
           <input type='text' name='id' value={commentId} hidden readOnly />
+          {parentId && (
+            <input
+              type='text'
+              name='parentId'
+              value={parentId}
+              hidden
+              readOnly
+            />
+          )}
           <p>Are you sure you want to delete this comment?</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button type='submit' variant='destructive'>
                 Continue
               </Button>
+            </DialogClose>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function AddReplyControl({
+  parentId,
+  slug,
+}: Readonly<{ parentId: string; slug: string }>) {
+  const { addCommentFormAction } = useCommentsManager();
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size='icon' variant='ghost'>
+          <Reply className='size-4' />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className='w-4/5 rounded-sm'>
+        <form action={addCommentFormAction} className='space-y-4'>
+          <DialogHeader>
+            <DialogTitle>Add Reply</DialogTitle>
+          </DialogHeader>
+          <input type='text' name='slug' value={slug} hidden readOnly />
+          <input type='text' name='parentId' value={parentId} hidden readOnly />
+          <Textarea
+            name='content'
+            placeholder='Write a reply...'
+            required
+            minLength={3}
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type='submit'>Reply</Button>
             </DialogClose>
           </DialogFooter>
         </form>

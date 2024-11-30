@@ -7,6 +7,7 @@ import { db } from '~/lib/db';
 import { getIPHash } from '~/lib/utils/server';
 
 import { CONTENT_DIR } from '../constants';
+import { Comment } from '../types';
 import { readAndParseMDXFile } from '../utils';
 
 export async function getBlogPosts() {
@@ -66,12 +67,32 @@ export async function getHeartsInfoBySlug(slug: string) {
   return { total, currentClientHeartsCount };
 }
 
-export function getCommentsBySlug(slug: string) {
-  return db.query.comments.findMany({
+export async function getCommentsBySlug(slug: string): Promise<Comment[]> {
+  const comments = await db.query.comments.findMany({
     where: (commentsTable, { eq }) => eq(commentsTable.slug, slug),
     with: {
       user: true,
     },
     orderBy: (commentsTable, { desc }) => [desc(commentsTable.createdAt)],
   });
+
+  const commentMap = new Map(
+    comments.map((comment) => [
+      comment.id,
+      { ...comment, replies: [] as Comment[] },
+    ])
+  );
+
+  const result: Comment[] = [];
+
+  comments.forEach((comment) => {
+    if (comment.parentId) {
+      const parentComment = commentMap.get(comment.parentId)!;
+      parentComment.replies.push(commentMap.get(comment.id)!);
+    } else {
+      result.push(commentMap.get(comment.id)!);
+    }
+  });
+
+  return result;
 }
