@@ -2,7 +2,7 @@ import 'server-only';
 
 import { unstable_cache } from 'next/cache';
 import { openai } from '@ai-sdk/openai';
-import { embed, embedMany, generateObject } from 'ai';
+import { embed, generateObject } from 'ai';
 import { cosineDistance, desc, gt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -38,14 +38,6 @@ export const getSuggestedQuestions = unstable_cache(
     tags: ['getSuggestedQuestions'],
   }
 );
-
-export async function generateEmbeddings(chunks: string[]) {
-  const { embeddings } = await embedMany({
-    model: openai.embedding('text-embedding-ada-002'),
-    values: chunks,
-  });
-  return embeddings;
-}
 
 async function generateEmbedding(value: string) {
   const input = value.replaceAll('\\n', ' ');

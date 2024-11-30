@@ -16,7 +16,9 @@
         "KV_REST_API_READ_ONLY_TOKEN",
         "AUTH_SECRET",
         "AUTH_GITHUB_ID",
-        "AUTH_GITHUB_SECRET"
+        "AUTH_GITHUB_SECRET",
+        "HASH_SECRET",
+        "GITHUB_PERSONAL_ACCESS_TOKEN"
       ]
     },
     "type-check": {
