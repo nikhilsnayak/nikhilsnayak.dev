@@ -1,20 +1,22 @@
 import { createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 
 import { comments } from '~/lib/db/schema';
 
 const commentSchema = createSelectSchema(comments);
 
-export const addCommentSchema = commentSchema.pick({
-  id: true,
-  content: true,
-  slug: true,
-});
+const baseSchema = {
+  parentId: z.string().optional().nullable().default(null),
+};
 
-export const editCommentSchema = commentSchema.pick({
-  id: true,
-  content: true,
-});
+export const addCommentSchema = commentSchema
+  .pick({ id: true, content: true, slug: true })
+  .extend(baseSchema);
 
-export const deleteCommentSchema = commentSchema.pick({
-  id: true,
-});
+export const editCommentSchema = commentSchema
+  .pick({ id: true, content: true })
+  .extend(baseSchema);
+
+export const deleteCommentSchema = commentSchema
+  .pick({ id: true })
+  .extend(baseSchema);

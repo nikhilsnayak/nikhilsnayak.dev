@@ -14,7 +14,7 @@ import {
   deleteCommentSchema,
   editCommentSchema,
 } from '../schema';
-import type { CommentWithUser, HeartsInfo } from '../types';
+import type { CommentWithoutReplies, HeartsInfo } from '../types';
 
 export async function updateViewsBySlug(slug: string) {
   try {
@@ -78,7 +78,7 @@ export async function addHeart(
 
 export async function addComment(
   formData: FormData
-): Promise<CommentWithUser | { error: string }> {
+): Promise<CommentWithoutReplies | { error: string }> {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -107,7 +107,7 @@ export async function addComment(
 
 export async function editComment(
   formData: FormData
-): Promise<CommentWithUser | { error: string }> {
+): Promise<CommentWithoutReplies | { error: string }> {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -162,7 +162,7 @@ export async function editComment(
 
 export async function deleteComment(
   formData: FormData
-): Promise<CommentWithUser | { error: string }> {
+): Promise<CommentWithoutReplies | { error: string }> {
   const session = await auth();
 
   if (!session?.user?.id) {
