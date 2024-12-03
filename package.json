@@ -56,7 +56,7 @@
     "eslint-plugin-react-compiler": "^19.0.0-beta-df7b47d-20241124",
     "framer-motion": "12.0.0-alpha.2",
     "langchain": "^0.3.6",
-    "lucide-react": "^0.462.0",
+    "lucide-react": "^0.463.0",
     "next": "^15.0.4-canary.28",
     "next-auth": "5.0.0-beta.25",
     "next-mdx-remote": "^5.0.0",
