@@ -314,10 +314,10 @@ export default function GenUI() {
   };
 
   return (
-    <section className='bg-background w-full rounded-lg border p-4 shadow-lg'>
+    <section className='w-full rounded-lg border bg-background p-4 shadow-lg'>
       <ul className='relative mb-4 h-[60vh] space-y-4 overflow-auto rounded-lg p-4'>
         {messages.length === 0 ? (
-          <li className='text-foreground absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+          <li className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground'>
             No Conversation
           </li>
         ) : (
@@ -514,7 +514,7 @@ export function StockDisplay({
         </button>
 
         {showDetails && (
-          <div className='text-foreground mt-4 rounded bg-gray-100 p-4 dark:bg-gray-800'>
+          <div className='mt-4 rounded bg-gray-100 p-4 text-foreground dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
             <p>
               Details about financial metrics and other insights would be
@@ -532,7 +532,7 @@ export function StockDisplay({
             value={compareSymbol}
             onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
             placeholder='Enter stock symbol'
-            className='text-foreground rounded border px-2 py-1'
+            className='rounded border px-2 py-1 text-foreground'
           />
           <button
             className='rounded bg-green-500 px-4 py-1 text-white'
@@ -543,7 +543,7 @@ export function StockDisplay({
         </div>
 
         {showComparison && (
-          <div className='text-primary-foreground mt-4 rounded bg-zinc-800 p-4 dark:bg-zinc-300'>
+          <div className='mt-4 rounded bg-zinc-800 p-4 text-primary-foreground dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
               Comparison details between {symbol} and {compareSymbol} would be
