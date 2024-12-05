@@ -29,9 +29,9 @@ import { Spinner } from '~/components/spinner';
 
 import { addComment, deleteComment, editComment } from '../functions/mutations';
 import {
-  addCommentSchema,
-  deleteCommentSchema,
-  editCommentSchema,
+  AddCommentSchema,
+  DeleteCommentSchema,
+  EditCommentSchema,
 } from '../schema';
 import type { Comment } from '../types';
 
@@ -165,7 +165,7 @@ export function CommentsManager({
     const id = crypto.randomUUID();
     formData.append('id', id);
 
-    const parsedResult = addCommentSchema.safeParse(
+    const parsedResult = AddCommentSchema.safeParse(
       Object.fromEntries(formData)
     );
 
@@ -201,7 +201,7 @@ export function CommentsManager({
   };
 
   const editCommentFormAction = (formData: FormData) => {
-    const parsedResult = editCommentSchema.safeParse(
+    const parsedResult = EditCommentSchema.safeParse(
       Object.fromEntries(formData)
     );
 
@@ -231,7 +231,7 @@ export function CommentsManager({
   };
 
   const deleteCommentFormAction = (formData: FormData) => {
-    const parsedResult = deleteCommentSchema.safeParse(
+    const parsedResult = DeleteCommentSchema.safeParse(
       Object.fromEntries(formData)
     );
 

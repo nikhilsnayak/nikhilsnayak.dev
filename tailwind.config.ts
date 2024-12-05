@@ -9,6 +9,7 @@ const config = {
     './app/**/*.tsx',
     './content/**/*.{mdx,tsx}',
     './features/**/*.tsx',
+    './mdx-components.tsx',
   ],
   prefix: '',
   theme: {

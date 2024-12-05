@@ -8,15 +8,13 @@ import {
 import Image from 'next/image';
 import { highlight, type LineNumbers } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import type { MDXComponents } from 'mdx/types';
 import { Link } from 'next-view-transitions';
 import { Tweet as ReactTweet, TweetProps } from 'react-tweet';
-import rehypeMdxCodeProps from 'rehype-mdx-code-props';
 
 import { cn, slugify } from '~/lib/utils';
-
-import { Spinner } from './spinner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { Spinner } from '~/components/spinner';
 
 function Table({
   data,
@@ -254,16 +252,8 @@ const components = {
   Tweet,
 };
 
-export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {
-  return (
-    <MDXRemote
-      {...props}
-      options={{
-        mdxOptions: {
-          rehypePlugins: [rehypeMdxCodeProps],
-        },
-      }}
-      components={{ ...components, ...(props.components || {}) }}
-    />
-  );
+export function useMDXComponents(): MDXComponents {
+  return {
+    ...components,
+  };
 }

@@ -1,12 +1,10 @@
 import { Suspense } from 'react';
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 import { Eye } from 'lucide-react';
 
 import { BASE_URL } from '~/lib/constants';
 import { formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
-import { CustomMDX } from '~/components/mdx';
 import { Spinner } from '~/components/spinner';
 import { SummarizeButton } from '~/features/ai/components/summarize-button';
 import { CommentsSection } from '~/features/blog/components/comments-section';
@@ -15,8 +13,8 @@ import { Hearts } from '~/features/blog/components/hearts';
 import { SocialShare } from '~/features/blog/components/social-share';
 import { BlogViewsCount } from '~/features/blog/components/views';
 import {
-  getBlogPostBySlug,
-  getBlogPosts,
+  getBlogMetadataBySlug,
+  getBlogsMetadata,
 } from '~/features/blog/functions/queries';
 
 interface BlogProps {
@@ -24,7 +22,7 @@ interface BlogProps {
 }
 
 export async function generateStaticParams() {
-  const posts = await getBlogPosts();
+  const posts = await getBlogsMetadata();
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -35,19 +33,14 @@ export async function generateMetadata({
   params,
 }: BlogProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
-  if (!post) {
+  const metadata = await getBlogMetadataBySlug(slug);
+  if (!metadata) {
     return {};
   }
 
-  const {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-    image,
-  } = post.metadata;
-  const ogImage =
-    image ?? `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`;
+  const { title, publishedAt: publishedTime, summary: description } = metadata;
+
+  const ogImage = `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`;
 
   return {
     title,
@@ -76,27 +69,10 @@ export async function generateMetadata({
 
 export default async function BlogPage({ params }: Readonly<BlogProps>) {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const { publishedAt, summary, title } = await getBlogMetadataBySlug(slug);
 
-  if (!post) {
-    notFound();
-  }
+  const { default: Blog } = await import(`../../../content/${slug}/post.mdx`);
 
-  const { metadata } = post;
-  let components = null;
-
-  if (metadata.components) {
-    const componentNames = JSON.parse(metadata.components);
-    const importedComponents = await Promise.all(
-      (componentNames as string[]).map(async (name) => {
-        const mod = await import(`../../../content/components/${slug}/${name}`);
-        return { [name]: mod.default };
-      })
-    );
-    components = Object.assign({}, ...importedComponents);
-  }
-
-  const blogTitle = post.metadata.title;
   return (
     <section>
       <script
@@ -106,13 +82,11 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
-            headline: post.metadata.title,
-            datePublished: post.metadata.publishedAt,
-            dateModified: post.metadata.publishedAt,
-            description: post.metadata.summary,
-            image: post.metadata.image
-              ? `${BASE_URL}${post.metadata.image}`
-              : `/api/og?title=${encodeURIComponent(post.metadata.title)}`,
+            headline: title,
+            datePublished: publishedAt,
+            dateModified: publishedAt,
+            description: summary,
+            image: `/api/og?title=${encodeURIComponent(title)}`,
             url: `${BASE_URL}/blogs/${slug}`,
             author: {
               '@type': 'Person',
@@ -127,14 +101,14 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
           viewTransitionName: slug,
         }}
       >
-        {post.metadata.title}
+        {title}
       </h1>
       <div className='mb-8 mt-4 flex flex-col justify-between gap-3 text-sm sm:flex-row sm:items-center'>
         <div className='flex items-center gap-3'>
           <p className='text-sm text-neutral-600 dark:text-neutral-400'>
-            {formatDate(post.metadata.publishedAt)}
+            {formatDate(publishedAt)}
           </p>
-          <SummarizeButton blogTitle={blogTitle} />
+          <SummarizeButton blogTitle={title} />
         </div>
         <ErrorBoundary fallback={<span>{"Couldn't load views"}</span>}>
           <Suspense fallback={<Spinner variant='ellipsis' />}>
@@ -149,13 +123,13 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
         </ErrorBoundary>
       </div>
       <article className='prose min-w-full dark:prose-invert'>
-        <CustomMDX source={post.content} components={components} />
+        <Blog />
       </article>
       <div className='mt-8 space-y-4'>
         <p className='dark:text-fluorescent'>
           If you enjoyed this blog, share it on social media to help others find
           it too
-          <SocialShare title={post.metadata.title} slug={slug} />
+          <SocialShare title={title} slug={slug} />
         </p>
         <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
           <Suspense fallback={<HeartButton />}>

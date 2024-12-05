@@ -1,18 +1,12 @@
 import { BASE_URL } from '~/lib/constants';
-import { getBlogPosts } from '~/features/blog/functions/queries';
+import { getBlogsMetadata } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
 export async function GET() {
-  const allBlogs = await getBlogPosts();
+  const allBlogs = await getBlogsMetadata();
 
   const itemsXml = allBlogs
-    .sort((a, b) => {
-      if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-        return -1;
-      }
-      return 1;
-    })
     .map(
       (post) =>
         `<item>
