@@ -67,6 +67,8 @@ export async function generateMetadata({
   };
 }
 
+export const dynamicParams = false;
+
 export default async function BlogPage({ params }: Readonly<BlogProps>) {
   const { slug } = await params;
   const { publishedAt, summary, title } = await getBlogMetadataBySlug(slug);
