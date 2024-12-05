@@ -1,8 +1,8 @@
----
-title: 'Dissecting Partial Pre Rendering'
-publishedAt: '2024-07-06'
-summary: 'Fast initial loads, dynamic content, and rich interactivity in a single HTTP request!'
----
+import buildOutput1 from './build-output-1.png';
+import buildOutput2 from './build-output-2.png';
+import buildOutput3 from './build-output-3.png';
+import courseDetailsPage from './course-details-page.png';
+import customerReviewSection from './customer-review-section.png';
 
 ## Prelude
 
@@ -98,12 +98,7 @@ Consider a Course Details Page as shown below.
 
 > Note: This is just an example for illustration purposes and the use case might vary in real scenarios. In this example, I assume that course details don't change very often.
 
-<Image
-  src='/blogs/dissecting-partial-pre-rendering/course-details-page.png'
-  alt='Course Details page'
-  width={1168}
-  height={929}
-/>
+<Image src={courseDetailsPage} alt='Course Details page' />
 
 The corresponding JSX to render this page looks like this:
 
@@ -113,7 +108,7 @@ import Image from 'next/image';
 export default function Home() {
   return (
     <div className='flex min-h-[100dvh] flex-col'>
-      <section className='w-full bg-muted py-12 md:py-24 lg:py-32'>
+      <section className='bg-muted w-full py-12 md:py-24 lg:py-32'>
         <div className='container m-auto px-4 md:px-6'>
           <div className='grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]'>
             <div className='flex flex-col justify-center space-y-4'>
@@ -121,7 +116,7 @@ export default function Home() {
                 <h1 className='text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none'>
                   Mastering React: A Comprehensive Course
                 </h1>
-                <p className='max-w-[600px] text-muted-foreground md:text-xl'>
+                <p className='text-muted-foreground max-w-[600px] md:text-xl'>
                   Dive deep into the world of React and become a proficient
                   frontend developer. This course covers everything from
                   fundamental concepts to advanced techniques.
@@ -148,7 +143,7 @@ export default function Home() {
               <h2 className='text-3xl font-bold tracking-tighter'>
                 Course Curriculum
               </h2>
-              <div className='mt-6 space-y-4 text-muted-foreground'>
+              <div className='text-muted-foreground mt-6 space-y-4'>
                 <div>
                   <h3 className='text-xl font-bold'>Introduction to React</h3>
                   <p>
@@ -178,7 +173,7 @@ export default function Home() {
               <h2 className='text-3xl font-bold tracking-tighter'>
                 About the Instructor
               </h2>
-              <div className='mt-6 space-y-4 text-muted-foreground'>
+              <div className='text-muted-foreground mt-6 space-y-4'>
                 <div className='flex items-center gap-4'>
                   <div className='flex h-16 w-16 items-center justify-center rounded-full border'>
                     <Image
@@ -223,21 +218,11 @@ So, technically, we generate a static HTML page with this information (SSG), res
 
 Here is the build logs for the above use case:
 
-<Image
-  src='/blogs/dissecting-partial-pre-rendering/build-output-1.png'
-  alt='Build output 1'
-  width={805}
-  height={307}
-/>
+<Image src={buildOutput1} alt='Build output 1' />
 
 Now let's increase the complexity a bit more. We need to add a customer review section as shown below:
 
-<Image
-  src='/blogs/dissecting-partial-pre-rendering/customer-review-section.png'
-  alt='Course Details page'
-  width={1121}
-  height={183}
-/>
+<Image src={customerReviewSection} alt='Customer Review Section' />
 
 The tricky part here is that the reviews get added and edited very often since our platform is very popular. Therefore, the reviews must be dynamically generated for each request.
 
@@ -287,12 +272,7 @@ With the above changes, our entire route is now dynamically rendered because we 
 
 Here the build logs for the above use case:
 
-<Image
-  src='/blogs/dissecting-partial-pre-rendering/build-output-2.png'
-  alt='Build output 2'
-  width={811}
-  height={322}
-/>
+<Image src={buildOutput2} alt='Build output 2' />
 
 Now comes the actual fun part. Remember earlier I said the PPR is built on top of existing React APIs? We have used the `Suspense` boundary in the above code to show a fallback UI while our `Reviews` component is suspended to get the data from the database.
 
@@ -321,12 +301,7 @@ export default nextConfig;
 
 With this one change we are now PPRing our page. Here is the build output with PPR turned ON
 
-<Image
-  src='/blogs/dissecting-partial-pre-rendering/build-output-3.png'
-  alt='Build output 3'
-  width={1122}
-  height={322}
-/>
+<Image src={buildOutput3} alt='Build output 3' />
 
 ### Chapter 3 - How It Compares to Other Rendering Strategies
 

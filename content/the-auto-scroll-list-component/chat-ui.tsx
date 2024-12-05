@@ -4,7 +4,7 @@ import { AssistantMessage, UserMessage } from './message';
 import { useContinueConversation } from './use-continue-conversation';
 import { UserInput } from './user-input';
 
-export default function ChatUI() {
+export function ChatUI() {
   const { messages, continueConversation, isPending } =
     useContinueConversation();
 

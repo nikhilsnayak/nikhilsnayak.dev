@@ -138,3 +138,25 @@ export function StockDisplay({
     </div>
   );
 }
+
+export function StockDisplayDemo() {
+  const sampleStockData = {
+    symbol: 'AAPL',
+    companyName: 'Apple Inc.',
+    currentPrice: '178.45',
+    openingPrice: '175.30',
+    highestPrice: '180.20',
+    lowestPrice: '173.50',
+    previousClose: '176.90',
+    volume: 75230000,
+    marketCap: 2830000000000,
+    peRatio: '28.46',
+    dividendYield: '0.55',
+    lastUpdated: new Date().toISOString(),
+  };
+  return (
+    <div className='not-prose mx-auto mt-6 min-w-full rounded-lg'>
+      <StockDisplay {...sampleStockData} />
+    </div>
+  );
+}

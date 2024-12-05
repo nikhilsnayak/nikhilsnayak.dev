@@ -17,7 +17,7 @@ export function List<
   }
 
   return (
-    <ul className='max-h-60 space-y-1 overflow-auto p-1' {...rest}>
+    <ul {...rest}>
       {items.map((item) => (
         <li key={item.id}>{children(item)}</li>
       ))}

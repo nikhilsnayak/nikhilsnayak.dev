@@ -10,9 +10,9 @@ import { comments, hearts, views } from '~/lib/db/schema';
 import { getIPHash } from '~/lib/utils/server';
 
 import {
-  addCommentSchema,
-  deleteCommentSchema,
-  editCommentSchema,
+  AddCommentSchema,
+  DeleteCommentSchema,
+  EditCommentSchema,
 } from '../schema';
 import type { CommentWithoutReplies, HeartsInfo } from '../types';
 
@@ -85,7 +85,7 @@ export async function addComment(
     return { error: 'Unauthorized' };
   }
 
-  const parsedResult = addCommentSchema.safeParse(Object.fromEntries(formData));
+  const parsedResult = AddCommentSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsedResult.success) {
     return { error: 'Invalid input' };
@@ -114,7 +114,7 @@ export async function editComment(
     return { error: 'Unauthorized' };
   }
 
-  const parsedResult = editCommentSchema.safeParse(
+  const parsedResult = EditCommentSchema.safeParse(
     Object.fromEntries(formData)
   );
 
@@ -169,7 +169,7 @@ export async function deleteComment(
     return { error: 'Unauthorized' };
   }
 
-  const parsedResult = deleteCommentSchema.safeParse(
+  const parsedResult = DeleteCommentSchema.safeParse(
     Object.fromEntries(formData)
   );
 

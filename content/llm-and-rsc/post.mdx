@@ -1,19 +1,8 @@
----
-title: 'LLM and RSC: A match made in Heaven'
-publishedAt: '2024-08-30'
-summary: 'Powerful synergy between advanced AI tools and modern web technologies to enhance user interfaces.'
-image: '/blogs/llm-and-rsc/cover.png'
-components: '["GenUI", "StockDisplayDemo"]'
----
+import cover from './cover.png';
+import { GenUI } from './gen-ui';
+import { StockDisplayDemo } from './stock-display';
 
-<Image
-  src='/blogs/llm-and-rsc/cover.png'
-  alt='Speed Insights'
-  width={1080}
-  height={540}
-  className='grayscale'
-  priority
-/>
+<Image src={cover} alt='cover image' className='grayscale' priority />
 
 > I know the title is a bit creepy, but bear with me till the end, and I'll convince you that the title is actually true.
 
@@ -325,10 +314,10 @@ export default function GenUI() {
   };
 
   return (
-    <section className='w-full rounded-lg border bg-background p-4 shadow-lg'>
+    <section className='bg-background w-full rounded-lg border p-4 shadow-lg'>
       <ul className='relative mb-4 h-[60vh] space-y-4 overflow-auto rounded-lg p-4'>
         {messages.length === 0 ? (
-          <li className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground'>
+          <li className='text-foreground absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
             No Conversation
           </li>
         ) : (
@@ -525,7 +514,7 @@ export function StockDisplay({
         </button>
 
         {showDetails && (
-          <div className='mt-4 rounded bg-gray-100 p-4 text-foreground dark:bg-gray-800'>
+          <div className='text-foreground mt-4 rounded bg-gray-100 p-4 dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
             <p>
               Details about financial metrics and other insights would be
@@ -543,7 +532,7 @@ export function StockDisplay({
             value={compareSymbol}
             onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
             placeholder='Enter stock symbol'
-            className='rounded border px-2 py-1 text-foreground'
+            className='text-foreground rounded border px-2 py-1'
           />
           <button
             className='rounded bg-green-500 px-4 py-1 text-white'
@@ -554,7 +543,7 @@ export function StockDisplay({
         </div>
 
         {showComparison && (
-          <div className='mt-4 rounded bg-zinc-800 p-4 text-primary-foreground dark:bg-zinc-300'>
+          <div className='text-primary-foreground mt-4 rounded bg-zinc-800 p-4 dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
               Comparison details between {symbol} and {compareSymbol} would be

@@ -2,7 +2,7 @@
 
 import { useControlStore } from './store';
 
-export default function Controls() {
+export function Controls() {
   const { delay, shouldError, setDelay, setShouldError } = useControlStore();
 
   return (

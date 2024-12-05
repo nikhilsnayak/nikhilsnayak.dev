@@ -6,7 +6,7 @@ import { AssistantMessage, UserMessage } from './message';
 import { useContinueConversation } from './use-continue-conversation';
 import { UserInput } from './user-input';
 
-export default function V2() {
+export function V2() {
   const { messages, continueConversation, isPending } =
     useContinueConversation();
 

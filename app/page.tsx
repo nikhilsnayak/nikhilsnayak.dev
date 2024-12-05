@@ -20,7 +20,7 @@ import { cn, formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
 import { BlogViewsCount } from '~/features/blog/components/views';
-import { getBlogPosts } from '~/features/blog/functions/queries';
+import { getBlogsMetadata } from '~/features/blog/functions/queries';
 
 const sourceCodePro = Source_Code_Pro({
   weight: ['600'],
@@ -28,7 +28,7 @@ const sourceCodePro = Source_Code_Pro({
 });
 
 export default async function HomePage() {
-  const recentBlogs = await getBlogPosts();
+  const recentBlogs = await getBlogsMetadata();
 
   return (
     <section>

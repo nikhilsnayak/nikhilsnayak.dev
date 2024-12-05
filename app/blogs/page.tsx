@@ -3,7 +3,7 @@ import { ArrowUpRight, Rss } from 'lucide-react';
 import { Link } from 'next-view-transitions';
 
 import { formatDate } from '~/lib/utils';
-import { getBlogPosts } from '~/features/blog/functions/queries';
+import { getBlogsMetadata } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const allBlogs = await getBlogPosts();
+  const allBlogs = await getBlogsMetadata();
 
   return (
     <section>

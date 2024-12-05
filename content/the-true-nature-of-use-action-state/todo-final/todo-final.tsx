@@ -7,8 +7,9 @@ import {
   useOptimistic,
 } from 'react';
 
+import { List } from '~/components/list';
+
 import { getTodos } from '../db/queries';
-import { List } from '../list';
 import { AddTodoForm, TodoItem } from '../todo';
 import { todosReducerFinal } from '../todos-reducer';
 import { Todo } from '../types';
@@ -66,7 +67,10 @@ export default function TodoFinal() {
         Updates in progress...
       </p>
       <AddTodoForm onSubmit={handleAddTodo} />
-      <List items={optimisticTodos}>
+      <List
+        items={optimisticTodos}
+        className='max-h-60 space-y-1 overflow-auto p-1'
+      >
         {(todo) => (
           <TodoItem
             done={todo.done}

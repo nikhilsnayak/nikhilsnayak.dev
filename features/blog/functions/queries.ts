@@ -7,26 +7,23 @@ import { db } from '~/lib/db';
 import { getIPHash } from '~/lib/utils/server';
 
 import { CONTENT_DIR } from '../constants';
+import { BlogMetadataSchema } from '../schema';
 import { Comment } from '../types';
-import { readAndParseMDXFile } from '../utils';
 
-export async function getBlogPosts() {
-  const files = await fs.readdir(CONTENT_DIR);
+export async function getBlogsMetadata() {
+  const files = await fs.readdir(CONTENT_DIR, { withFileTypes: true });
+  const slugs = files
+    .filter((file) => file.isDirectory())
+    .map((file) => file.name);
 
   const posts = await Promise.all(
-    files
-      .filter((file) => path.extname(file) === '.mdx')
-      .map(async (file) => {
-        const filePath = path.join(CONTENT_DIR, file);
-        const { metadata, content } = await readAndParseMDXFile(filePath);
-        const slug = path.basename(file, path.extname(file));
-
-        return {
-          metadata,
-          slug,
-          content,
-        };
-      })
+    slugs.map(async (slug) => {
+      const metadata = await getBlogMetadataBySlug(slug);
+      return {
+        metadata,
+        slug,
+      };
+    })
   );
 
   return posts.toSorted((a, b) => {
@@ -37,13 +34,10 @@ export async function getBlogPosts() {
   });
 }
 
-export async function getBlogPostBySlug(slug: string) {
-  const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
-  try {
-    return await readAndParseMDXFile(filePath);
-  } catch {
-    throw new Error(`Blog post with slug "${slug}" not found.`);
-  }
+export async function getBlogMetadataBySlug(slug: string) {
+  const metadataPath = path.join(CONTENT_DIR, slug, 'metadata.json');
+  const metadataContent = await fs.readFile(metadataPath, 'utf-8');
+  return BlogMetadataSchema.parse(JSON.parse(metadataContent));
 }
 
 export function getBlogViewsBySlug(slug: string) {

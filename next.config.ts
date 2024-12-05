@@ -1,7 +1,7 @@
 import { NextConfig } from 'next';
+import createMDX from '@next/mdx';
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['next-mdx-remote'],
   logging: {
     fetches: {
       fullUrl: true,
@@ -21,4 +21,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: {
+    rehypePlugins: [
+      // @ts-ignore https://nextjs.org/docs/canary/app/building-your-application/configuring/mdx#using-plugins-with-turbopack
+      ['rehype-mdx-code-props', { strict: true, throwOnError: true }],
+    ],
+  },
+});
+
+export default withMDX(nextConfig);

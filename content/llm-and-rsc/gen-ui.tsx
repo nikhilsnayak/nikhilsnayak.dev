@@ -10,7 +10,7 @@ export interface Message {
   display: ReactNode;
 }
 
-export default function GenUI() {
+export function GenUI() {
   const [messages, setMessages] = useState([] as Message[]);
   const [isPending, startTransition] = useTransition();
 
