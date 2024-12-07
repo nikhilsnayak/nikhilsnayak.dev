@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { Eye } from 'lucide-react';
 
 import { BASE_URL } from '~/lib/constants';
