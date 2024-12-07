@@ -41,44 +41,39 @@ function getLoader() {
   });
 }
 
-async function main() {
-  try {
-    console.log('🔧 Initializing loader...');
-    const loader = getLoader();
+try {
+  console.log('🔧 Initializing loader...');
+  const loader = getLoader();
 
-    console.log('📥 Loading content...');
-    const content = await loader.load();
-    console.log(`✅ Loaded ${content.length} document(s).`);
+  console.log('📥 Loading content...');
+  const content = await loader.load();
+  console.log(`✅ Loaded ${content.length} document(s).`);
 
-    console.log('✂️ Splitting documents...');
-    const markdownSplitter =
-      RecursiveCharacterTextSplitter.fromLanguage('markdown');
-    const splittedDocuments = await markdownSplitter.splitDocuments(content);
-    console.log(`✅ Split into ${splittedDocuments.length} chunks.`);
+  console.log('✂️ Splitting documents...');
+  const markdownSplitter =
+    RecursiveCharacterTextSplitter.fromLanguage('markdown');
+  const splittedDocuments = await markdownSplitter.splitDocuments(content);
+  console.log(`✅ Split into ${splittedDocuments.length} chunks.`);
 
-    const chunks = splittedDocuments.map((document) => document.pageContent);
+  const chunks = splittedDocuments.map((document) => document.pageContent);
 
-    console.log('🧠 Generating embeddings...');
-    const embeddings = await generateEmbeddings(chunks);
+  console.log('🧠 Generating embeddings...');
+  const embeddings = await generateEmbeddings(chunks);
 
-    console.log('💾 Inserting embeddings into the database...');
-    await Promise.all(
-      embeddings.map((embedding, i) =>
-        db.insert(documentsTable).values({
-          embedding,
-          content: splittedDocuments[i].pageContent,
-          metadata: splittedDocuments[i].metadata,
-        })
-      )
-    );
-    console.log('✅ Data inserted successfully into the database!');
-  } catch (error) {
-    console.error('🔥 Error occurred during execution:', error);
-    process.exit(1);
-  }
-}
-
-main().then(() => {
+  console.log('💾 Inserting embeddings into the database...');
+  await Promise.all(
+    embeddings.map((embedding, i) =>
+      db.insert(documentsTable).values({
+        embedding,
+        content: splittedDocuments[i].pageContent,
+        metadata: splittedDocuments[i].metadata,
+      })
+    )
+  );
+  console.log('✅ Data inserted successfully into the database!');
   console.log('🎉 Script completed successfully!');
   process.exit(0);
-});
+} catch (error) {
+  console.error('🔥 Error occurred during execution:', error);
+  process.exit(1);
+}

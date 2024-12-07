@@ -8,7 +8,10 @@ interface CopyToClipBoardProps
   content: string;
 }
 
-export function CopyToClipBoard({ content, ...rest }: CopyToClipBoardProps) {
+export function CopyToClipBoard({
+  content,
+  ...rest
+}: Readonly<CopyToClipBoardProps>) {
   return (
     <button
       {...rest}

@@ -1,7 +1,7 @@
 'use client';
 
 import { startTransition, useActionState, useOptimistic } from 'react';
-import { StreamableValue } from 'ai/rsc';
+import type { StreamableValue } from 'ai/rsc';
 
 import { continueConversation as continueConversationServerFn } from './functions';
 

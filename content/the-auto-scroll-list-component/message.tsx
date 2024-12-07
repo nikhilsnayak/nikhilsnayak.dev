@@ -1,8 +1,8 @@
 'use client';
 
-import { StreamableValue, useStreamableValue } from 'ai/rsc';
+import { useStreamableValue, type StreamableValue } from 'ai/rsc';
 
-export function UserMessage({ children }: { children: string }) {
+export function UserMessage({ children }: Readonly<{ children: string }>) {
   return (
     <p className='rounded-lg rounded-br-none bg-purple-100 p-3 text-purple-800 dark:bg-purple-900 dark:text-purple-100'>
       {children}
@@ -10,7 +10,9 @@ export function UserMessage({ children }: { children: string }) {
   );
 }
 
-export function AssistantMessage({ children }: { children: StreamableValue }) {
+export function AssistantMessage({
+  children,
+}: Readonly<{ children: StreamableValue }>) {
   const [value] = useStreamableValue(children);
   return (
     <p className='rounded-lg rounded-bl-none bg-gray-200 p-3 text-gray-800 dark:bg-gray-700 dark:text-gray-100'>

@@ -1,12 +1,12 @@
 'use client';
 
-import { FormEvent, useReducer } from 'react';
+import { useReducer, type FormEvent } from 'react';
 
 import { List } from '~/components/list';
 
 import { AddTodoForm, TodoItem } from './todo';
 import { todosReducer } from './todos-reducer';
-import { Todo } from './types';
+import type { Todo } from './types';
 
 const initialTodos: Todo[] = [];
 

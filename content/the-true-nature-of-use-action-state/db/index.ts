@@ -23,7 +23,10 @@ export const getDBConnection = (function () {
 
       request.onerror = (event: Event) =>
         reject(
-          'Error opening IndexedDB: ' + (event.target as IDBOpenDBRequest).error
+          new Error(
+            'Error opening IndexedDB: ' +
+              (event.target as IDBOpenDBRequest).error
+          )
         );
     });
   }

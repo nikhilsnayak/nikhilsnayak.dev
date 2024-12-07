@@ -8,7 +8,10 @@ export function Controls() {
   return (
     <div className='space-y-4 rounded-lg bg-gray-100 px-2 py-1 shadow-md dark:bg-gray-800'>
       <div className='flex flex-col space-y-2'>
-        <label className='font-medium text-gray-700 dark:text-gray-300'>
+        <label
+          className='font-medium text-gray-700 dark:text-gray-300'
+          htmlFor='delay'
+        >
           Delay (ms):
         </label>
         <input
@@ -18,6 +21,7 @@ export function Controls() {
           value={delay}
           onChange={(e) => setDelay(Number(e.target.value))}
           className='w-full accent-blue-500'
+          id='delay'
         />
         <span className='text-sm text-gray-600 dark:text-gray-400'>
           {delay}ms
@@ -29,8 +33,14 @@ export function Controls() {
           checked={shouldError}
           onChange={(e) => setShouldError(e.target.checked)}
           className='size-4 accent-blue-500'
+          id='should-error'
         />
-        <label className='text-gray-700 dark:text-gray-300'>Should Error</label>
+        <label
+          htmlFor='should-error'
+          className='text-gray-700 dark:text-gray-300'
+        >
+          Should Error
+        </label>
       </div>
     </div>
   );

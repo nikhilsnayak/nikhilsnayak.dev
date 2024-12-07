@@ -296,7 +296,7 @@ function CommentsList() {
   );
 }
 
-function CommentThread({ comment }: { comment: OptimisticComment }) {
+function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
   const { session } = useCommentsManager();
 
   return (

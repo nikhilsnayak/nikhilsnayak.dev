@@ -10,7 +10,7 @@ import { highlight, type LineNumbers } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
 import type { MDXComponents } from 'mdx/types';
 import { Link } from 'next-view-transitions';
-import { Tweet as ReactTweet, TweetProps } from 'react-tweet';
+import { Tweet as ReactTweet, type TweetProps } from 'react-tweet';
 
 import { cn, slugify } from '~/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';

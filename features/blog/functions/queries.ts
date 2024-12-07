@@ -8,7 +8,7 @@ import { getIPHash } from '~/lib/utils/server';
 
 import { CONTENT_DIR } from '../constants';
 import { BlogMetadataSchema } from '../schema';
-import { Comment } from '../types';
+import type { Comment } from '../types';
 
 export async function getBlogsMetadata() {
   const files = await fs.readdir(CONTENT_DIR, { withFileTypes: true });

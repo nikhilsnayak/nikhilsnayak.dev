@@ -1,5 +1,5 @@
 import { getDBConnection } from '.';
-import { Todo } from '../types';
+import type { Todo } from '../types';
 
 export async function createTodo(todo: Todo): Promise<Todo> {
   const db = await getDBConnection();
@@ -11,7 +11,7 @@ export async function createTodo(todo: Todo): Promise<Todo> {
 
     request.onsuccess = () =>
       resolve({ ...todo, id: request.result as string });
-    request.onerror = () => reject('Failed to create todo');
+    request.onerror = () => reject(new Error('Failed to create todo'));
   });
 }
 
@@ -25,7 +25,7 @@ export async function updateTodo(id: string, updatedTodo: Todo): Promise<Todo> {
     const request = store.put({ ...updatedTodo, id });
 
     request.onsuccess = () => resolve({ ...updatedTodo, id });
-    request.onerror = () => reject('Failed to update todo');
+    request.onerror = () => reject(new Error('Failed to update todo'));
   });
 }
 
@@ -39,6 +39,6 @@ export async function deleteTodo(id: string): Promise<string> {
     const request = store.delete(id);
 
     request.onsuccess = () => resolve(id);
-    request.onerror = () => reject('Failed to delete todo');
+    request.onerror = () => reject(new Error('Failed to delete todo'));
   });
 }

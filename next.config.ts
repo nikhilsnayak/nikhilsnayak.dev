@@ -1,4 +1,4 @@
-import { NextConfig } from 'next';
+import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
 
 const nextConfig: NextConfig = {
@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
     ppr: true,
-    after: true,
     inlineCss: true,
   },
 };
@@ -24,7 +23,7 @@ const nextConfig: NextConfig = {
 const withMDX = createMDX({
   options: {
     rehypePlugins: [
-      // @ts-ignore https://nextjs.org/docs/canary/app/building-your-application/configuring/mdx#using-plugins-with-turbopack
+      // @ts-expect-error https://nextjs.org/docs/canary/app/building-your-application/configuring/mdx#using-plugins-with-turbopack
       ['rehype-mdx-code-props', { strict: true, throwOnError: true }],
     ],
   },

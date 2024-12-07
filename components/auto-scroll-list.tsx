@@ -5,7 +5,7 @@ import { cn } from '~/lib/utils';
 export function AutoScrollList({
   className,
   ...rest
-}: Omit<ComponentProps<'ul'>, 'ref'>) {
+}: Readonly<Omit<ComponentProps<'ul'>, 'ref'>>) {
   return (
     <ul
       ref={scrollAreaRef}

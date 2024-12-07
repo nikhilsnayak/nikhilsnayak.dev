@@ -1,10 +1,10 @@
-import { FormEvent, PropsWithChildren } from 'react';
+import type { FormEvent, PropsWithChildren } from 'react';
 
 export function AddTodoForm({
   onSubmit,
-}: {
+}: Readonly<{
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
-}) {
+}>) {
   return (
     <form onSubmit={onSubmit} className='mb-2 flex gap-2'>
       <input
@@ -30,11 +30,13 @@ export function TodoItem({
   done = false,
   onStatusChange,
   onDelete,
-}: PropsWithChildren & {
-  done?: boolean;
-  onStatusChange?: (statue: boolean) => void;
-  onDelete?: () => void;
-}) {
+}: Readonly<
+  PropsWithChildren & {
+    done?: boolean;
+    onStatusChange?: (statue: boolean) => void;
+    onDelete?: () => void;
+  }
+>) {
   return (
     <div className='flex items-center justify-between gap-2 border-b p-1'>
       <p

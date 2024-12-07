@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { unstable_after as after, connection } from 'next/server';
+import { after, connection } from 'next/server';
 
 import { updateViewsBySlug } from '../functions/mutations';
 import { getBlogViewsBySlug } from '../functions/queries';

@@ -1,10 +1,10 @@
 export function UserInput({
   action,
   isPending,
-}: {
+}: Readonly<{
   action: (formData: FormData) => void;
   isPending: boolean;
-}) {
+}>) {
   return (
     <form action={action} className='flex space-x-2 p-4'>
       <input

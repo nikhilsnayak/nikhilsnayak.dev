@@ -1,5 +1,5 @@
 import { getDBConnection } from '.';
-import { Todo } from '../types';
+import type { Todo } from '../types';
 
 export async function getTodos(): Promise<Todo[]> {
   const db = await getDBConnection();

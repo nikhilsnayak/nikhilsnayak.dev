@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, useCallback, useState } from 'react';
+import { useCallback, useState, type ComponentProps } from 'react';
 
 import { AssistantMessage, UserMessage } from './message';
 import { useContinueConversation } from './use-continue-conversation';
@@ -33,7 +33,7 @@ export function V2() {
 function AutoScrollList({
   className,
   ...rest
-}: Omit<ComponentProps<'ul'>, 'ref'>) {
+}: Readonly<Omit<ComponentProps<'ul'>, 'ref'>>) {
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
 
   const autoScrollListRef = useCallback(

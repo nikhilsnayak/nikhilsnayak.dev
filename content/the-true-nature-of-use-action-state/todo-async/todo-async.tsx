@@ -1,13 +1,13 @@
 'use client';
 
-import { FormEvent, startTransition, useActionState } from 'react';
+import { startTransition, useActionState, type FormEvent } from 'react';
 
 import { List } from '~/components/list';
 
 import { getTodos } from '../db/queries';
 import { AddTodoForm, TodoItem } from '../todo';
 import { todosReducerAsync } from '../todos-reducer';
-import { Todo } from '../types';
+import type { Todo } from '../types';
 
 const initialTodos = await getTodos();
 

@@ -188,12 +188,12 @@ function Tech({
   icon,
   name,
   className,
-}: {
+}: Readonly<{
   name: string;
   icon: ReactNode;
   href: string;
   className?: string;
-}) {
+}>) {
   return (
     <span className={className}>
       {icon}
