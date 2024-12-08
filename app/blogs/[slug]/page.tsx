@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Eye } from 'lucide-react';
 
 import { BASE_URL } from '~/lib/constants';
@@ -77,26 +78,23 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
 
   return (
     <section>
-      <script
-        type='application/ld+json'
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: title,
-            datePublished: publishedAt,
-            dateModified: publishedAt,
-            description: summary,
-            image: `/api/og?title=${encodeURIComponent(title)}`,
-            url: `${BASE_URL}/blogs/${slug}`,
-            author: {
-              '@type': 'Person',
-              name: 'Nikhil S',
-            },
-          }),
-        }}
-      />
+      <Script type='application/ld+json' id={`${slug}-json-ld`}>
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: title,
+          datePublished: `${publishedAt}T09:00:00+05:30`,
+          dateModified: `${publishedAt}T09:00:00+05:30`,
+          description: summary,
+          image: `/api/og?title=${encodeURIComponent(title)}`,
+          url: `${BASE_URL}/blogs/${slug}`,
+          author: {
+            '@type': 'Person',
+            name: 'Nikhil S',
+            url: BASE_URL,
+          },
+        })}
+      </Script>
       <h1
         className='font-mono text-2xl font-semibold tracking-tighter'
         style={{
