@@ -21,8 +21,10 @@ export function HeartButton({
         scale: [1, 1.2, 1],
         transition: { duration: 0.5, repeat: Infinity, repeatDelay: 0.5 },
       });
+
+      return () => controls.stop();
     }
-  }, [fillPercentage, controls]);
+  }, [controls, fillPercentage]);
 
   return (
     <button
