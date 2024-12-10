@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 import { ViewTransitions } from 'next-view-transitions';
 
@@ -12,7 +13,7 @@ import { BASE_URL } from '~/lib/constants';
 import { cn } from '~/lib/utils';
 import { Toaster } from '~/components/ui/sonner';
 import { BotLink, NavLink } from '~/components/navigation';
-import { ThemeToggle } from '~/components/theme-toggle';
+import { ThemeButton } from '~/components/theme-button';
 import { AI } from '~/features/ai';
 import { LanguageStats } from '~/features/github/components/language-stats';
 import { LatestCommit } from '~/features/github/components/latest-commit';
@@ -153,6 +154,23 @@ function Header() {
         </ul>
       </nav>
     </header>
+  );
+}
+
+function ThemeToggle() {
+  return (
+    <div className='flex gap-2 rounded-full border bg-muted'>
+      <span className='sr-only'>Toggle theme</span>
+      <ThemeButton type='light'>
+        <Sun />
+      </ThemeButton>
+      <ThemeButton type='dark'>
+        <Moon />
+      </ThemeButton>
+      <ThemeButton type='system'>
+        <Monitor />
+      </ThemeButton>
+    </div>
   );
 }
 
