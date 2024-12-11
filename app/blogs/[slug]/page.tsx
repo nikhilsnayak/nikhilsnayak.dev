@@ -144,9 +144,11 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
         >
           Comments
         </h2>
-        <Suspense fallback={<Spinner variant='ellipsis' />}>
-          <CommentsSection slug={slug} />
-        </Suspense>
+        <ErrorBoundary fallback={<span>{"Couldn't load comments"}</span>}>
+          <Suspense fallback={<Spinner variant='ellipsis' />}>
+            <CommentsSection slug={slug} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </section>
   );
