@@ -6,7 +6,7 @@ import { revalidateTag } from 'next/cache';
 import { openai } from '@ai-sdk/openai';
 import { Ratelimit } from '@upstash/ratelimit';
 import { kv } from '@vercel/kv';
-import { generateId, streamText, tool } from 'ai';
+import { generateId, smoothStream, streamText, tool } from 'ai';
 import { createStreamableUI, getMutableAIState } from 'ai/rsc';
 import { z } from 'zod';
 
@@ -43,9 +43,12 @@ export async function continueConversation(
         stream.done();
       } else {
         aiState.update([...aiState.get(), { role: 'user', content: message }]);
-        const result = await streamText({
+        const result = streamText({
           model: openai.chat('gpt-4o-mini'),
           messages: aiState.get(),
+          maxSteps: 2,
+          experimental_toolCallStreaming: true,
+          experimental_transform: smoothStream(),
           system: `
             You are **Roronoa Zoro**, an AI chatbot featured on Nikhil S.'s portfolio website. Your role is to assist users by answering questions based strictly on the knowledge base of Nikhil's blog posts and the ongoing chat history.
   
@@ -98,7 +101,6 @@ export async function continueConversation(
               },
             }),
           },
-          maxSteps: 2,
         });
 
         let text = '';
