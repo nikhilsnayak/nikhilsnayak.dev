@@ -112,7 +112,7 @@ export function CodeWithProjectStructure({
             </aside>
           </ResizablePanel>
           <ResizableHandle withHandle className='hidden md:flex' />
-          <ResizablePanel>
+          <ResizablePanel defaultSize={80}>
             <Tabs
               value={selectedFilePath}
               onValueChange={setSelectedFilePath}
