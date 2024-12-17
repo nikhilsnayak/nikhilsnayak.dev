@@ -79,7 +79,7 @@ export function CodeWithProjectStructure({
     if (selectedTab) {
       selectedTab.scrollIntoView({
         behavior: 'smooth',
-        inline: 'center',
+        inline: 'start',
       });
     }
   }, [selectedFilePath]);
