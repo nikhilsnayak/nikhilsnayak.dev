@@ -79,7 +79,7 @@ export function CodeWithProjectStructure({
     if (selectedTab) {
       selectedTab.scrollIntoView({
         behavior: 'smooth',
-        inline: 'start',
+        inline: 'nearest',
       });
     }
   }, [selectedFilePath]);
@@ -170,13 +170,18 @@ function FileSystemNode({
   const { selectedFilePath, setSelectedFilePath } =
     useCodeWithProjectStructure();
   const [isOpen, setIsOpen] = useState(false);
-
+  const nodeRef = useRef<HTMLDivElement>(null);
   const currentPath = [...path.split('/').filter(Boolean), item.name].join('/');
 
   useEffect(() => {
+    const isSelected = selectedFilePath.startsWith(currentPath);
     if (item.type === 'folder') {
-      const shouldBeOpen = selectedFilePath.startsWith(currentPath);
-      setIsOpen(shouldBeOpen);
+      setIsOpen(isSelected);
+    } else if (isSelected) {
+      nodeRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
     }
   }, [selectedFilePath, item.type, currentPath]);
 
@@ -191,7 +196,7 @@ function FileSystemNode({
   const indent = level * 16;
 
   return (
-    <div>
+    <div ref={nodeRef}>
       <Button
         variant='ghost'
         className={cn(
