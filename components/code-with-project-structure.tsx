@@ -99,7 +99,7 @@ export function CodeWithProjectStructure({
             className='hidden border-r md:block'
           >
             <aside>
-              <h3 className='overflow-hidden text-ellipsis whitespace-nowrap border-b border-border p-4 text-lg font-semibold'>
+              <h3 className='overflow-hidden text-ellipsis whitespace-nowrap border-b border-border px-4 py-2 font-semibold'>
                 {projectName}
               </h3>
               <ScrollArea className='h-[calc(100vh-10rem)]'>
