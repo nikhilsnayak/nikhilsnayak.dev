@@ -1,6 +1,5 @@
 import './globals.css';
 
-import { unstable_ViewTransition as ViewTransition } from 'react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
@@ -8,6 +7,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
+import { ViewTransitions } from 'next-view-transitions';
 
 import { BASE_URL } from '~/lib/constants';
 import { cn } from '~/lib/utils';
@@ -67,33 +67,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
-      <body
-        className={cn(
-          geistSans.variable,
-          geistMono.variable,
-          'flex min-h-dvh flex-col font-sans'
-        )}
-      >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
+    <ViewTransitions>
+      <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
+        <body
+          className={cn(
+            geistSans.variable,
+            geistMono.variable,
+            'flex min-h-dvh flex-col font-sans'
+          )}
         >
-          <Toaster richColors />
-          <AI>
-            <Header />
-            <main className='mx-auto my-4 w-full max-w-screen-lg flex-grow px-4 py-2'>
-              <ViewTransition>{children}</ViewTransition>
-            </main>
-            <Footer />
-          </AI>
-        </ThemeProvider>
-        <SpeedInsights />
-        <Analytics />
-      </body>
-    </html>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster richColors />
+            <AI>
+              <Header />
+              <main className='mx-auto my-4 w-full max-w-screen-lg flex-grow px-4 py-2'>
+                {children}
+              </main>
+              <Footer />
+            </AI>
+          </ThemeProvider>
+          <SpeedInsights />
+          <Analytics />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }
 
