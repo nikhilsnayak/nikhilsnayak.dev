@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
     reactCompiler: true,
     ppr: true,
     inlineCss: true,
+    newDevOverlay: true,
+    viewTransition: true,
   },
 };
 

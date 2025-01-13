@@ -1,8 +1,8 @@
 'use client';
 
 import { Fragment } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Link } from 'next-view-transitions';
 
 import { getBreadCrumbItems } from '~/lib/utils';
 import {
