@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowUpRight, Rss } from 'lucide-react';
+import { Link } from 'next-view-transitions';
 
 import { formatDate } from '~/lib/utils';
 import { getBlogsMetadata } from '~/features/blog/functions/queries';
