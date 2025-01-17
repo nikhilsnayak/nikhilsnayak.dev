@@ -1,12 +1,9 @@
-import {
-  CodeWithProjectStructure,
-  File,
-} from '~/components/code-with-project-structure';
+import { ViewTransitionTabs } from '~/components/view-transition-tabs';
 
 export default function Playground() {
   return (
-    <div>
-      <CodeWithProjectStructure
+    <div className='space-y-4'>
+      {/* <CodeWithProjectStructure
         projectName='Cine Score'
         projectStructure={[
           {
@@ -152,7 +149,92 @@ export default function Playground() {
         ]}
       >
         <File filePath='src/index.ts'></File>
-      </CodeWithProjectStructure>
+      </CodeWithProjectStructure> */}
+
+      <ViewTransitionTabs
+        tabs={[
+          {
+            value: 'App.tsx',
+            content: `import { AssistantMessage, UserMessage } from './message';
+import { useContinueConversation } from './use-continue-conversation';
+import { UserInput } from './user-input';
+
+export default function App() {
+  const { messages, continueConversation, isPending } =
+    useContinueConversation();
+
+  return (
+    <div>
+      <ul className='mb-4 h-[50vh] space-y-4 overflow-auto p-4'>
+        {messages.map((message) => {
+          return (
+            <li key={message.id}>
+              {message.role === 'assistant' ? (
+                <AssistantMessage>{message.value}</AssistantMessage>
+              ) : (
+                <UserMessage>{message.value}</UserMessage>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      <UserInput action={continueConversation} isPending={isPending} />
+    </div>
+  );
+}`,
+          },
+          {
+            value: 'AutoScrollList.tsx',
+            content: `import { useCallback, useState } from 'react';
+
+export function AutoScrollList({ className, ...rest }) {
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+
+  const autoScrollListRef = useCallback(
+    (list) => {
+      const observer = new MutationObserver(() => {
+        if (shouldAutoScroll) {
+          list.scrollTo({ top: list.scrollHeight });
+        }
+      });
+
+      observer.observe(list, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+      });
+
+      return () => observer.disconnect();
+    },
+    [shouldAutoScroll]
+  );
+
+  const handleUserInteraction = (e) => {
+    const { scrollHeight, clientHeight, scrollTop } = e.currentTarget;
+    const maxScrollHeight = scrollHeight - clientHeight;
+
+    if (e.deltaY < 0) {
+      setShouldAutoScroll(false);
+    } else if (
+      e.deltaY > 0 &&
+      maxScrollHeight - scrollTop <= maxScrollHeight / 2
+    ) {
+      setShouldAutoScroll(true);
+    }
+  };
+
+  return (
+    <ul
+      ref={autoScrollListRef}
+      className={\`overflow-y-auto $\{className}\`}
+      onWheel={handleUserInteraction}
+      {...rest}
+    />
+  );
+}`,
+          },
+        ]}
+      />
     </div>
   );
 }

@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
     ppr: true,
     inlineCss: true,
     newDevOverlay: true,
+    viewTransition: true,
   },
 };
 
