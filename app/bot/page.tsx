@@ -21,7 +21,7 @@ export default async function BotPage() {
           <AvatarImage alt='zoro' src={zoro.src} />
           <AvatarFallback>Z</AvatarFallback>
         </Avatar>
-        <h1 className='animate-pulse bg-linear-to-br from-green-900 to-green-400 bg-clip-text font-mono text-2xl font-bold italic text-transparent sm:text-3xl'>
+        <h1 className='animate-pulse bg-linear-to-br from-green-900 to-green-400 bg-clip-text font-mono text-2xl font-bold text-transparent italic sm:text-3xl'>
           Zoro
         </h1>
       </header>

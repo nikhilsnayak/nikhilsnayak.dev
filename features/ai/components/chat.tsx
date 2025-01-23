@@ -81,7 +81,7 @@ export function Chat({
                 <Button
                   key={index}
                   variant='outline'
-                  className='h-auto whitespace-normal px-3 py-2 text-start text-sm font-normal'
+                  className='h-auto px-3 py-2 text-start text-sm font-normal whitespace-normal'
                   onClick={() => {
                     setInput('');
                     handleSubmit(question);
@@ -101,7 +101,7 @@ export function Chat({
               <div>
                 {message.role === 'user' ? <CircleUserRound /> : <BotIcon />}
               </div>
-              <div className='prose prose-sm min-w-0 overflow-x-auto break-words dark:prose-invert'>
+              <div className='prose prose-sm dark:prose-invert min-w-0 overflow-x-auto break-words'>
                 {message.display}
               </div>
             </li>

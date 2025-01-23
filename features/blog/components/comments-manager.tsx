@@ -314,13 +314,13 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
             <h3 className='flex items-center gap-2'>
               <span className='font-bold'>{comment.user.name}</span>
               {session?.user?.id === comment.userId && (
-                <span className='rounded bg-muted px-1 py-0.5 text-[10px] text-muted-foreground'>
+                <span className='bg-muted text-muted-foreground rounded px-1 py-0.5 text-[10px]'>
                   You
                 </span>
               )}
               {comment.isPending && <Spinner className='size-4' />}
             </h3>
-            <span className='text-sm text-muted-foreground'>
+            <span className='text-muted-foreground text-sm'>
               {formatDate(comment.createdAt.toISOString())}
             </span>
           </div>
