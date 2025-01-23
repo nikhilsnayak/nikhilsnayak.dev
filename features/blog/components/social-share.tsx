@@ -23,7 +23,7 @@ export function SocialShare({
       <DropdownMenuTrigger asChild>
         <Button
           variant='ghost'
-          className='ml-2 size-4 p-0 align-text-bottom text-foreground'
+          className='text-foreground ml-2 size-4 p-0 align-text-bottom'
         >
           <ShareIcon />
         </Button>

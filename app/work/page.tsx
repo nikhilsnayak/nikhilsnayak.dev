@@ -23,7 +23,7 @@ export default function WorkPage() {
           knowledge and insights with the community.
         </p>
       </header>
-      <hr className='my-6 border-foreground/20' />
+      <hr className='border-foreground/20 my-6' />
       <section>
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
           Experience:
@@ -41,7 +41,7 @@ export default function WorkPage() {
         </h3>
         <ul className='ml-4 list-disc'>
           <li>
-            <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
+            <p className='text-muted-foreground mb-4 flex flex-col gap-1 text-sm'>
               <span className='font-medium'>
                 Engineer - Software Development{' '}
               </span>
@@ -49,7 +49,7 @@ export default function WorkPage() {
             </p>
           </li>
           <li>
-            <p className='mb-4 flex flex-col gap-1 text-sm text-muted-foreground'>
+            <p className='text-muted-foreground mb-4 flex flex-col gap-1 text-sm'>
               <span className='font-medium'>
                 Trainee Engineer - Software Development{' '}
               </span>
@@ -110,7 +110,7 @@ export default function WorkPage() {
         </h2>
         <div className='flex flex-col gap-4 md:flex-row md:items-center'>
           <div className='space-y-2'>
-            <span className='text-sm text-muted-foreground underline'>
+            <span className='text-muted-foreground text-sm underline'>
               Jan 14 2024
             </span>
             <p className='text-balance'>
@@ -130,7 +130,7 @@ export default function WorkPage() {
           <Image
             src={techMang24}
             alt='Me as Speaker at TechMang24 giving a talk on Next.js 14'
-            className='w-full max-w-sm rounded-sm object-cover drop-shadow-sm'
+            className='w-full max-w-sm rounded-sm object-cover drop-shadow-xs'
             placeholder='blur'
           />
         </div>

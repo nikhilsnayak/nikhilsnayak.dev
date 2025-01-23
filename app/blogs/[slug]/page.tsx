@@ -105,7 +105,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
       >
         {title}
       </h1>
-      <div className='mb-8 mt-4 flex flex-col justify-between gap-3 text-sm sm:flex-row sm:items-center'>
+      <div className='mt-4 mb-8 flex flex-col justify-between gap-3 text-sm sm:flex-row sm:items-center'>
         <div className='flex items-center gap-3'>
           <p className='text-sm text-neutral-600 dark:text-neutral-400'>
             {formatDate(publishedAt)}
@@ -124,7 +124,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <article className='prose min-w-full dark:prose-invert'>
+      <article className='prose dark:prose-invert min-w-full'>
         <Blog />
       </article>
       <div className='mt-8 space-y-4'>

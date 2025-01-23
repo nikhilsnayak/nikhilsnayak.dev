@@ -38,8 +38,8 @@ export default async function BlogsPage() {
             href={`/blogs/${post.slug}`}
             className='group block'
           >
-            <div className='h-full transform space-y-2 overflow-hidden rounded-lg border border-border p-4 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl'>
-              <p className='flex items-center justify-between text-xs text-muted-foreground'>
+            <div className='border-border h-full transform space-y-2 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl'>
+              <p className='text-muted-foreground flex items-center justify-between text-xs'>
                 <span>{formatDate(post.metadata.publishedAt)}</span>
                 <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
               </p>

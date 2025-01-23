@@ -7,7 +7,7 @@ export async function LatestCommit() {
       href={latestCommit.url}
       target='_blank'
       rel='noopener noreferrer'
-      className='block text-xs tracking-tighter underline dark:text-fluorescent'
+      className='dark:text-fluorescent block text-xs tracking-tighter underline'
     >
       Latest commit: {latestCommit.message.split('\n')[0]} by{' '}
       {latestCommit.author} on {latestCommit.date}

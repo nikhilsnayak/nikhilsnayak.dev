@@ -95,7 +95,7 @@ export function StockDisplay({
         </button>
 
         {showDetails && (
-          <div className='mt-4 rounded bg-gray-100 p-4 text-foreground dark:bg-gray-800'>
+          <div className='text-foreground mt-4 rounded bg-gray-100 p-4 dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
             <p>
               Details about financial metrics and other insights would be
@@ -113,7 +113,7 @@ export function StockDisplay({
             value={compareSymbol}
             onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
             placeholder='Enter stock symbol'
-            className='rounded border px-2 py-1 text-foreground'
+            className='text-foreground rounded border px-2 py-1'
           />
           <button
             className='rounded bg-green-500 px-4 py-1 text-white'
@@ -124,7 +124,7 @@ export function StockDisplay({
         </div>
 
         {showComparison && (
-          <div className='mt-4 rounded bg-zinc-800 p-4 text-primary-foreground dark:bg-zinc-300'>
+          <div className='text-primary-foreground mt-4 rounded bg-zinc-800 p-4 dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
               Comparison details between {symbol} and {compareSymbol} would be

@@ -140,7 +140,7 @@ function Pre(props: Readonly<PreProps>) {
       data-line-numbers={lineNumbers}
     >
       {filename ? (
-        <h6 className='sticky left-0 right-0 top-0 overflow-hidden border-b-2 border-neutral-400 px-2 py-1 text-foreground dark:border-neutral-600'>
+        <h6 className='text-foreground sticky top-0 right-0 left-0 overflow-hidden border-b-2 border-neutral-400 px-2 py-1 dark:border-neutral-600'>
           {filename}
         </h6>
       ) : null}

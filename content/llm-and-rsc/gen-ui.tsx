@@ -35,10 +35,10 @@ export function GenUI() {
   };
 
   return (
-    <section className='w-full rounded-lg border bg-background p-4 shadow-lg'>
+    <section className='bg-background w-full rounded-lg border p-4 shadow-lg'>
       <ul className='relative mb-4 h-[60vh] space-y-4 overflow-auto rounded-lg p-4'>
         {messages.length === 0 ? (
-          <li className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground'>
+          <li className='text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
             No Conversation
           </li>
         ) : (
@@ -54,13 +54,13 @@ export function GenUI() {
         <input
           type='text'
           name='query'
-          className='col-span-6 flex-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-none'
+          className='col-span-6 flex-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-hidden'
           placeholder='Enter your message...'
         />
         <button
           type='submit'
           disabled={isPending}
-          className='col-span-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-none disabled:bg-blue-300'
+          className='col-span-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-hidden disabled:bg-blue-300'
         >
           Ask
         </button>

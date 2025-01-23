@@ -16,7 +16,7 @@ export function Spinner({
     case 'ring':
       return (
         <Loader
-          className={cn('animate-spin fill-background', className)}
+          className={cn('fill-background animate-spin', className)}
           {...rest}
         />
       );
