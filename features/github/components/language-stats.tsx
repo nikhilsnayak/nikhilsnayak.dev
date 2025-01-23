@@ -27,7 +27,7 @@ export async function LanguageStats() {
               style={{ backgroundColor: colorMap[lang.name] ?? '#808080' }}
             />
             <span>{lang.name}</span>
-            <span className='ml-1 text-gray-400'>
+            <span className='ml-1 text-gray-800 dark:text-gray-400'>
               {lang.percentage.toFixed(1)}%
             </span>
           </div>

@@ -54,13 +54,13 @@ export function GenUI() {
         <input
           type='text'
           name='query'
-          className='col-span-6 flex-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-none'
+          className='col-span-6 flex-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-hidden'
           placeholder='Enter your message...'
         />
         <button
           type='submit'
           disabled={isPending}
-          className='col-span-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-none disabled:bg-blue-300'
+          className='col-span-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-hidden disabled:bg-blue-300'
         >
           Ask
         </button>

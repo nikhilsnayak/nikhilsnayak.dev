@@ -285,7 +285,7 @@ function CommentsList() {
 
   return (
     <List
-      className='max-w-screen-sm space-y-4 overflow-hidden'
+      className='max-w-(--breakpoint-sm) space-y-4 overflow-hidden'
       items={comments}
       emptyListFallback={<p>No comments yet.</p>}
     >

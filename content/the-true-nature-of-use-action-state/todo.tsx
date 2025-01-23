@@ -40,7 +40,7 @@ export function TodoItem({
   return (
     <div className='flex items-center justify-between gap-2 border-b p-1'>
       <p
-        className={`overflow-hidden overflow-ellipsis ${done ? 'line-through' : ''}`}
+        className={`overflow-hidden text-ellipsis ${done ? 'line-through' : ''}`}
       >
         {children}
       </p>

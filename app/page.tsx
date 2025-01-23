@@ -39,7 +39,7 @@ export default async function HomePage() {
         </h1>
         <p
           className={cn(
-            'mb-4 bg-fluorescent px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
+            'bg-fluorescent mb-4 px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
             sourceCodePro.className
           )}
         >
@@ -48,7 +48,7 @@ export default async function HomePage() {
         <Image
           src={profile}
           alt='Nikhil S'
-          className='mx-auto aspect-[4/3] drop-shadow-md sm:absolute sm:right-8 sm:top-0 sm:w-[250px]'
+          className='mx-auto aspect-4/3 drop-shadow-md sm:absolute sm:top-0 sm:right-8 sm:w-[250px]'
           priority
           placeholder='blur'
         />
@@ -152,9 +152,9 @@ export default async function HomePage() {
               href={`/blogs/${post.slug}`}
               className='group block'
             >
-              <div className='h-full transform space-y-4 overflow-hidden rounded-lg border border-border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'>
+              <div className='border-border h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'>
                 <div className='space-y-1'>
-                  <p className='flex items-center justify-between text-xs text-muted-foreground'>
+                  <p className='text-muted-foreground flex items-center justify-between text-xs'>
                     <span>{formatDate(post.metadata.publishedAt)}</span>
                     <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
                   </p>

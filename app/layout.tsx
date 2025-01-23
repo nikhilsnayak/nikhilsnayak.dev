@@ -20,12 +20,12 @@ import { LatestCommit } from '~/features/github/components/latest-commit';
 import { SourceLink } from '~/features/github/components/source-link';
 
 const geistSans = Geist({
-  variable: '--font-geist-sans',
+  variable: '--font-sans',
   subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+  variable: '--font-mono',
   subsets: ['latin'],
 });
 
@@ -85,7 +85,7 @@ export default function RootLayout({
             <Toaster richColors />
             <AI>
               <Header />
-              <main className='mx-auto my-4 w-full max-w-screen-lg flex-grow px-4 py-2'>
+              <main className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'>
                 {children}
               </main>
               <Footer />
@@ -101,8 +101,8 @@ export default function RootLayout({
 
 function Header() {
   return (
-    <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur'>
-      <nav className='mx-auto flex max-w-screen-lg items-center justify-between p-4'>
+    <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur-sm'>
+      <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
         <ul className='flex gap-4'>
           <li>
             <NavLink href='/'>home</NavLink>
@@ -159,7 +159,7 @@ function Header() {
 
 function ThemeToggle() {
   return (
-    <div className='flex gap-2 rounded-full border bg-muted'>
+    <div className='bg-muted flex gap-2 rounded-full border'>
       <span className='sr-only'>Toggle theme</span>
       <ThemeButton type='light'>
         <Sun />
@@ -176,7 +176,7 @@ function ThemeToggle() {
 
 function Footer() {
   return (
-    <footer className='mx-auto w-full max-w-screen-lg space-y-6 border-t p-4'>
+    <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
       <div className='flex items-center justify-between gap-6'>
         <div className='space-y-2'>
           <SourceLink />

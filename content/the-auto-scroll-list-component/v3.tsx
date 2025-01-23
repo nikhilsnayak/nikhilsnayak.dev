@@ -11,7 +11,7 @@ export function V3() {
     useContinueConversation();
 
   return (
-    <div className='not-prose max-w-sm rounded border bg-gray-100 shadow dark:border-gray-700 dark:bg-gray-800'>
+    <div className='not-prose max-w-sm rounded border bg-gray-100 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
       <AutoScrollList className='mb-4 h-[50vh] space-y-4 p-4'>
         {messages.map((message) => {
           return (
