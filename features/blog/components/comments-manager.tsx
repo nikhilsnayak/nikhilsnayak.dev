@@ -6,6 +6,7 @@ import {
   use,
   useActionState,
   useOptimistic,
+  useState,
 } from 'react';
 import { Pencil, Reply, Trash2 } from 'lucide-react';
 import type { Session } from 'next-auth';
@@ -16,7 +17,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -393,16 +393,29 @@ function EditCommentControl({
   parentId,
 }: Readonly<{ commentId: string; content: string; parentId: string | null }>) {
   const { editCommentFormAction } = useCommentsManager();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size='icon' variant='ghost'>
           <Pencil className='size-4 text-blue-400' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
-        <form action={editCommentFormAction} className='space-y-4'>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setIsOpen(false);
+            const form = e.currentTarget;
+            const formData = new FormData(form);
+            form.reset();
+            startTransition(() => {
+              editCommentFormAction(formData);
+            });
+          }}
+          className='space-y-4'
+        >
           <DialogHeader>
             <DialogTitle>Edit Comment</DialogTitle>
           </DialogHeader>
@@ -424,9 +437,7 @@ function EditCommentControl({
             defaultValue={content}
           />
           <DialogFooter>
-            <DialogClose asChild>
-              <Button type='submit'>Save changes</Button>
-            </DialogClose>
+            <Button type='submit'>Save changes</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -439,16 +450,29 @@ function DeleteCommentControl({
   parentId,
 }: Readonly<{ commentId: string; parentId: string | null }>) {
   const { deleteCommentFormAction } = useCommentsManager();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size='icon' variant='ghost'>
           <Trash2 className='size-4 text-red-400' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
-        <form action={deleteCommentFormAction} className='space-y-4'>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setIsOpen(false);
+            const form = e.currentTarget;
+            const formData = new FormData(form);
+            form.reset();
+            startTransition(() => {
+              deleteCommentFormAction(formData);
+            });
+          }}
+          className='space-y-4'
+        >
           <DialogHeader>
             <DialogTitle>Delete Comment</DialogTitle>
           </DialogHeader>
@@ -464,11 +488,9 @@ function DeleteCommentControl({
           )}
           <p>Are you sure you want to delete this comment?</p>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button type='submit' variant='destructive'>
-                Continue
-              </Button>
-            </DialogClose>
+            <Button type='submit' variant='destructive'>
+              Continue
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -481,16 +503,29 @@ function AddReplyControl({
   slug,
 }: Readonly<{ parentId: string; slug: string }>) {
   const { addCommentFormAction } = useCommentsManager();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size='icon' variant='ghost'>
           <Reply className='size-4' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-4/5 rounded-sm'>
-        <form action={addCommentFormAction} className='space-y-4'>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setIsOpen(false);
+            const form = e.currentTarget;
+            const formData = new FormData(form);
+            form.reset();
+            startTransition(() => {
+              addCommentFormAction(formData);
+            });
+          }}
+          className='space-y-4'
+        >
           <DialogHeader>
             <DialogTitle>Add Reply</DialogTitle>
           </DialogHeader>
@@ -503,9 +538,7 @@ function AddReplyControl({
             minLength={3}
           />
           <DialogFooter>
-            <DialogClose asChild>
-              <Button type='submit'>Reply</Button>
-            </DialogClose>
+            <Button type='submit'>Reply</Button>
           </DialogFooter>
         </form>
       </DialogContent>
