@@ -1,6 +1,9 @@
 import 'server-only';
 
-import { unstable_cache } from 'next/cache';
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from 'next/cache';
 import { openai } from '@ai-sdk/openai';
 import { embed, generateObject } from 'ai';
 import { cosineDistance, desc, gt, sql } from 'drizzle-orm';
@@ -9,7 +12,11 @@ import { z } from 'zod';
 import { db } from '~/lib/db';
 import { documents } from '~/lib/db/schema';
 
-async function INTERNAL__getSuggestedQuestions() {
+export async function getSuggestedQuestions() {
+  'use cache';
+  cacheTag('getSuggestedQuestions');
+  cacheLife('days');
+
   const randomDocs = await db
     .select()
     .from(documents)
@@ -29,15 +36,6 @@ async function INTERNAL__getSuggestedQuestions() {
 
   return object;
 }
-
-export const getSuggestedQuestions = unstable_cache(
-  INTERNAL__getSuggestedQuestions,
-  ['getSuggestedQuestions'],
-  {
-    revalidate: 24 * 60 * 60,
-    tags: ['getSuggestedQuestions'],
-  }
-);
 
 async function generateEmbedding(value: string) {
   const input = value.replaceAll('\\n', ' ');
