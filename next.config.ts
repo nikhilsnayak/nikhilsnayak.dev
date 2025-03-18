@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     ppr: true,
     inlineCss: true,
     useCache: true,
-    nodeMiddleware: true,
+    // nodeMiddleware: true,
   },
 };
 
