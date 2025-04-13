@@ -32,7 +32,7 @@ function getLoader() {
 
   if (slug) {
     console.log(`📄 Loading single file for slug: ${slug}`);
-    return new TextLoader(path.join(CONTENT_DIR, `${slug}.mdx`));
+    return new TextLoader(path.join(CONTENT_DIR, `${slug}/post.mdx`));
   }
 
   console.log('📚 Loading all files from directory...');
