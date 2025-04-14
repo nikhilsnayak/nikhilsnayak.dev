@@ -208,7 +208,7 @@ You've probably used `JSON.stringify` and `JSON.parse` to serialize/de-serialize
 
 This is where RSC comes in. It supports serializing all types covered by the [Structured Clone Algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm) and extends it to include additional types like Symbols, Promises, and even React-specific constructs such as Function Components, `Suspense`, Client References and Server References.
 
-To make use of RSCs we need a RSC compatible bundler (more on why bundler is required is covered later posts). At the time of writing this post, these are the bundlers with official implementations
+To make use of RSCs we need a RSC compatible bundler (more on why bundler is required is covered in later posts). At the time of writing this post, these are the bundlers with official implementations
 
 1. [Parcel](https://parceljs.org/)
 2. [Turbopack](https://turbo.build/pack/docs)
@@ -379,7 +379,7 @@ Discussing conditional exports in detail is beyond the scope of this article, bu
 
 To fix the issue, let's update the `package.json` file by adding the required CLI flag:
 
-```json lineNumbers filename="package.json" addition="6,11,12,17,18" deletion="5"
+```json lineNumbers filename="package.json" addition="6,11,12,18,19" deletion="5"
 {
   "name": "my-rsc-framework",
   "scripts": {
@@ -486,7 +486,7 @@ async function MovieList({ moviesPromise }) {
 }
 ```
 
-In the `App` component, the promise returned by `getMovies` is no longer awaited. Instead, it is passed down to the `MovieList` component. The `MovieList` component is an async component that waits for the passed promise to resolve. It is wrapped in a `Suspense` boundary with a `"Loading..."` as the fallback.
+In the `App` component, the promise returned by `getMovies` is no longer awaited. Instead, it is passed down to the `MovieList` component. The `MovieList` component is an async component that waits for the passed promise to resolve. It is wrapped in a `Suspense` boundary with `"Loading..."` as fallback.
 
 The shell of the app i.e. until the `Suspense` boundary along with the fallback of the suspended `MovieList` component, is immediately sent to the browser. While the server waits for `MovieList` component to render, the browser can show the fallback
 
