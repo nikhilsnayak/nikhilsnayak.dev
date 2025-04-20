@@ -13,9 +13,7 @@ export async function GET() {
           <title>${post.metadata.title}</title>
           <link>${BASE_URL}/blogs/${post.slug}</link>
           <description>${post.metadata.summary || ''}</description>
-          <pubDate>${new Date(
-            post.metadata.publishedAt
-          ).toUTCString()}</pubDate>
+          <pubDate>${post.metadata.publishedAt.toUTCString()}</pubDate>
         </item>`
     )
     .join('\n');

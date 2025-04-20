@@ -38,7 +38,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const { title, publishedAt: publishedTime, summary: description } = metadata;
+  const { title, publishedAt, summary: description } = metadata;
 
   const ogImage = `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`;
 
@@ -50,7 +50,7 @@ export async function generateMetadata({
       description,
       type: 'article',
       siteName: 'Nikhil S - Blog',
-      publishedTime,
+      publishedTime: publishedAt.toDateString(),
       url: `${BASE_URL}/blogs/${slug}`,
       images: [
         {

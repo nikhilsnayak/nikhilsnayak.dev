@@ -2,6 +2,7 @@ import 'server-only';
 
 import fs from 'fs/promises';
 import path from 'path';
+import matter from 'gray-matter';
 
 import { db } from '~/lib/db';
 import { getIPHash } from '~/lib/utils/server';
@@ -27,7 +28,7 @@ export async function getBlogsMetadata() {
   );
 
   return posts.toSorted((a, b) => {
-    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
+    if (a.metadata.publishedAt > b.metadata.publishedAt) {
       return -1;
     }
     return 1;
@@ -37,20 +38,8 @@ export async function getBlogsMetadata() {
 export async function getBlogMetadataBySlug(slug: string) {
   const postPath = path.join(CONTENT_DIR, slug, 'post.mdx');
   const postContent = await fs.readFile(postPath, 'utf-8');
-  const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
-  const match = frontmatterRegex.exec(postContent);
-  const frontMatterBlock = match ? match[1] : '';
-  const frontMatterLines = frontMatterBlock.trim().split('\n');
-  const metadata = frontMatterLines.reduce(
-    (acc, line) => {
-      const [key, ...valueArr] = line.split(': ');
-      const value = valueArr.join(': ').trim();
-      acc[key.trim()] = value.replace(/^['"](.*)['"]$/, '$1');
-      return acc;
-    },
-    {} as Record<string, string>
-  );
-  return BlogMetadataSchema.parse(metadata);
+  const { data } = matter(postContent);
+  return BlogMetadataSchema.parse(data);
 }
 
 export function getBlogViewsBySlug(slug: string) {
