@@ -73,7 +73,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
   const { slug } = await params;
 
   const { default: Blog, frontmatter: metadata } = await import(
-    `../../../content/${slug}/post.mdx`
+    `~/content/${slug}/post.mdx`
   );
 
   const { publishedAt, summary, title } = metadata;
