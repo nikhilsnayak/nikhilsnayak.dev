@@ -51,7 +51,20 @@ export async function generateMetadata({
       type: 'article',
       siteName: 'Nikhil S - Blog',
       publishedTime: publishedAt.toDateString(),
-      url: `${BASE_URL}/blogs/${slug}`,
+  openGraph: {
+    title,
+    description,
+    type: 'article',
+    siteName: 'Nikhil S - Blog',
+    publishedTime: publishedAt.toDateString(),
+-   url: `${BASE_URL}/blogs/${slug}`,
++   url: `${BASE_URL}/blog/${slug}`,
+    images: [
+      {
+        url: ogImage,
+      },
+    ],
+  },
       images: [
         {
           url: ogImage,
