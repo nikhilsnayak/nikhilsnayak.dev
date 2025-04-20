@@ -56,7 +56,7 @@ export async function continueConversation(
             - If you cannot find a relevant answer, politely inform the user that their question is beyond your scope, and suggest they contact Nikhil at **nikhilsnayak3473@gmail.com** for further assistance.
             - **Do not create or speculate** on answers outside the provided content.
             - Always cite the **reference document** used, converting the path to a URL.
-                For example, \`content/llm-and-rsc.mdx\` becomes \`blogs/llm-and-rsc\`
+                For example, \`content/llm-and-rsc.mdx\` becomes \`blog/llm-and-rsc\`
           `.trim(),
           tools: {
             getInformation: tool({

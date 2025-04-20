@@ -149,7 +149,7 @@ export default async function HomePage() {
           {recentBlogs.slice(0, 2).map((post) => (
             <Link
               key={post.slug}
-              href={`/blogs/${post.slug}`}
+              href={`/blog/${post.slug}`}
               className='group block'
             >
               <div className='border-border h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'>

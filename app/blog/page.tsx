@@ -19,7 +19,7 @@ export default async function BlogsPage() {
     <section>
       <div className='mb-6 flex items-center justify-between'>
         <h1 className='font-mono text-2xl font-medium tracking-tighter'>
-          My Blogs
+          My Blog
         </h1>
         <a
           href='/rss.xml'
@@ -35,7 +35,7 @@ export default async function BlogsPage() {
         {allBlogs.map((post) => (
           <Link
             key={post.slug}
-            href={`/blogs/${post.slug}`}
+            href={`/blog/${post.slug}`}
             className='group block'
           >
             <div className='border-border h-full transform space-y-2 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl'>

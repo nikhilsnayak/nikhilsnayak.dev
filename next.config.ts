@@ -2,6 +2,14 @@ import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/blogs/:slug*',
+        destination: '/blog/:slug*',
+      },
+    ];
+  },
   logging: {
     fetches: {
       fullUrl: true,

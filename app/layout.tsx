@@ -111,7 +111,7 @@ function Header() {
             <NavLink href='/work'>work</NavLink>
           </li>
           <li>
-            <NavLink href='/blogs'>blogs</NavLink>
+            <NavLink href='/blog'>blog</NavLink>
           </li>
         </ul>
         <ul className='flex items-center gap-4'>
