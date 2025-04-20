@@ -101,14 +101,11 @@ export default function RootLayout({
 
 function Header() {
   return (
-    <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur-sm'>
+    <header className='w-full border-b'>
       <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
         <ul className='flex gap-4'>
           <li>
             <NavLink href='/'>home</NavLink>
-          </li>
-          <li>
-            <NavLink href='/work'>work</NavLink>
           </li>
           <li>
             <NavLink href='/blog'>blog</NavLink>

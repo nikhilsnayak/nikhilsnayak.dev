@@ -2,7 +2,7 @@ import { BASE_URL } from '~/lib/constants';
 import { getBlogsMetadata } from '~/features/blog/functions/queries';
 
 export default async function sitemap() {
-  const routes = ['', '/work', '/bot', '/blogs', '/rss.xml'];
+  const routes = ['', '/bot', '/blog', '/rss.xml'];
   const blogs = await getBlogsMetadata();
 
   return [
@@ -11,7 +11,7 @@ export default async function sitemap() {
       lastModified: new Date().toISOString().split('T')[0],
     })),
     ...blogs.map((post) => ({
-      url: `${BASE_URL}/blogs/${post.slug}`,
+      url: `${BASE_URL}/blog/${post.slug}`,
       lastModified: post.metadata.publishedAt,
     })),
   ];
