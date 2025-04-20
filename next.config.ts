@@ -40,7 +40,7 @@ const withMDX = createMDX({
     ],
     rehypePlugins: [
       // @ts-expect-error https://nextjs.org/docs/canary/app/building-your-application/configuring/mdx#using-plugins-with-turbopack
-      ['rehype-mdx-code-props', { strict: true, throwOnError: true }],
+      ['rehype-mdx-code-props'],
     ],
   },
 });
