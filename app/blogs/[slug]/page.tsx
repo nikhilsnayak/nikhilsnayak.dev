@@ -71,9 +71,12 @@ export const dynamicParams = false;
 
 export default async function BlogPage({ params }: Readonly<BlogProps>) {
   const { slug } = await params;
-  const { publishedAt, summary, title } = await getBlogMetadataBySlug(slug);
 
-  const { default: Blog } = await import(`../../../content/${slug}/post.mdx`);
+  const { default: Blog, frontmatter: metadata } = await import(
+    `../../../content/${slug}/post.mdx`
+  );
+
+  const { publishedAt, summary, title } = metadata;
 
   return (
     <section>
