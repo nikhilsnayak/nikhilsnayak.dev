@@ -92,7 +92,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
             dateModified: publishedAt,
             description: summary,
             image: `/api/og?title=${encodeURIComponent(title)}`,
-            url: `${BASE_URL}/blogs/${slug}`,
+            url: `${BASE_URL}/blog/${slug}`,
             author: {
               '@type': 'Person',
               name: 'Nikhil S',
