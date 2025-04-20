@@ -1,6 +1,7 @@
 import {
   cloneElement,
   createElement,
+  Fragment,
   type ComponentProps,
   type PropsWithChildren,
   type ReactElement,
@@ -78,6 +79,7 @@ interface CodeProps {
   highlightedLines?: LineNumbers;
   addedLines?: LineNumbers;
   removedLines?: LineNumbers;
+  noHighlight?: boolean;
 }
 
 function Code({
@@ -85,7 +87,28 @@ function Code({
   highlightedLines,
   addedLines,
   removedLines,
+  noHighlight,
 }: Readonly<CodeProps>) {
+  if (children.split('\n').length === 1) {
+    return <code>{children}</code>;
+  }
+
+  if (noHighlight) {
+    return (
+      <code>
+        {children
+          .split('\n')
+          .filter(Boolean)
+          .map((line, index) => (
+            <Fragment key={index}>
+              <span className='css__line'>{line}</span>
+              {'\n'}
+            </Fragment>
+          ))}
+      </code>
+    );
+  }
+
   const codeLines = highlight(children, {
     modifiers: {
       highlightedLines,
@@ -104,11 +127,19 @@ interface PreProps {
   highlight?: string;
   addition?: string;
   deletion?: string;
+  noHighlight?: boolean;
 }
 
 function Pre(props: Readonly<PreProps>) {
-  const { children, filename, lineNumbers, highlight, addition, deletion } =
-    props;
+  const {
+    children,
+    filename,
+    lineNumbers,
+    highlight,
+    addition,
+    deletion,
+    noHighlight,
+  } = props;
 
   const getLineNumbers = (rawString?: string) => {
     const rangeArray = (numbers: number[]) => {
@@ -149,6 +180,7 @@ function Pre(props: Readonly<PreProps>) {
         highlightedLines: getLineNumbers(highlight),
         addedLines: getLineNumbers(addition),
         removedLines: getLineNumbers(deletion),
+        noHighlight,
       })}
     </pre>
   );
