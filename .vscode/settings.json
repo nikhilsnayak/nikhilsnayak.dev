@@ -10,11 +10,7 @@
     "**/app/**/layout.tsx": "${dirname} - layout.tsx",
     "**/app/**/route.ts": "${dirname} - route.ts"
   },
-  "tailwindCSS.experimental.classRegex": [
-    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ],
-  "tailwindCSS.experimental.configFile": "./tailwind.config.ts",
+  "tailwindCSS.classFunctions": ["tw", "clsx"],
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib"
 }

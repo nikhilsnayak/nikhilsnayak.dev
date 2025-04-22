@@ -57,41 +57,37 @@ export default async function HomePage() {
         <h2 className='font-mono text-2xl font-medium tracking-tighter underline'>
           Experience:
         </h2>
-        <div className='space-y-8'>
-          <div className='group bg-background relative rounded-lg border p-6 transition-all hover:shadow-md'>
-            <div className='mb-2'>
-              <h3 className='hover:text-primary inline-flex items-center gap-2 font-mono text-xl font-medium tracking-tighter'>
-                <a
-                  href='https://www.codecrafttech.com/'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='codecraft technologies'
-                  className='flex items-center gap-2 transition-all hover:opacity-80'
-                >
-                  CodeCraft Technologies{' '}
-                  <ArrowUpRight className='h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1' />
-                </a>
-              </h3>
+        <div>
+          <h3 className='hover:text-primary mb-2 inline-flex items-center gap-2 font-mono text-xl font-medium tracking-tighter'>
+            <a
+              href='https://www.codecrafttech.com/'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='codecraft technologies'
+              className='flex items-center gap-2 transition-all hover:opacity-80'
+            >
+              CodeCraft Technologies
+              <ArrowUpRight className='w-4' />
+            </a>
+          </h3>
+          <div>
+            <div className='relative border-l-3 pb-4 pl-4'>
+              <div className='absolute top-1 -left-[9px] size-4 rounded-full border-2 bg-green-500' />
+              <p className='text-muted-foreground flex flex-col gap-1'>
+                <span className='font-medium'>
+                  Engineer - Software Development
+                </span>
+                <time className='text-xs'>Nov 2024 - Present</time>
+              </p>
             </div>
-            <div>
-              <div className='border-muted relative border-l-2 pb-4 pl-4'>
-                <div className='border-background bg-secondary absolute top-1 -left-[9px] h-4 w-4 rounded-full border-2' />
-                <p className='text-muted-foreground flex flex-col gap-1'>
-                  <span className='font-medium'>
-                    Engineer - Software Development
-                  </span>
-                  <time className='text-xs'>Nov 2024 - Present</time>
-                </p>
-              </div>
-              <div className='border-muted relative border-l-2 pl-4'>
-                <div className='border-background bg-secondary absolute top-1 -left-[9px] h-4 w-4 rounded-full border-2' />
-                <p className='text-muted-foreground flex flex-col gap-1'>
-                  <span className='font-medium'>
-                    Trainee Engineer - Software Development
-                  </span>
-                  <time className='text-xs'>Aug 2023 - Nov 2024</time>
-                </p>
-              </div>
+            <div className='relative border-l-3 pl-4'>
+              <div className='bg-background absolute top-1 -left-[9px] size-4 rounded-full border-2' />
+              <p className='text-muted-foreground flex flex-col gap-1'>
+                <span className='font-medium'>
+                  Trainee Engineer - Software Development
+                </span>
+                <time className='text-xs'>Aug 2023 - Nov 2024</time>
+              </p>
             </div>
           </div>
         </div>
