@@ -3,7 +3,7 @@ import { ArrowUpRight, Rss } from 'lucide-react';
 import { Link } from 'next-view-transitions';
 
 import { formatDate } from '~/lib/utils';
-import { getBlogsMetadata } from '~/features/blog/functions/queries';
+import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const allBlogs = await getBlogsMetadata();
+  const blog = await getBlogMetadata();
 
   return (
     <section>
@@ -32,7 +32,7 @@ export default async function BlogsPage() {
       </div>
 
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
-        {allBlogs.map((post) => (
+        {blog.map((post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}

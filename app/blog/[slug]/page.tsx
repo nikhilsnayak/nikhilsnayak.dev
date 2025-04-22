@@ -13,8 +13,8 @@ import { Hearts } from '~/features/blog/components/hearts';
 import { SocialShare } from '~/features/blog/components/social-share';
 import { BlogViewsCount } from '~/features/blog/components/views';
 import {
-  getBlogMetadataBySlug,
-  getBlogsMetadata,
+  getBlogMetadata,
+  getPostMetadataBySlug,
 } from '~/features/blog/functions/queries';
 
 interface BlogProps {
@@ -22,7 +22,7 @@ interface BlogProps {
 }
 
 export async function generateStaticParams() {
-  const posts = await getBlogsMetadata();
+  const posts = await getBlogMetadata();
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -33,7 +33,7 @@ export async function generateMetadata({
   params,
 }: BlogProps): Promise<Metadata> {
   const { slug } = await params;
-  const metadata = await getBlogMetadataBySlug(slug);
+  const metadata = await getPostMetadataBySlug(slug);
   if (!metadata) {
     return {};
   }

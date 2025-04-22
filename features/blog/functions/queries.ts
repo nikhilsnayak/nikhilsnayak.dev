@@ -8,10 +8,10 @@ import { db } from '~/lib/db';
 import { getIPHash } from '~/lib/utils/server';
 
 import { CONTENT_DIR } from '../constants';
-import { BlogMetadataSchema } from '../schema';
+import { PostMetadataSchema } from '../schema';
 import type { Comment } from '../types';
 
-export async function getBlogsMetadata() {
+export async function getBlogMetadata() {
   const files = await fs.readdir(CONTENT_DIR, { withFileTypes: true });
   const slugs = files
     .filter((file) => file.isDirectory())
@@ -19,7 +19,7 @@ export async function getBlogsMetadata() {
 
   const posts = await Promise.all(
     slugs.map(async (slug) => {
-      const metadata = await getBlogMetadataBySlug(slug);
+      const metadata = await getPostMetadataBySlug(slug);
       return {
         metadata,
         slug,
@@ -35,11 +35,11 @@ export async function getBlogsMetadata() {
   });
 }
 
-export async function getBlogMetadataBySlug(slug: string) {
+export async function getPostMetadataBySlug(slug: string) {
   const postPath = path.join(CONTENT_DIR, slug, 'post.mdx');
   const postContent = await fs.readFile(postPath, 'utf-8');
   const { data } = matter(postContent);
-  return BlogMetadataSchema.parse(data);
+  return PostMetadataSchema.parse(data);
 }
 
 export function getBlogViewsBySlug(slug: string) {

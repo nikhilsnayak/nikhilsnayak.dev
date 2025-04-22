@@ -1,12 +1,12 @@
 import { BASE_URL } from '~/lib/constants';
-import { getBlogsMetadata } from '~/features/blog/functions/queries';
+import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
 export async function GET() {
-  const allBlogs = await getBlogsMetadata();
+  const blog = await getBlogMetadata();
 
-  const itemsXml = allBlogs
+  const itemsXml = blog
     .map(
       (post) =>
         `<item>

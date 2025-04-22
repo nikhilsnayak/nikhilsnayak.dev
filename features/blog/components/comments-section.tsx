@@ -24,7 +24,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
             action={async () => {
               'use server';
               return await signIn('github', {
-                redirectTo: `/blogs/${slug}#comments`,
+                redirectTo: `/blog/${slug}#comments`,
               });
             }}
           >
@@ -43,7 +43,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
             action={async () => {
               'use server';
               return await signOut({
-                redirectTo: `/blogs/${slug}#comments`,
+                redirectTo: `/blog/${slug}#comments`,
               });
             }}
           >

@@ -20,7 +20,7 @@ import { cn, formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
 import { BlogViewsCount } from '~/features/blog/components/views';
-import { getBlogsMetadata } from '~/features/blog/functions/queries';
+import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 const sourceCodePro = Source_Code_Pro({
   weight: ['600'],
@@ -28,7 +28,7 @@ const sourceCodePro = Source_Code_Pro({
 });
 
 export default async function HomePage() {
-  const recentBlogs = await getBlogsMetadata();
+  const recentPosts = await getBlogMetadata();
 
   return (
     <section>
@@ -216,7 +216,7 @@ export default async function HomePage() {
         </ul>
         <p className='text-lg sm:text-xl'>
           In my free time, I{' '}
-          <Link href='/blogs' className='underline'>
+          <Link href='/blog' className='underline'>
             write
           </Link>{' '}
           about these technologies, breaking down complex concepts from the
@@ -228,7 +228,7 @@ export default async function HomePage() {
           Recent Posts:
         </h2>
         <div className='space-y-8'>
-          {recentBlogs.slice(0, 2).map((post) => (
+          {recentPosts.slice(0, 2).map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}

@@ -6,7 +6,7 @@ export function SourceLink() {
   const path = usePathname();
   const parts = path.split('/').slice(1);
 
-  const isBlogPage = parts.at(-2) === 'blogs';
+  const isBlogPage = ['blog', 'blogs'].includes(parts.at(-2) ?? '');
 
   let href = 'https://github.com/nikhilsnayak/nikhilsnayak.dev';
 
