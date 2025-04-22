@@ -25,7 +25,7 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends React.ComponentProps<'span'>,
     VariantProps<typeof badgeVariants> {
   asChild?: boolean;
 }
