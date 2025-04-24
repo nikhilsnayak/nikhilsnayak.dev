@@ -54,7 +54,7 @@
     "code-syntactic-sugar": "2.0.0-beta.2",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.0",
-    "drizzle-orm": "^0.42.0",
+    "drizzle-orm": "^0.43.0",
     "drizzle-zod": "^0.7.1",
     "eslint": "^9.24.0",
     "eslint-config-next": "^15.3.0-canary.40",
