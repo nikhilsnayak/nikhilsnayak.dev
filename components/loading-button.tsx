@@ -1,10 +1,10 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '~/lib/utils';
 
-import { Button, type ButtonProps } from './button';
+import { Button } from './ui/button';
 
-interface LoadingButtonProps extends ButtonProps {
+interface LoadingButtonProps extends ComponentProps<typeof Button> {
   isLoading: boolean;
   loadingIndicator?: ReactNode;
 }

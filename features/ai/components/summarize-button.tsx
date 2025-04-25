@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { generateId } from 'ai';
 import { useActions, useUIState } from 'ai/rsc';
 
-import { LoadingButton } from '~/components/ui/loading-button';
+import { LoadingButton } from '~/components/loading-button';
 import { Spinner } from '~/components/spinner';
 
 import type { AI } from '..';
