@@ -13,8 +13,8 @@ import { Hearts } from '~/features/blog/components/hearts';
 import { SocialShare } from '~/features/blog/components/social-share';
 import { BlogViewsCount } from '~/features/blog/components/views';
 import {
-  getBlogMetadataBySlug,
-  getBlogsMetadata,
+  getBlogMetadata,
+  getPostMetadataBySlug,
 } from '~/features/blog/functions/queries';
 
 interface BlogProps {
@@ -22,7 +22,7 @@ interface BlogProps {
 }
 
 export async function generateStaticParams() {
-  const posts = await getBlogsMetadata();
+  const posts = await getBlogMetadata();
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -33,12 +33,12 @@ export async function generateMetadata({
   params,
 }: BlogProps): Promise<Metadata> {
   const { slug } = await params;
-  const metadata = await getBlogMetadataBySlug(slug);
+  const metadata = await getPostMetadataBySlug(slug);
   if (!metadata) {
     return {};
   }
 
-  const { title, publishedAt: publishedTime, summary: description } = metadata;
+  const { title, publishedAt, summary: description } = metadata;
 
   const ogImage = `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`;
 
@@ -50,8 +50,8 @@ export async function generateMetadata({
       description,
       type: 'article',
       siteName: 'Nikhil S - Blog',
-      publishedTime,
-      url: `${BASE_URL}/blogs/${slug}`,
+      publishedTime: publishedAt.toDateString(),
+      url: `${BASE_URL}/blog/${slug}`,
       images: [
         {
           url: ogImage,
@@ -71,9 +71,12 @@ export const dynamicParams = false;
 
 export default async function BlogPage({ params }: Readonly<BlogProps>) {
   const { slug } = await params;
-  const { publishedAt, summary, title } = await getBlogMetadataBySlug(slug);
 
-  const { default: Blog } = await import(`../../../content/${slug}/post.mdx`);
+  const { default: Blog, frontmatter: metadata } = await import(
+    `~/content/${slug}/post.mdx`
+  );
+
+  const { publishedAt, summary, title } = metadata;
 
   return (
     <section>
@@ -89,7 +92,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
             dateModified: publishedAt,
             description: summary,
             image: `/api/og?title=${encodeURIComponent(title)}`,
-            url: `${BASE_URL}/blogs/${slug}`,
+            url: `${BASE_URL}/blog/${slug}`,
             author: {
               '@type': 'Person',
               name: 'Nikhil S',
@@ -128,7 +131,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
         <Blog />
       </article>
       <div className='mt-8 space-y-4'>
-        <p className='dark:text-fluorescent'>
+        <p className='dark:text-theme'>
           If you enjoyed this blog, share it on social media to help others find
           it too
           <SocialShare title={title} slug={slug} />

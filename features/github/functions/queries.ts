@@ -22,7 +22,7 @@ export async function getLatestCommit() {
   return {
     author: latestCommit?.commit?.author?.name,
     date: latestCommit?.commit.author?.date
-      ? formatDate(latestCommit.commit.author.date)
+      ? formatDate(new Date(latestCommit.commit.author.date))
       : null,
     message: latestCommit.commit.message,
     url: latestCommit.html_url,

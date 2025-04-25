@@ -1,17 +1,19 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import type { ButtonProps } from './ui/button';
-import { LoadingButton } from './ui/loading-button';
+import { LoadingButton } from './loading-button';
 
-interface FormSubmitProps extends Omit<ButtonProps, 'type' | 'disabled'> {
+interface FormSubmitProps
+  extends Omit<
+    ComponentProps<typeof LoadingButton>,
+    'type' | 'disabled' | 'isLoading'
+  > {
   pendingFallback?: ReactNode;
 }
 
 export function FormSubmit({
-  children,
   pendingFallback,
   ...rest
 }: Readonly<FormSubmitProps>) {
@@ -23,8 +25,6 @@ export function FormSubmit({
       isLoading={pending}
       loadingIndicator={pendingFallback}
       {...rest}
-    >
-      {children}
-    </LoadingButton>
+    />
   );
 }

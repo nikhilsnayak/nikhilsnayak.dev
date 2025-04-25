@@ -1,15 +1,16 @@
 import {
   cloneElement,
   createElement,
+  Fragment,
   type ComponentProps,
   type PropsWithChildren,
   type ReactElement,
 } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { highlight, type LineNumbers } from 'code-syntactic-sugar';
 import { AppWindow, Code2 } from 'lucide-react';
 import type { MDXComponents } from 'mdx/types';
-import { Link } from 'next-view-transitions';
 import { Tweet as ReactTweet, type TweetProps } from 'react-tweet';
 
 import { cn, slugify } from '~/lib/utils';
@@ -78,6 +79,7 @@ interface CodeProps {
   highlightedLines?: LineNumbers;
   addedLines?: LineNumbers;
   removedLines?: LineNumbers;
+  noHighlight?: boolean;
 }
 
 function Code({
@@ -85,7 +87,28 @@ function Code({
   highlightedLines,
   addedLines,
   removedLines,
+  noHighlight,
 }: Readonly<CodeProps>) {
+  if (children.split('\n').length === 1) {
+    return <code>{children}</code>;
+  }
+
+  if (noHighlight) {
+    return (
+      <code data-no-highlight>
+        {children
+          .split('\n')
+          .filter(Boolean)
+          .map((line, index) => (
+            <Fragment key={index}>
+              <span className='css__line'>{line}</span>
+              {'\n'}
+            </Fragment>
+          ))}
+      </code>
+    );
+  }
+
   const codeLines = highlight(children, {
     modifiers: {
       highlightedLines,
@@ -104,11 +127,19 @@ interface PreProps {
   highlight?: string;
   addition?: string;
   deletion?: string;
+  noHighlight?: boolean;
 }
 
 function Pre(props: Readonly<PreProps>) {
-  const { children, filename, lineNumbers, highlight, addition, deletion } =
-    props;
+  const {
+    children,
+    filename,
+    lineNumbers,
+    highlight,
+    addition,
+    deletion,
+    noHighlight,
+  } = props;
 
   const getLineNumbers = (rawString?: string) => {
     const rangeArray = (numbers: number[]) => {
@@ -149,6 +180,7 @@ function Pre(props: Readonly<PreProps>) {
         highlightedLines: getLineNumbers(highlight),
         addedLines: getLineNumbers(addition),
         removedLines: getLineNumbers(deletion),
+        noHighlight,
       })}
     </pre>
   );

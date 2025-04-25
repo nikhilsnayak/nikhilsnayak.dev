@@ -2,15 +2,16 @@ import 'server-only';
 
 import fs from 'fs/promises';
 import path from 'path';
+import matter from 'gray-matter';
 
 import { db } from '~/lib/db';
 import { getIPHash } from '~/lib/utils/server';
 
 import { CONTENT_DIR } from '../constants';
-import { BlogMetadataSchema } from '../schema';
+import { PostMetadataSchema } from '../schema';
 import type { Comment } from '../types';
 
-export async function getBlogsMetadata() {
+export async function getBlogMetadata() {
   const files = await fs.readdir(CONTENT_DIR, { withFileTypes: true });
   const slugs = files
     .filter((file) => file.isDirectory())
@@ -18,7 +19,7 @@ export async function getBlogsMetadata() {
 
   const posts = await Promise.all(
     slugs.map(async (slug) => {
-      const metadata = await getBlogMetadataBySlug(slug);
+      const metadata = await getPostMetadataBySlug(slug);
       return {
         metadata,
         slug,
@@ -27,17 +28,18 @@ export async function getBlogsMetadata() {
   );
 
   return posts.toSorted((a, b) => {
-    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
+    if (a.metadata.publishedAt > b.metadata.publishedAt) {
       return -1;
     }
     return 1;
   });
 }
 
-export async function getBlogMetadataBySlug(slug: string) {
-  const metadataPath = path.join(CONTENT_DIR, slug, 'metadata.json');
-  const metadataContent = await fs.readFile(metadataPath, 'utf-8');
-  return BlogMetadataSchema.parse(JSON.parse(metadataContent));
+export async function getPostMetadataBySlug(slug: string) {
+  const postPath = path.join(CONTENT_DIR, slug, 'post.mdx');
+  const postContent = await fs.readFile(postPath, 'utf-8');
+  const { data } = matter(postContent);
+  return PostMetadataSchema.parse(data);
 }
 
 export function getBlogViewsBySlug(slug: string) {

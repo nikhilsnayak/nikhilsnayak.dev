@@ -1,3 +1,9 @@
+---
+title: Build your own RSC Framework - Part 1/n (Server Components)
+publishedAt: 2025-04-14
+summary: In this series of posts we explore building a minimal RSC framework. Part 1 covers adding support for server components
+---
+
 ## Introduction
 
 React Server Components are one of the most interesting innovations to happen in the web ecosystem in recent times. They've made a lot of noise—some people love them, and some hate them. I’m definitely on the loving side. TBH, RSCs made me dive deep into React and made me love it even more—to the extent of exploring and building my own RSC implementation called [COSMOS-RSC](https://github.com/nikhilsnayak/cosmos-rsc).
@@ -33,16 +39,17 @@ npm install express react react-dom @babel/core @babel/preset-react babel-loader
 
 Let's bootstrap the app in the traditional way, as we've been doing for ages now.
 
-Here’s the folder structure and the files:s
+Here’s the folder structure and the files:
 
-```
+{/* prettier-ignore */}
+```md noHighlight
 my-rsc-framework/
 ├── package.json
-├── build.js       # Build script
-├── index.html     # HTML file to load React.
-├── client.js      # Client runtime
-├── app.js         # Main application entry point
-└── server.js      # Server runtime
+├── build.js     # Build script
+├── index.html   # HTML file to load React.
+├── client.js    # Client runtime
+├── app.js       # Main application entry point
+└── server.js    # Server runtime
 ```
 
 <Tabs defaultValue='package.json'>

@@ -1,17 +1,17 @@
 import { BASE_URL } from '~/lib/constants';
-import { getBlogsMetadata } from '~/features/blog/functions/queries';
+import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 export default async function sitemap() {
-  const routes = ['', '/work', '/bot', '/blogs', '/rss.xml'];
-  const blogs = await getBlogsMetadata();
+  const routes = ['', '/bot', '/blog', '/rss.xml'];
+  const blog = await getBlogMetadata();
 
   return [
     ...routes.map((route) => ({
       url: `${BASE_URL}${route}`,
       lastModified: new Date().toISOString().split('T')[0],
     })),
-    ...blogs.map((post) => ({
-      url: `${BASE_URL}/blogs/${post.slug}`,
+    ...blog.map((post) => ({
+      url: `${BASE_URL}/blog/${post.slug}`,
       lastModified: post.metadata.publishedAt,
     })),
   ];

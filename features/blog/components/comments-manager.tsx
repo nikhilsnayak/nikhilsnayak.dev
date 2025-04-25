@@ -321,7 +321,7 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
               {comment.isPending && <Spinner className='size-4' />}
             </h3>
             <span className='text-muted-foreground text-sm'>
-              {formatDate(comment.createdAt.toISOString())}
+              {formatDate(comment.createdAt)}
             </span>
           </div>
         </div>

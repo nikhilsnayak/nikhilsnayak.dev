@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { ArrowUpRight, Rss } from 'lucide-react';
-import { Link } from 'next-view-transitions';
 
 import { formatDate } from '~/lib/utils';
-import { getBlogsMetadata } from '~/features/blog/functions/queries';
+import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const allBlogs = await getBlogsMetadata();
+  const blog = await getBlogMetadata();
 
   return (
     <section>
       <div className='mb-6 flex items-center justify-between'>
         <h1 className='font-mono text-2xl font-medium tracking-tighter'>
-          My Blogs
+          My Blog
         </h1>
         <a
           href='/rss.xml'
@@ -32,10 +32,10 @@ export default async function BlogsPage() {
       </div>
 
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
-        {allBlogs.map((post) => (
+        {blog.map((post) => (
           <Link
             key={post.slug}
-            href={`/blogs/${post.slug}`}
+            href={`/blog/${post.slug}`}
             className='group block'
           >
             <div className='border-border h-full transform space-y-2 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl'>

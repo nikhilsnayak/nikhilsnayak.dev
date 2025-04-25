@@ -7,7 +7,6 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
-import { ViewTransitions } from 'next-view-transitions';
 
 import { BASE_URL } from '~/lib/constants';
 import { cn } from '~/lib/utils';
@@ -67,51 +66,46 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ViewTransitions>
-      <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
-        <body
-          className={cn(
-            geistSans.variable,
-            geistMono.variable,
-            'flex min-h-dvh flex-col font-sans'
-          )}
+    <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
+      <body
+        className={cn(
+          geistSans.variable,
+          geistMono.variable,
+          'flex min-h-dvh flex-col font-sans'
+        )}
+      >
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster richColors />
-            <AI>
-              <Header />
-              <main className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'>
-                {children}
-              </main>
-              <Footer />
-            </AI>
-          </ThemeProvider>
-          <SpeedInsights />
-          <Analytics />
-        </body>
-      </html>
-    </ViewTransitions>
+          <Toaster richColors />
+          <AI>
+            <Header />
+            <main className='mx-auto w-9/10 max-w-(--breakpoint-lg) grow border-x p-4'>
+              {children}
+            </main>
+            <Footer />
+          </AI>
+        </ThemeProvider>
+        <SpeedInsights />
+        <Analytics />
+      </body>
+    </html>
   );
 }
 
 function Header() {
   return (
-    <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur-sm'>
-      <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
+    <header className='w-full border-b'>
+      <nav className='mx-auto flex w-9/10 max-w-(--breakpoint-lg) items-center justify-between border-x p-4'>
         <ul className='flex gap-4'>
           <li>
             <NavLink href='/'>home</NavLink>
           </li>
           <li>
-            <NavLink href='/work'>work</NavLink>
-          </li>
-          <li>
-            <NavLink href='/blogs'>blogs</NavLink>
+            <NavLink href='/blog'>blog</NavLink>
           </li>
         </ul>
         <ul className='flex items-center gap-4'>
@@ -121,7 +115,7 @@ function Header() {
           <li className='hover:opacity-70'>
             <a
               href='https://x.com/_nikhilsnayak_'
-              className='dark:text-fluorescent'
+              className='dark:text-theme'
               target='_blank'
               rel='noopener noreferrer'
               aria-label='x.com'
@@ -132,7 +126,7 @@ function Header() {
           <li className='hover:opacity-70'>
             <a
               href='https://github.com/nikhilsnayak'
-              className='dark:text-fluorescent'
+              className='dark:text-theme'
               target='_blank'
               rel='noopener noreferrer'
               aria-label='github'
@@ -143,7 +137,7 @@ function Header() {
           <li className='hover:opacity-70'>
             <a
               href='https://linkedin.com/in/nikhilsnayak'
-              className='dark:text-fluorescent'
+              className='dark:text-theme'
               target='_blank'
               rel='noopener noreferrer'
               aria-label='linkedin'
@@ -176,15 +170,17 @@ function ThemeToggle() {
 
 function Footer() {
   return (
-    <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
-      <div className='flex items-center justify-between gap-6'>
-        <div className='space-y-2'>
-          <SourceLink />
-          <LatestCommit />
+    <footer className='w-full border-t'>
+      <div className='mx-auto w-9/10 max-w-(--breakpoint-lg) space-y-6 border-x p-4'>
+        <div className='flex items-center justify-between gap-6'>
+          <div className='space-y-2'>
+            <SourceLink />
+            <LatestCommit />
+          </div>
+          <ThemeToggle />
         </div>
-        <ThemeToggle />
+        <LanguageStats />
       </div>
-      <LanguageStats />
     </footer>
   );
 }

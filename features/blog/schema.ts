@@ -24,8 +24,8 @@ export const DeleteCommentSchema = CommentSchema.pick({ id: true }).extend(
   BaseSchema
 );
 
-export const BlogMetadataSchema = z.object({
+export const PostMetadataSchema = z.object({
   title: z.string(),
-  publishedAt: z.string(),
+  publishedAt: z.date(),
   summary: z.string(),
 });

@@ -1,6 +1,7 @@
-import { Suspense, type ReactNode } from 'react';
+import { Suspense } from 'react';
 import { Source_Code_Pro } from 'next/font/google';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   SiBun,
   SiDrizzle,
@@ -14,13 +15,12 @@ import {
 } from '@icons-pack/react-simple-icons';
 import { profile } from '~/assets/images';
 import { ArrowUpRight } from 'lucide-react';
-import { Link } from 'next-view-transitions';
 
 import { cn, formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
 import { BlogViewsCount } from '~/features/blog/components/views';
-import { getBlogsMetadata } from '~/features/blog/functions/queries';
+import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 const sourceCodePro = Source_Code_Pro({
   weight: ['600'],
@@ -28,7 +28,7 @@ const sourceCodePro = Source_Code_Pro({
 });
 
 export default async function HomePage() {
-  const recentBlogs = await getBlogsMetadata();
+  const recentPosts = await getBlogMetadata();
 
   return (
     <section>
@@ -39,7 +39,7 @@ export default async function HomePage() {
         </h1>
         <p
           className={cn(
-            'bg-fluorescent mb-4 px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
+            'bg-theme mb-4 px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
             sourceCodePro.className
           )}
         >
@@ -53,88 +53,170 @@ export default async function HomePage() {
           placeholder='blur'
         />
       </header>
+      <section className='mt-8 space-y-6'>
+        <h2 className='font-mono text-2xl font-medium tracking-tighter underline'>
+          Experience:
+        </h2>
+        <div>
+          <h3 className='hover:text-primary mb-2 inline-flex items-center gap-2 font-mono text-xl font-medium tracking-tighter'>
+            <a
+              href='https://www.codecrafttech.com/'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='codecraft technologies'
+              className='flex items-center gap-2 transition-all hover:opacity-80'
+            >
+              CodeCraft Technologies
+              <ArrowUpRight className='w-4' />
+            </a>
+          </h3>
+          <div>
+            <div className='relative border-l-3 pb-4 pl-4'>
+              <div className='absolute top-1 -left-[9px] size-4 rounded-full border-2 bg-green-500' />
+              <p className='text-muted-foreground flex flex-col gap-1'>
+                <span className='font-medium'>
+                  Engineer - Software Development
+                </span>
+                <time className='text-xs'>Nov 2024 - Present</time>
+              </p>
+            </div>
+            <div className='relative border-l-3 pl-4'>
+              <div className='bg-background absolute top-1 -left-[9px] size-4 rounded-full border-2' />
+              <p className='text-muted-foreground flex flex-col gap-1'>
+                <span className='font-medium'>
+                  Trainee Engineer - Software Development
+                </span>
+                <time className='text-xs'>Aug 2023 - Nov 2024</time>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className='mt-8 space-y-4'>
         <h2 className='mb-4 font-mono text-2xl font-medium tracking-tighter underline'>
           Tech Stack:
         </h2>
-        <ul className='list-disc space-y-2 px-4'>
-          <li>
-            <Tech
-              name='Bun'
-              href='https://bun.sh/'
-              icon={
-                <SiBun className='inline size-3 fill-amber-300 dark:fill-[#f9f1e1]' />
-              }
-              className='mr-2'
-            />
+        <ul className='space-y-2'>
+          <li className='rounded-md border-2 border-dashed p-4'>
+            <span className='mr-2'>
+              <SiBun className='inline size-3 fill-amber-300 dark:fill-[#f9f1e1]' />
+              <a
+                href='https://bun.sh/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                Bun
+              </a>
+            </span>
             +
-            <Tech
-              name='Typescript'
-              href='https://www.typescriptlang.org/'
-              icon={<SiTypescript className='inline size-3 fill-[#3178c6]' />}
-              className='mx-2'
-            />
+            <span className='mx-2'>
+              <SiTypescript className='inline size-3 fill-[#3178c6]' />
+              <a
+                href='https://www.typescriptlang.org/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                Typescript
+              </a>
+            </span>
             for blazingly fast ⚡ dev exp and full stack type safety
           </li>
-          <li>
-            <Tech
-              name='React'
-              href='https://react.dev/'
-              icon={<SiReact className='inline size-3 fill-[#58c4dc]' />}
-              className='mr-2'
-            />
+          <li className='rounded-md border-2 border-dashed p-4'>
+            <span className='mr-2'>
+              <SiReact className='inline size-3 fill-[#58c4dc]' />
+              <a
+                href='https://react.dev/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                React
+              </a>
+            </span>
             +
-            <Tech
-              name='Next.js (App Router)'
-              href='https://nextjs.org/'
-              icon={<SiNextdotjs className='inline size-3' />}
-              className='mx-2'
-            />
+            <span className='mx-2'>
+              <SiNextdotjs className='inline size-3' />
+              <a
+                href='https://nextjs.org/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                Next.js (App Router)
+              </a>
+            </span>
             for powering interactive UIs at scale
           </li>
-          <li>
-            <Tech
-              name='TailwindCSS'
-              href='https://tailwindcss.com/'
-              icon={<SiTailwindcss className='inline size-3 fill-[#0ea5e9]' />}
-              className='mr-2'
-            />
+          <li className='rounded-md border-2 border-dashed p-4'>
+            <span className='mr-2'>
+              <SiTailwindcss className='inline size-3 fill-[#0ea5e9]' />
+              <a
+                href='https://tailwindcss.com/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                TailwindCSS
+              </a>
+            </span>
             +
-            <Tech
-              name='Radix UI'
-              href='https://www.radix-ui.com/'
-              icon={<SiRadixui className='inline size-3' />}
-              className='mx-2'
-            />
+            <span className='mx-2'>
+              <SiRadixui className='inline size-3' />
+              <a
+                href='https://www.radix-ui.com/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                Radix UI
+              </a>
+            </span>
             =
-            <Tech
-              name='Shadcn UI'
-              href='https://ui.shadcn.com/'
-              icon={<SiShadcnui className='inline size-3' />}
-              className='mx-2'
-            />
+            <span className='mx-2'>
+              <SiShadcnui className='inline size-3' />
+              <a
+                href='https://ui.shadcn.com/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                Shadcn UI
+              </a>
+            </span>
             for consistent and accessible web 🌐
           </li>
-          <li>
-            <Tech
-              name='PostgreSQL'
-              href='https://www.postgresql.org/'
-              icon={<SiPostgresql className='inline size-3 fill-[#699dc9]' />}
-              className='mr-2'
-            />
+          <li className='rounded-md border-2 border-dashed p-4'>
+            <span className='mr-2'>
+              <SiPostgresql className='inline size-3 fill-[#699dc9]' />
+              <a
+                href='https://www.postgresql.org/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                PostgreSQL
+              </a>
+            </span>
             +
-            <Tech
-              name='Drizzle ORM'
-              href='https://orm.drizzle.team/'
-              icon={<SiDrizzle className='inline size-3 dark:fill-[#c5f74f]' />}
-              className='mx-2'
-            />
+            <span className='mx-2'>
+              <SiDrizzle className='inline size-3 dark:fill-[#c5f74f]' />
+              <a
+                href='https://orm.drizzle.team/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline'
+              >
+                Drizzle ORM
+              </a>
+            </span>
             for flexible and type safe data storage
           </li>
         </ul>
         <p className='text-lg sm:text-xl'>
           In my free time, I{' '}
-          <Link href='/blogs' className='underline'>
+          <Link href='/blog' className='underline'>
             write
           </Link>{' '}
           about these technologies, breaking down complex concepts from the
@@ -146,10 +228,10 @@ export default async function HomePage() {
           Recent Posts:
         </h2>
         <div className='space-y-8'>
-          {recentBlogs.slice(0, 2).map((post) => (
+          {recentPosts.slice(0, 2).map((post) => (
             <Link
               key={post.slug}
-              href={`/blogs/${post.slug}`}
+              href={`/blog/${post.slug}`}
               className='group block'
             >
               <div className='border-border h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'>
@@ -180,31 +262,5 @@ export default async function HomePage() {
         </div>
       </section>
     </section>
-  );
-}
-
-function Tech({
-  href,
-  icon,
-  name,
-  className,
-}: Readonly<{
-  name: string;
-  icon: ReactNode;
-  href: string;
-  className?: string;
-}>) {
-  return (
-    <span className={className}>
-      {icon}
-      <a
-        href={href}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='ml-1 font-medium underline'
-      >
-        {name}
-      </a>
-    </span>
   );
 }

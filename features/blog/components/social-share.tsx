@@ -16,7 +16,7 @@ export function SocialShare({
   slug,
   title,
 }: Readonly<{ slug: string; title: string }>) {
-  const postLink = `${BASE_URL}/blogs/${slug}`;
+  const postLink = `${BASE_URL}/blog/${slug}`;
 
   return (
     <DropdownMenu>

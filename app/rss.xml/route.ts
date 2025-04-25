@@ -1,21 +1,19 @@
 import { BASE_URL } from '~/lib/constants';
-import { getBlogsMetadata } from '~/features/blog/functions/queries';
+import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 export const dynamic = 'force-static';
 
 export async function GET() {
-  const allBlogs = await getBlogsMetadata();
+  const blog = await getBlogMetadata();
 
-  const itemsXml = allBlogs
+  const itemsXml = blog
     .map(
       (post) =>
         `<item>
           <title>${post.metadata.title}</title>
-          <link>${BASE_URL}/blogs/${post.slug}</link>
+          <link>${BASE_URL}/blog/${post.slug}</link>
           <description>${post.metadata.summary || ''}</description>
-          <pubDate>${new Date(
-            post.metadata.publishedAt
-          ).toUTCString()}</pubDate>
+          <pubDate>${post.metadata.publishedAt.toUTCString()}</pubDate>
         </item>`
     )
     .join('\n');

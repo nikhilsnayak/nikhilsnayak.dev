@@ -2,9 +2,9 @@
 
 import type { ComponentPropsWithoutRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { zoro } from '~/assets/images';
-import { Link } from 'next-view-transitions';
 
 import { cn } from '~/lib/utils';
 
@@ -19,7 +19,7 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
       href={href}
       className={cn(
         'font-semibold transition-all after:block after:h-[2px] after:w-full after:bg-transparent after:transition-all',
-        path === href && 'dark:after:bg-fluorescent after:bg-current',
+        path === href && 'dark:after:bg-theme after:bg-current',
         className
       )}
     />
