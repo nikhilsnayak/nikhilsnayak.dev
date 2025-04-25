@@ -2,9 +2,9 @@
 
 import type { ComponentPropsWithoutRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { zoro } from '~/assets/images';
-import { Link } from 'next-view-transitions';
 
 import { cn } from '~/lib/utils';
 
