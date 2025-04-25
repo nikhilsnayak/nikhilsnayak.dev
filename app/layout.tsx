@@ -83,7 +83,7 @@ export default function RootLayout({
           <Toaster richColors />
           <AI>
             <Header />
-            <main className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'>
+            <main className='mx-auto w-9/10 max-w-(--breakpoint-lg) grow border-x p-4'>
               {children}
             </main>
             <Footer />
@@ -99,7 +99,7 @@ export default function RootLayout({
 function Header() {
   return (
     <header className='w-full border-b'>
-      <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
+      <nav className='mx-auto flex w-9/10 max-w-(--breakpoint-lg) items-center justify-between border-x p-4'>
         <ul className='flex gap-4'>
           <li>
             <NavLink href='/'>home</NavLink>
@@ -115,7 +115,7 @@ function Header() {
           <li className='hover:opacity-70'>
             <a
               href='https://x.com/_nikhilsnayak_'
-              className='dark:text-fluorescent'
+              className='dark:text-theme'
               target='_blank'
               rel='noopener noreferrer'
               aria-label='x.com'
@@ -126,7 +126,7 @@ function Header() {
           <li className='hover:opacity-70'>
             <a
               href='https://github.com/nikhilsnayak'
-              className='dark:text-fluorescent'
+              className='dark:text-theme'
               target='_blank'
               rel='noopener noreferrer'
               aria-label='github'
@@ -137,7 +137,7 @@ function Header() {
           <li className='hover:opacity-70'>
             <a
               href='https://linkedin.com/in/nikhilsnayak'
-              className='dark:text-fluorescent'
+              className='dark:text-theme'
               target='_blank'
               rel='noopener noreferrer'
               aria-label='linkedin'
@@ -170,15 +170,17 @@ function ThemeToggle() {
 
 function Footer() {
   return (
-    <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
-      <div className='flex items-center justify-between gap-6'>
-        <div className='space-y-2'>
-          <SourceLink />
-          <LatestCommit />
+    <footer className='w-full border-t'>
+      <div className='mx-auto w-9/10 max-w-(--breakpoint-lg) space-y-6 border-x p-4'>
+        <div className='flex items-center justify-between gap-6'>
+          <div className='space-y-2'>
+            <SourceLink />
+            <LatestCommit />
+          </div>
+          <ThemeToggle />
         </div>
-        <ThemeToggle />
+        <LanguageStats />
       </div>
-      <LanguageStats />
     </footer>
   );
 }

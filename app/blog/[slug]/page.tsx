@@ -131,7 +131,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
         <Blog />
       </article>
       <div className='mt-8 space-y-4'>
-        <p className='dark:text-fluorescent'>
+        <p className='dark:text-theme'>
           If you enjoyed this blog, share it on social media to help others find
           it too
           <SocialShare title={title} slug={slug} />

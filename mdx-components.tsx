@@ -95,7 +95,7 @@ function Code({
 
   if (noHighlight) {
     return (
-      <code>
+      <code data-no-highlight>
         {children
           .split('\n')
           .filter(Boolean)

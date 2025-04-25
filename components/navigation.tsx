@@ -19,7 +19,7 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
       href={href}
       className={cn(
         'font-semibold transition-all after:block after:h-[2px] after:w-full after:bg-transparent after:transition-all',
-        path === href && 'dark:after:bg-fluorescent after:bg-current',
+        path === href && 'dark:after:bg-theme after:bg-current',
         className
       )}
     />

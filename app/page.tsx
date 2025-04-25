@@ -39,7 +39,7 @@ export default async function HomePage() {
         </h1>
         <p
           className={cn(
-            'bg-fluorescent mb-4 px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
+            'bg-theme mb-4 px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
             sourceCodePro.className
           )}
         >
@@ -234,7 +234,7 @@ export default async function HomePage() {
               href={`/blog/${post.slug}`}
               className='group block'
             >
-              <div className='border-border h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:shadow-xl'>
+              <div className='border-border h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-lg transition-all duration-300 hover:translate-x-2 hover:shadow-xl'>
                 <div className='space-y-1'>
                   <p className='text-muted-foreground flex items-center justify-between text-xs'>
                     <span>{formatDate(post.metadata.publishedAt)}</span>

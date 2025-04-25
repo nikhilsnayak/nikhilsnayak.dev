@@ -20,7 +20,7 @@ export function SourceLink() {
   return (
     <a
       href={href}
-      className='dark:text-fluorescent block text-xs tracking-tighter underline'
+      className='dark:text-theme block text-xs tracking-tighter underline'
       target='_blank'
       rel='noopener noreferrer'
       aria-label='source code'

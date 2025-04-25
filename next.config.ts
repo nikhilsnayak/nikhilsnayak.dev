@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
     inlineCss: true,
     useCache: true,
     nodeMiddleware: true,
-    clientSegmentCache: true,
+    // clientSegmentCache: true,
   },
 };
 
