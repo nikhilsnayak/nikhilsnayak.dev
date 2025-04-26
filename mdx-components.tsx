@@ -263,6 +263,22 @@ function Tweet(props: TweetProps) {
   );
 }
 
+function CustomTabs({ className, ...props }: ComponentProps<typeof Tabs>) {
+  return <Tabs className={cn('[&_pre]:!mt-0', className)} {...props} />;
+}
+
+function CustomTabsList({
+  className,
+  ...props
+}: ComponentProps<typeof TabsList>) {
+  return (
+    <TabsList
+      className={cn('bg-background rounded-b-none', className)}
+      {...props}
+    />
+  );
+}
+
 const components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -285,10 +301,10 @@ const components = {
   Tweet,
   ScrollArea,
   ScrollBar,
-  Tabs,
-  TabsContent,
-  TabsList,
+  Tabs: CustomTabs,
+  TabsList: CustomTabsList,
   TabsTrigger,
+  TabsContent,
 };
 
 export function useMDXComponents(): MDXComponents {

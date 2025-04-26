@@ -70,7 +70,7 @@ export const dynamicParams = false;
 export default async function BlogPage({ params }: Readonly<BlogProps>) {
   const { slug } = await params;
 
-  const { default: Blog, frontmatter: metadata } = await import(
+  const { default: Post, frontmatter: metadata } = await import(
     `~/content/${slug}/post.mdx`
   );
 
@@ -103,12 +103,8 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
           {title}
         </h1>
       </ViewTransition>
-      <div className='mt-4 mb-8 flex flex-col justify-between gap-3 text-sm sm:flex-row sm:items-center'>
-        <div className='flex items-center gap-3'>
-          <p className='text-sm text-neutral-600 dark:text-neutral-400'>
-            {formatDate(publishedAt)}
-          </p>
-        </div>
+      <div className='mt-4 mb-8 flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400'>
+        <p>{formatDate(publishedAt)}</p>
         <ErrorBoundary
           fallback={
             <ViewTransition enter='slide-up'>
@@ -130,7 +126,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
         </ErrorBoundary>
       </div>
       <article className='prose dark:prose-invert min-w-full'>
-        <Blog />
+        <Post />
       </article>
       <div className='mt-8 space-y-4'>
         <p className='dark:text-theme'>

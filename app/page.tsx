@@ -72,6 +72,7 @@ export default async function HomePage() {
           </h3>
           <div>
             <div className='relative border-l-3 pb-4 pl-4'>
+              <div className='absolute top-1 -left-[9px] size-4 animate-ping rounded-full border-2 bg-green-500' />
               <div className='absolute top-1 -left-[9px] size-4 rounded-full border-2 bg-green-500' />
               <p className='text-muted-foreground flex flex-col gap-1'>
                 <span className='font-medium'>
@@ -247,7 +248,9 @@ export default async function HomePage() {
                   </ViewTransition>
                 </div>
                 <ErrorBoundary
-                  fallback={<p className='w-max'>{"Couldn't load views"}</p>}
+                  fallback={
+                    <p className='w-max text-sm'>{"Couldn't load views"}</p>
+                  }
                 >
                   <Suspense fallback={<Spinner variant='ellipsis' />}>
                     <ViewsCount slug={post.slug} update />
