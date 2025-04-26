@@ -16,7 +16,6 @@ const formatter = new Intl.NumberFormat('en', {
 
 export async function ViewsCount({ slug, update = false }: ViewsProps) {
   await connection();
-  await new Promise((res) => setTimeout(res, 5000));
   const views = await getViewsBySlug(slug);
 
   if (process.env.NODE_ENV === 'production' && update) {
