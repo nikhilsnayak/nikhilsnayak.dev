@@ -83,6 +83,12 @@ export default function RootLayout({
           <AI>
             <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur-sm'>
               <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
+                <a
+                  href='#main-content'
+                  className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded focus:p-2'
+                >
+                  Skip to content
+                </a>
                 <ul className='flex gap-4'>
                   <li>
                     <NavLink href='/'>home</NavLink>
@@ -128,7 +134,10 @@ export default function RootLayout({
                 </ul>
               </nav>
             </header>
-            <main className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'>
+            <main
+              id='main-content'
+              className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'
+            >
               {children}
             </main>
             <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
