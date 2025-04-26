@@ -340,3 +340,45 @@ article.prose pre code .css__line[data-removed-line] {
 article.prose pre code[data-no-highlight] {
   @apply text-foreground;
 }
+
+::view-transition-old(.slide-down) {
+  animation:
+    150ms ease-out both fade-out,
+    150ms ease-out both slide-down;
+}
+
+::view-transition-new(.slide-up) {
+  animation:
+    210ms ease-in 150ms both fade-in,
+    400ms ease-in both slide-up;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}

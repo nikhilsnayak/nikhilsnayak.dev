@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, unstable_ViewTransition as ViewTransition } from 'react';
 import { Source_Code_Pro } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { cn, formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
-import { BlogViewsCount } from '~/features/blog/components/views';
+import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 const sourceCodePro = Source_Code_Pro({
@@ -96,7 +96,7 @@ export default async function HomePage() {
         <h2 className='mb-4 font-mono text-2xl font-medium tracking-tighter underline'>
           Tech Stack:
         </h2>
-        <ul className='space-y-2'>
+        <ul className='space-y-2 text-pretty'>
           <li className='rounded-md border-2 border-dashed p-4'>
             <span className='mr-2'>
               <SiBun className='inline size-3 fill-amber-300 dark:fill-[#f9f1e1]' />
@@ -185,7 +185,7 @@ export default async function HomePage() {
                 Shadcn UI
               </a>
             </span>
-            for consistent and accessible web 🌐
+            for consistent and accessible web
           </li>
           <li className='rounded-md border-2 border-dashed p-4'>
             <span className='mr-2'>
@@ -240,20 +240,17 @@ export default async function HomePage() {
                     <span>{formatDate(post.metadata.publishedAt)}</span>
                     <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
                   </p>
-                  <h2
-                    className='font-mono text-xl font-semibold'
-                    style={{
-                      viewTransitionName: post.slug,
-                    }}
-                  >
-                    {post.metadata.title}
-                  </h2>
+                  <ViewTransition name={post.slug}>
+                    <h3 className='font-mono text-xl font-semibold text-balance'>
+                      {post.metadata.title}
+                    </h3>
+                  </ViewTransition>
                 </div>
-                <ErrorBoundary fallback={<p>{"Couldn't load views"}</p>}>
+                <ErrorBoundary
+                  fallback={<p className='w-max'>{"Couldn't load views"}</p>}
+                >
                   <Suspense fallback={<Spinner variant='ellipsis' />}>
-                    <BlogViewsCount slug={post.slug}>
-                      {(count) => <p>{count} views</p>}
-                    </BlogViewsCount>
+                    <ViewsCount slug={post.slug} update />
                   </Suspense>
                 </ErrorBoundary>
               </div>

@@ -42,7 +42,7 @@ export async function getPostMetadataBySlug(slug: string) {
   return PostMetadataSchema.parse(data);
 }
 
-export function getBlogViewsBySlug(slug: string) {
+export function getViewsBySlug(slug: string) {
   return db.query.views.findFirst({
     where: (views, { eq }) => eq(views.slug, slug),
   });
