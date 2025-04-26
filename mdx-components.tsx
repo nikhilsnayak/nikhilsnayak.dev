@@ -264,7 +264,12 @@ function Tweet(props: TweetProps) {
 }
 
 function CustomTabs({ className, ...props }: ComponentProps<typeof Tabs>) {
-  return <Tabs className={cn('[&_pre]:!mt-0', className)} {...props} />;
+  return (
+    <Tabs
+      className={cn('gap-0 [&_pre]:!mt-0 [&_pre]:!rounded-t-none', className)}
+      {...props}
+    />
+  );
 }
 
 function CustomTabsList({
@@ -272,10 +277,13 @@ function CustomTabsList({
   ...props
 }: ComponentProps<typeof TabsList>) {
   return (
-    <TabsList
-      className={cn('bg-background rounded-b-none', className)}
-      {...props}
-    />
+    <ScrollArea className='w-full rounded-lg rounded-b-none border-2 border-b-0 border-neutral-400 bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800'>
+      <TabsList
+        className={cn('rounded-none bg-inherit', className)}
+        {...props}
+      />
+      <ScrollBar orientation='horizontal' />
+    </ScrollArea>
   );
 }
 
