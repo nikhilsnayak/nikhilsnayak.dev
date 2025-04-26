@@ -1,3 +1,4 @@
+import { unstable_ViewTransition as ViewTransition } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight, Rss } from 'lucide-react';
@@ -8,7 +9,7 @@ import { getBlogMetadata } from '~/features/blog/functions/queries';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Blogs',
+  title: 'Blog',
   description: 'A list of blog posts where I document my learnings',
 };
 
@@ -43,14 +44,11 @@ export default async function BlogsPage() {
                 <span>{formatDate(post.metadata.publishedAt)}</span>
                 <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
               </p>
-              <h2
-                className='font-mono text-lg font-semibold'
-                style={{
-                  viewTransitionName: post.slug,
-                }}
-              >
-                {post.metadata.title}
-              </h2>
+              <ViewTransition name={post.slug}>
+                <h2 className='font-mono text-lg font-semibold text-balance'>
+                  {post.metadata.title}
+                </h2>
+              </ViewTransition>
               <p className='text-sm'>{post.metadata.summary}</p>
             </div>
           </Link>

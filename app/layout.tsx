@@ -5,14 +5,13 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { SiGithub, SiLinkedin, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Monitor, Moon, Sun } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 
 import { BASE_URL } from '~/lib/constants';
 import { cn } from '~/lib/utils';
 import { Toaster } from '~/components/ui/sonner';
-import { BotLink, NavLink } from '~/components/navigation';
-import { ThemeButton } from '~/components/theme-button';
+import { NavLink } from '~/components/nav-link';
+import { ThemeToggle } from '~/components/theme-toggle';
 import { AI } from '~/features/ai';
 import { LanguageStats } from '~/features/github/components/language-stats';
 import { LatestCommit } from '~/features/github/components/latest-commit';
@@ -82,105 +81,71 @@ export default function RootLayout({
         >
           <Toaster richColors />
           <AI>
-            <Header />
-            <main className='mx-auto w-9/10 max-w-(--breakpoint-lg) grow border-x p-4'>
+            <header className='sticky top-0 z-50 w-full border-b shadow-md backdrop-blur-sm'>
+              <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
+                <ul className='flex gap-4'>
+                  <li>
+                    <NavLink href='/'>home</NavLink>
+                  </li>
+                  <li>
+                    <NavLink href='/blog'>blog</NavLink>
+                  </li>
+                </ul>
+                <ul className='flex items-center gap-4'>
+                  <li className='hover:opacity-70'>
+                    <a
+                      href='https://x.com/_nikhilsnayak_'
+                      className='dark:text-theme'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='x.com'
+                    >
+                      <SiX className='size-4' />
+                    </a>
+                  </li>
+                  <li className='hover:opacity-70'>
+                    <a
+                      href='https://github.com/nikhilsnayak'
+                      className='dark:text-theme'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='github'
+                    >
+                      <SiGithub className='size-4' />
+                    </a>
+                  </li>
+                  <li className='hover:opacity-70'>
+                    <a
+                      href='https://linkedin.com/in/nikhilsnayak'
+                      className='dark:text-theme'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='linkedin'
+                    >
+                      <SiLinkedin className='size-4' />
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </header>
+            <main className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'>
               {children}
             </main>
-            <Footer />
+            <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
+              <div className='flex items-center justify-between gap-6'>
+                <div className='space-y-2'>
+                  <SourceLink />
+                  <LatestCommit />
+                </div>
+                <ThemeToggle />
+              </div>
+              <LanguageStats />
+            </footer>
           </AI>
         </ThemeProvider>
         <SpeedInsights />
         <Analytics />
       </body>
     </html>
-  );
-}
-
-function Header() {
-  return (
-    <header className='w-full border-b'>
-      <nav className='mx-auto flex w-9/10 max-w-(--breakpoint-lg) items-center justify-between border-x p-4'>
-        <ul className='flex gap-4'>
-          <li>
-            <NavLink href='/'>home</NavLink>
-          </li>
-          <li>
-            <NavLink href='/blog'>blog</NavLink>
-          </li>
-        </ul>
-        <ul className='flex items-center gap-4'>
-          <li className='hover:opacity-70'>
-            <BotLink />
-          </li>
-          <li className='hover:opacity-70'>
-            <a
-              href='https://x.com/_nikhilsnayak_'
-              className='dark:text-theme'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='x.com'
-            >
-              <SiX className='size-4' />
-            </a>
-          </li>
-          <li className='hover:opacity-70'>
-            <a
-              href='https://github.com/nikhilsnayak'
-              className='dark:text-theme'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='github'
-            >
-              <SiGithub className='size-4' />
-            </a>
-          </li>
-          <li className='hover:opacity-70'>
-            <a
-              href='https://linkedin.com/in/nikhilsnayak'
-              className='dark:text-theme'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='linkedin'
-            >
-              <SiLinkedin className='size-4' />
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-  );
-}
-
-function ThemeToggle() {
-  return (
-    <div className='bg-muted flex gap-2 rounded-full border'>
-      <span className='sr-only'>Toggle theme</span>
-      <ThemeButton type='light'>
-        <Sun />
-      </ThemeButton>
-      <ThemeButton type='dark'>
-        <Moon />
-      </ThemeButton>
-      <ThemeButton type='system'>
-        <Monitor />
-      </ThemeButton>
-    </div>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className='w-full border-t'>
-      <div className='mx-auto w-9/10 max-w-(--breakpoint-lg) space-y-6 border-x p-4'>
-        <div className='flex items-center justify-between gap-6'>
-          <div className='space-y-2'>
-            <SourceLink />
-            <LatestCommit />
-          </div>
-          <ThemeToggle />
-        </div>
-        <LanguageStats />
-      </div>
-    </footer>
   );
 }

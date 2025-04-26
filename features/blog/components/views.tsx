@@ -1,25 +1,27 @@
-import type { ReactNode } from 'react';
 import { after, connection } from 'next/server';
 
 import { updateViewsBySlug } from '../functions/mutations';
-import { getBlogViewsBySlug } from '../functions/queries';
+import { getViewsBySlug } from '../functions/queries';
 
 interface ViewsProps {
   slug: string;
-  children: (count: number) => ReactNode;
   update?: boolean;
 }
 
-export async function BlogViewsCount({
-  slug,
-  children,
-  update = false,
-}: ViewsProps) {
+const formatter = new Intl.NumberFormat('en', {
+  notation: 'compact',
+  compactDisplay: 'short',
+  maximumFractionDigits: 1,
+});
+
+export async function ViewsCount({ slug, update = false }: ViewsProps) {
   await connection();
-  const views = await getBlogViewsBySlug(slug);
+  await new Promise((res) => setTimeout(res, 5000));
+  const views = await getViewsBySlug(slug);
+
   if (process.env.NODE_ENV === 'production' && update) {
     after(() => updateViewsBySlug(slug));
   }
 
-  return children(views?.count ?? 0);
+  return <p className='w-max'>{formatter.format(views?.count ?? 0)} views</p>;
 }

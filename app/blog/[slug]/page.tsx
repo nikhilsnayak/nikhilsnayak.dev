@@ -1,17 +1,15 @@
-import { Suspense } from 'react';
+import { Suspense, unstable_ViewTransition as ViewTransition } from 'react';
 import type { Metadata } from 'next';
-import { Eye } from 'lucide-react';
 
 import { BASE_URL } from '~/lib/constants';
 import { formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
-import { SummarizeButton } from '~/features/ai/components/summarize-button';
 import { CommentsSection } from '~/features/blog/components/comments-section';
 import { HeartButton } from '~/features/blog/components/heart-button';
 import { Hearts } from '~/features/blog/components/hearts';
 import { SocialShare } from '~/features/blog/components/social-share';
-import { BlogViewsCount } from '~/features/blog/components/views';
+import { ViewsCount } from '~/features/blog/components/views';
 import {
   getBlogMetadata,
   getPostMetadataBySlug,
@@ -100,30 +98,34 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
           }),
         }}
       />
-      <h1
-        className='font-mono text-2xl font-semibold tracking-tighter'
-        style={{
-          viewTransitionName: slug,
-        }}
-      >
-        {title}
-      </h1>
+      <ViewTransition name={slug}>
+        <h1 className='font-mono text-2xl font-semibold tracking-tighter text-balance'>
+          {title}
+        </h1>
+      </ViewTransition>
       <div className='mt-4 mb-8 flex flex-col justify-between gap-3 text-sm sm:flex-row sm:items-center'>
         <div className='flex items-center gap-3'>
           <p className='text-sm text-neutral-600 dark:text-neutral-400'>
             {formatDate(publishedAt)}
           </p>
-          <SummarizeButton blogTitle={title} />
         </div>
-        <ErrorBoundary fallback={<span>{"Couldn't load views"}</span>}>
-          <Suspense fallback={<Spinner variant='ellipsis' />}>
-            <BlogViewsCount slug={slug} update>
-              {(count) => (
-                <span className='flex items-center gap-2'>
-                  <Eye /> {count}
-                </span>
-              )}
-            </BlogViewsCount>
+        <ErrorBoundary
+          fallback={
+            <ViewTransition enter='slide-up'>
+              <p className='w-max'>{"Couldn't load views"}</p>
+            </ViewTransition>
+          }
+        >
+          <Suspense
+            fallback={
+              <ViewTransition exit='slide-down'>
+                <p className='animate-pulse blur-xs'>100 views</p>
+              </ViewTransition>
+            }
+          >
+            <ViewTransition enter='slide-up'>
+              <ViewsCount slug={slug} />
+            </ViewTransition>
           </Suspense>
         </ErrorBoundary>
       </div>

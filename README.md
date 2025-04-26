@@ -4,8 +4,6 @@
 
 ## Overview
 
-This project utilizes several cutting-edge technologies to build a modern web application:
-
 - **Package Manager**: [Bun](https://bun.sh)
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
@@ -22,7 +20,7 @@ This project utilizes several cutting-edge technologies to build a modern web ap
 
 ### Running Locally
 
-> **Note:** This repository uses several experimental features which may result in unstable behavior.
+> **Note:** This project uses several experimental features which may result in unstable behavior.
 
 1. Clone the repository and navigate to the directory:
 
