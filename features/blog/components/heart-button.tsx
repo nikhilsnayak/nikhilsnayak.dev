@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
+import { AnimatePresence, motion, useAnimationControls } from 'motion/react';
 
 import type { HeartsInfo } from '../types';
 
