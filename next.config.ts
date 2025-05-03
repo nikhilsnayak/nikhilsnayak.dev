@@ -26,7 +26,6 @@ const nextConfig: NextConfig = {
     ppr: true,
     inlineCss: true,
     useCache: true,
-    nodeMiddleware: true,
     viewTransition: true,
     // clientSegmentCache: true,
   },
