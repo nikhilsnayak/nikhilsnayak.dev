@@ -8,8 +8,6 @@
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Components**: [Shadcn UI](https://ui.shadcn.com/)
-- **LLM**: [OpenAI](https://platform.openai.com/)
-- **RAG**: [AI SDK](https://sdk.vercel.ai/docs/introduction)
 - **Database**: [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
 - **Auth**: [Auth.js](https://authjs.dev/)
