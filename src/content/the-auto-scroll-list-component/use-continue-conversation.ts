@@ -1,7 +1,6 @@
 'use client';
 
 import { startTransition, useActionState, useOptimistic } from 'react';
-import type { StreamableValue } from 'ai/rsc';
 
 import { continueConversation as continueConversationServerFn } from './functions';
 
@@ -14,7 +13,7 @@ interface UserMessage {
 interface AssistantMessage {
   id: string;
   role: 'assistant';
-  value: StreamableValue;
+  value: AsyncGenerator<string, string>;
 }
 
 type Message = UserMessage | AssistantMessage;
