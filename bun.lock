@@ -24,7 +24,7 @@
         "babel-plugin-react-compiler": "^19.1.0-rc.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "code-syntactic-sugar": "2.0.0-beta.2",
+        "code-syntactic-sugar": "2.0.0",
         "dotenv": "^16.5.0",
         "drizzle-kit": "^0.31.0",
         "drizzle-orm": "^0.43.1",
@@ -718,7 +718,7 @@
 
     "clsx": ["clsx@2.1.1", "", {}, "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA=="],
 
-    "code-syntactic-sugar": ["code-syntactic-sugar@2.0.0-beta.2", "", { "peerDependencies": { "react": "^18 || ^19" } }, "sha512-xx7qnUY/19zXc9Y2BvDWBO7JcIwzM0Kc6MxqFUqzyna0YdoZFWaG13Ak4+TJmRdpl0f038N9m6/D9SBoESqecg=="],
+    "code-syntactic-sugar": ["code-syntactic-sugar@2.0.0", "", { "peerDependencies": { "react": "^18 || ^19" } }, "sha512-IKaK0SJ9Q0IQeRsxnrq5e7ivjNRHocnPE7JKUT9XB9yKG92B1yILMSTNDcJLeXCIxw1SktwuzrkYvYK5pjUk6A=="],
 
     "collapse-white-space": ["collapse-white-space@2.1.0", "", {}, "sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw=="],
 
