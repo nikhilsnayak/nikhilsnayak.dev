@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { startTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '~/components/ui/button';
@@ -25,8 +25,10 @@ export default function ErrorFallback({
       <div className='mt-6'>
         <Button
           onClick={() => {
-            reset();
-            router.refresh();
+            startTransition(() => {
+              router.refresh();
+              reset();
+            });
           }}
         >
           Try again
