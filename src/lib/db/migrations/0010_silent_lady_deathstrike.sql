@@ -1,1 +1,0 @@
-ALTER TABLE "hearts" DROP CONSTRAINT "hearts_client_identifier_unique";

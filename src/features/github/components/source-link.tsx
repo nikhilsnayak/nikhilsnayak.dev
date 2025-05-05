@@ -11,10 +11,10 @@ export function SourceLink() {
   let href = 'https://github.com/nikhilsnayak/nikhilsnayak.dev';
 
   if (isBlogPage) {
-    href = `${href}/blob/main/content/${parts.at(-1)}/post.mdx`;
+    href = `${href}/blob/main/src/content/${parts.at(-1)}/post.mdx`;
   } else {
     const combinedParts = parts.join('/');
-    href = `${href}/blob/main/app/${combinedParts ? `${combinedParts}/` : ''}page.tsx`;
+    href = `${href}/blob/main/src/app/${combinedParts ? `${combinedParts}/` : ''}page.tsx`;
   }
 
   return (
