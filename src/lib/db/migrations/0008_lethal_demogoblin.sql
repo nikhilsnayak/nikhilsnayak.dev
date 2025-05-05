@@ -1,1 +1,0 @@
-ALTER TABLE "hearts" ADD CONSTRAINT "hearts_client_identifier_unique" UNIQUE("client_identifier");

@@ -1,1 +1,0 @@
-ALTER TABLE "views" ALTER COLUMN "count" SET DEFAULT 0;

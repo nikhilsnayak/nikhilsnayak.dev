@@ -1,1 +1,0 @@
-ALTER TABLE "hearts" ADD CONSTRAINT "hearts_slug_client_identifier_unique" UNIQUE NULLS NOT DISTINCT("slug","client_identifier");
