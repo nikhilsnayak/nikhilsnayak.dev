@@ -7,7 +7,7 @@ import { eq, sql } from 'drizzle-orm';
 import { auth } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { comments, hearts, views } from '~/lib/db/schema';
-import { getIPHash } from '~/lib/utils/server';
+import { getIPHash, sendErrorToPostHog } from '~/lib/utils/server';
 
 import {
   AddCommentSchema,
@@ -29,10 +29,9 @@ export async function updateViewsBySlug(slug: string) {
         set: { count: sql`${views.count} + 1` },
       });
   } catch (error) {
-    console.log(error);
+    sendErrorToPostHog(error);
   }
 }
-
 export async function addHeart(
   prevState: HeartsInfo,
   formData: FormData
@@ -71,7 +70,7 @@ export async function addHeart(
       currentClientHeartsCount: updatedHearts.count,
     };
   } catch (error) {
-    console.log(error);
+    sendErrorToPostHog(error);
     return prevState;
   }
 }
@@ -100,7 +99,7 @@ export async function addComment(
 
     return { ...newComment, user: session.user };
   } catch (error) {
-    console.log(error);
+    sendErrorToPostHog(error);
     return { error: 'Server error' };
   }
 }
@@ -155,7 +154,7 @@ export async function editComment(
 
     return { ...updatedCommentFromDb, user: session.user };
   } catch (error) {
-    console.log(error);
+    sendErrorToPostHog(error);
     return { error: 'Server error' };
   }
 }
@@ -199,7 +198,7 @@ export async function deleteComment(
       .then((res) => res[0]);
     return { ...deletedComment, user: session.user };
   } catch (error) {
-    console.log(error);
+    sendErrorToPostHog(error);
     return { error: 'Server error' };
   }
 }
