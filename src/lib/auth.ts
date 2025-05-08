@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 import GitHub from 'next-auth/providers/github';

@@ -2,6 +2,7 @@
 
 import type { ComponentProps } from 'react';
 import { unstable_rethrow as rethrow } from 'next/navigation';
+import posthog from 'posthog-js';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 
 export function ErrorBoundary({
@@ -13,7 +14,7 @@ export function ErrorBoundary({
       {...rest}
       onError={(error, info) => {
         rethrow(error);
-        console.error(error);
+        posthog.captureException(error);
         onError?.(error, info);
       }}
     />
