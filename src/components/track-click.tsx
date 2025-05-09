@@ -15,12 +15,14 @@ export function TrackClick({
   properties,
 }: TrackClickProps) {
   return (
-    <Slot.Root
+    <Slot.Slot
       onClick={() => {
+        console.log({ eventName, properties });
+
         posthog.capture(eventName, properties);
       }}
     >
       {children}
-    </Slot.Root>
+    </Slot.Slot>
   );
 }
