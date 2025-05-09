@@ -17,8 +17,6 @@ export function TrackClick({
   return (
     <Slot.Slot
       onClick={() => {
-        console.log({ eventName, properties });
-
         posthog.capture(eventName, properties);
       }}
     >
