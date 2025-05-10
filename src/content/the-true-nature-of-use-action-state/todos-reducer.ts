@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 import { createTodo, deleteTodo, updateTodo } from './db/mutations';
-import { useControlStore } from './store';
+import { controlStore } from './store';
 import type { Todo, TodoAction } from './types';
 
 export function todosReducer(state: Todo[], action: TodoAction): Todo[] {
@@ -29,7 +29,7 @@ export async function todosReducerAsync(
   state: Todo[],
   action: TodoAction
 ): Promise<Todo[]> {
-  const { delay, shouldError } = useControlStore.getState();
+  const { delay, shouldError } = controlStore.getState();
   await new Promise((resolve, reject) => {
     setTimeout(() => {
       if (shouldError) {
@@ -72,7 +72,7 @@ export async function todosReducerFinal(
   action: TodoAction
 ): Promise<Todo[]> {
   try {
-    const { delay, shouldError } = useControlStore.getState();
+    const { delay, shouldError } = controlStore.getState();
     await new Promise((resolve, reject) => {
       setTimeout(() => {
         if (shouldError) {
