@@ -1,16 +1,24 @@
-import { create } from 'zustand';
+import { createStore, useStore } from '~/lib/store';
 
-interface ControlState {
-  delay: number;
-  shouldError: boolean;
-
-  setDelay: (value: number) => void;
-  setShouldError: (value: boolean) => void;
-}
-
-export const useControlStore = create<ControlState>((set) => ({
+export const controlStore = createStore({
   delay: 0,
   shouldError: false,
-  setDelay: (value) => set(() => ({ delay: value })),
-  setShouldError: (value) => set(() => ({ shouldError: value })),
-}));
+});
+
+export function useControlStore() {
+  const state = useStore(controlStore);
+
+  const setDelay = (value: number) => {
+    controlStore.setState((prev) => {
+      return { ...prev, delay: value };
+    });
+  };
+
+  const setShouldError = (value: boolean) => {
+    controlStore.setState((prev) => {
+      return { ...prev, shouldError: value };
+    });
+  };
+
+  return { ...state, setDelay, setShouldError };
+}
