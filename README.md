@@ -12,7 +12,7 @@
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
 - **Auth**: [Auth.js](https://authjs.dev/)
 - **Deployment**: [Vercel](https://vercel.com)
-- **Analytics**: [PostHog](http://posthog.com/)
+- **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
 
 ## Getting Started
 

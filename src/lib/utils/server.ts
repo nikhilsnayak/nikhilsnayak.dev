@@ -2,9 +2,6 @@ import 'server-only';
 
 import crypto from 'crypto';
 import { headers } from 'next/headers';
-import { after } from 'next/server';
-
-import { PostHogClient } from '~/lib/posthog';
 
 export async function getIPHash() {
   const $h = await headers();
@@ -21,13 +18,4 @@ export async function getIPHash() {
   }
 
   return crypto.createHmac('sha256', secret).update(ip).digest('hex');
-}
-
-export function sendErrorToPostHog(error: unknown) {
-  after(async () => {
-    console.log(error);
-    const posthog = PostHogClient();
-    posthog.captureException(error);
-    await posthog.shutdown();
-  });
 }

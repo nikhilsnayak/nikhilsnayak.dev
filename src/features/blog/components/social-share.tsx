@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { CopyToClipBoard } from '~/components/copy-to-clipboard';
-import { TrackClick } from '~/components/track-click';
 
 export function SocialShare({
   slug,
@@ -31,57 +30,34 @@ export function SocialShare({
       </DropdownMenuTrigger>
       <DropdownMenuContent side='right'>
         <DropdownMenuItem>
-          <TrackClick
-            eventName='blog:copy'
-            properties={{
-              title,
-            }}
+          <CopyToClipBoard
+            className='flex w-full items-center gap-2'
+            content={postLink}
           >
-            <CopyToClipBoard
-              className='flex w-full items-center gap-2'
-              content={postLink}
-            >
-              <Link className='size-3' /> <span>Copy link</span>
-            </CopyToClipBoard>
-          </TrackClick>
+            <Link className='size-3' /> <span>Copy link</span>
+          </CopyToClipBoard>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <TrackClick
-            eventName='blog:share'
-            properties={{
-              title,
-              platform: 'X',
-            }}
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this blog post: ${title} - ${postLink} by @_nikhilsnayak_`)}`}
+            className='flex w-full items-center gap-2'
+            target='_blank'
+            rel='noopener noreferrer'
           >
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this blog post: ${title} - ${postLink} by @_nikhilsnayak_`)}`}
-              className='flex w-full items-center gap-2'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <SiX className='size-3' /> <span>Share on X</span>
-            </a>
-          </TrackClick>
+            <SiX className='size-3' /> <span>Share on X</span>
+          </a>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <TrackClick
-            eventName='blog:share'
-            properties={{
-              title,
-              platform: 'linkedin',
-            }}
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postLink)}`}
+            className='flex w-full items-center gap-2'
+            target='_blank'
+            rel='noopener noreferrer'
           >
-            <a
-              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postLink)}`}
-              className='flex w-full items-center gap-2'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <SiLinkedin className='size-3' />
-              <span>Share on Linkedin</span>
-            </a>
-          </TrackClick>
+            <SiLinkedin className='size-3' />
+            <span>Share on Linkedin</span>
+          </a>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

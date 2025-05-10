@@ -2,7 +2,6 @@
 
 import { startTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import posthog from 'posthog-js';
 
 import { Button } from '~/components/ui/button';
 
@@ -14,9 +13,8 @@ export default function ErrorFallback({
   reset: () => void;
 }>) {
   const router = useRouter();
-
   useEffect(() => {
-    posthog.captureException(error);
+    console.error(error);
   }, [error]);
 
   return (
