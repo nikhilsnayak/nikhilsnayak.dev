@@ -8,7 +8,7 @@
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Components**: [Shadcn UI](https://ui.shadcn.com/)
-- **Database**: [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
+- **Database**: [Neon](https://neon.tech/home)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
 - **Auth**: [Auth.js](https://authjs.dev/)
 - **Deployment**: [Vercel](https://vercel.com)

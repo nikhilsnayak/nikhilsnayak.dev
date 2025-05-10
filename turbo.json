@@ -10,10 +10,6 @@
       "env": [
         "OPENAI_API_KEY",
         "POSTGRES_URL",
-        "KV_URL",
-        "KV_REST_API_URL",
-        "KV_REST_API_TOKEN",
-        "KV_REST_API_READ_ONLY_TOKEN",
         "AUTH_SECRET",
         "AUTH_GITHUB_ID",
         "AUTH_GITHUB_SECRET",
