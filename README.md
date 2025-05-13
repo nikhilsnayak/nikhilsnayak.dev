@@ -43,9 +43,3 @@
 
 Feel free to use this repository as a template. Ensure to remove any personal information.
 
-## Additional Resources
-
-- [Code of Conduct](./CODE_OF_CONDUCT.md)
-- [Contributing Guidelines](./CONTRIBUTING.md)
-- [License](./LICENSE)
-- [Security Policy](./SECURITY.md)
