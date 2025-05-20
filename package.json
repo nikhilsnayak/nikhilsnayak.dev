@@ -43,7 +43,7 @@
     "dotenv": "^16.5.0",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
-    "drizzle-zod": "^0.7.1",
+    "drizzle-zod": "^0.8.0",
     "eslint": "^9.26.0",
     "eslint-config-next": "^15.4.0-canary.30",
     "eslint-config-prettier": "^10.1.5",
