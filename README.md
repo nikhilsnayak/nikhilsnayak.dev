@@ -42,4 +42,3 @@
    ```
 
 Feel free to use this repository as a template. Ensure to remove any personal information.
-
