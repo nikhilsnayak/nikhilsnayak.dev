@@ -22,7 +22,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.27.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
-    "@icons-pack/react-simple-icons": "^10.2.0",
+    "@icons-pack/react-simple-icons": "^13.0.0",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "@neondatabase/serverless": "^1.0.0",
