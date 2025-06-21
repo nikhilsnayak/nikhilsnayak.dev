@@ -27,6 +27,7 @@ export default async function BlogsPage() {
           target='_blank'
           rel='noopener noreferrer'
           className='hover:opacity-70'
+          aria-label='rss feed'
         >
           <Rss />
         </a>

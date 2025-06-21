@@ -3,6 +3,7 @@
 import type { ComponentPropsWithoutRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'motion/react';
 
 import { cn } from '~/lib/utils';
 
@@ -14,14 +15,14 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
     path === href || (href !== '/' && path.startsWith(href + '/'));
 
   return (
-    <Link
-      {...props}
-      href={href}
-      className={cn(
-        'font-semibold transition-all after:block after:h-[2px] after:w-full after:bg-transparent after:transition-all',
-        isActive && 'dark:after:bg-theme after:bg-current',
-        className
-      )}
-    />
+    <motion.div layout className='relative'>
+      <Link {...props} href={href} className={cn('font-semibold', className)} />
+      {isActive ? (
+        <motion.div
+          layoutId='active-indicator'
+          className='dark:bg-theme absolute right-0 -bottom-1 left-0 h-[2px] bg-current'
+        />
+      ) : null}
+    </motion.div>
   );
 }
