@@ -1,6 +1,4 @@
 import { Suspense, unstable_ViewTransition as ViewTransition } from 'react';
-import { Source_Code_Pro } from 'next/font/google';
-import Image from 'next/image';
 import Link from 'next/link';
 import {
   SiBun,
@@ -15,18 +13,11 @@ import {
 } from '@icons-pack/react-simple-icons';
 import { ArrowUpRight } from 'lucide-react';
 
-import { cn, formatDate } from '~/lib/utils';
+import { formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
 import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
-
-import profile from './profile.jpg';
-
-const sourceCodePro = Source_Code_Pro({
-  weight: ['600'],
-  subsets: ['latin'],
-});
 
 export default async function HomePage() {
   const recentPosts = await getBlogMetadata();
@@ -35,24 +26,13 @@ export default async function HomePage() {
     <section>
       <header className='relative'>
         <h1 className='mb-3 text-3xl font-light sm:text-5xl'>
-          {"Hi, I'm"}
-          <strong className='block font-extrabold'>Nikhil S</strong>
+          <strong className='block font-bold'>Nikhil S</strong>
         </h1>
-        <p
-          className={cn(
-            'bg-theme mb-4 px-4 py-1 text-lg font-semibold text-slate-800 sm:text-xl',
-            sourceCodePro.className
-          )}
-        >
-          Full-Stack Developer
+        <p className='mb-4 text-lg sm:text-xl'>
+          {
+            "Hey! I'm Nikhil, a full-stack software engineer primarily working with React."
+          }
         </p>
-        <Image
-          src={profile}
-          alt='Nikhil S'
-          className='mx-auto aspect-4/3 drop-shadow-md sm:absolute sm:top-0 sm:right-8 sm:w-[250px]'
-          priority
-          placeholder='blur'
-        />
       </header>
       <section className='mt-8 space-y-6'>
         <h2 className='font-mono text-2xl font-medium tracking-tighter underline'>

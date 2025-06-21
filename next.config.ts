@@ -27,7 +27,9 @@ const nextConfig: NextConfig = {
     inlineCss: true,
     useCache: true,
     viewTransition: true,
-    // clientSegmentCache: true,
+    devtoolNewPanelUI: true,
+    devtoolSegmentExplorer: true,
+    clientSegmentCache: true,
   },
 };
 
