@@ -49,7 +49,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react-compiler": "^19.1.0-rc.1-rc-af1b7da-20250421",
     "gray-matter": "^4.0.3",
-    "lucide-react": "^0.519.0",
+    "lucide-react": "^0.520.0",
     "motion": "^12.18.1",
     "next": "15.4.0-canary.90",
     "next-auth": "5.0.0-beta.28",
