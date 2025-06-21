@@ -19,6 +19,11 @@ import { Spinner } from '~/components/spinner';
 import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 
+/**
+ * Asynchronously renders the personal homepage with sections for introduction, experience, tech stack, and recent blog posts.
+ *
+ * Displays the author's name and introduction, a timeline of work experience, a list of core technologies used, and up to two recent blog posts with view counts.
+ */
 export default async function HomePage() {
   const recentPosts = await getBlogMetadata();
 
