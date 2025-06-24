@@ -316,7 +316,5 @@ const components = {
 };
 
 export function useMDXComponents(): MDXComponents {
-  return {
-    ...components,
-  };
+  return components;
 }
