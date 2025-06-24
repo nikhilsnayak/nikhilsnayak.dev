@@ -14,7 +14,7 @@ import {
   BreadcrumbSeparator,
 } from '~/components/ui/breadcrumb';
 
-export default function BlogsTemplate({
+export default function BlogsLayout({
   children,
 }: Readonly<React.PropsWithChildren>) {
   const path = usePathname();
