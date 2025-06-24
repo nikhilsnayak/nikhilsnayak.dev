@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { unstable_cacheLife as cacheLife } from 'next/cache';
 import { Octokit } from 'octokit';
 
 import { formatDate } from '~/lib/utils';
@@ -10,6 +11,8 @@ const repo = 'nikhilsnayak.dev';
 
 export async function getLatestCommit() {
   'use cache';
+  cacheLife('max');
+
   const response = await octokit.rest.repos.listCommits({
     owner,
     repo,
@@ -31,6 +34,8 @@ export async function getLatestCommit() {
 
 export async function getLanguages() {
   'use cache';
+  cacheLife('max');
+
   const response = await octokit.rest.repos.listLanguages({
     owner,
     repo,

@@ -2,6 +2,7 @@ import 'server-only';
 
 import fs from 'fs/promises';
 import path from 'path';
+import { unstable_cacheLife as cacheLife } from 'next/cache';
 import matter from 'gray-matter';
 
 import { db } from '~/lib/db';
@@ -12,6 +13,9 @@ import { PostMetadataSchema } from '../schema';
 import type { Comment } from '../types';
 
 export async function getBlogMetadata() {
+  'use cache';
+  cacheLife('max');
+
   const files = await fs.readdir(CONTENT_DIR, { withFileTypes: true });
   const slugs = files
     .filter((file) => file.isDirectory())

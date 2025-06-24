@@ -7,8 +7,6 @@ import * as motion from 'motion/react-client';
 import { formatDate } from '~/lib/utils';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 
-export const dynamic = 'force-static';
-
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'A list of blog posts where I document my learnings',

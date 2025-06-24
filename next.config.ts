@@ -22,14 +22,14 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    reactCompiler: true,
     ppr: true,
+    dynamicIO: true,
+    clientSegmentCache: true,
+    reactCompiler: true,
     inlineCss: true,
-    useCache: true,
     viewTransition: true,
     devtoolNewPanelUI: true,
     devtoolSegmentExplorer: true,
-    clientSegmentCache: true,
   },
 };
 
