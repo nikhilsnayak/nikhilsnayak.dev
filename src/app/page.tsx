@@ -28,7 +28,7 @@ export default async function HomePage() {
       <motion.header
         viewport={{ once: true }}
         initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         className='relative'
       >
@@ -44,7 +44,7 @@ export default async function HomePage() {
       <motion.section
         viewport={{ once: true }}
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         className='mt-8 space-y-6'
       >
@@ -90,7 +90,7 @@ export default async function HomePage() {
       <motion.section
         viewport={{ once: true }}
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         className='mt-8 space-y-4'
       >
@@ -101,7 +101,7 @@ export default async function HomePage() {
           <motion.li
             viewport={{ once: true }}
             initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
             className='rounded-md border-2 border-dashed p-4'
           >
@@ -133,7 +133,7 @@ export default async function HomePage() {
           <motion.li
             viewport={{ once: true }}
             initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
             className='rounded-md border-2 border-dashed p-4'
           >
@@ -165,7 +165,7 @@ export default async function HomePage() {
           <motion.li
             viewport={{ once: true }}
             initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.3 }}
             className='rounded-md border-2 border-dashed p-4'
           >
@@ -209,7 +209,7 @@ export default async function HomePage() {
           <motion.li
             viewport={{ once: true }}
             initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.4 }}
             className='rounded-md border-2 border-dashed p-4'
           >
@@ -242,7 +242,7 @@ export default async function HomePage() {
         <motion.p
           viewport={{ once: true }}
           initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.5 }}
           className='text-lg sm:text-xl'
         >
@@ -257,7 +257,7 @@ export default async function HomePage() {
       <motion.section
         viewport={{ once: true }}
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.6 }}
         className='mt-8'
       >
@@ -270,7 +270,7 @@ export default async function HomePage() {
               key={post.slug}
               viewport={{ once: true }}
               initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 * i }}
             >
               <Link

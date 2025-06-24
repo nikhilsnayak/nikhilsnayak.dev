@@ -20,7 +20,7 @@ export default async function BlogsPage() {
       <motion.div
         viewport={{ once: true }}
         initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         className='mb-6 flex items-center justify-between'
       >
@@ -44,7 +44,7 @@ export default async function BlogsPage() {
             key={post.slug}
             viewport={{ once: true }}
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 * i }}
           >
             <Link
