@@ -40,7 +40,7 @@
     "client-only": "^0.0.1",
     "clsx": "^2.1.1",
     "code-syntactic-sugar": "2.0.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.0.0",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.2",
