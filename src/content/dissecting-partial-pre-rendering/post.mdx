@@ -46,7 +46,6 @@ Okay, SSR solved the problems we had, right? Then why did front-end frameworks l
 1. **Poor SEO:** Since the entire web page is constructed by the client, there will be poor SEO as crawlers cannot execute JS. Additionally, when the page loads, there is no meaningful content, which severely affects the indexing of web pages by search engines.
    > People argue that crawlers can now execute JS and index CSR'ed websites, but I still believe an HTML document with full meaningful content will always have the upper hand.
 2. **The Loading Spinners Hell:** The most irritating problem I call "The Loading Spinners Hell." Let's break this down in detail because this is interesting:
-
    - **Step 1:** Your HTML document loads <LoadingSpinner className='fill-foreground inline-block' /> (1)
    - **Step 2:** JS starts to render the page.
    - **Step 3:** Oh wait, I need more data to render this part of the page; I'll get it from the API. Meanwhile... <LoadingSpinner className='fill-foreground inline-block' /> (2)

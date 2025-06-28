@@ -12,7 +12,6 @@ import {
   SiTypescript,
 } from '@icons-pack/react-simple-icons';
 import { ArrowUpRight } from 'lucide-react';
-import * as motion from 'motion/react-client';
 
 import { formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
@@ -25,13 +24,7 @@ export default async function HomePage() {
 
   return (
     <section>
-      <motion.header
-        viewport={{ once: true }}
-        initial={{ opacity: 0, y: -10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className='relative'
-      >
+      <header>
         <h1 className='mb-3 text-3xl font-light sm:text-5xl'>
           <strong className='block font-bold'>Nikhil S</strong>
         </h1>
@@ -40,14 +33,8 @@ export default async function HomePage() {
             "Hey! I'm Nikhil, a full-stack software engineer primarily working with React."
           }
         </p>
-      </motion.header>
-      <motion.section
-        viewport={{ once: true }}
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className='mt-8 space-y-6'
-      >
+      </header>
+      <section className='mt-8 space-y-6'>
         <h2 className='font-mono text-2xl font-medium tracking-tighter underline'>
           Experience:
         </h2>
@@ -86,25 +73,13 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-      </motion.section>
-      <motion.section
-        viewport={{ once: true }}
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className='mt-8 space-y-4'
-      >
+      </section>
+      <section className='mt-8 space-y-4'>
         <h2 className='mb-4 font-mono text-2xl font-medium tracking-tighter underline'>
           Tech Stack:
         </h2>
         <ul className='space-y-2 text-pretty'>
-          <motion.li
-            viewport={{ once: true }}
-            initial={{ opacity: 0, y: 5 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className='rounded-md border-2 border-dashed p-4'
-          >
+          <li className='rounded-md border-2 border-dashed p-4'>
             <span className='mr-2'>
               <SiBun className='inline size-3 fill-amber-300 dark:fill-[#f9f1e1]' />
               <a
@@ -129,14 +104,8 @@ export default async function HomePage() {
               </a>
             </span>
             for blazingly fast ⚡ dev exp and full stack type safety
-          </motion.li>
-          <motion.li
-            viewport={{ once: true }}
-            initial={{ opacity: 0, y: 5 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className='rounded-md border-2 border-dashed p-4'
-          >
+          </li>
+          <li className='rounded-md border-2 border-dashed p-4'>
             <span className='mr-2'>
               <SiReact className='inline size-3 fill-[#58c4dc]' />
               <a
@@ -161,14 +130,8 @@ export default async function HomePage() {
               </a>
             </span>
             for powering interactive UIs at scale
-          </motion.li>
-          <motion.li
-            viewport={{ once: true }}
-            initial={{ opacity: 0, y: 5 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-            className='rounded-md border-2 border-dashed p-4'
-          >
+          </li>
+          <li className='rounded-md border-2 border-dashed p-4'>
             <span className='mr-2'>
               <SiTailwindcss className='inline size-3 fill-[#0ea5e9]' />
               <a
@@ -205,14 +168,8 @@ export default async function HomePage() {
               </a>
             </span>
             for consistent and accessible web
-          </motion.li>
-          <motion.li
-            viewport={{ once: true }}
-            initial={{ opacity: 0, y: 5 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.4 }}
-            className='rounded-md border-2 border-dashed p-4'
-          >
+          </li>
+          <li className='rounded-md border-2 border-dashed p-4'>
             <span className='mr-2'>
               <SiPostgresql className='inline size-3 fill-[#699dc9]' />
               <a
@@ -237,72 +194,52 @@ export default async function HomePage() {
               </a>
             </span>
             for flexible and type safe data storage
-          </motion.li>
+          </li>
         </ul>
-        <motion.p
-          viewport={{ once: true }}
-          initial={{ opacity: 0, y: 5 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-          className='text-lg sm:text-xl'
-        >
+        <p className='text-lg sm:text-xl'>
           In my free time, I{' '}
           <Link href='/blog' className='underline'>
             write
           </Link>{' '}
           about these technologies, breaking down complex concepts from the
           ground up.
-        </motion.p>
-      </motion.section>
-      <motion.section
-        viewport={{ once: true }}
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.6 }}
-        className='mt-8'
-      >
+        </p>
+      </section>
+      <section className='mt-8'>
         <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
           Recent Posts:
         </h2>
         <div className='space-y-8'>
-          {recentPosts.slice(0, 2).map((post, i) => (
-            <motion.div
+          {recentPosts.slice(0, 2).map((post) => (
+            <Link
               key={post.slug}
-              viewport={{ once: true }}
-              initial={{ opacity: 0, y: 5 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 * i }}
+              href={`/blog/${post.slug}`}
+              className='group border-border block h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-sm transition-all duration-300 hover:translate-x-2 hover:shadow-xl'
             >
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className='group border-border block h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-sm transition-all duration-300 hover:translate-x-2 hover:shadow-xl'
+              <div className='space-y-1'>
+                <p className='text-muted-foreground flex items-center justify-between text-xs'>
+                  <span>{formatDate(post.metadata.publishedAt)}</span>
+                  <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
+                </p>
+                <ViewTransition name={post.slug}>
+                  <h3 className='font-mono text-xl font-semibold text-balance'>
+                    {post.metadata.title}
+                  </h3>
+                </ViewTransition>
+              </div>
+              <ErrorBoundary
+                fallback={
+                  <p className='w-max text-sm'>{"Couldn't load views"}</p>
+                }
               >
-                <div className='space-y-1'>
-                  <p className='text-muted-foreground flex items-center justify-between text-xs'>
-                    <span>{formatDate(post.metadata.publishedAt)}</span>
-                    <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
-                  </p>
-                  <ViewTransition name={post.slug}>
-                    <h3 className='font-mono text-xl font-semibold text-balance'>
-                      {post.metadata.title}
-                    </h3>
-                  </ViewTransition>
-                </div>
-                <ErrorBoundary
-                  fallback={
-                    <p className='w-max text-sm'>{"Couldn't load views"}</p>
-                  }
-                >
-                  <Suspense fallback={<Spinner variant='ellipsis' />}>
-                    <ViewsCount slug={post.slug} update />
-                  </Suspense>
-                </ErrorBoundary>
-              </Link>
-            </motion.div>
+                <Suspense fallback={<Spinner variant='ellipsis' />}>
+                  <ViewsCount slug={post.slug} update />
+                </Suspense>
+              </ErrorBoundary>
+            </Link>
           ))}
         </div>
-      </motion.section>
+      </section>
     </section>
   );
 }

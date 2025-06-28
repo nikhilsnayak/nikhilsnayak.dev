@@ -1,8 +1,6 @@
 import { BASE_URL } from '~/lib/constants';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 
-export const dynamic = 'force-static';
-
 export async function GET() {
   const blog = await getBlogMetadata();
 

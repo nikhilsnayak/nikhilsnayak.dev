@@ -33,7 +33,7 @@ export function HeartButton({
       disabled={!heartsInfo || fillPercentage === 100}
     >
       <motion.svg
-        whileInView={controls}
+        animate={controls}
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
         width='24'
@@ -66,7 +66,7 @@ export function HeartButton({
         <motion.span
           key={heartsInfo?.total ?? 0}
           initial={{ opacity: 0, y: -10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.2 }}
           className='font-semibold tabular-nums'
