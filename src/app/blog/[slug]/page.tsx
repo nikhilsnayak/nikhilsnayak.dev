@@ -118,7 +118,7 @@ export default async function BlogPage({ params }: Readonly<BlogProps>) {
             }
           >
             <ViewTransition enter='slide-up'>
-              <ViewsCount slug={slug} />
+              <ViewsCount slug={slug} update />
             </ViewTransition>
           </Suspense>
         </ErrorBoundary>

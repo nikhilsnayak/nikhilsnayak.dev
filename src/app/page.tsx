@@ -233,7 +233,7 @@ export default async function HomePage() {
                 }
               >
                 <Suspense fallback={<Spinner variant='ellipsis' />}>
-                  <ViewsCount slug={post.slug} update />
+                  <ViewsCount slug={post.slug} />
                 </Suspense>
               </ErrorBoundary>
             </Link>
