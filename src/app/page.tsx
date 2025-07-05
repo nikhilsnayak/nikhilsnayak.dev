@@ -30,7 +30,7 @@ export default async function HomePage() {
         </h1>
         <p className='mb-4 text-lg sm:text-xl'>
           {
-            "Hey! I'm Nikhil, a full-stack software engineer primarily working with React."
+            "Full-Stack Software Engineer primarily working with React."
           }
         </p>
       </header>
