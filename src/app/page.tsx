@@ -28,7 +28,7 @@ export default async function HomePage() {
         <h1 className='mb-3 text-3xl font-light sm:text-5xl'>
           <strong className='block font-bold'>Nikhil S</strong>
         </h1>
-        <p className='mb-4 text-lg sm:text-xl'>
+        <p className='mb-4 text-lg sm:text-xl text-pretty'>
           {
             "Full-Stack Software Engineer primarily working with React."
           }
