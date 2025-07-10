@@ -28,10 +28,8 @@ export default async function HomePage() {
         <h1 className='mb-3 text-3xl font-light sm:text-5xl'>
           <strong className='block font-bold'>Nikhil S</strong>
         </h1>
-        <p className='mb-4 text-lg sm:text-xl text-pretty'>
-          {
-            "Full-Stack Software Engineer primarily working with React."
-          }
+        <p className='mb-4 text-lg text-pretty sm:text-xl'>
+          {'Full-Stack Software Engineer primarily working with React.'}
         </p>
       </header>
       <section className='mt-8 space-y-6'>
