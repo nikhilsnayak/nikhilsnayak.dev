@@ -146,17 +146,16 @@ async function commentsReducer(
 }
 
 interface CommentsManagerProps {
-  initialCommentsPromise: Promise<Comment[]>;
+  initialComments: Comment[];
   session?: Session | null;
   slug: string;
 }
 
 export function CommentsManager({
-  initialCommentsPromise,
+  initialComments,
   session,
   slug,
 }: Readonly<CommentsManagerProps>) {
-  const initialComments = use(initialCommentsPromise);
   const [state, dispatch] = useActionState(commentsReducer, initialComments);
   const [comments, setOptimisticComments] =
     useOptimistic<OptimisticComment[]>(state);

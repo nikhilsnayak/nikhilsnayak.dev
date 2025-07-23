@@ -1,9 +1,7 @@
-import { Suspense } from 'react';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { LogOut } from 'lucide-react';
 
 import { auth, signIn, signOut } from '~/lib/auth';
-import { Skeleton } from '~/components/ui/skeleton';
 import { FormSubmit } from '~/components/form-submit';
 import { Spinner } from '~/components/spinner';
 
@@ -11,9 +9,8 @@ import { getCommentsBySlug } from '../functions/queries';
 import { CommentsManager } from './comments-manager';
 
 export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
-  const commentsPromise = getCommentsBySlug(slug);
-
   const session = await auth();
+  const initialComments = await getCommentsBySlug(slug);
 
   return (
     <div className='space-y-8'>
@@ -53,25 +50,11 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
           </form>
         </div>
       )}
-      <Suspense fallback={<CommentsSkeleton />}>
-        <CommentsManager
-          session={session}
-          slug={slug}
-          initialCommentsPromise={commentsPromise}
-        />
-      </Suspense>
+      <CommentsManager
+        session={session}
+        slug={slug}
+        initialComments={initialComments}
+      />
     </div>
   );
-}
-
-function CommentsSkeleton() {
-  return new Array(3).fill(0).map((_, i) => (
-    <div key={i} className='flex items-start gap-4'>
-      <Skeleton className='h-10 w-10 rounded-full' />
-      <div className='space-y-2'>
-        <Skeleton className='h-4 w-[120px]' />
-        <Skeleton className='h-4 w-[300px]' />
-      </div>
-    </div>
-  ));
 }
