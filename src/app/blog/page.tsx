@@ -42,7 +42,13 @@ export default async function BlogsPage() {
               <span>{formatDate(post.metadata.publishedAt)}</span>
               <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
             </p>
-            <ViewTransition name={post.slug}>
+            <ViewTransition
+              name={
+                post.slug === '2-years-into-software-engineering'
+                  ? 'two-years-into-software-engineering' // view-transition in not getting trigged if the name starts with number
+                  : post.slug
+              }
+            >
               <h2 className='font-mono text-lg font-semibold text-balance'>
                 {post.metadata.title}
               </h2>

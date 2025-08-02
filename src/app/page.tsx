@@ -219,7 +219,13 @@ export default async function HomePage() {
                   <span>{formatDate(post.metadata.publishedAt)}</span>
                   <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
                 </p>
-                <ViewTransition name={post.slug}>
+                <ViewTransition
+                  name={
+                    post.slug === '2-years-into-software-engineering'
+                      ? 'two-years-into-software-engineering' // view-transition in not getting trigged if the name starts with number
+                      : post.slug
+                  }
+                >
                   <h3 className='font-mono text-xl font-semibold text-balance'>
                     {post.metadata.title}
                   </h3>
