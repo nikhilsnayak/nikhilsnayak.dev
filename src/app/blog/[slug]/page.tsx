@@ -15,10 +15,6 @@ import {
   getPostMetadataBySlug,
 } from '~/features/blog/functions/queries';
 
-interface BlogProps {
-  params: Promise<{ slug: string }>;
-}
-
 export async function generateStaticParams() {
   const posts = await getBlogMetadata();
 
@@ -29,7 +25,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: BlogProps): Promise<Metadata> {
+}: PageProps<'/blog/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
   const metadata = await getPostMetadataBySlug(slug);
   if (!metadata) {
@@ -65,7 +61,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPage({ params }: Readonly<BlogProps>) {
+export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
   const { slug } = await params;
 
   const { default: Post, frontmatter: metadata } = await import(

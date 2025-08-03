@@ -14,9 +14,7 @@ import {
   BreadcrumbSeparator,
 } from '~/components/ui/breadcrumb';
 
-export default function BlogsLayout({
-  children,
-}: Readonly<React.PropsWithChildren>) {
+export default function BlogsLayout({ children }: LayoutProps<'/blog'>) {
   const path = usePathname();
   const items = getBreadCrumbItems(path);
 
