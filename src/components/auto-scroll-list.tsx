@@ -65,7 +65,7 @@ function scrollAreaRef(list: HTMLUListElement) {
 
   const observer = new MutationObserver(() => {
     if (shouldAutoScroll) {
-      list.scrollTo({ top: list.scrollHeight });
+      list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
     }
   });
 

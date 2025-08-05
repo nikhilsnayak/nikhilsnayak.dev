@@ -169,7 +169,7 @@ function Pre(props: Readonly<PreProps>) {
 
   return (
     <pre
-      className='relative border-2 border-neutral-400 p-0 dark:border-neutral-600'
+      className='relative border-2 border-neutral-400 !p-0 dark:border-neutral-600'
       data-line-numbers={lineNumbers}
     >
       {filename ? (

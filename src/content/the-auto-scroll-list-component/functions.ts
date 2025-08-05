@@ -9,13 +9,12 @@ export async function continueConversation(query: string) {
     ).join('');
   }
 
-  // Next.js compiler is dumb to recognize async generator function as server action so a wrapper func.
   async function* generateStreamableText() {
     let shouldContinue = true;
 
     setTimeout(() => {
       shouldContinue = false;
-    }, 10000);
+    }, 30000);
 
     while (shouldContinue) {
       await new Promise((resolve) => setTimeout(resolve, 20));
