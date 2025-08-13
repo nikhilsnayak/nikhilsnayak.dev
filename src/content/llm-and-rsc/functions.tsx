@@ -19,6 +19,7 @@ export async function continueConversation(query: string): Promise<Message> {
   const completion = await askAI(query);
 
   // Check if the response includes a function call
+  //@ts-expect-error -- migrate to responses API (https://platform.openai.com/docs/guides/migrate-to-responses)
   const functionCall = completion.choices[0].message.tool_calls?.[0].function;
 
   if (functionCall && functionCall.name === 'getStockPrice') {
