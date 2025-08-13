@@ -49,22 +49,20 @@ function Table({
   );
 }
 
-function CustomLink(props: ComponentProps<'a'>) {
-  const href = props.href;
-
+function CustomLink({ href, ...props }: ComponentProps<'a'>) {
   if (href?.startsWith('/')) {
     return (
-      <Link href={href} {...props}>
+      <Link href={{ pathname: href }} {...props}>
         {props.children}
       </Link>
     );
   }
 
   if (href?.startsWith('#')) {
-    return <a {...props} />;
+    return <a href={href} {...props} />;
   }
 
-  return <a target='_blank' rel='noopener noreferrer' {...props} />;
+  return <a href={href} target='_blank' rel='noopener noreferrer' {...props} />;
 }
 
 function RoundedImage({

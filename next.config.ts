@@ -26,8 +26,10 @@ const nextConfig: NextConfig = {
     clientSegmentCache: true,
     reactCompiler: true,
     viewTransition: true,
+    typedRoutes: true,
     devtoolSegmentExplorer: true,
     browserDebugInfoInTerminal: true,
+    turbopackPersistentCaching: true,
   },
 };
 

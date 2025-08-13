@@ -30,7 +30,7 @@ export function getBreadCrumbItems(path: string) {
     .filter(Boolean)
     .map((part, i, parts) => ({
       label: deslugify(part),
-      href:
+      pathname:
         i < parts.length - 1
           ? '/' + parts.slice(0, i + 1).join('/')
           : undefined,

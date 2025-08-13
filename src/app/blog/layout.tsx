@@ -29,12 +29,18 @@ export default function BlogsLayout({ children }: LayoutProps<'/blog'>) {
           {items.map((item, index) => (
             <Fragment key={item.label}>
               <BreadcrumbItem>
-                {item.href ? (
+                {item.pathname ? (
                   <BreadcrumbLink
                     asChild
                     className='max-w-20 truncate md:max-w-none'
                   >
-                    <Link href={item.href}>{item.label}</Link>
+                    <Link
+                      href={{
+                        pathname: item.pathname,
+                      }}
+                    >
+                      {item.label}
+                    </Link>
                   </BreadcrumbLink>
                 ) : (
                   <BreadcrumbPage className='max-w-20 truncate md:max-w-none'>
