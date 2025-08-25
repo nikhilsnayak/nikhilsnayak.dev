@@ -226,7 +226,6 @@
 }
 
 html {
-  scrollbar-gutter: stable;
   overflow-y: scroll;
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
