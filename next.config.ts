@@ -21,12 +21,12 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  typedRoutes: true,
   experimental: {
     cacheComponents: true,
     clientSegmentCache: true,
     reactCompiler: true,
     viewTransition: true,
-    typedRoutes: true,
     devtoolSegmentExplorer: true,
     browserDebugInfoInTerminal: true,
     turbopackPersistentCaching: true,
