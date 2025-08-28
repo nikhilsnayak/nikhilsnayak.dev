@@ -3,7 +3,7 @@ import './globals.css';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { SiBluesky, SiGithub, SiX } from '@icons-pack/react-simple-icons';
+import { SiGithub, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ThemeProvider } from 'next-themes';
@@ -103,17 +103,6 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                       aria-label='x.com'
                     >
                       <SiX className='size-4' />
-                    </a>
-                  </li>
-                  <li className='border-r pr-3'>
-                    <a
-                      href='https://bsky.app/profile/nikhilsnayak.dev'
-                      className='dark:text-theme hover:opacity-70'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      aria-label='bluesky'
-                    >
-                      <SiBluesky className='size-4' />
                     </a>
                   </li>
                   <li>
