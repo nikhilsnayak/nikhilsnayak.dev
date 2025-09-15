@@ -222,6 +222,7 @@ Let's update our example so that the todos are persisted and see `useActionState
 
 > I won't be using a real backend for persisting todos. Wrapping `localStorage` in a promise doesn't sit right with me either. That's why I'll be using [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API). It functions like a relational database and is async by nature. For convenience, I’ve wrapped its callback-based API with promises.
 
+{/* prettier-ignore */}
 ```tsx lineNumbers filename="App.tsx" addition="2,4,11-15,19,28,30,37,39,46,48" deletion="1,10,18"
 import { FormEvent, useReducer } from 'react';
 import { FormEvent, startTransition, useActionState } from 'react';

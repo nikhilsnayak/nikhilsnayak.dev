@@ -336,7 +336,7 @@ import { MovieList } from './movie-list';
 import { Search } from './search';
 
 export function App({ searchParams }) {
-  const query = searchParams.get('query') ?? ''
+  const query = searchParams.get('query') ?? '';
   const moviesPromise = getMovies(query);
 
   return (
