@@ -23,12 +23,18 @@ const nextConfig: NextConfig = {
   },
   typedRoutes: true,
   experimental: {
-    cacheComponents: true,
-    clientSegmentCache: true,
+    typedEnv: true,
+    mcpServer: true,
     reactCompiler: true,
     viewTransition: true,
+    cacheComponents: true,
+    clientSegmentCache: true,
+    clientParamParsing: true,
     browserDebugInfoInTerminal: true,
     turbopackPersistentCaching: true,
+    staleTimes: {
+      dynamic: 300,
+    },
   },
 };
 
