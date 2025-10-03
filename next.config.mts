@@ -21,17 +21,18 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  reactCompiler: true,
   typedRoutes: true,
   experimental: {
     typedEnv: true,
     mcpServer: true,
-    reactCompiler: true,
     viewTransition: true,
     cacheComponents: true,
     clientSegmentCache: true,
     clientParamParsing: true,
     browserDebugInfoInTerminal: true,
-    turbopackPersistentCaching: true,
+    turbopackPersistentCachingForBuild: true,
+    turbopackPersistentCachingForDev: true,
     staleTimes: {
       dynamic: 300,
     },
