@@ -1,4 +1,4 @@
-import { Suspense, unstable_ViewTransition as ViewTransition } from 'react';
+import { Suspense, ViewTransition } from 'react';
 import type { Metadata } from 'next';
 
 import { BASE_URL } from '~/lib/constants';

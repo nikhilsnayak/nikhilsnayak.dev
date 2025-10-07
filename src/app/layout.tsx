@@ -1,6 +1,6 @@
 import './globals.css';
 
-import { unstable_ViewTransition as ViewTransition } from 'react';
+import { ViewTransition } from 'react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { SiGithub, SiX } from '@icons-pack/react-simple-icons';

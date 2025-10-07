@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  unstable_ViewTransition as ViewTransition,
-  type ComponentPropsWithoutRef,
-} from 'react';
+import { ViewTransition, type ComponentPropsWithoutRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 

@@ -1,4 +1,4 @@
-import { unstable_ViewTransition as ViewTransition } from 'react';
+import { ViewTransition } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight, Rss } from 'lucide-react';
