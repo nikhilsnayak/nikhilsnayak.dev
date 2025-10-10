@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   trailingComma: 'es5',
   tabWidth: 2,
   semi: true,
@@ -31,3 +31,5 @@ module.exports = {
     'prettier-plugin-tailwindcss',
   ],
 };
+
+export default config;

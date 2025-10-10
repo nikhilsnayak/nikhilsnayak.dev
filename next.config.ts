@@ -15,24 +15,15 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
   reactCompiler: true,
   typedRoutes: true,
   experimental: {
-    typedEnv: true,
-    mcpServer: true,
     viewTransition: true,
     cacheComponents: true,
-    clientSegmentCache: true,
     clientParamParsing: true,
-    browserDebugInfoInTerminal: true,
-    turbopackPersistentCachingForBuild: true,
-    turbopackPersistentCachingForDev: true,
     staleTimes: {
       dynamic: 300,
     },
