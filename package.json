@@ -48,7 +48,7 @@
     "eslint-config-next": "^15.6.0-canary.57",
     "eslint-config-prettier": "^10.1.8",
     "gray-matter": "^4.0.3",
-    "lucide-react": "^0.544.0",
+    "lucide-react": "^0.545.0",
     "motion": "^12.23.22",
     "next": "^15.6.0-canary.57",
     "next-auth": "5.0.0-beta.29",
