@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
     viewTransition: true,
     cacheComponents: true,
     clientParamParsing: true,
+    turbopackFileSystemCacheForDev: true,
+    turbopackFileSystemCacheForBuild: true,
     staleTimes: {
       dynamic: 300,
     },
