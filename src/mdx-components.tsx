@@ -6,7 +6,7 @@ import {
   type PropsWithChildren,
   type ReactElement,
 } from 'react';
-import { unstable_cacheLife as cacheLife } from 'next/cache';
+import { cacheLife } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { highlight, type LineNumbers } from 'code-syntactic-sugar';

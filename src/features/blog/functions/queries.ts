@@ -2,7 +2,7 @@ import 'server-only';
 
 import fs from 'fs/promises';
 import path from 'path';
-import { unstable_cacheLife as cacheLife } from 'next/cache';
+import { cacheLife } from 'next/cache';
 import matter from 'gray-matter';
 
 import { db } from '~/lib/db';

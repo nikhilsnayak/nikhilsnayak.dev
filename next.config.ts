@@ -20,15 +20,11 @@ const nextConfig: NextConfig = {
   },
   reactCompiler: true,
   typedRoutes: true,
+  cacheComponents: true,
   experimental: {
     viewTransition: true,
-    cacheComponents: true,
-    clientParamParsing: true,
     turbopackFileSystemCacheForDev: true,
     turbopackFileSystemCacheForBuild: true,
-    staleTimes: {
-      dynamic: 300,
-    },
   },
 };
 

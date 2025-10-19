@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { unstable_cacheLife as cacheLife } from 'next/cache';
+import { cacheLife } from 'next/cache';
 import { Octokit } from 'octokit';
 
 import { formatDate } from '~/lib/utils';
