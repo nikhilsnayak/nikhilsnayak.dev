@@ -62,7 +62,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <ViewTransition>
-      <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
+      <html
+        lang='en'
+        suppressHydrationWarning
+        className='styled-scrollbar'
+        data-scroll-behavior='smooth'
+      >
         <body
           className={cn(
             geistSans.variable,

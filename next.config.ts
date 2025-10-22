@@ -24,7 +24,6 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
     turbopackFileSystemCacheForDev: true,
-    turbopackFileSystemCacheForBuild: true,
   },
 };
 
