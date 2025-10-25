@@ -20,9 +20,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
           <form
             action={async () => {
               'use server';
-              return await signIn('github', {
-                redirectTo: `/blog/${slug}#comments`,
-              });
+              await signIn('github');
             }}
           >
             <FormSubmit pendingFallback={<Spinner />}>
@@ -39,9 +37,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
           <form
             action={async () => {
               'use server';
-              return await signOut({
-                redirectTo: `/blog/${slug}#comments`,
-              });
+              await signOut();
             }}
           >
             <FormSubmit pendingFallback={<Spinner />}>

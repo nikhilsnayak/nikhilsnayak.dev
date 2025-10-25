@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   cacheComponents: true,
   experimental: {
+    inlineCss: true,
     viewTransition: true,
     turbopackFileSystemCacheForDev: true,
   },
