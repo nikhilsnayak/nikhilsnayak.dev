@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  reactCompiler: true,
+  reactCompiler: process.env.NODE_ENV === 'development',
   typedRoutes: true,
   cacheComponents: true,
   experimental: {
