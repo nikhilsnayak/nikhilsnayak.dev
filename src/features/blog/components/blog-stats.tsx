@@ -32,7 +32,7 @@ export async function BlogStats() {
       {stats.map((stat, index) => (
         <div key={index} className='flex items-center gap-2'>
           {stat.icon}
-          <span className='text-muted-foreground font-mono leading-4 font-semibold'>
+          <span className='text-muted-foreground cursor-default font-mono leading-4 font-semibold'>
             {NumberFormatter.format(stat.value)}
           </span>
         </div>

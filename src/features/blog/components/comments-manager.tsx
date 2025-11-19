@@ -343,7 +343,7 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
           </div>
         )}
       </div>
-      <p className='my-2 break-words'>{comment.content}</p>
+      <p className='my-2 wrap-break-word'>{comment.content}</p>
 
       {comment.replies.length > 0 && (
         <List

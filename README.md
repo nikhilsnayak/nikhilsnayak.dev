@@ -4,7 +4,7 @@
 
 ## Overview
 
-- **Package Manager**: [Bun](https://bun.sh)
+- **Package Manager and Runtime**: [Bun](https://bun.sh)
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Components**: [Shadcn UI](https://ui.shadcn.com/)
@@ -14,11 +14,7 @@
 - **Deployment**: [Vercel](https://vercel.com)
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
 
-## Getting Started
-
-### Running Locally
-
-> **Note:** This project uses several experimental features which may result in unstable behavior.
+## Running Locally
 
 1. Clone the repository and navigate to the directory:
 

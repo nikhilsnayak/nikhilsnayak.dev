@@ -28,6 +28,7 @@
     "@next/mdx": "^16.0.3",
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.19",
+    "@total-typescript/ts-reset": "^0.6.1",
     "@types/mdx": "^2.0.13",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.6",

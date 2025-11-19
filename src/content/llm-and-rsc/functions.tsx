@@ -23,7 +23,7 @@ export async function continueConversation(query: string): Promise<Message> {
   const functionCall = completion.choices[0].message.tool_calls?.[0].function;
 
   if (functionCall && functionCall.name === 'getStockPrice') {
-    const { symbol } = JSON.parse(functionCall.arguments);
+    const { symbol } = JSON.parse(functionCall.arguments) as { symbol: string };
     return {
       id: (Math.random() * 1000).toString(),
       role: 'bot',
