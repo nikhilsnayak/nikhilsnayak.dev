@@ -44,3 +44,9 @@ export function formatDate(date: Date) {
     year: 'numeric',
   });
 }
+
+export const NumberFormatter = new Intl.NumberFormat('en', {
+  notation: 'compact',
+  compactDisplay: 'short',
+  maximumFractionDigits: 1,
+});

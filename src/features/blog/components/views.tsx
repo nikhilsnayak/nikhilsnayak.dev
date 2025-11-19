@@ -1,5 +1,7 @@
 import { after, connection } from 'next/server';
 
+import { NumberFormatter } from '~/lib/utils';
+
 import { updateViewsBySlug } from '../functions/mutations';
 import { getViewsBySlug } from '../functions/queries';
 
@@ -7,12 +9,6 @@ interface ViewsProps {
   slug: string;
   update?: boolean;
 }
-
-const formatter = new Intl.NumberFormat('en', {
-  notation: 'compact',
-  compactDisplay: 'short',
-  maximumFractionDigits: 1,
-});
 
 export async function ViewsCount({ slug, update = false }: ViewsProps) {
   await connection();
@@ -22,5 +18,7 @@ export async function ViewsCount({ slug, update = false }: ViewsProps) {
     after(() => updateViewsBySlug(slug));
   }
 
-  return <p className='w-max'>{formatter.format(views?.count ?? 0)} views</p>;
+  return (
+    <p className='w-max'>{NumberFormatter.format(views?.count ?? 0)} views</p>
+  );
 }

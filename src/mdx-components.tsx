@@ -167,7 +167,7 @@ function Pre(props: Readonly<PreProps>) {
 
   return (
     <pre
-      className='relative border-2 border-neutral-400 !p-0 dark:border-neutral-600'
+      className='relative border-2 border-neutral-400 p-0! dark:border-neutral-600'
       data-line-numbers={lineNumbers}
     >
       {filename ? (
@@ -267,7 +267,7 @@ async function Tweet(props: TweetProps) {
 function CustomTabs({ className, ...props }: ComponentProps<typeof Tabs>) {
   return (
     <Tabs
-      className={cn('gap-0 [&_pre]:!mt-0 [&_pre]:!rounded-t-none', className)}
+      className={cn('gap-0 [&_pre]:mt-0! [&_pre]:rounded-t-none!', className)}
       {...props}
     />
   );

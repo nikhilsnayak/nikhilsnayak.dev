@@ -3,6 +3,7 @@ import 'server-only';
 import fs from 'fs/promises';
 import path from 'path';
 import { cacheLife } from 'next/cache';
+import { sql } from 'drizzle-orm';
 import matter from 'gray-matter';
 
 import { db } from '~/lib/db';
@@ -95,4 +96,21 @@ export async function getCommentsBySlug(slug: string): Promise<Comment[]> {
   });
 
   return result;
+}
+
+export async function getBlogStats() {
+  const result = await db.execute(sql`
+    SELECT
+      (SELECT COALESCE(SUM(v.count), 0) FROM views v) AS "totalViews",
+      (SELECT COALESCE(SUM(h.count), 0) FROM hearts h) AS "totalHearts",
+      (SELECT COALESCE(COUNT(*), 0) FROM comment c) AS "totalComments";
+  `);
+
+  const [stats] = result.rows;
+
+  return stats as {
+    totalViews: number;
+    totalHearts: number;
+    totalComments: number;
+  };
 }

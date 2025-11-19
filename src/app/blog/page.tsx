@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowUpRight, Rss } from 'lucide-react';
 
 import { formatDate } from '~/lib/utils';
+import { BlogStats } from '~/features/blog/components/blog-stats';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 
 export const metadata: Metadata = {
@@ -15,10 +16,10 @@ export default async function BlogsPage() {
   const blog = await getBlogMetadata();
 
   return (
-    <section>
-      <div className='mb-6 flex items-center justify-between'>
+    <section className='space-y-6'>
+      <div className='flex items-center justify-between'>
         <h1 className='font-mono text-2xl font-medium tracking-tighter'>
-          My Blog
+          Blog
         </h1>
         <a
           href='/rss.xml'
@@ -30,6 +31,8 @@ export default async function BlogsPage() {
           <Rss />
         </a>
       </div>
+
+      <BlogStats />
 
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
         {blog.map((post) => (
