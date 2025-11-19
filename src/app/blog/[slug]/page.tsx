@@ -92,13 +92,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           }),
         }}
       />
-      <ViewTransition
-        name={
-          slug === '2-years-into-software-engineering'
-            ? 'two-years-into-software-engineering' // view-transition in not getting trigged if the name starts with number
-            : slug
-        }
-      >
+      <ViewTransition name={slug}>
         <h1 className='font-mono text-2xl font-semibold tracking-tighter text-balance'>
           {title}
         </h1>
