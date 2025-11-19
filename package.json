@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --bun next dev -p 5000",
-    "build": "bun --bun next build",
-    "start": "bun --bun next start -p 5000",
+    "dev": "next dev -p 5000",
+    "build": "next build",
+    "start": "next start -p 5000",
     "lint": "eslint .",
     "lint:fix": "eslint --fix . .",
     "type-check": "next typegen && tsc --noEmit",
