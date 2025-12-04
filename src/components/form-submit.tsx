@@ -5,11 +5,10 @@ import { useFormStatus } from 'react-dom';
 
 import { LoadingButton } from './loading-button';
 
-interface FormSubmitProps
-  extends Omit<
-    ComponentProps<typeof LoadingButton>,
-    'type' | 'disabled' | 'isLoading'
-  > {
+interface FormSubmitProps extends Omit<
+  ComponentProps<typeof LoadingButton>,
+  'type' | 'disabled' | 'isLoading'
+> {
   pendingFallback?: ReactNode;
 }
 
