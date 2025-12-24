@@ -24,7 +24,6 @@ const nextConfig: NextConfig = {
   experimental: {
     inlineCss: true,
     viewTransition: true,
-    turbopackFileSystemCacheForDev: true,
   },
 };
 
