@@ -213,7 +213,7 @@ export default async function HomePage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className='group border-border block h-full transform space-y-4 overflow-hidden border p-4 shadow-sm transition-all duration-300 hover:translate-x-2 hover:shadow-xl'
+              className='group border-border block h-full transform space-y-4 overflow-hidden border p-4 shadow-xs transition-all duration-300 hover:translate-x-2 hover:shadow-sm'
             >
               <div className='space-y-1'>
                 <p className='text-muted-foreground flex items-center justify-between text-xs'>

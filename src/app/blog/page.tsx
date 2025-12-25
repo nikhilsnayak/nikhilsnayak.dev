@@ -16,7 +16,6 @@ export const metadata: Metadata = {
 export default async function BlogsPage() {
   const blog = await getBlogMetadata();
 
-  // Group posts by year
   const postsByYear = blog.reduce((acc, post) => {
     const year = post.metadata.publishedAt.getFullYear();
     if (!acc.has(year)) {
@@ -58,7 +57,7 @@ export default async function BlogsPage() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className='group border-border block h-full transform space-y-2 overflow-hidden border p-4 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-md'
+                  className='group border-border block h-full transform space-y-2 overflow-hidden border p-4 shadow-xs transition-all duration-250 hover:scale-105 hover:shadow-sm'
                 >
                   <p className='text-muted-foreground flex items-center justify-between text-xs'>
                     <span>{formatDate(post.metadata.publishedAt)}</span>

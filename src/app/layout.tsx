@@ -92,8 +92,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
               disableTransitionOnChange
             >
               <Toaster richColors />
-              <header className='w-full border-b shadow-xs'>
-                <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
+              <header className='w-full'>
+                <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between border-b p-4'>
                   <a
                     href='#main-content'
                     className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:p-2'
