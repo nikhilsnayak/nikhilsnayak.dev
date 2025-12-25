@@ -11,12 +11,12 @@ export function UserInput({
         type='text'
         name='query'
         required
-        className='grow rounded-lg border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:text-white'
+        className='grow border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:text-white'
       />
       <button
         type='submit'
         disabled={isPending}
-        className='rounded-lg bg-purple-500 px-4 py-2 text-white'
+        className='bg-purple-500 px-4 py-2 text-white'
       >
         Ask
       </button>

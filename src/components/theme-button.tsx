@@ -21,7 +21,7 @@ export function ThemeButton({ type, children }: Readonly<ThemeButtonProps>) {
       size='icon'
       onClick={() => setTheme(type)}
       className={cn(
-        'hover:bg-background/50 rounded-full p-2',
+        'hover:bg-background/40! p-2',
         isClient && theme === type && 'bg-background'
       )}
     >

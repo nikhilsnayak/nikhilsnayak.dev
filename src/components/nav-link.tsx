@@ -18,7 +18,7 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
       <Link {...props} href={href} className={cn('font-semibold', className)} />
       {isActive ? (
         <ViewTransition name='active-indicator'>
-          <div className='dark:bg-theme absolute right-0 -bottom-1 left-0 h-[2px] bg-current' />
+          <div className='dark:bg-accent absolute right-0 -bottom-1 left-0 h-[2px] bg-current' />
         </ViewTransition>
       ) : null}
     </div>

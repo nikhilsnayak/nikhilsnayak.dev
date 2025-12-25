@@ -123,7 +123,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
         <Post />
       </article>
       <div className='mt-8 space-y-4'>
-        <p className='dark:text-theme'>
+        <p className='dark:text-accent'>
           If you enjoyed this blog, share it on social media to help others find
           it too
           <SocialShare title={title} slug={slug} />

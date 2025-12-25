@@ -6,7 +6,7 @@ export function Controls() {
   const { delay, shouldError, setDelay, setShouldError } = useControlStore();
 
   return (
-    <div className='space-y-4 rounded-lg bg-gray-100 px-2 py-1 shadow-md dark:bg-gray-800'>
+    <div className='space-y-4 bg-gray-100 px-2 py-1 shadow-md dark:bg-gray-800'>
       <div className='flex flex-col space-y-2'>
         <label className='font-medium text-gray-700 dark:text-gray-300'>
           Delay (ms):

@@ -31,17 +31,17 @@ export default function BlogsLayout({ children }: LayoutProps<'/blog'>) {
               <BreadcrumbItem>
                 {item.pathname ? (
                   <BreadcrumbLink
-                    asChild
                     className='max-w-20 truncate md:max-w-none'
-                  >
-                    <Link
-                      href={{
-                        pathname: item.pathname,
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  </BreadcrumbLink>
+                    render={
+                      <Link
+                        href={{
+                          pathname: item.pathname,
+                        }}
+                      >
+                        {item.label}
+                      </Link>
+                    }
+                  />
                 ) : (
                   <BreadcrumbPage className='max-w-20 truncate md:max-w-none'>
                     {item.label}

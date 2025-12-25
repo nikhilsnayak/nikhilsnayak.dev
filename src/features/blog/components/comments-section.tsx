@@ -1,9 +1,9 @@
-import { SiGithub } from '@icons-pack/react-simple-icons';
 import { LogOut } from 'lucide-react';
 
 import { auth, signIn, signOut } from '~/lib/auth';
 import { FormSubmit } from '~/components/form-submit';
 import { Spinner } from '~/components/spinner';
+import { GithubIcon } from '~/assets/icons/github';
 
 import { getCommentsBySlug } from '../functions/queries';
 import { CommentsManager } from './comments-manager';
@@ -25,7 +25,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
           >
             <FormSubmit pendingFallback={<Spinner />}>
               <span className='flex items-center gap-2'>
-                <SiGithub />
+                <GithubIcon />
                 <span>Sign in with GitHub</span>
               </span>
             </FormSubmit>

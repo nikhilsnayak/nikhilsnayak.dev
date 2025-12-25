@@ -30,7 +30,7 @@ export function V1() {
   }, []);
 
   return (
-    <div className='not-prose w-full rounded border bg-gray-100 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
+    <div className='not-prose w-full border bg-gray-100 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
       <ul
         ref={autoScrollListRef}
         className='mb-4 h-[50vh] space-y-4 overflow-y-auto p-4'

@@ -7,7 +7,7 @@ export async function LanguageStats() {
   return (
     <div className='max-w-xs text-sm'>
       <h3 className='mb-2 font-semibold'>Languages</h3>
-      <div className='mb-2 flex h-2 overflow-hidden rounded-full'>
+      <div className='mb-2 flex h-2 overflow-hidden'>
         {languages.map((lang) => (
           <div
             key={lang.name}
@@ -23,7 +23,7 @@ export async function LanguageStats() {
         {languages.map((lang) => (
           <div key={lang.name} className='flex items-center'>
             <span
-              className='mr-1 h-2 w-2 rounded-full'
+              className='mr-1 h-2 w-2'
               style={{ backgroundColor: colorMap[lang.name] ?? '#808080' }}
             />
             <span>{lang.name}</span>

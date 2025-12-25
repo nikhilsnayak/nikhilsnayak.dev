@@ -112,7 +112,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className='flex min-h-[100dvh] flex-col'>
+    <div className='flex min-h-dvh flex-col'>
       <section className='bg-muted w-full py-12 md:py-24 lg:py-32'>
         <div className='container m-auto px-4 md:px-6'>
           <div className='grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]'>
@@ -180,13 +180,13 @@ export default function Home() {
               </h2>
               <div className='text-muted-foreground mt-6 space-y-4'>
                 <div className='flex items-center gap-4'>
-                  <div className='flex h-16 w-16 items-center justify-center rounded-full border'>
+                  <div className='flex h-16 w-16 items-center justify-center border'>
                     <Image
                       src='https://generated.vusercontent.net/placeholder.svg'
                       alt='Instructor'
                       width={64}
                       height={64}
-                      className='h-full w-full rounded-full object-cover'
+                      className='h-full w-full object-cover'
                     />
                     <span className='sr-only'>JD</span>
                   </div>
@@ -252,7 +252,7 @@ async function Reviews() {
 
 export default function Home() {
   return (
-    <div className='flex flex-col min-h-[100dvh]'>
+    <div className='flex flex-col min-h-dvh'>
       ------
       <section className='w-full py-12 md:py-24 lg:py-32 border-t'>
         <div className='container m-auto px-4 md:px-6'>

@@ -1,4 +1,3 @@
-import { SiX } from '@icons-pack/react-simple-icons';
 import { Link, ShareIcon } from 'lucide-react';
 
 import { BASE_URL } from '~/lib/constants';
@@ -11,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { CopyToClipBoard } from '~/components/copy-to-clipboard';
+import { XIcon } from '~/assets/icons/x';
 
 export function SocialShare({
   slug,
@@ -20,14 +20,16 @@ export function SocialShare({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          className='text-foreground ml-2 size-4 p-0 align-text-bottom'
-        >
-          <ShareIcon />
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant='ghost'
+            className='text-foreground ml-2 size-4 p-0 align-text-bottom'
+          >
+            <ShareIcon />
+          </Button>
+        }
+      />
       <DropdownMenuContent side='right'>
         <DropdownMenuItem>
           <CopyToClipBoard
@@ -45,7 +47,8 @@ export function SocialShare({
             target='_blank'
             rel='noopener noreferrer'
           >
-            <SiX className='size-3' /> <span>Share on X</span>
+            <XIcon className='size-3' />
+            <span>Share on X</span>
           </a>
         </DropdownMenuItem>
       </DropdownMenuContent>

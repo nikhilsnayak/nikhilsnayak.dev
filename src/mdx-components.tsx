@@ -65,14 +65,6 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
   return <a href={href} target='_blank' rel='noopener noreferrer' {...props} />;
 }
 
-function RoundedImage({
-  alt,
-  className,
-  ...props
-}: React.ComponentProps<typeof Image>) {
-  return <Image alt={alt} className={cn('rounded-lg', className)} {...props} />;
-}
-
 interface CodeProps {
   children: string;
   highlightedLines?: LineNumbers;
@@ -167,7 +159,7 @@ function Pre(props: Readonly<PreProps>) {
 
   return (
     <pre
-      className='relative border-2 border-neutral-400 p-0! dark:border-neutral-600'
+      className='relative rounded-none! border-2 border-neutral-400 bg-neutral-200 p-0! dark:border-neutral-600 dark:bg-neutral-800'
       data-line-numbers={lineNumbers}
     >
       {filename ? (
@@ -265,12 +257,7 @@ async function Tweet(props: TweetProps) {
 }
 
 function CustomTabs({ className, ...props }: ComponentProps<typeof Tabs>) {
-  return (
-    <Tabs
-      className={cn('gap-0 [&_pre]:mt-0! [&_pre]:rounded-t-none!', className)}
-      {...props}
-    />
-  );
+  return <Tabs className={cn('gap-0 [&_pre]:mt-0!', className)} {...props} />;
 }
 
 function CustomTabsList({
@@ -278,11 +265,8 @@ function CustomTabsList({
   ...props
 }: ComponentProps<typeof TabsList>) {
   return (
-    <ScrollArea className='w-full rounded-lg rounded-b-none border-2 border-b-0 border-neutral-400 bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800'>
-      <TabsList
-        className={cn('rounded-none bg-inherit', className)}
-        {...props}
-      />
+    <ScrollArea className='w-full border-2 border-b-0 border-neutral-400 bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800'>
+      <TabsList className={cn('bg-inherit', className)} {...props} />
       <ScrollBar orientation='horizontal' />
     </ScrollArea>
   );
@@ -295,7 +279,7 @@ const components = {
   h4: createHeading(4),
   h5: createHeading(5),
   h6: createHeading(6),
-  Image: RoundedImage,
+  Image,
   a: CustomLink,
   code: Code,
   Table,

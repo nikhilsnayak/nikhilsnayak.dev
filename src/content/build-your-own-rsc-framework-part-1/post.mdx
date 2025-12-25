@@ -261,8 +261,8 @@ export async function App() {
   const movies = await getMovies();
 
   return (
-    <div className='flex min-h-[100dvh] flex-col bg-gray-900 text-gray-200'>
-      <main className='container mx-auto max-w-lg flex-grow px-4 py-8'>
+    <div className='flex min-h-dvh flex-col bg-gray-900 text-gray-200'>
+      <main className='container mx-auto max-w-lg grow px-4 py-8'>
         <ul
           className='space-y-4 max-h-[70vh] overflow-auto px-4'
           style={{
@@ -274,7 +274,7 @@ export async function App() {
             movies.map((movie) => (
               <li
                 key={movie.id}
-                className='flex items-center justify-between bg-gray-800 p-4 rounded-lg shadow'
+                className='flex items-center justify-between bg-gray-800 p-4 shadow'
               >
                 <div className='flex items-center space-x-4'>
                   <span className='text-xl font-bold'>{movie.votes}</span>
@@ -424,8 +424,8 @@ export function App() {
   const moviesPromise = getMovies();
 
   return (
-    <div className='flex min-h-[100dvh] flex-col bg-gray-900 text-gray-200'>
-      <main className='container mx-auto max-w-lg flex-grow px-4 py-8'>
+    <div className='flex min-h-dvh flex-col bg-gray-900 text-gray-200'>
+      <main className='container mx-auto max-w-lg grow px-4 py-8'>
         <ul
           className='max-h-[70vh] space-y-4 overflow-auto px-4'
           style={{
@@ -437,7 +437,7 @@ export function App() {
             movies.map((movie) => (
               <li
                 key={movie.id}
-                className='flex items-center justify-between rounded-lg bg-gray-800 p-4 shadow'
+                className='flex items-center justify-between bg-gray-800 p-4 shadow'
               >
                 <div className='flex items-center space-x-4'>
                   <span className='text-xl font-bold'>{movie.votes}</span>
@@ -471,7 +471,7 @@ async function MovieList({ moviesPromise }) {
         movies.map((movie) => (
           <li
             key={movie.id}
-            className='flex items-center justify-between rounded-lg bg-gray-800 p-4 shadow'
+            className='flex items-center justify-between bg-gray-800 p-4 shadow'
           >
             <div className='flex items-center space-x-4'>
               <span className='text-xl font-bold'>{movie.votes}</span>

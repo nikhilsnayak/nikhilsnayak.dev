@@ -3,7 +3,6 @@ import './globals.css';
 import { ViewTransition } from 'react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { SiGithub, SiX } from '@icons-pack/react-simple-icons';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ThemeProvider } from 'next-themes';
@@ -13,6 +12,8 @@ import { cn } from '~/lib/utils';
 import { Toaster } from '~/components/ui/sonner';
 import { NavLink } from '~/components/nav-link';
 import { ThemeToggle } from '~/components/theme-toggle';
+import { GithubIcon } from '~/assets/icons/github';
+import { XIcon } from '~/assets/icons/x';
 import { LanguageStats } from '~/features/github/components/language-stats';
 import { LatestCommit } from '~/features/github/components/latest-commit';
 import { SourceLink } from '~/features/github/components/source-link';
@@ -62,82 +63,88 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <ViewTransition>
-      <html lang='en' suppressHydrationWarning className='styled-scrollbar'>
+      <html
+        lang='en'
+        suppressHydrationWarning
+        className='styled-scrollbar h-full'
+      >
         <body
           className={cn(
             geistSans.variable,
             geistMono.variable,
-            'flex min-h-dvh flex-col font-sans'
+            'bg-background text-foreground relative font-sans antialiased'
           )}
         >
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster richColors />
-            <header className='w-full border-b shadow-xs'>
-              <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
-                <a
-                  href='#main-content'
-                  className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded focus:p-2'
-                >
-                  Skip to content
-                </a>
-                <ul className='flex gap-4'>
-                  <li>
-                    <NavLink href='/'>home</NavLink>
-                  </li>
-                  <li>
-                    <NavLink href='/blog'>blog</NavLink>
-                  </li>
-                </ul>
-                <ul className='flex items-center gap-3'>
-                  <li className='border-r pr-3'>
-                    <a
-                      href='https://x.com/_nikhilsnayak_'
-                      className='dark:text-theme hover:opacity-70'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      aria-label='x.com'
-                    >
-                      <SiX className='size-4' />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href='https://github.com/nikhilsnayak'
-                      className='dark:text-theme hover:opacity-70'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      aria-label='github'
-                    >
-                      <SiGithub className='size-4' />
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </header>
-            <main
-              id='main-content'
-              className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'
+          <div id='root' className='isolate flex h-full flex-col'>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
             >
-              {children}
-            </main>
-            <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
-              <div className='flex items-center justify-between gap-6'>
-                <div className='space-y-2'>
-                  <SourceLink />
-                  <LatestCommit />
+              <Toaster richColors />
+              <header className='w-full border-b shadow-xs'>
+                <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between p-4'>
+                  <a
+                    href='#main-content'
+                    className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:p-2'
+                  >
+                    Skip to content
+                  </a>
+                  <ul className='flex gap-4'>
+                    <li>
+                      <NavLink href='/'>home</NavLink>
+                    </li>
+                    <li>
+                      <NavLink href='/blog'>blog</NavLink>
+                    </li>
+                  </ul>
+                  <ul className='flex items-center gap-3'>
+                    <li className='border-r pr-3'>
+                      <a
+                        href='https://x.com/_nikhilsnayak_'
+                        className='hover:opacity-70'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label='x.com'
+                      >
+                        <XIcon className='dark:fill-accent size-4' />
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href='https://github.com/nikhilsnayak'
+                        className='hover:opacity-70'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label='github'
+                      >
+                        <GithubIcon className='dark:fill-accent size-4' />
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </header>
+              <main
+                id='main-content'
+                className='mx-auto my-4 w-full max-w-(--breakpoint-lg) grow px-4 py-2'
+              >
+                {children}
+              </main>
+              <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
+                <div className='flex items-center justify-between gap-6'>
+                  <div className='space-y-2'>
+                    <SourceLink />
+                    <LatestCommit />
+                  </div>
+                  <ThemeToggle />
                 </div>
-                <ThemeToggle />
-              </div>
-              <LanguageStats />
-            </footer>
-          </ThemeProvider>
-          <SpeedInsights />
-          <Analytics />
+                <LanguageStats />
+              </footer>
+            </ThemeProvider>
+            <SpeedInsights />
+            <Analytics />
+          </div>
         </body>
       </html>
     </ViewTransition>

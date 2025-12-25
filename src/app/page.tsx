@@ -1,21 +1,19 @@
 import { Suspense, ViewTransition } from 'react';
 import Link from 'next/link';
-import {
-  SiBun,
-  SiDrizzle,
-  SiNextdotjs,
-  SiPostgresql,
-  SiRadixui,
-  SiReact,
-  SiShadcnui,
-  SiTailwindcss,
-  SiTypescript,
-} from '@icons-pack/react-simple-icons';
 import { ArrowUpRight } from 'lucide-react';
 
 import { formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
+import { BaseUiIcon } from '~/assets/icons/base-ui';
+import { BunIcon } from '~/assets/icons/bun';
+import { DrizzleOrmIcon } from '~/assets/icons/drizzle-orm';
+import { NextJsIcon } from '~/assets/icons/next-js';
+import { PostgresqlIcon } from '~/assets/icons/postgresql';
+import { ReactJsIcon } from '~/assets/icons/react-js';
+import { ShadcnUiIcon } from '~/assets/icons/shadcn-ui';
+import { TailwindCssIcon } from '~/assets/icons/tailwind-css';
+import { TypescriptIcon } from '~/assets/icons/typescript';
 import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 
@@ -51,8 +49,8 @@ export default async function HomePage() {
           </h3>
           <div>
             <div className='relative border-l-3 pb-4 pl-4'>
-              <div className='absolute top-1 -left-[9px] size-4 animate-ping rounded-full border-2 bg-green-500' />
-              <div className='absolute top-1 -left-[9px] size-4 rounded-full border-2 bg-green-500' />
+              <div className='absolute top-1 -left-[9px] size-4 animate-ping border-2 bg-green-500' />
+              <div className='absolute top-1 -left-[9px] size-4 border-2 bg-green-500' />
               <p className='text-muted-foreground flex flex-col gap-1'>
                 <span className='font-medium'>
                   Engineer - Software Development
@@ -61,7 +59,7 @@ export default async function HomePage() {
               </p>
             </div>
             <div className='relative border-l-3 pl-4'>
-              <div className='bg-background absolute top-1 -left-[9px] size-4 rounded-full border-2' />
+              <div className='bg-background absolute top-1 -left-[9px] size-4 border-2' />
               <p className='text-muted-foreground flex flex-col gap-1'>
                 <span className='font-medium'>
                   Trainee Engineer - Software Development
@@ -77,9 +75,9 @@ export default async function HomePage() {
           Tech Stack:
         </h2>
         <ul className='space-y-2 text-pretty'>
-          <li className='rounded-md border-2 border-dashed p-4'>
+          <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <SiBun className='inline size-3 fill-amber-300 dark:fill-[#f9f1e1]' />
+              <BunIcon className='inline size-3 dark:fill-[#ffffff]' />
               <a
                 href='https://bun.sh/'
                 target='_blank'
@@ -91,7 +89,7 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <SiTypescript className='inline size-3 fill-[#3178c6]' />
+              <TypescriptIcon className='inline size-3 fill-[#3178C6]' />
               <a
                 href='https://www.typescriptlang.org/'
                 target='_blank'
@@ -103,9 +101,9 @@ export default async function HomePage() {
             </span>
             for blazingly fast ⚡ dev exp and full stack type safety
           </li>
-          <li className='rounded-md border-2 border-dashed p-4'>
+          <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <SiReact className='inline size-3 fill-[#58c4dc]' />
+              <ReactJsIcon className='inline size-3 fill-[#61DAFB]' />
               <a
                 href='https://react.dev/'
                 target='_blank'
@@ -117,7 +115,7 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <SiNextdotjs className='inline size-3' />
+              <NextJsIcon className='inline size-3 dark:fill-[#ffffff]' />
               <a
                 href='https://nextjs.org/'
                 target='_blank'
@@ -129,9 +127,9 @@ export default async function HomePage() {
             </span>
             for powering interactive UIs at scale
           </li>
-          <li className='rounded-md border-2 border-dashed p-4'>
+          <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <SiTailwindcss className='inline size-3 fill-[#0ea5e9]' />
+              <TailwindCssIcon className='inline size-3 fill-[#06B6D4]' />
               <a
                 href='https://tailwindcss.com/'
                 target='_blank'
@@ -143,19 +141,19 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <SiRadixui className='inline size-3' />
+              <BaseUiIcon className='inline size-3 dark:fill-[#ffffff]' />
               <a
-                href='https://www.radix-ui.com/'
+                href='https://base-ui.com/'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='ml-1 font-medium underline'
               >
-                Radix UI
+                Base UI
               </a>
             </span>
             =
             <span className='mx-2'>
-              <SiShadcnui className='inline size-3' />
+              <ShadcnUiIcon className='inline size-3 dark:fill-[#ffffff]' />
               <a
                 href='https://ui.shadcn.com/'
                 target='_blank'
@@ -167,9 +165,9 @@ export default async function HomePage() {
             </span>
             for consistent and accessible web
           </li>
-          <li className='rounded-md border-2 border-dashed p-4'>
+          <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <SiPostgresql className='inline size-3 fill-[#699dc9]' />
+              <PostgresqlIcon className='inline size-3 fill-[#4169E1]' />
               <a
                 href='https://www.postgresql.org/'
                 target='_blank'
@@ -181,7 +179,7 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <SiDrizzle className='inline size-3 dark:fill-[#c5f74f]' />
+              <DrizzleOrmIcon className='inline size-3 fill-[#C5F74F]' />
               <a
                 href='https://orm.drizzle.team/'
                 target='_blank'
@@ -212,7 +210,7 @@ export default async function HomePage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className='group border-border block h-full transform space-y-4 overflow-hidden rounded-lg border p-4 shadow-sm transition-all duration-300 hover:translate-x-2 hover:shadow-xl'
+              className='group border-border block h-full transform space-y-4 overflow-hidden border p-4 shadow-sm transition-all duration-300 hover:translate-x-2 hover:shadow-xl'
             >
               <div className='space-y-1'>
                 <p className='text-muted-foreground flex items-center justify-between text-xs'>

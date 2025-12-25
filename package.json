@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
+    "@base-ui/react": "^1.0.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
-    "@icons-pack/react-simple-icons": "^13.8.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@neondatabase/serverless": "^1.0.2",
@@ -55,7 +55,6 @@
     "openai": "^6.15.0",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "radix-ui": "^1.4.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-error-boundary": "^6.0.0",

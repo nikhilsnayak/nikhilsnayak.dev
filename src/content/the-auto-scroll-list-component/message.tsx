@@ -4,7 +4,7 @@ import { useLayoutEffect, useState } from 'react';
 
 export function UserMessage({ children }: Readonly<{ children: string }>) {
   return (
-    <p className='rounded-lg rounded-br-none bg-purple-100 p-3 text-purple-800 dark:bg-purple-900 dark:text-purple-100'>
+    <p className='bg-purple-100 p-3 text-purple-800 dark:bg-purple-900 dark:text-purple-100'>
       {children}
     </p>
   );
@@ -15,7 +15,7 @@ export function AssistantMessage({
 }: Readonly<{ children: AsyncGenerator<string, string> }>) {
   const value = useStreamableValue(children);
   return (
-    <p className='rounded-lg rounded-bl-none bg-gray-200 p-3 text-gray-800 dark:bg-gray-700 dark:text-gray-100'>
+    <p className='bg-gray-200 p-3 text-gray-800 dark:bg-gray-700 dark:text-gray-100'>
       {value}
     </p>
   );

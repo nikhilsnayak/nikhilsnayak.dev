@@ -58,7 +58,7 @@ export default async function Page(props: {
         ({ id, title, director, releaseYear, genre, rating, cast }) => (
           <li
             key={id}
-            className='rounded-lg bg-white p-6 shadow-lg transition-colors hover:bg-gray-100'
+            className='bg-white p-6 shadow-lg transition-colors hover:bg-gray-100'
           >
             <h2 className='mb-2 text-2xl font-semibold text-gray-800'>
               {title}
@@ -125,14 +125,14 @@ export default function Page() {
             <input
               type={field.type}
               name={field.name}
-              className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500'
+              className='mt-1 block w-full border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500'
               required
             />
           </div>
         ))}
         <button
           type='submit'
-          className='w-full rounded-md bg-indigo-600 px-4 py-2 text-white shadow-xs hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden'
+          className='w-full bg-indigo-600 px-4 py-2 text-white shadow-xs hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden'
         >
           Add Movie
         </button>
@@ -317,8 +317,8 @@ export default function GenUI() {
   };
 
   return (
-    <section className='bg-background w-full rounded-lg border p-4 shadow-lg'>
-      <ul className='relative mb-4 h-[60vh] space-y-4 overflow-auto rounded-lg p-4'>
+    <section className='bg-background w-full border p-4 shadow-lg'>
+      <ul className='relative mb-4 h-[60vh] space-y-4 overflow-auto p-4'>
         {messages.length === 0 ? (
           <li className='text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
             No Conversation
@@ -336,13 +336,13 @@ export default function GenUI() {
         <input
           type='text'
           name='query'
-          className='col-span-6 flex-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:outline-hidden'
+          className='col-span-6 flex-1 border border-gray-300 p-2 focus:border-blue-500 focus:outline-hidden'
           placeholder='Enter your message...'
         />
         <button
           type='submit'
           disabled={isPending}
-          className='col-span-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-hidden disabled:bg-blue-300'
+          className='col-span-2 bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-hidden disabled:bg-blue-300'
         >
           Ask
         </button>
@@ -466,7 +466,7 @@ export function StockDisplay({
   };
 
   return (
-    <div className='mt-2 rounded-md border p-6'>
+    <div className='mt-2 border p-6'>
       <h2 className='mb-2 text-xl font-bold'>
         {companyName} ({symbol})
       </h2>
@@ -510,14 +510,14 @@ export function StockDisplay({
 
       <div className='mt-4'>
         <button
-          className='rounded bg-blue-500 px-4 py-2 text-white'
+          className='bg-blue-500 px-4 py-2 text-white'
           onClick={() => setShowDetails(!showDetails)}
         >
           {showDetails ? 'Hide Financial Metrics' : 'Show Additional Metrics'}
         </button>
 
         {showDetails && (
-          <div className='text-foreground mt-4 rounded bg-gray-100 p-4 dark:bg-gray-800'>
+          <div className='text-foreground mt-4 bg-gray-100 p-4 dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
             <p>
               Details about financial metrics and other insights would be
@@ -535,10 +535,10 @@ export function StockDisplay({
             value={compareSymbol}
             onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
             placeholder='Enter stock symbol'
-            className='text-foreground rounded border px-2 py-1'
+            className='text-foreground border px-2 py-1'
           />
           <button
-            className='rounded bg-green-500 px-4 py-1 text-white'
+            className='bg-green-500 px-4 py-1 text-white'
             onClick={() => compareStock(compareSymbol)}
           >
             Compare
@@ -546,7 +546,7 @@ export function StockDisplay({
         </div>
 
         {showComparison && (
-          <div className='text-primary-foreground mt-4 rounded bg-zinc-800 p-4 dark:bg-zinc-300'>
+          <div className='text-primary-foreground mt-4 bg-zinc-800 p-4 dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
               Comparison details between {symbol} and {compareSymbol} would be

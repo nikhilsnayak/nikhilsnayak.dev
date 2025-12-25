@@ -44,7 +44,7 @@ export function StockDisplay({
   };
 
   return (
-    <div className='mt-2 rounded-md border p-6'>
+    <div className='mt-2 border p-6'>
       <h2 className='mb-2 text-xl font-bold'>
         {companyName} ({symbol})
       </h2>
@@ -88,14 +88,14 @@ export function StockDisplay({
 
       <div className='mt-4'>
         <button
-          className='rounded bg-blue-500 px-4 py-2 text-white'
+          className='bg-blue-500 px-4 py-2 text-white'
           onClick={() => setShowDetails(!showDetails)}
         >
           {showDetails ? 'Hide Financial Metrics' : 'Show Additional Metrics'}
         </button>
 
         {showDetails && (
-          <div className='text-foreground mt-4 rounded bg-gray-100 p-4 dark:bg-gray-800'>
+          <div className='text-foreground mt-4 bg-gray-100 p-4 dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
             <p>
               Details about financial metrics and other insights would be
@@ -113,10 +113,10 @@ export function StockDisplay({
             value={compareSymbol}
             onChange={(e) => setCompareSymbol(e.target.value.toUpperCase())}
             placeholder='Enter stock symbol'
-            className='text-foreground rounded border px-2 py-1'
+            className='text-foreground border px-2 py-1'
           />
           <button
-            className='rounded bg-green-500 px-4 py-1 text-white'
+            className='bg-green-500 px-4 py-1 text-white'
             onClick={() => compareStock(compareSymbol)}
           >
             Compare
@@ -124,7 +124,7 @@ export function StockDisplay({
         </div>
 
         {showComparison && (
-          <div className='text-primary-foreground mt-4 rounded bg-zinc-800 p-4 dark:bg-zinc-300'>
+          <div className='text-primary-foreground mt-4 bg-zinc-800 p-4 dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
               Comparison details between {symbol} and {compareSymbol} would be
@@ -155,7 +155,7 @@ export function StockDisplayDemo() {
     lastUpdated: new Date().toISOString(),
   };
   return (
-    <div className='not-prose mx-auto mt-6 min-w-full rounded-lg'>
+    <div className='not-prose mx-auto mt-6 min-w-full'>
       <StockDisplay {...sampleStockData} />
     </div>
   );

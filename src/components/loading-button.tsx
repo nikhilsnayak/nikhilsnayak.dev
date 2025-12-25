@@ -4,10 +4,10 @@ import { cn } from '~/lib/utils';
 
 import { Button } from './ui/button';
 
-interface LoadingButtonProps extends ComponentProps<typeof Button> {
+type LoadingButtonProps = ComponentProps<typeof Button> & {
   isLoading: boolean;
   loadingIndicator?: ReactNode;
-}
+};
 
 export function LoadingButton({
   isLoading,

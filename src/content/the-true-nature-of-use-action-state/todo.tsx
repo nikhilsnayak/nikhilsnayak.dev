@@ -13,11 +13,11 @@ export function AddTodoForm({
         required
         minLength={3}
         placeholder='Add a todo'
-        className='flex-1 rounded border px-2 py-1'
+        className='flex-1 border px-2 py-1'
       />
       <button
         type='submit'
-        className='min-w-10 shrink-0 rounded bg-blue-500 p-1 text-white'
+        className='min-w-10 shrink-0 bg-blue-500 p-1 text-white'
       >
         +
       </button>
@@ -52,7 +52,7 @@ export function TodoItem({
           onChange={(e) => onStatusChange?.(e.target.checked)}
         />
         <button
-          className='flex size-5 items-center justify-center rounded bg-red-500 text-white'
+          className='flex size-5 items-center justify-center bg-red-500 text-white'
           onClick={onDelete}
         >
           -

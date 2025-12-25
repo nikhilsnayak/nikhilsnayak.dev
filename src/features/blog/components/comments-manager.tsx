@@ -313,7 +313,7 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
             <h3 className='flex items-center gap-2'>
               <span className='font-bold'>{comment.user.name}</span>
               {session?.user?.id === comment.userId && (
-                <span className='bg-muted text-muted-foreground rounded px-1 py-0.5 text-[10px]'>
+                <span className='bg-muted text-muted-foreground px-1 py-0.5 text-[10px]'>
                   You
                 </span>
               )}
@@ -381,7 +381,9 @@ function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
         required
         minLength={3}
       />
-      <Button className='self-end'>Comment</Button>
+      <Button className='self-end' type='submit'>
+        Comment
+      </Button>
     </form>
   );
 }
@@ -396,12 +398,14 @@ function EditCommentControl({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button size='icon' variant='ghost'>
-          <Pencil className='size-4 text-blue-400' />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className='w-4/5 rounded-sm'>
+      <DialogTrigger
+        render={
+          <Button size='icon' variant='ghost'>
+            <Pencil className='size-4 text-blue-400' />
+          </Button>
+        }
+      />
+      <DialogContent className='w-4/5'>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -453,12 +457,14 @@ function DeleteCommentControl({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button size='icon' variant='ghost'>
-          <Trash2 className='size-4 text-red-400' />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className='w-4/5 rounded-sm'>
+      <DialogTrigger
+        render={
+          <Button size='icon' variant='ghost'>
+            <Trash2 className='size-4 text-red-400' />
+          </Button>
+        }
+      />
+      <DialogContent className='w-4/5'>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -506,12 +512,14 @@ function AddReplyControl({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button size='icon' variant='ghost'>
-          <Reply className='size-4' />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className='w-4/5 rounded-sm'>
+      <DialogTrigger
+        render={
+          <Button size='icon' variant='ghost'>
+            <Reply className='size-4' />
+          </Button>
+        }
+      />
+      <DialogContent className='w-4/5'>
         <form
           onSubmit={(e) => {
             e.preventDefault();

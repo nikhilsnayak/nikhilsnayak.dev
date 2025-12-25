@@ -94,8 +94,8 @@ export function App({ searchParams }) {
   const moviesPromise = getMovies(query);
 
   return (
-    <div className='flex min-h-[100dvh] flex-col bg-gray-900 text-gray-200'>
-      <main className='container mx-auto max-w-lg flex-grow px-4 py-8'>
+    <div className='flex min-h-dvh flex-col bg-gray-900 text-gray-200'>
+      <main className='container mx-auto max-w-lg grow px-4 py-8'>
         <Search query={query} />
         <Suspense fallback='Loading...'>
           <MovieList moviesPromise={moviesPromise} />
@@ -119,7 +119,7 @@ function Search({ query }) {
       <input
         type='search'
         placeholder='Search movies...'
-        className='w-full rounded-md border border-gray-700 bg-gray-800 px-8 py-2 text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none'
+        className='w-full border border-gray-700 bg-gray-800 px-8 py-2 text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none'
         name='query'
         defaultValue={query}
       />
@@ -315,7 +315,7 @@ export function Search({ query }) {
       <input
         type='search'
         placeholder='Search movies...'
-        className='w-full rounded-md border border-gray-700 bg-gray-800 px-8 py-2 text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none'
+        className='w-full border border-gray-700 bg-gray-800 px-8 py-2 text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none'
         name='query'
         defaultValue={query}
       />
@@ -340,8 +340,8 @@ export function App({ searchParams }) {
   const moviesPromise = getMovies(query);
 
   return (
-    <div className='flex min-h-[100dvh] flex-col bg-gray-900 text-gray-200'>
-      <main className='container mx-auto max-w-lg flex-grow px-4 py-8'>
+    <div className='flex min-h-dvh flex-col bg-gray-900 text-gray-200'>
+      <main className='container mx-auto max-w-lg grow px-4 py-8'>
         <Search query={query} />
         <Suspense fallback='Loading...'>
           <MovieList moviesPromise={moviesPromise} />
@@ -365,7 +365,7 @@ function Search({ query }) {
       <input
         type='search'
         placeholder='Search movies...'
-        className='w-full rounded-md border border-gray-700 bg-gray-800 px-8 py-2 text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none'
+        className='w-full border border-gray-700 bg-gray-800 px-8 py-2 text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none'
         name='query'
         defaultValue={query}
       />

@@ -20,7 +20,7 @@ export function SourceLink() {
   return (
     <a
       href={href}
-      className='dark:text-theme block max-w-max text-xs tracking-tighter underline'
+      className='dark:text-accent block max-w-max text-xs tracking-tighter underline'
       target='_blank'
       rel='noopener noreferrer'
       aria-label='source code'

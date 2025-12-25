@@ -1,6 +1,8 @@
+'use client';
+
 import * as React from 'react';
+import { useRender } from '@base-ui/react/use-render';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
-import { Slot as SlotPrimitive } from 'radix-ui';
 
 import { cn } from '~/lib/utils';
 
@@ -32,21 +34,23 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
 }
 
 function BreadcrumbLink({
-  asChild,
+  render,
   className,
   ...props
 }: React.ComponentProps<'a'> & {
-  asChild?: boolean;
+  render?: React.ReactElement;
 }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'a';
+  const element = useRender({
+    render: render ?? <a />,
+    props: {
+      'data-slot': 'breadcrumb-link',
+      className: cn('hover:text-foreground transition-colors', className),
+      ...props,
+    },
+    defaultTagName: 'a',
+  });
 
-  return (
-    <Comp
-      data-slot='breadcrumb-link'
-      className={cn('hover:text-foreground transition-colors', className)}
-      {...props}
-    />
-  );
+  return element;
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
