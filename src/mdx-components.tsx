@@ -52,17 +52,44 @@ function Table({
 function CustomLink({ href, ...props }: ComponentProps<'a'>) {
   if (href?.startsWith('/')) {
     return (
-      <Link href={{ pathname: href }} {...props}>
+      <Link
+        {...props}
+        href={{ pathname: href }}
+        className={cn(
+          'underline underline-offset-2 transition-all hover:underline-offset-4',
+          props.className
+        )}
+      >
         {props.children}
       </Link>
     );
   }
 
   if (href?.startsWith('#')) {
-    return <a href={href} {...props} />;
+    return (
+      <a
+        {...props}
+        href={href}
+        className={cn(
+          'underline underline-offset-2 transition-all hover:underline-offset-4',
+          props.className
+        )}
+      />
+    );
   }
 
-  return <a href={href} target='_blank' rel='noopener noreferrer' {...props} />;
+  return (
+    <a
+      {...props}
+      href={href}
+      target='_blank'
+      rel='noopener noreferrer'
+      className={cn(
+        'underline underline-offset-2 transition-all hover:underline-offset-4',
+        props.className
+      )}
+    />
+  );
 }
 
 interface CodeProps {

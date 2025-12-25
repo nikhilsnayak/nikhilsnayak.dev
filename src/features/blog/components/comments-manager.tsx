@@ -325,7 +325,7 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
           </div>
         </div>
         {session?.user?.id && !comment.isPending && (
-          <div className='mt-2 flex items-center space-x-2 sm:mt-0'>
+          <div className='mt-2 flex items-center gap-2 sm:mt-0'>
             <AddReplyControl parentId={comment.id} slug={comment.slug} />
             {session.user.id === comment.userId && (
               <>

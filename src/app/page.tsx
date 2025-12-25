@@ -82,7 +82,7 @@ export default async function HomePage() {
                 href='https://bun.sh/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Bun
               </a>
@@ -94,7 +94,7 @@ export default async function HomePage() {
                 href='https://www.typescriptlang.org/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Typescript
               </a>
@@ -108,7 +108,7 @@ export default async function HomePage() {
                 href='https://react.dev/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 React
               </a>
@@ -120,7 +120,7 @@ export default async function HomePage() {
                 href='https://nextjs.org/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Next.js (App Router)
               </a>
@@ -134,7 +134,7 @@ export default async function HomePage() {
                 href='https://tailwindcss.com/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 TailwindCSS
               </a>
@@ -146,7 +146,7 @@ export default async function HomePage() {
                 href='https://base-ui.com/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Base UI
               </a>
@@ -158,7 +158,7 @@ export default async function HomePage() {
                 href='https://ui.shadcn.com/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Shadcn UI
               </a>
@@ -172,7 +172,7 @@ export default async function HomePage() {
                 href='https://www.postgresql.org/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 PostgreSQL
               </a>
@@ -184,7 +184,7 @@ export default async function HomePage() {
                 href='https://orm.drizzle.team/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Drizzle ORM
               </a>
@@ -194,7 +194,10 @@ export default async function HomePage() {
         </ul>
         <p className='text-lg sm:text-xl'>
           In my free time, I{' '}
-          <Link href='/blog' className='underline'>
+          <Link
+            href='/blog'
+            className='underline underline-offset-2 transition-all hover:underline-offset-4'
+          >
             write
           </Link>{' '}
           about these technologies, breaking down complex concepts from the

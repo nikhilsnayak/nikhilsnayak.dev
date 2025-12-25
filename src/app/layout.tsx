@@ -43,6 +43,12 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     type: 'website',
   },
+  authors: [{ name: 'Nikhil S', url: BASE_URL }],
+  alternates: {
+    types: {
+      'application/rss+xml': `${BASE_URL}/rss.xml`,
+    },
+  },
   robots: {
     index: true,
     follow: true,
@@ -57,6 +63,9 @@ export const metadata: Metadata = {
   twitter: {
     title: 'Nikhil S',
     card: 'summary_large_image',
+    creator: '@_nikhilsnayak_',
+    description: 'Software Engineer from India',
+    site: BASE_URL,
   },
 };
 

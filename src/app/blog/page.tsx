@@ -2,6 +2,7 @@ import { ViewTransition } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight, Rss } from 'lucide-react';
+import * as motion from 'motion/react-client';
 
 import { formatDate } from '~/lib/utils';
 import { BlogStats } from '~/features/blog/components/blog-stats';
@@ -31,15 +32,17 @@ export default async function BlogsPage() {
         <h1 className='font-mono text-2xl font-medium tracking-tighter'>
           Blog
         </h1>
-        <a
+        <motion.a
           href='/rss.xml'
           target='_blank'
           rel='noopener noreferrer'
-          className='hover:opacity-70'
           aria-label='rss feed'
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
         >
           <Rss />
-        </a>
+        </motion.a>
       </div>
 
       <BlogStats />
