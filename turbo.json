@@ -9,7 +9,7 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "OPENAI_API_KEY",
-        "POSTGRES_URL",
+        "DATABASE_URL",
         "AUTH_SECRET",
         "AUTH_GITHUB_ID",
         "AUTH_GITHUB_SECRET",
