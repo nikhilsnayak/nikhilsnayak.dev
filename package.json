@@ -46,7 +46,7 @@
     "eslint-config-next": "^16.1.2",
     "eslint-config-prettier": "^10.1.8",
     "gray-matter": "^4.0.3",
-    "lucide-react": "^0.562.0",
+    "lucide-react": "^0.563.0",
     "motion": "^12.26.2",
     "next": "^16.1.2",
     "next-auth": "5.0.0-beta.30",
