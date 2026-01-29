@@ -18,12 +18,7 @@ export function ThemeButton({ type, children }: Readonly<ThemeButtonProps>) {
   const isActive = isClient && theme === type;
 
   return (
-    <motion.div
-      className='relative'
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-    >
+    <div className='relative'>
       {isActive && (
         <motion.div
           layoutId='activeThemeIndicator'
@@ -42,6 +37,6 @@ export function ThemeButton({ type, children }: Readonly<ThemeButtonProps>) {
         <span className='sr-only'>{type}</span>
         {children}
       </Button>
-    </motion.div>
+    </div>
   );
 }
