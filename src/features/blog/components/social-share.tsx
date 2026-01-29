@@ -31,26 +31,30 @@ export function SocialShare({
         }
       />
       <DropdownMenuContent side='right'>
-        <DropdownMenuItem>
-          <CopyToClipBoard
-            className='flex w-full items-center gap-2'
-            content={postLink}
-          >
-            <Link className='size-3' /> <span>Copy link</span>
-          </CopyToClipBoard>
-        </DropdownMenuItem>
+        <DropdownMenuItem
+          render={
+            <CopyToClipBoard
+              className='flex w-full items-center gap-2'
+              content={postLink}
+            >
+              <Link className='size-3' /> <span>Copy link</span>
+            </CopyToClipBoard>
+          }
+        />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <a
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this blog post: ${title} - ${postLink} by @_nikhilsnayak_`)}`}
-            className='flex w-full items-center gap-2'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <XIcon className='size-3' />
-            <span>Share on X</span>
-          </a>
-        </DropdownMenuItem>
+        <DropdownMenuItem
+          render={
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this blog post: ${title} - ${postLink} by @_nikhilsnayak_`)}`}
+              className='flex w-full items-center gap-2'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <XIcon className='size-3' />
+              <span>Share on X</span>
+            </a>
+          } 
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );
