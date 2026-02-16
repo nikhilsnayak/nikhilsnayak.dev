@@ -53,7 +53,7 @@ export function SocialShare({
               <XIcon className='size-3' />
               <span>Share on X</span>
             </a>
-          } 
+          }
         />
       </DropdownMenuContent>
     </DropdownMenu>
