@@ -16,35 +16,47 @@ async function StockCard({ symbol }: { symbol: string }) {
 }
 
 export async function continueConversation(query: string): Promise<Message> {
-  const completion = await askAI(query);
+  try {
+    const response = await askAI(query);
+    const candidate = response?.candidates?.[0];
+    const part = candidate?.content?.parts?.[0];
 
-  // Check if the response includes a function call
-  //@ts-expect-error -- migrate to responses API (https://platform.openai.com/docs/guides/migrate-to-responses)
-  const functionCall = completion.choices[0].message.tool_calls?.[0].function;
+    if (part?.functionCall) {
+      const functionCall = part.functionCall;
+      const { symbol } = functionCall.args as { symbol: string };
+      return {
+        id: (Math.random() * 1000).toString(),
+        role: 'bot',
+        display: (
+          <Suspense
+            fallback={
+              <div className='flex items-center gap-2'>
+                <span>{`Fetching current stock price of ${symbol}`}</span>
+                <Spinner />
+              </div>
+            }
+          >
+            <StockCard symbol={symbol} />
+          </Suspense>
+        ),
+      };
+    } else {
+      const text =
+        candidate?.content?.parts?.[0]?.text ||
+        'Could not fulfill the request. Please try again.';
+      return {
+        id: (Math.random() * 1000).toString(),
+        role: 'bot',
+        display: <Markdown>{text}</Markdown>,
+      };
+    }
+  } catch (error) {
+    console.error(error);
 
-  if (functionCall && functionCall.name === 'getStockPrice') {
-    const { symbol } = JSON.parse(functionCall.arguments) as { symbol: string };
     return {
       id: (Math.random() * 1000).toString(),
       role: 'bot',
-      display: (
-        <Suspense
-          fallback={
-            <div className='flex items-center gap-2'>
-              <span>{`Fetching current stock price of ${symbol}`}</span>
-              <Spinner />
-            </div>
-          }
-        >
-          <StockCard symbol={symbol} />
-        </Suspense>
-      ),
-    };
-  } else {
-    return {
-      id: (Math.random() * 1000).toString(),
-      role: 'bot',
-      display: <Markdown>{completion.choices[0].message?.content}</Markdown>,
+      display: <p>Something went wrong. Please try again</p>,
     };
   }
 }

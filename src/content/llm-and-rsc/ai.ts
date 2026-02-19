@@ -1,6 +1,41 @@
-import { OpenAI } from 'openai';
+import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 
-const openai = new OpenAI();
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
+
+const model = genAI.getGenerativeModel({
+  model: 'gemini-2.0-flash',
+  systemInstruction: `
+  You are a highly knowledgeable financial assistant. 
+  Your role is to provide accurate financial insights, explain concepts in simple terms, 
+  and assist users with stock-related queries. You have access to a function for fetching 
+  real-time stock prices based on the symbol provided by the user.
+  If a user asks for specific stock data,
+  ensure you call the correct function and provide the information concisely. 
+  Be polite, professional, and focused on finance-related topics.
+  `,
+  tools: [
+    {
+      functionDeclarations: [
+        {
+          name: 'getStockPrice',
+          description:
+            'Fetches the current stock price of a given stock symbol.',
+          parameters: {
+            type: SchemaType.OBJECT,
+            properties: {
+              symbol: {
+                type: SchemaType.STRING,
+                description:
+                  'The stock symbol (e.g., AAPL, TSLA) to fetch the price for.',
+              },
+            },
+            required: ['symbol'],
+          },
+        },
+      ],
+    },
+  ],
+});
 
 // Define the tool function to mock real-time stock prices
 export async function getStockPrice(symbol: string) {
@@ -30,43 +65,8 @@ export async function getStockPrice(symbol: string) {
 }
 
 export async function askAI(prompt: string) {
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini-2024-07-18',
-    messages: [
-      {
-        role: 'system',
-        content: `You are a highly knowledgeable financial assistant. 
-                  Your role is to provide accurate financial insights, explain concepts in simple terms, 
-                  and assist users with stock-related queries. You have access to a function for fetching 
-                  real-time stock prices based on the symbol provided by the user.
-                  If a user asks for specific stock data,
-                  ensure you call the correct function and provide the information concisely. 
-                  Be polite, professional, and focused on finance-related topics.`,
-      },
-      { role: 'user', content: prompt },
-    ],
-    tools: [
-      {
-        function: {
-          name: 'getStockPrice',
-          description:
-            'Fetches the current stock price of a given stock symbol.',
-          parameters: {
-            type: 'object',
-            properties: {
-              symbol: {
-                type: 'string',
-                description:
-                  'The stock symbol (e.g., AAPL, TSLA) to fetch the price for.',
-              },
-            },
-            required: ['symbol'],
-          },
-        },
-        type: 'function',
-      },
-    ],
-  });
+  const chat = model.startChat();
 
-  return response;
+  const result = await chat.sendMessage(prompt);
+  return result.response;
 }
