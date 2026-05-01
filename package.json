@@ -43,7 +43,7 @@
     "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
     "drizzle-zod": "^0.8.3",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "eslint-config-next": "^16.2.0-canary.51",
     "eslint-config-prettier": "^10.1.8",
     "gray-matter": "^4.0.3",
