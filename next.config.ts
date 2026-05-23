@@ -24,6 +24,13 @@ const nextConfig: NextConfig = {
   experimental: {
     inlineCss: true,
     viewTransition: true,
+    turbopackFileSystemCacheForBuild: true,
+    prefetchInlining: true,
+    cachedNavigations: true,
+    appNewScrollHandler: true,
+    optimisticRouting: true,
+    varyParams: true,
+    useOffline: true,
   },
 };
 
