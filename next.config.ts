@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   typedRoutes: true,
   cacheComponents: true,
+  partialPrefetching: true,
   experimental: {
     inlineCss: true,
     viewTransition: true,
@@ -31,6 +32,7 @@ const nextConfig: NextConfig = {
     optimisticRouting: true,
     varyParams: true,
     useOffline: true,
+    appShells: true,
   },
 };
 
