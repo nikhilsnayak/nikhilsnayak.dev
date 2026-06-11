@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
     optimisticRouting: true,
     varyParams: true,
     useOffline: true,
+    useNodeStreams: true,
   },
 };
 
