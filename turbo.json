@@ -8,7 +8,7 @@
     "build": {
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
-        "OPENAI_API_KEY",
+        "GOOGLE_API_KEY",
         "DATABASE_URL",
         "AUTH_SECRET",
         "AUTH_GITHUB_ID",

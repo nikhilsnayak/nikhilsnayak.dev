@@ -8,7 +8,7 @@
     "start": "next start -p 5000",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "type-check": "next typegen && tsc --noEmit",
+    "type-check": "TURBOPACK=1 next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "ci": "turbo lint type-check format:check",
