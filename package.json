@@ -41,7 +41,7 @@
     "code-syntactic-sugar": "2.0.0",
     "drizzle-kit": "^1.0.0-rc.3",
     "drizzle-orm": "^1.0.0-rc.3",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "eslint-config-next": "16.3.0-canary.59",
     "eslint-config-prettier": "^10.1.8",
     "gray-matter": "^4.0.3",
