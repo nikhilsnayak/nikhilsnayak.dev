@@ -48,17 +48,13 @@ export async function getPostMetadataBySlug(slug: string) {
 }
 
 export function getViewsBySlug(slug: string) {
-  return db.query.views.findFirst({
-    where: (views, { eq }) => eq(views.slug, slug),
-  });
+  return db.query.views.findFirst({ where: { slug } });
 }
 
 export async function getHeartsInfoBySlug(slug: string) {
   const ip = await getIPHash();
 
-  const hearts = await db.query.hearts.findMany({
-    where: (hearts, { eq }) => eq(hearts.slug, slug),
-  });
+  const hearts = await db.query.hearts.findMany({ where: { slug } });
 
   const total = hearts.reduce((acc, cv) => acc + cv.count, 0);
 
@@ -70,10 +66,8 @@ export async function getHeartsInfoBySlug(slug: string) {
 
 export async function getCommentsBySlug(slug: string): Promise<Comment[]> {
   const comments = await db.query.comments.findMany({
-    where: (commentsTable, { eq }) => eq(commentsTable.slug, slug),
-    with: {
-      user: true,
-    },
+    where: { slug },
+    with: { user: true },
     orderBy: (commentsTable, { desc }) => [desc(commentsTable.createdAt)],
   });
 

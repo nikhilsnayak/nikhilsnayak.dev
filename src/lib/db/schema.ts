@@ -1,15 +1,16 @@
-import { relations } from 'drizzle-orm';
 import {
   foreignKey,
   integer,
-  pgTable,
   primaryKey,
+  snakeCase,
   text,
   timestamp,
   unique,
   varchar,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
+
+const pgTable = snakeCase.table;
 
 export const views = pgTable('views', {
   slug: varchar('slug', { length: 255 }).primaryKey(),
@@ -92,22 +93,3 @@ export const comments = pgTable(
     }).onDelete('cascade'),
   ]
 );
-
-export const usersRelations = relations(users, ({ many }) => ({
-  comments: many(comments),
-}));
-
-export const commentsRelations = relations(comments, ({ one, many }) => ({
-  user: one(users, {
-    fields: [comments.userId],
-    references: [users.id],
-  }),
-  parent: one(comments, {
-    relationName: 'repliesRelation',
-    fields: [comments.parentId],
-    references: [comments.id],
-  }),
-  replies: many(comments, {
-    relationName: 'repliesRelation',
-  }),
-}));

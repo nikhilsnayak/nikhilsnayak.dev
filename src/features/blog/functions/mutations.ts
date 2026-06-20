@@ -128,11 +128,7 @@ export async function editComment(
 
   try {
     const existingComment = await db.query.comments.findFirst({
-      where: (commentsTable, { and, eq }) =>
-        and(
-          eq(commentsTable.id, updatedComment.id),
-          eq(commentsTable.userId, userId)
-        ),
+      where: { AND: [{ id: updatedComment.id }, { userId }] },
     });
 
     if (!existingComment) {
@@ -183,8 +179,7 @@ export async function deleteComment(
 
   const userId = session.user.id;
   const existingComment = await db.query.comments.findFirst({
-    where: (commentsTable, { and, eq }) =>
-      and(eq(commentsTable.id, commentId), eq(commentsTable.userId, userId)),
+    where: { AND: [{ id: commentId }, { userId }] },
   });
 
   if (!existingComment) {
