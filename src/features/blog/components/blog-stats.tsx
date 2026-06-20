@@ -1,5 +1,5 @@
-import { cacheLife } from 'next/cache';
 import { Eye, Heart, MessageCircle } from 'lucide-react';
+import { cacheLife } from 'next/cache';
 
 import { NumberFormatter } from '~/lib/utils';
 

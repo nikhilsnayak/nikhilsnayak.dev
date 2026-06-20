@@ -30,13 +30,13 @@ export async function GET(request: Request) {
   const truncatedTitle = truncateText(title, 80);
   const fontSize = getFontSize(truncatedTitle);
 
-  const fontRegular = await fetch(
-    new URL('./JetBrainsMono-Regular.ttf', import.meta.url)
-  ).then((res) => res.arrayBuffer());
+  const fontRegular = await fetch(new URL('./JetBrainsMono-Regular.ttf', import.meta.url)).then(
+    (res) => res.arrayBuffer(),
+  );
 
-  const fontBold = await fetch(
-    new URL('./JetBrainsMono-Bold.ttf', import.meta.url)
-  ).then((res) => res.arrayBuffer());
+  const fontBold = await fetch(new URL('./JetBrainsMono-Bold.ttf', import.meta.url)).then((res) =>
+    res.arrayBuffer(),
+  );
 
   return new ImageResponse(
     <div
@@ -208,6 +208,6 @@ export async function GET(request: Request) {
           weight: 700,
         },
       ],
-    }
+    },
   );
 }

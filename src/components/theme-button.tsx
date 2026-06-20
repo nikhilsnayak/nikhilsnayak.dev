@@ -1,12 +1,12 @@
 'use client';
 
-import { type PropsWithChildren } from 'react';
 import { motion } from 'motion/react';
 import { useTheme } from 'next-themes';
+import { type PropsWithChildren } from 'react';
 
-import { cn } from '~/lib/utils';
-import { useIsClient } from '~/hooks/use-is-client';
 import { Button } from '~/components/ui/button';
+import { useIsClient } from '~/hooks/use-is-client';
+import { cn } from '~/lib/utils';
 
 interface ThemeButtonProps extends PropsWithChildren {
   type: 'light' | 'dark' | 'system';
@@ -30,9 +30,7 @@ export function ThemeButton({ type, children }: Readonly<ThemeButtonProps>) {
         variant='ghost'
         size='icon'
         onClick={() => setTheme(type)}
-        className={cn(
-          'hover:bg-background/40! relative z-10 p-2 transition-colors duration-200'
-        )}
+        className={cn('hover:bg-background/40! relative z-10 p-2 transition-colors duration-200')}
       >
         <span className='sr-only'>{type}</span>
         {children}

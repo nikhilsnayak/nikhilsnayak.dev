@@ -27,7 +27,7 @@ export const hearts = pgTable(
   (t) => [
     primaryKey({ columns: [t.slug, t.clientIdentifier] }),
     unique().on(t.slug, t.clientIdentifier).nullsNotDistinct(),
-  ]
+  ],
 );
 
 export const users = pgTable('user', {
@@ -119,5 +119,5 @@ export const comments = pgTable(
       columns: [table.parentId],
       foreignColumns: [table.id],
     }).onDelete('cascade'),
-  ]
+  ],
 );

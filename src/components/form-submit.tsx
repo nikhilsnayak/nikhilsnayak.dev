@@ -12,18 +12,10 @@ interface FormSubmitProps extends Omit<
   pendingFallback?: ReactNode;
 }
 
-export function FormSubmit({
-  pendingFallback,
-  ...rest
-}: Readonly<FormSubmitProps>) {
+export function FormSubmit({ pendingFallback, ...rest }: Readonly<FormSubmitProps>) {
   const { pending } = useFormStatus();
 
   return (
-    <LoadingButton
-      type='submit'
-      isLoading={pending}
-      loadingIndicator={pendingFallback}
-      {...rest}
-    />
+    <LoadingButton type='submit' isLoading={pending} loadingIndicator={pendingFallback} {...rest} />
   );
 }

@@ -1,5 +1,5 @@
-import type { ComponentProps } from 'react';
 import { Loader } from 'lucide-react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '~/lib/utils';
 
@@ -7,19 +7,10 @@ interface SpinnerProps extends ComponentProps<'svg'> {
   variant?: 'ring' | 'ellipsis';
 }
 
-export function Spinner({
-  className,
-  variant = 'ring',
-  ...rest
-}: Readonly<SpinnerProps>) {
+export function Spinner({ className, variant = 'ring', ...rest }: Readonly<SpinnerProps>) {
   switch (variant) {
     case 'ring':
-      return (
-        <Loader
-          className={cn('fill-background animate-spin', className)}
-          {...rest}
-        />
-      );
+      return <Loader className={cn('fill-background animate-spin', className)} {...rest} />;
     case 'ellipsis':
       return (
         <svg

@@ -21,9 +21,7 @@ type Message = UserMessage | AssistantMessage;
 export function useContinueConversation() {
   const [state, dispatch, isPending] = useActionState(
     async (prev: Message[], currentUserMessage: UserMessage) => {
-      const streamable = await continueConversationServerFn(
-        currentUserMessage.value
-      );
+      const streamable = await continueConversationServerFn(currentUserMessage.value);
 
       const assistantMessage: AssistantMessage = {
         id: crypto.randomUUID(),
@@ -32,7 +30,7 @@ export function useContinueConversation() {
       };
       return [...prev, currentUserMessage, assistantMessage];
     },
-    []
+    [],
   );
 
   const [messages, setOptimisticMessages] = useOptimistic(state);

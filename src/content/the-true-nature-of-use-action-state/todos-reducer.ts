@@ -25,19 +25,12 @@ export function todosReducer(state: Todo[], action: TodoAction): Todo[] {
   }
 }
 
-export async function todosReducerAsync(
-  state: Todo[],
-  action: TodoAction
-): Promise<Todo[]> {
+export async function todosReducerAsync(state: Todo[], action: TodoAction): Promise<Todo[]> {
   const { delay, shouldError } = controlStore.getState();
   await new Promise((resolve, reject) => {
     setTimeout(() => {
       if (shouldError) {
-        reject(
-          new Error(
-            `Network Error: Failed to ${action.type.toUpperCase()} todo`
-          )
-        );
+        reject(new Error(`Network Error: Failed to ${action.type.toUpperCase()} todo`));
       } else {
         resolve('success');
       }
@@ -49,10 +42,7 @@ export async function todosReducerAsync(
       return [newTodo, ...state];
     }
     case 'edit': {
-      const updatedTodo = await updateTodo(
-        action.payload.id,
-        action.payload.updatedTodo
-      );
+      const updatedTodo = await updateTodo(action.payload.id, action.payload.updatedTodo);
       return state.map((todo) => {
         if (todo.id === action.payload.id) return updatedTodo;
         return todo;
@@ -67,20 +57,13 @@ export async function todosReducerAsync(
   }
 }
 
-export async function todosReducerFinal(
-  state: Todo[],
-  action: TodoAction
-): Promise<Todo[]> {
+export async function todosReducerFinal(state: Todo[], action: TodoAction): Promise<Todo[]> {
   try {
     const { delay, shouldError } = controlStore.getState();
     await new Promise((resolve, reject) => {
       setTimeout(() => {
         if (shouldError) {
-          reject(
-            new Error(
-              `Network Error: Failed to ${action.type.toUpperCase()} todo`
-            )
-          );
+          reject(new Error(`Network Error: Failed to ${action.type.toUpperCase()} todo`));
         } else {
           resolve('success');
         }
@@ -92,10 +75,7 @@ export async function todosReducerFinal(
         return [newTodo, ...state];
       }
       case 'edit': {
-        const updatedTodo = await updateTodo(
-          action.payload.id,
-          action.payload.updatedTodo
-        );
+        const updatedTodo = await updateTodo(action.payload.id, action.payload.updatedTodo);
         return state.map((todo) => {
           if (todo.id === action.payload.id) return updatedTodo;
           return todo;

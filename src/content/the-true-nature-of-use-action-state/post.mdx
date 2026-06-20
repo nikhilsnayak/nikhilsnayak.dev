@@ -459,7 +459,7 @@ function App() {
 }
 ```
 
-```ts lineNumbers filename="todos-reducer.ts" addition="1,7,29-36"
+```ts lineNumbers filename="todos-reducer.ts" addition="1,7,26-33"
 import { toast } from 'your-toast-lib';
 
 import { createTodo, deleteTodo, updateTodo } from './db/mutations';
@@ -472,10 +472,7 @@ export async function todosReducer(state: Todo[], action: TodoAction) {
         const newTodo = await createTodo(action.payload.todo);
         return [newTodo, ...state];
       case 'edit':
-        const updatedTodo = await updateTodo(
-          action.payload.id,
-          action.payload.updatedTodo
-        );
+        const updatedTodo = await updateTodo(action.payload.id, action.payload.updatedTodo);
         return state.map((todo) => {
           if (todo.id === action.payload.id) {
             return updatedTodo;

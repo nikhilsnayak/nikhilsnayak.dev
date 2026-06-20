@@ -44,8 +44,7 @@ import { useContinueConversation } from './use-continue-conversation';
 import { UserInput } from './user-input';
 
 export default function App() {
-  const { messages, continueConversation, isPending } =
-    useContinueConversation();
+  const { messages, continueConversation, isPending } = useContinueConversation();
 
   return (
     <div>
@@ -183,7 +182,7 @@ Now that we understand how the `ChatUI` works, let’s focus on building the cor
 <CodeBlock>  
 <Snippet>
 
-```tsx lineNumbers filename="AutoScrollList.tsx" highlight="4,6-23,25-37"
+```tsx lineNumbers filename="AutoScrollList.tsx" highlight="4,6-23,25-34"
 import { useCallback, useState } from 'react';
 
 export function AutoScrollList({ className, ...rest }) {
@@ -205,7 +204,7 @@ export function AutoScrollList({ className, ...rest }) {
 
       return () => observer.disconnect();
     },
-    [shouldAutoScroll]
+    [shouldAutoScroll],
   );
 
   const handleUserInteraction = (e) => {
@@ -214,10 +213,7 @@ export function AutoScrollList({ className, ...rest }) {
 
     if (e.deltaY < 0) {
       setShouldAutoScroll(false);
-    } else if (
-      e.deltaY > 0 &&
-      maxScrollHeight - scrollTop <= maxScrollHeight / 2
-    ) {
+    } else if (e.deltaY > 0 && maxScrollHeight - scrollTop <= maxScrollHeight / 2) {
       setShouldAutoScroll(true);
     }
   };
@@ -284,15 +280,9 @@ With this version, you don't need `useCallback` or `useState` because we are ste
 <CodeBlock>  
 <Snippet>
 
-```tsx lineNumbers filename="AutoScrollList.tsx" highlight="11-77"
+```tsx lineNumbers filename="AutoScrollList.tsx" highlight="5-71"
 export function AutoScrollList({ className, ...rest }) {
-  return (
-    <ul
-      ref={autoScrollListRef}
-      className={`overflow-y-auto ${className}`}
-      {...rest}
-    />
-  );
+  return <ul ref={autoScrollListRef} className={`overflow-y-auto ${className}`} {...rest} />;
 }
 
 function autoScrollListRef(list: HTMLUListElement) {

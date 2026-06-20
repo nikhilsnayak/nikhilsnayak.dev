@@ -5,8 +5,7 @@ import { useContinueConversation } from './use-continue-conversation';
 import { UserInput } from './user-input';
 
 export function ChatUI() {
-  const { messages, continueConversation, isPending } =
-    useContinueConversation();
+  const { messages, continueConversation, isPending } = useContinueConversation();
 
   return (
     <div className='not-prose w-full border bg-gray-100 shadow-sm dark:border-gray-700 dark:bg-gray-800'>

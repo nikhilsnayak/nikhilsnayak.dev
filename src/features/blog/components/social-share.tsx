@@ -1,6 +1,7 @@
 import { Link, ShareIcon } from 'lucide-react';
 
-import { BASE_URL } from '~/lib/constants';
+import { XIcon } from '~/assets/icons/x';
+import { CopyToClipBoard } from '~/components/copy-to-clipboard';
 import { Button } from '~/components/ui/button';
 import {
   DropdownMenu,
@@ -9,23 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import { CopyToClipBoard } from '~/components/copy-to-clipboard';
-import { XIcon } from '~/assets/icons/x';
+import { BASE_URL } from '~/lib/constants';
 
-export function SocialShare({
-  slug,
-  title,
-}: Readonly<{ slug: string; title: string }>) {
+export function SocialShare({ slug, title }: Readonly<{ slug: string; title: string }>) {
   const postLink = `${BASE_URL}/blog/${slug}`;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            variant='ghost'
-            className='text-foreground ml-2 size-4 p-0 align-text-bottom'
-          >
+          <Button variant='ghost' className='text-foreground ml-2 size-4 p-0 align-text-bottom'>
             <ShareIcon />
           </Button>
         }
@@ -33,10 +27,7 @@ export function SocialShare({
       <DropdownMenuContent side='right'>
         <DropdownMenuItem
           render={
-            <CopyToClipBoard
-              className='flex w-full items-center gap-2'
-              content={postLink}
-            >
+            <CopyToClipBoard className='flex w-full items-center gap-2' content={postLink}>
               <Link className='size-3' /> <span>Copy link</span>
             </CopyToClipBoard>
           }

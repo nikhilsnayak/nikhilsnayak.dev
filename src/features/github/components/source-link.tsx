@@ -1,7 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { motion } from 'motion/react';
+import { usePathname } from 'next/navigation';
 
 export function SourceLink() {
   const path = usePathname();

@@ -1,8 +1,8 @@
 'use client';
 
-import { ViewTransition, type ComponentPropsWithoutRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ViewTransition, type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '~/lib/utils';
 
@@ -10,8 +10,7 @@ type NavLinkProps = ComponentPropsWithoutRef<typeof Link>;
 
 export function NavLink({ className, href, ...props }: NavLinkProps) {
   const path = usePathname();
-  const isActive =
-    path === href || (href !== '/' && path.startsWith(href + '/'));
+  const isActive = path === href || (href !== '/' && path.startsWith(href + '/'));
 
   return (
     <div className='relative'>

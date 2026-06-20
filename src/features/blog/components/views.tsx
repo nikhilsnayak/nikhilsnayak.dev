@@ -18,7 +18,5 @@ export async function ViewsCount({ slug, update = false }: ViewsProps) {
     after(() => updateViewsBySlug(slug));
   }
 
-  return (
-    <p className='w-max'>{NumberFormatter.format(views?.count ?? 0)} views</p>
-  );
+  return <p className='w-max'>{NumberFormatter.format(views?.count ?? 0)} views</p>;
 }

@@ -18,11 +18,7 @@ export function LoadingButton({
   ...rest
 }: Readonly<LoadingButtonProps>) {
   return (
-    <Button
-      className={cn(className, 'relative')}
-      disabled={isLoading || disabled}
-      {...rest}
-    >
+    <Button className={cn(className, 'relative')} disabled={isLoading || disabled} {...rest}>
       <>
         {isLoading ? (
           <span className='absolute inset-0 flex items-center justify-center'>

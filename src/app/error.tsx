@@ -1,7 +1,7 @@
 'use client';
 
-import { startTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { startTransition, useEffect } from 'react';
 
 import { Button } from '~/components/ui/button';
 

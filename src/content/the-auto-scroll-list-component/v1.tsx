@@ -7,8 +7,7 @@ import { useContinueConversation } from './use-continue-conversation';
 import { UserInput } from './user-input';
 
 export function V1() {
-  const { messages, continueConversation, isPending } =
-    useContinueConversation();
+  const { messages, continueConversation, isPending } = useContinueConversation();
 
   const autoScrollListRef = useRef<HTMLUListElement>(null);
 
@@ -31,10 +30,7 @@ export function V1() {
 
   return (
     <div className='not-prose w-full border bg-gray-100 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
-      <ul
-        ref={autoScrollListRef}
-        className='mb-4 h-[50vh] space-y-4 overflow-y-auto p-4'
-      >
+      <ul ref={autoScrollListRef} className='mb-4 h-[50vh] space-y-4 overflow-y-auto p-4'>
         {messages.map((message) => {
           return (
             <li key={message.id}>

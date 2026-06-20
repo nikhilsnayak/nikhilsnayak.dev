@@ -1,12 +1,12 @@
+import { LogOut } from 'lucide-react';
 import type { Route } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { LogOut } from 'lucide-react';
 
-import { auth } from '~/lib/auth';
+import { GithubIcon } from '~/assets/icons/github';
 import { FormSubmit } from '~/components/form-submit';
 import { Spinner } from '~/components/spinner';
-import { GithubIcon } from '~/assets/icons/github';
+import { auth } from '~/lib/auth';
 
 import { getCommentsBySlug } from '../functions/queries';
 import { CommentsManager } from './comments-manager';
@@ -58,11 +58,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
           </form>
         </div>
       )}
-      <CommentsManager
-        session={session}
-        slug={slug}
-        initialComments={initialComments}
-      />
+      <CommentsManager session={session} slug={slug} initialComments={initialComments} />
     </div>
   );
 }

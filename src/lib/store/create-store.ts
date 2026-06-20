@@ -1,8 +1,8 @@
 import type { Store } from './types';
 
-export function createStore<
-  T extends Record<string | number | symbol, unknown>,
->(initialState: T): Store<T> {
+export function createStore<T extends Record<string | number | symbol, unknown>>(
+  initialState: T,
+): Store<T> {
   let state = initialState;
   const listeners = new Set<() => void>();
 

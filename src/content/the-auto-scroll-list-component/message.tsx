@@ -15,9 +15,7 @@ export function AssistantMessage({
 }: Readonly<{ children: AsyncGenerator<string, string> }>) {
   const value = useStreamableValue(children);
   return (
-    <p className='bg-gray-200 p-3 text-gray-800 dark:bg-gray-700 dark:text-gray-100'>
-      {value}
-    </p>
+    <p className='bg-gray-200 p-3 text-gray-800 dark:bg-gray-700 dark:text-gray-100'>{value}</p>
   );
 }
 

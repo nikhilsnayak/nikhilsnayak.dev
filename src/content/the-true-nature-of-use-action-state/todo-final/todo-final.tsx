@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  startTransition,
-  useActionState,
-  useOptimistic,
-  type FormEvent,
-} from 'react';
+import { startTransition, useActionState, useOptimistic, type FormEvent } from 'react';
 
 import { List } from '~/components/list';
 
@@ -17,10 +12,7 @@ import type { Todo } from '../types';
 const initialTodos = await getTodos();
 
 export default function TodoFinal() {
-  const [todos, dispatch, isPending] = useActionState(
-    todosReducerFinal,
-    initialTodos
-  );
+  const [todos, dispatch, isPending] = useActionState(todosReducerFinal, initialTodos);
   const [optimisticTodos, setOptimisticTodos] = useOptimistic(todos);
 
   const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
@@ -42,7 +34,7 @@ export default function TodoFinal() {
       const payload = { id: todo.id, updatedTodo: { ...todo, done } };
       startTransition(() => {
         setOptimisticTodos((prev) =>
-          prev.map((item) => (item.id === todo.id ? { ...item, done } : item))
+          prev.map((item) => (item.id === todo.id ? { ...item, done } : item)),
         );
         dispatch({ type: 'edit', payload });
       });
@@ -53,9 +45,7 @@ export default function TodoFinal() {
     return () => {
       const payload = { id: todo.id };
       startTransition(() => {
-        setOptimisticTodos((prev) =>
-          prev.filter((item) => item.id !== todo.id)
-        );
+        setOptimisticTodos((prev) => prev.filter((item) => item.id !== todo.id));
         dispatch({ type: 'delete', payload });
       });
     };
@@ -63,14 +53,9 @@ export default function TodoFinal() {
 
   return (
     <section className='not-prose mt-8 space-y-4'>
-      <p className={isPending ? 'visible' : 'invisible'}>
-        Updates in progress...
-      </p>
+      <p className={isPending ? 'visible' : 'invisible'}>Updates in progress...</p>
       <AddTodoForm onSubmit={handleAddTodo} />
-      <List
-        items={optimisticTodos}
-        className='max-h-60 space-y-1 overflow-auto p-1'
-      >
+      <List items={optimisticTodos} className='max-h-60 space-y-1 overflow-auto p-1'>
         {(todo) => (
           <TodoItem
             done={todo.done}

@@ -378,7 +378,7 @@ function Search({ query }) {
 
 <TabsContent value='server.js'>
 
-```js lineNumbers addition="1,13,27-30" deletion="26"
+```js lineNumbers addition="1,13,27" deletion="26"
 require('react-server-dom-webpack/node-register')();
 require('@babel/register')({
   ignore: [/[\\\/](dist|node_modules)[\\\/]/],
@@ -405,10 +405,7 @@ app.get('/rsc', (req, res) => {
   });
 
   const rscStream = ReactServerDOMWebpackServer.renderToPipeableStream(tree);
-  const rscStream = ReactServerDOMWebpackServer.renderToPipeableStream(
-    tree,
-    clientManifest
-  );
+  const rscStream = ReactServerDOMWebpackServer.renderToPipeableStream(tree, clientManifest);
   res.setHeader('Content-Type', 'text/x-component');
   rscStream.pipe(res);
 });

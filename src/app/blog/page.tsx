@@ -1,12 +1,12 @@
-import { ViewTransition } from 'react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowUpRight, Rss } from 'lucide-react';
 import * as motion from 'motion/react-client';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ViewTransition } from 'react';
 
-import { formatDate } from '~/lib/utils';
 import { BlogStats } from '~/features/blog/components/blog-stats';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
+import { formatDate } from '~/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -28,9 +28,7 @@ export default async function BlogsPage() {
   return (
     <section className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <h1 className='font-mono text-2xl font-medium tracking-tighter'>
-          Blog
-        </h1>
+        <h1 className='font-mono text-2xl font-medium tracking-tighter'>Blog</h1>
         <motion.a
           href='/rss.xml'
           target='_blank'
@@ -49,9 +47,7 @@ export default async function BlogsPage() {
       <div className='space-y-12'>
         {[...postsByYear.entries()].map(([year, posts]) => (
           <div key={year}>
-            <h2 className='mb-6 font-mono text-xl font-medium tracking-tighter'>
-              {year}
-            </h2>
+            <h2 className='mb-6 font-mono text-xl font-medium tracking-tighter'>{year}</h2>
             <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
               {posts.map((post) => (
                 <Link

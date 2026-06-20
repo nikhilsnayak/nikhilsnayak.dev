@@ -14,8 +14,7 @@ export function AddHeartForm({
   slug: string;
 }>) {
   const [heartsInfo, addHeartAction] = useActionState(addHeart, initialValue);
-  const [optimisticHeartsInfo, setOptimisticHeartsInfo] =
-    useOptimistic(heartsInfo);
+  const [optimisticHeartsInfo, setOptimisticHeartsInfo] = useOptimistic(heartsInfo);
 
   return (
     <form

@@ -3,17 +3,11 @@
 import { startTransition, type ComponentProps } from 'react';
 import { toast } from 'sonner';
 
-interface CopyToClipBoardProps extends Omit<
-  ComponentProps<'button'>,
-  'onClick'
-> {
+interface CopyToClipBoardProps extends Omit<ComponentProps<'button'>, 'onClick'> {
   content: string;
 }
 
-export function CopyToClipBoard({
-  content,
-  ...rest
-}: Readonly<CopyToClipBoardProps>) {
+export function CopyToClipBoard({ content, ...rest }: Readonly<CopyToClipBoardProps>) {
   return (
     <button
       {...rest}

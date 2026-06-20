@@ -48,9 +48,7 @@ export function StockDisplay({
       <h2 className='mb-2 text-xl font-bold'>
         {companyName} ({symbol})
       </h2>
-      <p className='mb-4 text-sm'>
-        Last Updated: {new Date(lastUpdated).toLocaleString()}
-      </p>
+      <p className='mb-4 text-sm'>Last Updated: {new Date(lastUpdated).toLocaleString()}</p>
 
       <div className='space-y-2'>
         <p>
@@ -66,23 +64,19 @@ export function StockDisplay({
           <span className='font-semibold'>Lowest Price:</span> ${lowestPrice}
         </p>
         <p>
-          <span className='font-semibold'>Previous Close:</span> $
-          {previousClose}
+          <span className='font-semibold'>Previous Close:</span> ${previousClose}
         </p>
         <p>
-          <span className='font-semibold'>Volume:</span>{' '}
-          {volume.toLocaleString()}
+          <span className='font-semibold'>Volume:</span> {volume.toLocaleString()}
         </p>
         <p>
-          <span className='font-semibold'>Market Cap:</span> $
-          {marketCap.toLocaleString()}
+          <span className='font-semibold'>Market Cap:</span> ${marketCap.toLocaleString()}
         </p>
         <p>
           <span className='font-semibold'>P/E Ratio:</span> {peRatio}
         </p>
         <p>
-          <span className='font-semibold'>Dividend Yield:</span> {dividendYield}
-          %
+          <span className='font-semibold'>Dividend Yield:</span> {dividendYield}%
         </p>
       </div>
 
@@ -97,10 +91,7 @@ export function StockDisplay({
         {showDetails && (
           <div className='text-foreground mt-4 bg-gray-100 p-4 dark:bg-gray-800'>
             <h3 className='font-semibold'>Additional Financial Metrics:</h3>
-            <p>
-              Details about financial metrics and other insights would be
-              displayed here.
-            </p>
+            <p>Details about financial metrics and other insights would be displayed here.</p>
           </div>
         )}
       </div>
@@ -127,10 +118,9 @@ export function StockDisplay({
           <div className='text-primary-foreground mt-4 bg-zinc-800 p-4 dark:bg-zinc-300'>
             <h4 className='font-semibold'>Comparison Results:</h4>
             <p>
-              Comparison details between {symbol} and {compareSymbol} would be
-              displayed here. This interaction can call the
-              `continueConversation` server action and we can add one more tool
-              call for stock comparison
+              Comparison details between {symbol} and {compareSymbol} would be displayed here. This
+              interaction can call the `continueConversation` server action and we can add one more
+              tool call for stock comparison
             </p>
           </div>
         )}

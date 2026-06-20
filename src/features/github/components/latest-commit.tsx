@@ -13,8 +13,8 @@ export async function LatestCommit() {
       whileHover={{ opacity: 0.8 }}
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
     >
-      Latest commit: {latestCommit.message.split('\n')[0]} by{' '}
-      {latestCommit.author} on {latestCommit.date}
+      Latest commit: {latestCommit.message.split('\n')[0]} by {latestCommit.author} on{' '}
+      {latestCommit.date}
     </motion.a>
   );
 }

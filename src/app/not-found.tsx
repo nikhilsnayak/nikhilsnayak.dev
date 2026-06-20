@@ -7,8 +7,7 @@ export default function NotFound() {
         Page Not Found
       </h1>
       <p className='mt-4 text-base text-gray-500 dark:text-gray-400'>
-        Oops, the page you are looking for does not exist. It might have been
-        moved or deleted.
+        Oops, the page you are looking for does not exist. It might have been moved or deleted.
       </p>
       <div className='mt-6'>
         <Link

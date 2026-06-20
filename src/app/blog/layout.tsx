@@ -1,10 +1,9 @@
 'use client';
 
-import { Fragment } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Fragment } from 'react';
 
-import { getBreadCrumbItems } from '~/lib/utils';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '~/components/ui/breadcrumb';
+import { getBreadCrumbItems } from '~/lib/utils';
 
 export default function BlogsLayout({ children }: LayoutProps<'/blog'>) {
   const path = usePathname();

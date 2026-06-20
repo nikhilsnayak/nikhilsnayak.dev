@@ -9,8 +9,7 @@ export async function createTodo(todo: Todo): Promise<Todo> {
     const store = transaction.objectStore('todos');
     const request = store.add(todo);
 
-    request.onsuccess = () =>
-      resolve({ ...todo, id: request.result as string });
+    request.onsuccess = () => resolve({ ...todo, id: request.result as string });
     request.onerror = () => reject(new Error('Failed to create todo'));
   });
 }

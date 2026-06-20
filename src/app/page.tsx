@@ -1,10 +1,7 @@
-import { Suspense, ViewTransition } from 'react';
-import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
+import { Suspense, ViewTransition } from 'react';
 
-import { formatDate } from '~/lib/utils';
-import { ErrorBoundary } from '~/components/error-boundary';
-import { Spinner } from '~/components/spinner';
 import { BaseUiIcon } from '~/assets/icons/base-ui';
 import { BunIcon } from '~/assets/icons/bun';
 import { DrizzleOrmIcon } from '~/assets/icons/drizzle-orm';
@@ -14,8 +11,11 @@ import { ReactJsIcon } from '~/assets/icons/react-js';
 import { ShadcnUiIcon } from '~/assets/icons/shadcn-ui';
 import { TailwindCssIcon } from '~/assets/icons/tailwind-css';
 import { TypescriptIcon } from '~/assets/icons/typescript';
+import { ErrorBoundary } from '~/components/error-boundary';
+import { Spinner } from '~/components/spinner';
 import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
+import { formatDate } from '~/lib/utils';
 
 export default async function HomePage() {
   const recentPosts = await getBlogMetadata();
@@ -27,15 +27,11 @@ export default async function HomePage() {
           <strong className='block font-bold'>Nikhil S</strong>
         </h1>
         <p className='mb-4 text-lg text-pretty sm:text-xl'>
-          {
-            'Full-stack software engineer based in India, primarily working with React.'
-          }
+          {'Full-stack software engineer based in India, primarily working with React.'}
         </p>
       </header>
       <section className='mt-8 space-y-6'>
-        <h2 className='font-mono text-2xl font-medium tracking-tighter underline'>
-          Experience:
-        </h2>
+        <h2 className='font-mono text-2xl font-medium tracking-tighter underline'>Experience:</h2>
         <div>
           <h3 className='hover:text-primary mb-2 inline-flex items-center gap-2 font-mono text-xl font-medium tracking-tighter'>
             <a
@@ -54,18 +50,14 @@ export default async function HomePage() {
               <div className='absolute top-1 -left-[9px] size-4 animate-ping border-2 bg-green-500' />
               <div className='absolute top-1 -left-[9px] size-4 border-2 bg-green-500' />
               <p className='text-muted-foreground flex flex-col gap-1'>
-                <span className='font-medium'>
-                  Engineer - Software Development
-                </span>
+                <span className='font-medium'>Engineer - Software Development</span>
                 <time className='text-xs'>Nov 2024 - Present</time>
               </p>
             </div>
             <div className='relative border-l-3 pl-4'>
               <div className='bg-background absolute top-1 -left-[9px] size-4 border-2' />
               <p className='text-muted-foreground flex flex-col gap-1'>
-                <span className='font-medium'>
-                  Trainee Engineer - Software Development
-                </span>
+                <span className='font-medium'>Trainee Engineer - Software Development</span>
                 <time className='text-xs'>Aug 2023 - Nov 2024</time>
               </p>
             </div>
@@ -202,8 +194,7 @@ export default async function HomePage() {
           >
             write
           </Link>{' '}
-          about these technologies, breaking down complex concepts from the
-          ground up.
+          about these technologies, breaking down complex concepts from the ground up.
         </p>
       </section>
       <section className='mt-8'>
@@ -228,11 +219,7 @@ export default async function HomePage() {
                   </h3>
                 </ViewTransition>
               </div>
-              <ErrorBoundary
-                fallback={
-                  <p className='w-max text-sm'>{"Couldn't load views"}</p>
-                }
-              >
+              <ErrorBoundary fallback={<p className='w-max text-sm'>{"Couldn't load views"}</p>}>
                 <Suspense fallback={<Spinner variant='ellipsis' />}>
                   <ViewsCount slug={post.slug} />
                 </Suspense>

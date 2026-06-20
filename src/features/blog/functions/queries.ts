@@ -1,10 +1,10 @@
 import 'server-only';
-
 import fs from 'fs/promises';
 import path from 'path';
-import { cacheLife } from 'next/cache';
+
 import { sql } from 'drizzle-orm';
 import matter from 'gray-matter';
+import { cacheLife } from 'next/cache';
 
 import { db } from '~/lib/db';
 import { getIPHash } from '~/lib/utils/server';
@@ -18,9 +18,7 @@ export async function getBlogMetadata() {
   cacheLife('max');
 
   const files = await fs.readdir(CONTENT_DIR, { withFileTypes: true });
-  const slugs = files
-    .filter((file) => file.isDirectory())
-    .map((file) => file.name);
+  const slugs = files.filter((file) => file.isDirectory()).map((file) => file.name);
 
   const posts = await Promise.all(
     slugs.map(async (slug) => {
@@ -29,7 +27,7 @@ export async function getBlogMetadata() {
         metadata,
         slug,
       };
-    })
+    }),
   );
 
   return posts.toSorted((a, b) => {
@@ -72,10 +70,7 @@ export async function getCommentsBySlug(slug: string): Promise<Comment[]> {
   });
 
   const commentMap = new Map(
-    comments.map((comment) => [
-      comment.id,
-      { ...comment, replies: [] as Comment[] },
-    ])
+    comments.map((comment) => [comment.id, { ...comment, replies: [] as Comment[] }]),
   );
 
   const result: Comment[] = [];

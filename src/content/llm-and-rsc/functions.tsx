@@ -42,8 +42,7 @@ export async function continueConversation(query: string): Promise<Message> {
       };
     } else {
       const text =
-        candidate?.content?.parts?.[0]?.text ||
-        'Could not fulfill the request. Please try again.';
+        candidate?.content?.parts?.[0]?.text || 'Could not fulfill the request. Please try again.';
       return {
         id: (Math.random() * 1000).toString(),
         role: 'bot',

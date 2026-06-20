@@ -7,8 +7,7 @@ import { useContinueConversation } from './use-continue-conversation';
 import { UserInput } from './user-input';
 
 export function V2() {
-  const { messages, continueConversation, isPending } =
-    useContinueConversation();
+  const { messages, continueConversation, isPending } = useContinueConversation();
 
   return (
     <div className='not-prose w-full border bg-gray-100 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
@@ -30,10 +29,7 @@ export function V2() {
   );
 }
 
-function AutoScrollList({
-  className,
-  ...rest
-}: Readonly<Omit<ComponentProps<'ul'>, 'ref'>>) {
+function AutoScrollList({ className, ...rest }: Readonly<Omit<ComponentProps<'ul'>, 'ref'>>) {
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
 
   const autoScrollListRef = useCallback(
@@ -52,7 +48,7 @@ function AutoScrollList({
 
       return () => observer.disconnect();
     },
-    [shouldAutoScroll]
+    [shouldAutoScroll],
   );
 
   return (
@@ -64,10 +60,7 @@ function AutoScrollList({
         const maxScrollHeight = scrollHeight - clientHeight;
         if (e.deltaY < 0) {
           setShouldAutoScroll(false);
-        } else if (
-          e.deltaY > 0 &&
-          maxScrollHeight - scrollTop <= maxScrollHeight / 2
-        ) {
+        } else if (e.deltaY > 0 && maxScrollHeight - scrollTop <= maxScrollHeight / 2) {
           setShouldAutoScroll(true);
         }
       }}

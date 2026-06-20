@@ -1,19 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
 import { AnimatePresence, motion, useAnimationControls } from 'motion/react';
+import { useEffect } from 'react';
 
 import type { HeartsInfo } from '../types';
 
-export function HeartButton({
-  heartsInfo,
-}: Readonly<{ heartsInfo?: HeartsInfo }>) {
+export function HeartButton({ heartsInfo }: Readonly<{ heartsInfo?: HeartsInfo }>) {
   const controls = useAnimationControls();
 
-  const fillPercentage = Math.min(
-    ((heartsInfo?.currentClientHeartsCount ?? 0) / 3) * 100,
-    100
-  );
+  const fillPercentage = Math.min(((heartsInfo?.currentClientHeartsCount ?? 0) / 3) * 100, 100);
 
   useEffect(() => {
     if (fillPercentage === 100) {
@@ -47,13 +42,7 @@ export function HeartButton({
         />
         <defs>
           <clipPath id='clip-path'>
-            <rect
-              x='0'
-              y={`${100 - fillPercentage}%`}
-              width='100%'
-              height='100%'
-              fill='red'
-            />
+            <rect x='0' y={`${100 - fillPercentage}%`} width='100%' height='100%' fill='red' />
           </clipPath>
         </defs>
         <path

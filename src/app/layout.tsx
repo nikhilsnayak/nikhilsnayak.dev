@@ -1,22 +1,21 @@
 import './globals.css';
-
-import { ViewTransition } from 'react';
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { ViewTransition } from 'react';
 
-import { BASE_URL } from '~/lib/constants';
-import { cn } from '~/lib/utils';
-import { Toaster } from '~/components/ui/sonner';
-import { NavLink } from '~/components/nav-link';
-import { ThemeToggle } from '~/components/theme-toggle';
 import { GithubIcon } from '~/assets/icons/github';
 import { XIcon } from '~/assets/icons/x';
+import { NavLink } from '~/components/nav-link';
+import { ThemeToggle } from '~/components/theme-toggle';
+import { Toaster } from '~/components/ui/sonner';
 import { LanguageStats } from '~/features/github/components/language-stats';
 import { LatestCommit } from '~/features/github/components/latest-commit';
 import { SourceLink } from '~/features/github/components/source-link';
+import { BASE_URL } from '~/lib/constants';
+import { cn } from '~/lib/utils';
 
 const geistSans = Geist({
   variable: '--font-sans',
@@ -72,16 +71,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <ViewTransition>
-      <html
-        lang='en'
-        suppressHydrationWarning
-        className='styled-scrollbar h-full'
-      >
+      <html lang='en' suppressHydrationWarning className='styled-scrollbar h-full'>
         <body
           className={cn(
             geistSans.variable,
             geistMono.variable,
-            'bg-background text-foreground relative font-sans antialiased'
+            'bg-background text-foreground relative font-sans antialiased',
           )}
         >
           <div id='root' className='isolate flex h-full flex-col'>

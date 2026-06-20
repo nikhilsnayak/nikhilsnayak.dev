@@ -1,5 +1,5 @@
-import { BASE_URL } from '~/lib/constants';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
+import { BASE_URL } from '~/lib/constants';
 
 export async function GET() {
   const blog = await getBlogMetadata();
@@ -12,7 +12,7 @@ export async function GET() {
           <link>${BASE_URL}/blog/${post.slug}</link>
           <description>${post.metadata.summary || ''}</description>
           <pubDate>${post.metadata.publishedAt.toUTCString()}</pubDate>
-        </item>`
+        </item>`,
     )
     .join('\n');
 

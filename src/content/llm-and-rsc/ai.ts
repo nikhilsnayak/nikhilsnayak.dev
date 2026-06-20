@@ -18,15 +18,13 @@ const model = genAI.getGenerativeModel({
       functionDeclarations: [
         {
           name: 'getStockPrice',
-          description:
-            'Fetches the current stock price of a given stock symbol.',
+          description: 'Fetches the current stock price of a given stock symbol.',
           parameters: {
             type: SchemaType.OBJECT,
             properties: {
               symbol: {
                 type: SchemaType.STRING,
-                description:
-                  'The stock symbol (e.g., AAPL, TSLA) to fetch the price for.',
+                description: 'The stock symbol (e.g., AAPL, TSLA) to fetch the price for.',
               },
             },
             required: ['symbol'],
@@ -39,12 +37,9 @@ const model = genAI.getGenerativeModel({
 
 // Define the tool function to mock real-time stock prices
 export async function getStockPrice(symbol: string) {
-  const randomValue = (min: number, max: number) =>
-    (Math.random() * (max - min) + min).toFixed(2);
+  const randomValue = (min: number, max: number) => (Math.random() * (max - min) + min).toFixed(2);
 
-  await new Promise((res) =>
-    setTimeout(res, Math.floor(Math.random() * 10000))
-  );
+  await new Promise((res) => setTimeout(res, Math.floor(Math.random() * 10000)));
 
   const stockData = {
     symbol: symbol,

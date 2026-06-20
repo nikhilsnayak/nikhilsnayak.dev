@@ -1,5 +1,5 @@
-import { BASE_URL } from '~/lib/constants';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
+import { BASE_URL } from '~/lib/constants';
 
 export default async function sitemap() {
   const routes = ['', '/blog', '/rss.xml'];

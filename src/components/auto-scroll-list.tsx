@@ -6,13 +6,7 @@ export function AutoScrollList({
   className,
   ...rest
 }: Readonly<Omit<ComponentProps<'ul'>, 'ref'>>) {
-  return (
-    <ul
-      ref={scrollAreaRef}
-      className={cn('overflow-y-auto', className)}
-      {...rest}
-    />
-  );
+  return <ul ref={scrollAreaRef} className={cn('overflow-y-auto', className)} {...rest} />;
 }
 
 function scrollAreaRef(list: HTMLUListElement) {

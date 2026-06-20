@@ -1,20 +1,15 @@
 'use server';
 
 import 'server-only';
-
-import { headers } from 'next/headers';
 import { eq, sql } from 'drizzle-orm';
+import { headers } from 'next/headers';
 
 import { auth } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { comments, hearts, views } from '~/lib/db/schema';
 import { getIPHash } from '~/lib/utils/server';
 
-import {
-  AddCommentSchema,
-  DeleteCommentSchema,
-  EditCommentSchema,
-} from '../schema';
+import { AddCommentSchema, DeleteCommentSchema, EditCommentSchema } from '../schema';
 import type { CommentWithoutReplies, HeartsInfo } from '../types';
 
 export async function updateViewsBySlug(slug: string) {
@@ -34,10 +29,7 @@ export async function updateViewsBySlug(slug: string) {
   }
 }
 
-export async function addHeart(
-  prevState: HeartsInfo,
-  formData: FormData
-): Promise<HeartsInfo> {
+export async function addHeart(prevState: HeartsInfo, formData: FormData): Promise<HeartsInfo> {
   const slug = formData.get('slug')?.toString();
   if (!slug) {
     return prevState;
@@ -78,7 +70,7 @@ export async function addHeart(
 }
 
 export async function addComment(
-  formData: FormData
+  formData: FormData,
 ): Promise<CommentWithoutReplies | { error: string }> {
   const session = await auth.api.getSession({ headers: await headers() });
 
@@ -107,7 +99,7 @@ export async function addComment(
 }
 
 export async function editComment(
-  formData: FormData
+  formData: FormData,
 ): Promise<CommentWithoutReplies | { error: string }> {
   const session = await auth.api.getSession({ headers: await headers() });
 
@@ -115,9 +107,7 @@ export async function editComment(
     return { error: 'Unauthorized' };
   }
 
-  const parsedResult = EditCommentSchema.safeParse(
-    Object.fromEntries(formData)
-  );
+  const parsedResult = EditCommentSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsedResult.success) {
     return { error: 'Invalid input' };
@@ -158,7 +148,7 @@ export async function editComment(
 }
 
 export async function deleteComment(
-  formData: FormData
+  formData: FormData,
 ): Promise<CommentWithoutReplies | { error: string }> {
   const session = await auth.api.getSession({ headers: await headers() });
 
@@ -166,9 +156,7 @@ export async function deleteComment(
     return { error: 'Unauthorized' };
   }
 
-  const parsedResult = DeleteCommentSchema.safeParse(
-    Object.fromEntries(formData)
-  );
+  const parsedResult = DeleteCommentSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsedResult.success) {
     return { error: 'Invalid input' };

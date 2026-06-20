@@ -15,10 +15,7 @@ export function AddTodoForm({
         placeholder='Add a todo'
         className='flex-1 border px-2 py-1'
       />
-      <button
-        type='submit'
-        className='min-w-10 shrink-0 bg-blue-500 p-1 text-white'
-      >
+      <button type='submit' className='min-w-10 shrink-0 bg-blue-500 p-1 text-white'>
         +
       </button>
     </form>
@@ -39,11 +36,7 @@ export function TodoItem({
 >) {
   return (
     <div className='flex items-center justify-between gap-2 border-b p-1'>
-      <p
-        className={`overflow-hidden text-ellipsis ${done ? 'line-through' : ''}`}
-      >
-        {children}
-      </p>
+      <p className={`overflow-hidden text-ellipsis ${done ? 'line-through' : ''}`}>{children}</p>
       <div className='flex shrink-0 items-center gap-1'>
         <input
           type='checkbox'

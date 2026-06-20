@@ -19,9 +19,7 @@ export function Controls() {
             className='w-full accent-blue-500'
           />
         </label>
-        <span className='text-sm text-gray-600 dark:text-gray-400'>
-          {delay}ms
-        </span>
+        <span className='text-sm text-gray-600 dark:text-gray-400'>{delay}ms</span>
       </div>
       <label className='flex items-center gap-2 text-gray-700 dark:text-gray-300'>
         <input

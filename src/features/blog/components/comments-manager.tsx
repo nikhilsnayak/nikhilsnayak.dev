@@ -1,5 +1,6 @@
 'use client';
 
+import { Pencil, Reply, Trash2 } from 'lucide-react';
 import {
   createContext,
   startTransition,
@@ -8,11 +9,10 @@ import {
   useOptimistic,
   useState,
 } from 'react';
-import { Pencil, Reply, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import type { Session } from '~/lib/auth';
-import { formatDate } from '~/lib/utils';
+import { List } from '~/components/list';
+import { Spinner } from '~/components/spinner';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
 import {
@@ -24,15 +24,11 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog';
 import { Textarea } from '~/components/ui/textarea';
-import { List } from '~/components/list';
-import { Spinner } from '~/components/spinner';
+import type { Session } from '~/lib/auth';
+import { formatDate } from '~/lib/utils';
 
 import { addComment, deleteComment, editComment } from '../functions/mutations';
-import {
-  AddCommentSchema,
-  DeleteCommentSchema,
-  EditCommentSchema,
-} from '../schema';
+import { AddCommentSchema, DeleteCommentSchema, EditCommentSchema } from '../schema';
 import type { Comment } from '../types';
 
 type FormAction = (formData: FormData) => void;
@@ -47,14 +43,12 @@ interface CommentsManagerContext {
   deleteCommentFormAction: FormAction;
 }
 
-const CommentsManagerContext = createContext<CommentsManagerContext | null>(
-  null
-);
+const CommentsManagerContext = createContext<CommentsManagerContext | null>(null);
 
 const updateNestedReplies = (
   comments: Comment[],
   parentId: string | null,
-  callback: (comment: Comment) => Comment
+  callback: (comment: Comment) => Comment,
 ): Comment[] => {
   return comments.map((comment) => {
     if (comment.id === parentId) {
@@ -72,7 +66,7 @@ const updateNestedReplies = (
 
 async function commentsReducer(
   state: Comment[],
-  { formData, type }: { formData: FormData; type: 'add' | 'edit' | 'delete' }
+  { formData, type }: { formData: FormData; type: 'add' | 'edit' | 'delete' },
 ): Promise<Comment[]> {
   switch (type) {
     case 'add': {
@@ -111,13 +105,13 @@ async function commentsReducer(
                 ...comment,
                 ...res,
               }
-            : comment
+            : comment,
         );
       } else {
         return updateNestedReplies(state, res.parentId, (parent) => ({
           ...parent,
           replies: parent.replies.map((reply) =>
-            reply.id === res.id ? { ...reply, ...res } : reply
+            reply.id === res.id ? { ...reply, ...res } : reply,
           ),
         }));
       }
@@ -157,16 +151,13 @@ export function CommentsManager({
   slug,
 }: Readonly<CommentsManagerProps>) {
   const [state, dispatch] = useActionState(commentsReducer, initialComments);
-  const [comments, setOptimisticComments] =
-    useOptimistic<OptimisticComment[]>(state);
+  const [comments, setOptimisticComments] = useOptimistic<OptimisticComment[]>(state);
 
   const addCommentFormAction = (formData: FormData) => {
     const id = crypto.randomUUID();
     formData.append('id', id);
 
-    const parsedResult = AddCommentSchema.safeParse(
-      Object.fromEntries(formData)
-    );
+    const parsedResult = AddCommentSchema.safeParse(Object.fromEntries(formData));
 
     if (!parsedResult.success || !session?.user?.id) {
       toast.error('Invalid data');
@@ -186,23 +177,17 @@ export function CommentsManager({
       if (newOptimisticComment.parentId === null) {
         return [newOptimisticComment, ...prev];
       } else {
-        return updateNestedReplies(
-          prev,
-          newOptimisticComment.parentId,
-          (parent) => ({
-            ...parent,
-            replies: [newOptimisticComment, ...parent.replies],
-          })
-        );
+        return updateNestedReplies(prev, newOptimisticComment.parentId, (parent) => ({
+          ...parent,
+          replies: [newOptimisticComment, ...parent.replies],
+        }));
       }
     });
     dispatch({ type: 'add', formData });
   };
 
   const editCommentFormAction = (formData: FormData) => {
-    const parsedResult = EditCommentSchema.safeParse(
-      Object.fromEntries(formData)
-    );
+    const parsedResult = EditCommentSchema.safeParse(Object.fromEntries(formData));
 
     if (!parsedResult.success) {
       toast.error('Invalid data');
@@ -213,16 +198,13 @@ export function CommentsManager({
     setOptimisticComments((prev) => {
       if (parentId === null) {
         return prev.map((comment) => {
-          if (comment.id === id)
-            return { ...comment, content, isPending: true };
+          if (comment.id === id) return { ...comment, content, isPending: true };
           return comment;
         });
       } else {
         return updateNestedReplies(state, parentId, (parent) => ({
           ...parent,
-          replies: parent.replies.map((reply) =>
-            reply.id === id ? { ...reply, content } : reply
-          ),
+          replies: parent.replies.map((reply) => (reply.id === id ? { ...reply, content } : reply)),
         }));
       }
     });
@@ -230,9 +212,7 @@ export function CommentsManager({
   };
 
   const deleteCommentFormAction = (formData: FormData) => {
-    const parsedResult = DeleteCommentSchema.safeParse(
-      Object.fromEntries(formData)
-    );
+    const parsedResult = DeleteCommentSchema.safeParse(Object.fromEntries(formData));
 
     if (!parsedResult.success) {
       toast.error('Invalid data');
@@ -272,9 +252,7 @@ export function CommentsManager({
 function useCommentsManager() {
   const context = use(CommentsManagerContext);
   if (context === null) {
-    throw new Error(
-      'useCommentsManager must be used inside CommentsManagerContext'
-    );
+    throw new Error('useCommentsManager must be used inside CommentsManagerContext');
   }
   return context;
 }
@@ -303,25 +281,18 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
       <div className='flex flex-col items-start justify-between sm:flex-row'>
         <div className='flex items-start gap-3 sm:gap-4'>
           <Avatar className='h-10 w-10 border'>
-            <AvatarImage
-              alt={comment.user.name ?? ''}
-              src={comment.user.image ?? ''}
-            />
+            <AvatarImage alt={comment.user.name ?? ''} src={comment.user.image ?? ''} />
             <AvatarFallback>{comment.user.name?.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>
             <h3 className='flex items-center gap-2'>
               <span className='font-bold'>{comment.user.name}</span>
               {session?.user?.id === comment.userId && (
-                <span className='bg-muted text-muted-foreground px-1 py-0.5 text-[10px]'>
-                  You
-                </span>
+                <span className='bg-muted text-muted-foreground px-1 py-0.5 text-[10px]'>You</span>
               )}
               {comment.isPending && <Spinner className='size-4' />}
             </h3>
-            <span className='text-muted-foreground text-sm'>
-              {formatDate(comment.createdAt)}
-            </span>
+            <span className='text-muted-foreground text-sm'>{formatDate(comment.createdAt)}</span>
           </div>
         </div>
         {session?.user?.id && !comment.isPending && (
@@ -334,10 +305,7 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
                   commentId={comment.id}
                   parentId={comment.parentId}
                 />
-                <DeleteCommentControl
-                  commentId={comment.id}
-                  parentId={comment.parentId}
-                />
+                <DeleteCommentControl commentId={comment.id} parentId={comment.parentId} />
               </>
             )}
           </div>
@@ -375,12 +343,7 @@ function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
       className='flex flex-col gap-2'
     >
       <input type='text' name='slug' value={slug} hidden readOnly />
-      <Textarea
-        name='content'
-        placeholder='Write a comment...'
-        required
-        minLength={3}
-      />
+      <Textarea name='content' placeholder='Write a comment...' required minLength={3} />
       <Button className='self-end' type='submit'>
         Comment
       </Button>
@@ -423,15 +386,7 @@ function EditCommentControl({
             <DialogTitle>Edit Comment</DialogTitle>
           </DialogHeader>
           <input type='text' name='id' value={commentId} hidden readOnly />
-          {parentId && (
-            <input
-              type='text'
-              name='parentId'
-              value={parentId}
-              hidden
-              readOnly
-            />
-          )}
+          {parentId && <input type='text' name='parentId' value={parentId} hidden readOnly />}
           <Textarea
             name='content'
             placeholder='Write a comment...'
@@ -482,15 +437,7 @@ function DeleteCommentControl({
             <DialogTitle>Delete Comment</DialogTitle>
           </DialogHeader>
           <input type='text' name='id' value={commentId} hidden readOnly />
-          {parentId && (
-            <input
-              type='text'
-              name='parentId'
-              value={parentId}
-              hidden
-              readOnly
-            />
-          )}
+          {parentId && <input type='text' name='parentId' value={parentId} hidden readOnly />}
           <p>Are you sure you want to delete this comment?</p>
           <DialogFooter>
             <Button type='submit' variant='destructive'>
@@ -503,10 +450,7 @@ function DeleteCommentControl({
   );
 }
 
-function AddReplyControl({
-  parentId,
-  slug,
-}: Readonly<{ parentId: string; slug: string }>) {
+function AddReplyControl({ parentId, slug }: Readonly<{ parentId: string; slug: string }>) {
   const { addCommentFormAction } = useCommentsManager();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -538,12 +482,7 @@ function AddReplyControl({
           </DialogHeader>
           <input type='text' name='slug' value={slug} hidden readOnly />
           <input type='text' name='parentId' value={parentId} hidden readOnly />
-          <Textarea
-            name='content'
-            placeholder='Write a reply...'
-            required
-            minLength={3}
-          />
+          <Textarea name='content' placeholder='Write a reply...' required minLength={3} />
           <DialogFooter>
             <Button type='submit'>Reply</Button>
           </DialogFooter>

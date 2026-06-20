@@ -1,3 +1,9 @@
+import { highlight, type LineNumbers } from 'code-syntactic-sugar';
+import { AppWindow, Code2 } from 'lucide-react';
+import type { MDXComponents } from 'mdx/types';
+import { cacheLife } from 'next/cache';
+import Image from 'next/image';
+import Link from 'next/link';
 import {
   cloneElement,
   createElement,
@@ -6,18 +12,12 @@ import {
   type PropsWithChildren,
   type ReactElement,
 } from 'react';
-import { cacheLife } from 'next/cache';
-import Image from 'next/image';
-import Link from 'next/link';
-import { highlight, type LineNumbers } from 'code-syntactic-sugar';
-import { AppWindow, Code2 } from 'lucide-react';
-import type { MDXComponents } from 'mdx/types';
 import { Tweet as ReactTweet, type TweetProps } from 'react-tweet';
 
-import { cn, slugify } from '~/lib/utils';
+import { Spinner } from '~/components/spinner';
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
-import { Spinner } from '~/components/spinner';
+import { cn, slugify } from '~/lib/utils';
 
 function Table({
   data,
@@ -27,9 +27,7 @@ function Table({
     rows: string[][];
   };
 }>) {
-  const headers = data.headers.map((header, index) => (
-    <th key={index}>{header}</th>
-  ));
+  const headers = data.headers.map((header, index) => <th key={index}>{header}</th>);
 
   const rows = data.rows.map((row, index) => (
     <tr key={index}>
@@ -57,7 +55,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
         href={{ pathname: href }}
         className={cn(
           'underline underline-offset-2 transition-all hover:underline-offset-4',
-          props.className
+          props.className,
         )}
       >
         {props.children}
@@ -72,7 +70,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
         href={href}
         className={cn(
           'underline underline-offset-2 transition-all hover:underline-offset-4',
-          props.className
+          props.className,
         )}
       />
     );
@@ -86,7 +84,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
       rel='noopener noreferrer'
       className={cn(
         'underline underline-offset-2 transition-all hover:underline-offset-4',
-        props.className
+        props.className,
       )}
     />
   );
@@ -149,15 +147,7 @@ interface PreProps {
 }
 
 function Pre(props: Readonly<PreProps>) {
-  const {
-    children,
-    filename,
-    lineNumbers,
-    highlight,
-    addition,
-    deletion,
-    noHighlight,
-  } = props;
+  const { children, filename, lineNumbers, highlight, addition, deletion, noHighlight } = props;
 
   const getLineNumbers = (rawString?: string) => {
     const rangeArray = (numbers: number[]) => {
@@ -175,9 +165,7 @@ function Pre(props: Readonly<PreProps>) {
     const lineNumbers = rawString
       ?.trim()
       ?.split(',')
-      ?.flatMap((range) =>
-        rangeArray(range.split('-').map((line) => Number(line)))
-      );
+      ?.flatMap((range) => rangeArray(range.split('-').map((line) => Number(line))));
 
     if (!lineNumbers || lineNumbers.length === 0) return;
 
@@ -217,7 +205,7 @@ function createHeading(level: number) {
           className: 'anchor',
         }),
       ],
-      children
+      children,
     );
   };
 
@@ -287,10 +275,7 @@ function CustomTabs({ className, ...props }: ComponentProps<typeof Tabs>) {
   return <Tabs className={cn('gap-0 [&_pre]:mt-0!', className)} {...props} />;
 }
 
-function CustomTabsList({
-  className,
-  ...props
-}: ComponentProps<typeof TabsList>) {
+function CustomTabsList({ className, ...props }: ComponentProps<typeof TabsList>) {
   return (
     <ScrollArea className='w-full border-2 border-b-0 border-neutral-400 bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800'>
       <TabsList className={cn('bg-inherit', className)} {...props} />

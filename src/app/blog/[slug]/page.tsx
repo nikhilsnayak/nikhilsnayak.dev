@@ -1,8 +1,6 @@
-import { Suspense, ViewTransition } from 'react';
 import type { Metadata } from 'next';
+import { Suspense, ViewTransition } from 'react';
 
-import { BASE_URL } from '~/lib/constants';
-import { formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { ScrollToHash } from '~/components/scroll-to-hash';
 import { Spinner } from '~/components/spinner';
@@ -11,10 +9,9 @@ import { HeartButton } from '~/features/blog/components/heart-button';
 import { Hearts } from '~/features/blog/components/hearts';
 import { SocialShare } from '~/features/blog/components/social-share';
 import { ViewsCount } from '~/features/blog/components/views';
-import {
-  getBlogMetadata,
-  getPostMetadataBySlug,
-} from '~/features/blog/functions/queries';
+import { getBlogMetadata, getPostMetadataBySlug } from '~/features/blog/functions/queries';
+import { BASE_URL } from '~/lib/constants';
+import { formatDate } from '~/lib/utils';
 
 export async function generateStaticParams() {
   const posts = await getBlogMetadata();
@@ -24,9 +21,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps<'/blog/[slug]'>): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
   const metadata = await getPostMetadataBySlug(slug);
   if (!metadata) {
@@ -65,9 +60,7 @@ export async function generateMetadata({
 export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
   const { slug } = await params;
 
-  const { default: Post, frontmatter: metadata } = await import(
-    `~/content/${slug}/post.mdx`
-  );
+  const { default: Post, frontmatter: metadata } = await import(`~/content/${slug}/post.mdx`);
 
   const { publishedAt, summary, title } = metadata;
 
@@ -94,9 +87,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
         }}
       />
       <ViewTransition name={slug}>
-        <h1 className='font-mono text-2xl font-semibold tracking-tighter text-balance'>
-          {title}
-        </h1>
+        <h1 className='font-mono text-2xl font-semibold tracking-tighter text-balance'>{title}</h1>
       </ViewTransition>
       <div className='mt-4 mb-8 flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400'>
         <p>{formatDate(publishedAt)}</p>
@@ -125,8 +116,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
       </article>
       <div className='mt-8 space-y-4'>
         <p className='dark:text-accent'>
-          If you enjoyed this blog, share it on social media to help others find
-          it too
+          If you enjoyed this blog, share it on social media to help others find it too
           <SocialShare title={title} slug={slug} />
         </p>
         <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
@@ -138,10 +128,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
       <div className='mt-8'>
         <ErrorBoundary fallback={<span>{"Couldn't load comments"}</span>}>
           <Suspense fallback={<Spinner variant='ellipsis' />}>
-            <h2
-              className='mb-4 font-mono text-xl font-bold sm:text-2xl'
-              id='comments'
-            >
+            <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl' id='comments'>
               Comments
             </h2>
             <ScrollToHash id='comments' />
