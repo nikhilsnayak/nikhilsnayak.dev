@@ -10,15 +10,13 @@
       "env": [
         "GOOGLE_API_KEY",
         "DATABASE_URL",
+        "BETTER_AUTH_URL",
         "AUTH_SECRET",
         "AUTH_GITHUB_ID",
         "AUTH_GITHUB_SECRET",
         "HASH_SECRET",
         "GITHUB_PERSONAL_ACCESS_TOKEN"
       ]
-    },
-    "type-check": {
-      "cache": true
     },
     "lint": {
       "cache": true

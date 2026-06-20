@@ -4,13 +4,14 @@
 
 ## Overview
 
-- **Package Manager and Runtime**: [Bun](https://bun.sh)
+- **Package Manager**: [Bun](https://bun.sh)
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
-- **Components**: [Shadcn UI](https://ui.shadcn.com/)
-- **Database**: [Neon](https://neon.tech/home)
+- **Design System**: [shadcn/ui](https://ui.shadcn.com/) with [Base UI](https://base-ui.com/)
+- **Database**: [Neon](https://neon.tech/home) in production, local [Postgres](https://www.postgresql.org/) via Docker in development
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
-- **Auth**: [Auth.js](https://authjs.dev/)
+- **Auth**: [Better Auth](https://www.better-auth.com/)
+- **Linting & Formatting**: [oxlint](https://oxc.rs/docs/guide/usage/linter) & [oxfmt](https://oxc.rs/docs/guide/usage/formatter)
 - **Deployment**: [Vercel](https://vercel.com)
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
 
@@ -29,9 +30,21 @@
    bun install
    ```
 
-3. Create a `.env.local` file based on the [`.env.example`](./.env.example) file.
+3. Create a `.env` file based on the [`.env.example`](./.env.example) file.
 
-4. Start the development server:
+4. Start the local database (Postgres + Neon proxy) using Docker:
+
+   ```bash
+   docker compose up -d
+   ```
+
+5. Apply the database schema:
+
+   ```bash
+   bun run db:push
+   ```
+
+6. Start the development server:
 
    ```bash
    bun run dev
