@@ -1,11 +1,27 @@
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import NextAuth from 'next-auth';
-import GitHub from 'next-auth/providers/github';
+import 'server-only';
+
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { nextCookies } from 'better-auth/next-js';
 
 import { db } from './db';
+import * as schema from './db/schema';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: DrizzleAdapter(db),
-  providers: [GitHub],
-  debug: process.env.NODE_ENV === 'development',
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: 'pg',
+    usePlural: true,
+    schema,
+  }),
+  secret: process.env.AUTH_SECRET,
+  socialProviders: {
+    github: {
+      clientId: process.env.AUTH_GITHUB_ID as string,
+      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
+    },
+  },
+  plugins: [nextCookies()],
 });
+
+export type Session = typeof auth.$Infer.Session;
+export type User = Session['user'];

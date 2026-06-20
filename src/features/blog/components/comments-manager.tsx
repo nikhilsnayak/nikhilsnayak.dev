@@ -9,9 +9,9 @@ import {
   useState,
 } from 'react';
 import { Pencil, Reply, Trash2 } from 'lucide-react';
-import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 
+import type { Session } from '~/lib/auth';
 import { formatDate } from '~/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';

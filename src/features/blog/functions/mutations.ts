@@ -2,6 +2,7 @@
 
 import 'server-only';
 
+import { headers } from 'next/headers';
 import { eq, sql } from 'drizzle-orm';
 
 import { auth } from '~/lib/auth';
@@ -79,7 +80,7 @@ export async function addHeart(
 export async function addComment(
   formData: FormData
 ): Promise<CommentWithoutReplies | { error: string }> {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user?.id) {
     return { error: 'Unauthorized' };
@@ -108,7 +109,7 @@ export async function addComment(
 export async function editComment(
   formData: FormData
 ): Promise<CommentWithoutReplies | { error: string }> {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user?.id) {
     return { error: 'Unauthorized' };
@@ -159,7 +160,7 @@ export async function editComment(
 export async function deleteComment(
   formData: FormData
 ): Promise<CommentWithoutReplies | { error: string }> {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user?.id) {
     return { error: 'Unauthorized' };

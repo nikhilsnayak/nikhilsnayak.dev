@@ -1,0 +1,57 @@
+Auth.js to Better Auth Schema Migration
+=======================================
+
+The `account` and `session` tables restructure incompatibly (renamed columns,
+new NOT NULL columns with no DB default, integer/timestamp/boolean type changes).
+drizzle-kit's "rename" choices either FAIL (invalid casts, NOT NULL adds on
+non-empty tables) or CORRUPT data (account.type holds "oauth", not the "github"
+that provider_id needs). These two tables only hold disposable OAuth state, so we
+recreate them and let users sign in again. The `user` table is PRESERVED (so
+existing comments keep their authors) — its changes are additive/castable.
+
+STEP 1 — drop the regenerable auth tables (run in the Neon SQL console):
+
+    DROP TABLE IF EXISTS "session";
+    DROP TABLE IF EXISTS "account";
+
+STEP 2 (optional pre-checks on the kept `user` table; both unlikely with GitHub):
+
+    SELECT email, count(*) FROM "user" GROUP BY email HAVING count(*) > 1;  -- email is now UNIQUE
+    SELECT count(*) FROM "user" WHERE name IS NULL;                          -- name is now NOT NULL
+
+STEP 3 — run `bun run db:push` and resolve each prompt as below.
+
+account  (recreated fresh — no column-rename prompts after STEP 1)
++ id, account_id, provider_id, user_id, access_token, refresh_token, id_token,
+  access_token_expires_at, refresh_token_expires_at, scope, password,
+  created_at, updated_at columns created
++ account_pkey (id) primary key created
++ user_id -> user(id) foreign key created (on delete cascade)
+--- table created ---
+
+session  (recreated fresh — no column-rename prompts after STEP 1)
++ id, token, expires_at, ip_address, user_agent, user_id,
+  created_at, updated_at columns created
++ session_pkey (id) primary key created
++ token unique constraint created
++ user_id -> user(id) foreign key created (on delete cascade)
+--- table created ---
+
+verification  (new table)
++ id, identifier, value, expires_at, created_at, updated_at columns created
+--- table created ---
+
+user  (preserved — choose CREATE, never RENAME)
++ user.email_verified column CREATED (boolean NOT NULL DEFAULT false)
+    -> choose "create column", NOT rename: old emailVerified is timestamp and
+       cannot be cast to boolean (push would fail). It was always NULL anyway.
+- user.emailVerified (old timestamp column) dropped
++ created_at column created (NOT NULL DEFAULT now())
++ updated_at column created (NOT NULL DEFAULT now())
+~ user.name set NOT NULL (existing rows have non-null name via GitHub login)
+~ user.email gains UNIQUE constraint
+--- all column conflicts resolved ---
+
+After STEP 3: existing users keep their row (and their comments). On next sign-in
+Better Auth recreates their account + session rows, matched to the existing user
+by email.

@@ -1,6 +1,9 @@
+import type { Route } from 'next';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
-import { auth, signIn, signOut } from '~/lib/auth';
+import { auth } from '~/lib/auth';
 import { FormSubmit } from '~/components/form-submit';
 import { Spinner } from '~/components/spinner';
 import { GithubIcon } from '~/assets/icons/github';
@@ -9,7 +12,7 @@ import { getCommentsBySlug } from '../functions/queries';
 import { CommentsManager } from './comments-manager';
 
 export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
   const initialComments = await getCommentsBySlug(slug);
 
   return (
@@ -20,7 +23,13 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
           <form
             action={async () => {
               'use server';
-              await signIn('github');
+              const { url } = await auth.api.signInSocial({
+                body: { provider: 'github', callbackURL: '/' },
+                headers: await headers(),
+              });
+              if (url) {
+                redirect(url as Route);
+              }
             }}
           >
             <FormSubmit pendingFallback={<Spinner />}>
@@ -37,7 +46,7 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
           <form
             action={async () => {
               'use server';
-              await signOut();
+              await auth.api.signOut({ headers: await headers() });
             }}
           >
             <FormSubmit pendingFallback={<Spinner />}>
