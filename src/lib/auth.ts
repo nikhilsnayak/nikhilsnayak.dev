@@ -20,6 +20,11 @@ export const auth = betterAuth({
       clientSecret: process.env.AUTH_GITHUB_SECRET as string,
     },
   },
+  account: {
+    accountLinking: {
+      trustedProviders: ['github'],
+    },
+  },
   plugins: [nextCookies()],
 });
 

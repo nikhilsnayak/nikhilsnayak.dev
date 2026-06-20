@@ -52,6 +52,34 @@ user  (preserved — choose CREATE, never RENAME)
 ~ user.email gains UNIQUE constraint
 --- all column conflicts resolved ---
 
-After STEP 3: existing users keep their row (and their comments). On next sign-in
-Better Auth recreates their account + session rows, matched to the existing user
-by email.
+STEP 4 — mark existing users as email-verified (run in the Neon SQL console
+AFTER STEP 3, once the email_verified column exists):
+
+    UPDATE "user" SET email_verified = true;
+
+    WHY THIS IS REQUIRED (account auto-linking):
+    Since STEP 1 dropped the account table, every preserved user has NO account
+    row. On their next GitHub sign-in Better Auth finds the existing user by email
+    and tries to auto-link the new GitHub account to it. Better Auth only links if:
+
+      (isTrustedProvider OR incoming-email-verified)
+        AND
+      (NOT requireLocalEmailVerified OR existing-user.email_verified)
+
+    `account.accountLinking.trustedProviders: ['github']` (set in src/lib/auth.ts)
+    satisfies the first clause, BUT `requireLocalEmailVerified` DEFAULTS TO true and
+    checks the EXISTING row's email_verified. STEP 3 creates that column as
+    NOT NULL DEFAULT false, so without this UPDATE every returning user would hit
+    ACCOUNT_NOT_LINKED (https://better-auth.com/docs/reference/errors/account_not_linked).
+    Setting it true is also accurate: these users authenticated via GitHub, which
+    only returns verified emails. (Alternative: set
+    account.accountLinking.requireLocalEmailVerified: false in src/lib/auth.ts — but
+    the UPDATE keeps the secure default for future users.)
+
+    At this point the DB contains only pre-existing (migrated) users, so the
+    unconditional UPDATE is correct. New users created after migration get their
+    email_verified from GitHub's response at sign-up, independent of this step.
+
+After STEP 4: existing users keep their row (and their comments). On next sign-in
+Better Auth links a fresh GitHub account + session to the existing user (matched
+by email) and signs them in normally.
