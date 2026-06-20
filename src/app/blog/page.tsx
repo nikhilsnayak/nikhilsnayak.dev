@@ -28,7 +28,7 @@ export default async function BlogsPage() {
   return (
     <section className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <h1 className='font-mono text-2xl font-medium tracking-tighter'>Blog</h1>
+        <h1 className='font-mono text-2xl font-medium tracking-tighter underline'>Blog</h1>
         <motion.a
           href='/rss.xml'
           target='_blank'

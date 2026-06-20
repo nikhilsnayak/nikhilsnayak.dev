@@ -71,7 +71,7 @@ export default async function HomePage() {
         <ul className='space-y-2 text-pretty'>
           <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <BunIcon className='inline size-3 dark:fill-[#ffffff]' />
+              <BunIcon className='inline size-3.5 dark:fill-[#ffffff]' />
               <a
                 href='https://bun.sh/'
                 target='_blank'
@@ -83,7 +83,7 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <TypescriptIcon className='inline size-3 fill-[#3178C6]' />
+              <TypescriptIcon className='inline size-3.5 fill-[#3178C6]' />
               <a
                 href='https://www.typescriptlang.org/'
                 target='_blank'
@@ -97,7 +97,7 @@ export default async function HomePage() {
           </li>
           <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <ReactJsIcon className='inline size-3 fill-[#61DAFB]' />
+              <ReactJsIcon className='inline size-3.5 fill-[#61DAFB]' />
               <a
                 href='https://react.dev/'
                 target='_blank'
@@ -109,7 +109,7 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <NextJsIcon className='inline size-3 dark:fill-[#ffffff]' />
+              <NextJsIcon className='inline size-3.5 dark:fill-[#ffffff]' />
               <a
                 href='https://nextjs.org/'
                 target='_blank'
@@ -123,7 +123,7 @@ export default async function HomePage() {
           </li>
           <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <TailwindCssIcon className='inline size-3 fill-[#06B6D4]' />
+              <TailwindCssIcon className='inline size-3.5 fill-[#06B6D4]' />
               <a
                 href='https://tailwindcss.com/'
                 target='_blank'
@@ -135,7 +135,7 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <BaseUiIcon className='inline size-3 dark:fill-[#ffffff]' />
+              <BaseUiIcon className='inline size-3.5 dark:fill-[#ffffff]' />
               <a
                 href='https://base-ui.com/'
                 target='_blank'
@@ -147,7 +147,7 @@ export default async function HomePage() {
             </span>
             =
             <span className='mx-2'>
-              <ShadcnUiIcon className='inline size-3 dark:fill-[#ffffff]' />
+              <ShadcnUiIcon className='inline size-3.5 dark:fill-[#ffffff]' />
               <a
                 href='https://ui.shadcn.com/'
                 target='_blank'
@@ -161,7 +161,7 @@ export default async function HomePage() {
           </li>
           <li className='border-2 border-dashed p-4'>
             <span className='mr-2'>
-              <PostgresqlIcon className='inline size-3 fill-[#4169E1]' />
+              <PostgresqlIcon className='inline size-3.5 fill-[#4169E1]' />
               <a
                 href='https://www.postgresql.org/'
                 target='_blank'
@@ -173,7 +173,7 @@ export default async function HomePage() {
             </span>
             +
             <span className='mx-2'>
-              <DrizzleOrmIcon className='inline size-3 fill-[#C5F74F]' />
+              <DrizzleOrmIcon className='inline size-3.5 fill-[#C5F74F]' />
               <a
                 href='https://orm.drizzle.team/'
                 target='_blank'

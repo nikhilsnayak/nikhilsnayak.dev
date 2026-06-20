@@ -128,7 +128,10 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
       <div className='mt-8'>
         <ErrorBoundary fallback={<span>{"Couldn't load comments"}</span>}>
           <Suspense fallback={<Spinner variant='ellipsis' />}>
-            <h2 className='mb-4 font-mono text-xl font-bold sm:text-2xl' id='comments'>
+            <h2
+              className='mb-4 font-mono text-xl font-medium tracking-tighter sm:text-2xl'
+              id='comments'
+            >
               Comments
             </h2>
             <ScrollToHash id='comments' />
