@@ -24,7 +24,10 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
             action={async () => {
               'use server';
               const { url } = await auth.api.signInSocial({
-                body: { provider: 'github', callbackURL: '/' },
+                body: {
+                  provider: 'github',
+                  callbackURL: `/blog/${slug}#comments`,
+                },
                 headers: await headers(),
               });
               if (url) {

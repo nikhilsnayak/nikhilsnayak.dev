@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { BASE_URL } from '~/lib/constants';
 import { formatDate } from '~/lib/utils';
 import { ErrorBoundary } from '~/components/error-boundary';
+import { ScrollToHash } from '~/components/scroll-to-hash';
 import { Spinner } from '~/components/spinner';
 import { CommentsSection } from '~/features/blog/components/comments-section';
 import { HeartButton } from '~/features/blog/components/heart-button';
@@ -143,6 +144,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
             >
               Comments
             </h2>
+            <ScrollToHash id='comments' />
             <CommentsSection slug={slug} />
           </Suspense>
         </ErrorBoundary>
