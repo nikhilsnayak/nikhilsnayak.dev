@@ -6,7 +6,7 @@ import { ViewTransition } from 'react';
 
 import { BlogStats } from '~/features/blog/components/blog-stats';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
-import { formatDate } from '~/lib/utils';
+import { formatDate, viewTransitionName } from '~/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -59,7 +59,7 @@ export default async function BlogsPage() {
                     <span>{formatDate(post.metadata.publishedAt)}</span>
                     <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
                   </p>
-                  <ViewTransition name={post.slug}>
+                  <ViewTransition name={viewTransitionName(post.slug)}>
                     <h2 className='font-mono text-lg font-semibold text-balance'>
                       {post.metadata.title}
                     </h2>

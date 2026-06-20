@@ -1,9 +1,9 @@
-import type { FormEvent, PropsWithChildren } from 'react';
+import type { PropsWithChildren, SubmitEventHandler } from 'react';
 
 export function AddTodoForm({
   onSubmit,
 }: Readonly<{
-  onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit?: SubmitEventHandler<HTMLFormElement>;
 }>) {
   return (
     <form onSubmit={onSubmit} className='mb-2 flex gap-2'>

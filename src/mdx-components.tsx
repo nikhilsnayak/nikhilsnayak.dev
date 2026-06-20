@@ -65,6 +65,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
 
   if (href?.startsWith('#')) {
     return (
+      // oxlint-disable-next-line jsx-a11y/anchor-has-content
       <a
         {...props}
         href={href}
@@ -77,6 +78,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
   }
 
   return (
+    // oxlint-disable-next-line jsx-a11y/anchor-has-content
     <a
       {...props}
       href={href}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, type FormEvent, type ReactNode } from 'react';
+import { SubmitEventHandler, useState, useTransition, type ReactNode } from 'react';
 
 import { continueConversation } from './functions';
 
@@ -14,10 +14,10 @@ export function GenUI() {
   const [messages, setMessages] = useState([] as Message[]);
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const query = formData.get('query')?.toString()?.trim();
+    const query = formData.get('query') as string;
     e.currentTarget.reset();
     if (!query) return;
 

@@ -1,6 +1,7 @@
 export function ShadcnUiIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
+      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
       role='img'
       viewBox='0 0 24 24'
       xmlns='http://www.w3.org/2000/svg'

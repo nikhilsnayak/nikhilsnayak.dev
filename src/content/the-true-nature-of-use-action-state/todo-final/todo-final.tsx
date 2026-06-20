@@ -1,6 +1,6 @@
 'use client';
 
-import { startTransition, useActionState, useOptimistic, type FormEvent } from 'react';
+import { startTransition, SubmitEventHandler, useActionState, useOptimistic } from 'react';
 
 import { List } from '~/components/list';
 
@@ -15,11 +15,11 @@ export default function TodoFinal() {
   const [todos, dispatch, isPending] = useActionState(todosReducerFinal, initialTodos);
   const [optimisticTodos, setOptimisticTodos] = useOptimistic(todos);
 
-  const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
+  const handleAddTodo: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const title = formData.get('title')!.toString();
+    const title = formData.get('title') as string;
     const id = crypto.randomUUID();
     const todo = { id, title, done: false };
     startTransition(() => {

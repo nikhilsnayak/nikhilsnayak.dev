@@ -41,6 +41,7 @@ function BreadcrumbLink({
   render?: React.ReactElement;
 }) {
   const element = useRender({
+    // oxlint-disable-next-line jsx-a11y/anchor-has-content jsx-a11y/anchor-is-valid
     render: render ?? <a />,
     props: {
       'data-slot': 'breadcrumb-link',
@@ -57,6 +58,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       data-slot='breadcrumb-page'
+      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
       role='link'
       aria-disabled='true'
       aria-current='page'

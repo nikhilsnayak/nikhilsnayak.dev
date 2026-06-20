@@ -30,7 +30,7 @@ export async function updateViewsBySlug(slug: string) {
 }
 
 export async function addHeart(prevState: HeartsInfo, formData: FormData): Promise<HeartsInfo> {
-  const slug = formData.get('slug')?.toString();
+  const slug = formData.get('slug') as string;
   if (!slug) {
     return prevState;
   }

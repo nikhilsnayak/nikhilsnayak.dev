@@ -11,7 +11,7 @@ import { SocialShare } from '~/features/blog/components/social-share';
 import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata, getPostMetadataBySlug } from '~/features/blog/functions/queries';
 import { BASE_URL } from '~/lib/constants';
-import { formatDate } from '~/lib/utils';
+import { formatDate, viewTransitionName } from '~/lib/utils';
 
 export async function generateStaticParams() {
   const posts = await getBlogMetadata();
@@ -86,7 +86,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           }),
         }}
       />
-      <ViewTransition name={slug}>
+      <ViewTransition name={viewTransitionName(slug)}>
         <h1 className='font-mono text-2xl font-semibold tracking-tighter text-balance'>{title}</h1>
       </ViewTransition>
       <div className='mt-4 mb-8 flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400'>

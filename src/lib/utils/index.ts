@@ -34,6 +34,14 @@ export function getBreadCrumbItems(path: string) {
     }));
 }
 
+export function viewTransitionName(slug: string) {
+  // `view-transition-name` must be a valid CSS <custom-ident>, which cannot
+  // start with a digit. Slugs like "2-years-..." would otherwise produce an
+  // invalid `::view-transition-group(...)` pseudo-element, so prefix to guarantee
+  // a valid identifier. Keep this consistent across all matching transitions.
+  return `vt-${slug.replace(/[^\w-]/g, '-')}`;
+}
+
 export function formatDate(date: Date) {
   return date.toLocaleString('en-us', {
     month: 'long',

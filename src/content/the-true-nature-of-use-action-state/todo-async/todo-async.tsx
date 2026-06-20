@@ -1,6 +1,6 @@
 'use client';
 
-import { startTransition, useActionState, type FormEvent } from 'react';
+import { startTransition, SubmitEventHandler, useActionState } from 'react';
 
 import { List } from '~/components/list';
 
@@ -14,11 +14,11 @@ const initialTodos = await getTodos();
 export default function TodoAsync() {
   const [todos, dispatch] = useActionState(todosReducerAsync, initialTodos);
 
-  const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
+  const handleAddTodo: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const title = formData.get('title')!.toString();
+    const title = formData.get('title') as string;
     const id = crypto.randomUUID();
     const todo = { id, title, done: false };
     startTransition(() => {

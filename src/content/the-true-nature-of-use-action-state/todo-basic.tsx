@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, type FormEvent } from 'react';
+import { SubmitEventHandler, useReducer } from 'react';
 
 import { List } from '~/components/list';
 
@@ -13,11 +13,11 @@ const initialTodos: Todo[] = [];
 export default function TodoBasic() {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos);
 
-  const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
+  const handleAddTodo: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const title = formData.get('title')!.toString();
+    const title = formData.get('title') as string;
     const id = crypto.randomUUID();
     const todo = { id, title, done: false };
     dispatch({ type: 'add', payload: { todo } });

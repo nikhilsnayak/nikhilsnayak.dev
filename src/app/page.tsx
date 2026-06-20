@@ -15,7 +15,7 @@ import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
 import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
-import { formatDate } from '~/lib/utils';
+import { formatDate, viewTransitionName } from '~/lib/utils';
 
 export default async function HomePage() {
   const recentPosts = await getBlogMetadata();
@@ -47,15 +47,15 @@ export default async function HomePage() {
           </h3>
           <div>
             <div className='relative border-l-3 pb-4 pl-4'>
-              <div className='absolute top-1 -left-[9px] size-4 animate-ping border-2 bg-green-500' />
-              <div className='absolute top-1 -left-[9px] size-4 border-2 bg-green-500' />
+              <div className='absolute top-1 left-[-9px] size-4 animate-ping border-2 bg-green-500' />
+              <div className='absolute top-1 left-[-9px] size-4 border-2 bg-green-500' />
               <p className='text-muted-foreground flex flex-col gap-1'>
                 <span className='font-medium'>Engineer - Software Development</span>
                 <time className='text-xs'>Nov 2024 - Present</time>
               </p>
             </div>
             <div className='relative border-l-3 pl-4'>
-              <div className='bg-background absolute top-1 -left-[9px] size-4 border-2' />
+              <div className='bg-background absolute top-1 left-[-9px] size-4 border-2' />
               <p className='text-muted-foreground flex flex-col gap-1'>
                 <span className='font-medium'>Trainee Engineer - Software Development</span>
                 <time className='text-xs'>Aug 2023 - Nov 2024</time>
@@ -213,7 +213,7 @@ export default async function HomePage() {
                   <span>{formatDate(post.metadata.publishedAt)}</span>
                   <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
                 </p>
-                <ViewTransition name={post.slug}>
+                <ViewTransition name={viewTransitionName(post.slug)}>
                   <h3 className='font-mono text-xl font-semibold text-balance'>
                     {post.metadata.title}
                   </h3>

@@ -10,7 +10,8 @@ type NavLinkProps = ComponentPropsWithoutRef<typeof Link>;
 
 export function NavLink({ className, href, ...props }: NavLinkProps) {
   const path = usePathname();
-  const isActive = path === href || (href !== '/' && path.startsWith(href + '/'));
+  const hrefStr = typeof href === 'string' ? href : href.href || '';
+  const isActive = path === hrefStr || (hrefStr !== '/' && path.startsWith(hrefStr + '/'));
 
   return (
     <div className='relative'>
