@@ -15,10 +15,14 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
 
   return (
     <div className='relative'>
-      <Link {...props} href={href} className={cn('font-semibold', className)} />
+      <Link
+        {...props}
+        href={href}
+        className={cn('press inline-block font-semibold transition-transform', className)}
+      />
       {isActive ? (
         <ViewTransition name='active-indicator'>
-          <div className='dark:bg-accent absolute right-0 -bottom-1 left-0 h-[2px] bg-current' />
+          <div className='bg-primary absolute right-0 -bottom-1 left-0 h-[2px]' />
         </ViewTransition>
       ) : null}
     </div>

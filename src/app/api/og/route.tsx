@@ -1,3 +1,6 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import { ImageResponse } from 'next/og';
 
 const WIDTH = 1200;
@@ -9,6 +12,7 @@ const COLORS = {
   textPrimary: '#FFFFFF',
   textSecondary: '#a0a0a0',
   textTertiary: '#707070',
+  accent: '#e1773b',
 } as const;
 
 function truncateText(text: string, maxLength: number): string {
@@ -30,12 +34,12 @@ export async function GET(request: Request) {
   const truncatedTitle = truncateText(title, 80);
   const fontSize = getFontSize(truncatedTitle);
 
-  const fontRegular = await fetch(new URL('./JetBrainsMono-Regular.ttf', import.meta.url)).then(
-    (res) => res.arrayBuffer(),
+  const fontRegular = await fs.readFile(
+    path.join(process.cwd(), 'src/app/api/og/JetBrainsMono-Regular.ttf'),
   );
 
-  const fontBold = await fetch(new URL('./JetBrainsMono-Bold.ttf', import.meta.url)).then((res) =>
-    res.arrayBuffer(),
+  const fontBold = await fs.readFile(
+    path.join(process.cwd(), 'src/app/api/og/JetBrainsMono-Bold.ttf'),
   );
 
   return new ImageResponse(
@@ -56,7 +60,7 @@ export async function GET(request: Request) {
           left: 200,
           width: 80,
           height: 80,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.3,
         }}
       />
@@ -67,7 +71,7 @@ export async function GET(request: Request) {
           left: 120,
           width: 40,
           height: 40,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.25,
         }}
       />
@@ -78,7 +82,7 @@ export async function GET(request: Request) {
           left: 400,
           width: 60,
           height: 60,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.2,
         }}
       />
@@ -89,7 +93,7 @@ export async function GET(request: Request) {
           left: 180,
           width: 50,
           height: 50,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.15,
         }}
       />
@@ -100,7 +104,7 @@ export async function GET(request: Request) {
           right: 300,
           width: 70,
           height: 70,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.22,
         }}
       />
@@ -111,7 +115,7 @@ export async function GET(request: Request) {
           right: 150,
           width: 35,
           height: 35,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.18,
         }}
       />
@@ -122,7 +126,7 @@ export async function GET(request: Request) {
           right: 250,
           width: 45,
           height: 45,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.2,
         }}
       />
@@ -133,7 +137,7 @@ export async function GET(request: Request) {
           right: 80,
           width: 55,
           height: 55,
-          backgroundColor: COLORS.backgroundSecondary,
+          backgroundColor: COLORS.accent,
           opacity: 0.16,
         }}
       />
@@ -150,10 +154,21 @@ export async function GET(request: Request) {
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            gap: 24,
             maxWidth: '900px',
           }}
         >
+          <div
+            style={{
+              width: 10,
+              height: fontSize,
+              backgroundColor: COLORS.accent,
+              flexShrink: 0,
+              marginTop: 8,
+            }}
+          />
           <div
             style={{
               display: 'flex',
@@ -163,7 +178,6 @@ export async function GET(request: Request) {
               color: COLORS.textPrimary,
               lineHeight: 1.2,
               fontFamily: 'JetBrains Mono',
-              marginBottom: 16,
               wordBreak: 'break-word',
             }}
           >
@@ -181,7 +195,7 @@ export async function GET(request: Request) {
           <div
             style={{
               fontSize: 16,
-              color: COLORS.textTertiary,
+              color: COLORS.accent,
               fontFamily: 'JetBrains Mono',
               letterSpacing: '0.02em',
             }}

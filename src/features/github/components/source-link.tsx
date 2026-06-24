@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 
 export function SourceLink() {
@@ -19,16 +18,14 @@ export function SourceLink() {
   }
 
   return (
-    <motion.a
+    <a
       href={href}
-      className='dark:text-accent block max-w-max text-xs tracking-tighter underline'
+      className='hover:text-primary block max-w-max text-xs tracking-tighter underline transition-colors'
       target='_blank'
       rel='noopener noreferrer'
       aria-label='source code'
-      whileHover={{ opacity: 0.8 }}
-      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
     >
       view source
-    </motion.a>
+    </a>
   );
 }

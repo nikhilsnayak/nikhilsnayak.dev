@@ -5,6 +5,7 @@ import { Suspense, ViewTransition } from 'react';
 import { BaseUiIcon } from '~/assets/icons/base-ui';
 import { BunIcon } from '~/assets/icons/bun';
 import { DrizzleOrmIcon } from '~/assets/icons/drizzle-orm';
+import { EffectIcon } from '~/assets/icons/effect';
 import { NextJsIcon } from '~/assets/icons/next-js';
 import { PostgresqlIcon } from '~/assets/icons/postgresql';
 import { ReactJsIcon } from '~/assets/icons/react-js';
@@ -46,16 +47,15 @@ export default async function HomePage() {
             </a>
           </h3>
           <div>
-            <div className='relative border-l-3 pb-4 pl-4'>
-              <div className='absolute top-1 left-[-9px] size-4 animate-ping border-2 bg-green-500' />
-              <div className='absolute top-1 left-[-9px] size-4 border-2 bg-green-500' />
+            <div className='relative border-l pb-4 pl-4'>
+              <div className='bg-foreground absolute top-1 -left-1.5 size-3 animate-[cursor-blink_1.2s_step-end_infinite]' />
               <p className='text-muted-foreground flex flex-col gap-1'>
                 <span className='font-medium'>Engineer - Software Development</span>
                 <time className='text-xs'>Nov 2024 - Present</time>
               </p>
             </div>
-            <div className='relative border-l-3 pl-4'>
-              <div className='bg-background absolute top-1 left-[-9px] size-4 border-2' />
+            <div className='relative border-l pl-4'>
+              <div className='bg-background absolute top-1 -left-1.5 size-3 border' />
               <p className='text-muted-foreground flex flex-col gap-1'>
                 <span className='font-medium'>Trainee Engineer - Software Development</span>
                 <time className='text-xs'>Aug 2023 - Nov 2024</time>
@@ -69,7 +69,7 @@ export default async function HomePage() {
           Tech Stack:
         </h2>
         <ul className='space-y-2 text-pretty'>
-          <li className='border-2 border-dashed p-4'>
+          <li className='border p-4'>
             <span className='mr-2'>
               <BunIcon className='inline size-3.5 dark:fill-[#ffffff]' />
               <a
@@ -93,9 +93,23 @@ export default async function HomePage() {
                 Typescript
               </a>
             </span>
-            for blazingly fast ⚡ dev exp and full stack type safety
+            for blazingly fast dev exp and full stack type safety
           </li>
-          <li className='border-2 border-dashed p-4'>
+          <li className='border p-4'>
+            <span className='mr-2'>
+              <EffectIcon className='inline size-3.5 dark:fill-[#ffffff]' />
+              <a
+                href='https://effect.website/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+              >
+                Effect
+              </a>
+            </span>
+            for writing robust, production-grade TypeScript
+          </li>
+          <li className='border p-4'>
             <span className='mr-2'>
               <ReactJsIcon className='inline size-3.5 fill-[#61DAFB]' />
               <a
@@ -121,7 +135,7 @@ export default async function HomePage() {
             </span>
             for powering interactive UIs at scale
           </li>
-          <li className='border-2 border-dashed p-4'>
+          <li className='border p-4'>
             <span className='mr-2'>
               <TailwindCssIcon className='inline size-3.5 fill-[#06B6D4]' />
               <a
@@ -157,9 +171,9 @@ export default async function HomePage() {
                 Shadcn UI
               </a>
             </span>
-            for consistent and accessible web
+            for consistent and accessible design system
           </li>
-          <li className='border-2 border-dashed p-4'>
+          <li className='border p-4'>
             <span className='mr-2'>
               <PostgresqlIcon className='inline size-3.5 fill-[#4169E1]' />
               <a
@@ -206,7 +220,7 @@ export default async function HomePage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className='group border-border block h-full transform space-y-4 overflow-hidden border p-4 shadow-xs transition-all duration-300 hover:translate-x-2 hover:shadow-sm'
+              className='group border-border hover:border-primary press block h-full space-y-4 overflow-hidden border p-4 transition'
             >
               <div className='space-y-1'>
                 <p className='text-muted-foreground flex items-center justify-between text-xs'>

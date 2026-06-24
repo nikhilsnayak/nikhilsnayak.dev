@@ -1,5 +1,4 @@
 import { ArrowUpRight, Rss } from 'lucide-react';
-import * as motion from 'motion/react-client';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ViewTransition } from 'react';
@@ -29,17 +28,15 @@ export default async function BlogsPage() {
     <section className='space-y-6'>
       <div className='flex items-center justify-between'>
         <h1 className='font-mono text-2xl font-medium tracking-tighter underline'>Blog</h1>
-        <motion.a
+        <a
           href='/rss.xml'
           target='_blank'
           rel='noopener noreferrer'
           aria-label='rss feed'
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+          className='hover:text-primary press inline-block transition'
         >
           <Rss />
-        </motion.a>
+        </a>
       </div>
 
       <BlogStats />
@@ -53,7 +50,7 @@ export default async function BlogsPage() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className='group border-border block h-full transform space-y-2 overflow-hidden border p-4 shadow-xs transition-all duration-250 hover:scale-105 hover:shadow-sm'
+                  className='group border-border hover:border-primary press block h-full space-y-2 overflow-hidden border p-4 transition'
                 >
                   <p className='text-muted-foreground flex items-center justify-between text-xs'>
                     <span>{formatDate(post.metadata.publishedAt)}</span>

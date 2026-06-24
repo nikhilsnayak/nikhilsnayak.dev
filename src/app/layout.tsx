@@ -107,23 +107,23 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                     <li className='border-r pr-3'>
                       <a
                         href='https://x.com/_nikhilsnayak_'
-                        className='hover:opacity-70'
+                        className='group press inline-block transition-transform'
                         target='_blank'
                         rel='noopener noreferrer'
                         aria-label='x.com'
                       >
-                        <XIcon className='dark:fill-accent size-4' />
+                        <XIcon className='group-hover:fill-primary size-4 transition-colors' />
                       </a>
                     </li>
                     <li>
                       <a
                         href='https://github.com/nikhilsnayak'
-                        className='hover:opacity-70'
+                        className='group press inline-block transition-transform'
                         target='_blank'
                         rel='noopener noreferrer'
                         aria-label='github'
                       >
-                        <GithubIcon className='dark:fill-accent size-4' />
+                        <GithubIcon className='group-hover:fill-primary size-4 transition-colors' />
                       </a>
                     </li>
                   </ul>
