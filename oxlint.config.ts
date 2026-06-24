@@ -18,4 +18,7 @@ export default defineConfig({
     typeAware: true,
     typeCheck: true,
   },
+  rules: {
+    'react/react-compiler': 'error',
+  },
 });
