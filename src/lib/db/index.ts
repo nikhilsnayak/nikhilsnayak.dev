@@ -23,7 +23,7 @@ const relations = defineRelations(schema, (r) => ({
 
 const connectionString = process.env.DATABASE_URL;
 
-if (process.env.NODE_ENV === 'production') {
+if (!process.env.USE_LOCAL_DB && process.env.NODE_ENV === 'production') {
   neonConfig.webSocketConstructor = WebSocket;
   neonConfig.poolQueryViaFetch = true;
 } else {

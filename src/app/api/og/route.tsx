@@ -2,6 +2,15 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { ImageResponse } from 'next/og';
+import { NextRequest } from 'next/server';
+
+const fontRegular = await fs.readFile(
+  path.join(process.cwd(), 'src/assets/fonts/JetBrainsMono-Regular.ttf'),
+);
+
+const fontBold = await fs.readFile(
+  path.join(process.cwd(), 'src/assets/fonts/JetBrainsMono-Bold.ttf'),
+);
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -28,19 +37,10 @@ function getFontSize(title: string): number {
   return 42;
 }
 
-export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const title = url.searchParams.get('title') ?? 'Blogs - Nikhil S';
+export async function GET(request: NextRequest) {
+  const title = request.nextUrl.searchParams.get('title') ?? 'Blogs - Nikhil S';
   const truncatedTitle = truncateText(title, 80);
   const fontSize = getFontSize(truncatedTitle);
-
-  const fontRegular = await fs.readFile(
-    path.join(process.cwd(), 'src/app/api/og/JetBrainsMono-Regular.ttf'),
-  );
-
-  const fontBold = await fs.readFile(
-    path.join(process.cwd(), 'src/app/api/og/JetBrainsMono-Bold.ttf'),
-  );
 
   return new ImageResponse(
     <div
