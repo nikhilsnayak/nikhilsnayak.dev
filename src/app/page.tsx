@@ -40,7 +40,7 @@ export default async function HomePage() {
               target='_blank'
               rel='noopener noreferrer'
               aria-label='codecraft technologies'
-              className='flex items-center gap-2 transition-all hover:opacity-80'
+              className='focus-ring flex items-center gap-2 transition-all hover:opacity-80'
             >
               CodeCraft Technologies
               <ArrowUpRight className='w-4' />
@@ -76,7 +76,7 @@ export default async function HomePage() {
                 href='https://bun.sh/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Bun
               </a>
@@ -88,7 +88,7 @@ export default async function HomePage() {
                 href='https://www.typescriptlang.org/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Typescript
               </a>
@@ -102,7 +102,7 @@ export default async function HomePage() {
                 href='https://effect.website/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Effect
               </a>
@@ -116,7 +116,7 @@ export default async function HomePage() {
                 href='https://react.dev/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 React
               </a>
@@ -128,7 +128,7 @@ export default async function HomePage() {
                 href='https://nextjs.org/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Next.js (App Router)
               </a>
@@ -142,7 +142,7 @@ export default async function HomePage() {
                 href='https://tailwindcss.com/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 TailwindCSS
               </a>
@@ -154,7 +154,7 @@ export default async function HomePage() {
                 href='https://base-ui.com/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Base UI
               </a>
@@ -166,7 +166,7 @@ export default async function HomePage() {
                 href='https://ui.shadcn.com/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Shadcn UI
               </a>
@@ -180,7 +180,7 @@ export default async function HomePage() {
                 href='https://www.postgresql.org/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 PostgreSQL
               </a>
@@ -192,7 +192,7 @@ export default async function HomePage() {
                 href='https://orm.drizzle.team/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
               >
                 Drizzle ORM
               </a>
@@ -204,7 +204,7 @@ export default async function HomePage() {
           In my free time, I{' '}
           <Link
             href='/blog'
-            className='underline underline-offset-2 transition-all hover:underline-offset-4'
+            className='focus-ring underline underline-offset-2 transition-all hover:underline-offset-4'
           >
             write
           </Link>{' '}
@@ -220,7 +220,7 @@ export default async function HomePage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className='group border-border hover:border-primary press block h-full space-y-4 overflow-hidden border p-4 transition'
+              className='group border-border hover:border-primary press focus-ring block h-full space-y-4 overflow-hidden border p-4 transition'
             >
               <div className='space-y-1'>
                 <p className='text-muted-foreground flex items-center justify-between text-xs'>

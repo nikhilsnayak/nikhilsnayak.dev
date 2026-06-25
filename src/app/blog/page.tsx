@@ -33,7 +33,7 @@ export default async function BlogsPage() {
           target='_blank'
           rel='noopener noreferrer'
           aria-label='rss feed'
-          className='hover:text-primary press inline-block transition'
+          className='hover:text-primary press focus-ring inline-block transition'
         >
           <Rss />
         </a>
@@ -50,7 +50,7 @@ export default async function BlogsPage() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className='group border-border hover:border-primary press block h-full space-y-2 overflow-hidden border p-4 transition'
+                  className='group border-border hover:border-primary press focus-ring block h-full space-y-2 overflow-hidden border p-4 transition'
                 >
                   <p className='text-muted-foreground flex items-center justify-between text-xs'>
                     <span>{formatDate(post.metadata.publishedAt)}</span>

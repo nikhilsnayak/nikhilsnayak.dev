@@ -91,7 +91,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                 <nav className='mx-auto flex max-w-(--breakpoint-lg) items-center justify-between border-b p-4'>
                   <a
                     href='#main-content'
-                    className='sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:p-2'
+                    className='focus-ring sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:p-2'
                   >
                     Skip to content
                   </a>
@@ -107,7 +107,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                     <li className='border-r pr-3'>
                       <a
                         href='https://x.com/_nikhilsnayak_'
-                        className='group press inline-block transition-transform'
+                        className='group press focus-ring inline-block transition-transform'
                         target='_blank'
                         rel='noopener noreferrer'
                         aria-label='x.com'
@@ -118,7 +118,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                     <li>
                       <a
                         href='https://github.com/nikhilsnayak'
-                        className='group press inline-block transition-transform'
+                        className='group press focus-ring inline-block transition-transform'
                         target='_blank'
                         rel='noopener noreferrer'
                         aria-label='github'

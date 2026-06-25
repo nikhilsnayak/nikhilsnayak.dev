@@ -198,7 +198,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
 }
 
@@ -267,6 +267,15 @@
     &:active {
       transform: scale(0.97);
     }
+  }
+}
+
+/* Consistent, branded keyboard-focus indicator. Opt-in per element (add the
+   `focus-ring` class), mirroring how `press` is applied — no global selector. */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 }
 

@@ -20,7 +20,7 @@ export function SourceLink() {
   return (
     <a
       href={href}
-      className='hover:text-primary block max-w-max text-xs tracking-tighter underline transition-colors'
+      className='hover:text-primary focus-ring block max-w-max text-xs tracking-tighter underline transition-colors'
       target='_blank'
       rel='noopener noreferrer'
       aria-label='source code'

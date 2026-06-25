@@ -54,7 +54,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
         {...props}
         href={{ pathname: href }}
         className={cn(
-          'underline underline-offset-2 transition-all hover:underline-offset-4',
+          'underline underline-offset-2 transition-all hover:underline-offset-4 focus-ring',
           props.className,
         )}
       >
@@ -70,7 +70,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
         {...props}
         href={href}
         className={cn(
-          'underline underline-offset-2 transition-all hover:underline-offset-4',
+          'underline underline-offset-2 transition-all hover:underline-offset-4 focus-ring',
           props.className,
         )}
       />
@@ -249,7 +249,7 @@ interface CollapsibleContentProps extends PropsWithChildren {
 function CollapsibleContent({ summary, children }: CollapsibleContentProps) {
   return (
     <details className='my-4'>
-      <summary className='cursor-pointer'>{summary}</summary>
+      <summary className='focus-ring cursor-pointer'>{summary}</summary>
       <div className='mt-2'>{children}</div>
     </details>
   );

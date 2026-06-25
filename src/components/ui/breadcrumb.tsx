@@ -45,7 +45,7 @@ function BreadcrumbLink({
     render: render ?? <a />,
     props: {
       'data-slot': 'breadcrumb-link',
-      className: cn('hover:text-foreground transition-colors', className),
+      className: cn('hover:text-foreground transition-colors focus-ring', className),
       ...props,
     },
     defaultTagName: 'a',

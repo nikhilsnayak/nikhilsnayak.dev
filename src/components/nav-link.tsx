@@ -18,7 +18,10 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
       <Link
         {...props}
         href={href}
-        className={cn('press inline-block font-semibold transition-transform', className)}
+        className={cn(
+          'press focus-ring inline-block font-semibold transition-transform',
+          className,
+        )}
       />
       {isActive ? (
         <ViewTransition name='active-indicator'>
