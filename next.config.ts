@@ -32,6 +32,7 @@ const nextConfig: NextConfig = {
     optimisticRouting: true,
     varyParams: true,
     useOffline: true,
+    useTypeScriptCli: true,
     turbopackRustReactCompiler: true,
     turbopackFileSystemCacheForBuild: true,
   },
