@@ -23,7 +23,6 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   experimental: {
-    appShells: true,
     inlineCss: true,
     viewTransition: true,
     prefetchInlining: true,
@@ -33,6 +32,7 @@ const nextConfig: NextConfig = {
     varyParams: true,
     useOffline: true,
     useTypeScriptCli: true,
+    requestInsights: true,
     turbopackRustReactCompiler: true,
     turbopackFileSystemCacheForBuild: true,
   },
