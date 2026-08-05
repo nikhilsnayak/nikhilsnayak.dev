@@ -24,7 +24,6 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   experimental: {
     inlineCss: true,
-    viewTransition: true,
     prefetchInlining: true,
     cachedNavigations: true,
     appNewScrollHandler: true,
