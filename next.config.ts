@@ -26,7 +26,6 @@ const nextConfig: NextConfig = {
     inlineCss: true,
     prefetchInlining: true,
     cachedNavigations: true,
-    appNewScrollHandler: true,
     optimisticRouting: true,
     varyParams: true,
     useOffline: true,
