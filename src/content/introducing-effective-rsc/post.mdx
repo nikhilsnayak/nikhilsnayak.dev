@@ -1,0 +1,197 @@
+---
+title: Introducing effective-rsc
+publishedAt: 2026-09-04
+summary: An Effect-native React Server Components framework for Bun, built on Rspack and the Navigation API.
+---
+
+import { NavigationDemo } from './navigation-demo';
+
+I just published
+[effective-rsc 0.1.0](https://github.com/nikhilsnayak/effective-rsc/releases/tag/v0.1.0).
+
+**React owns the UI. Effect owns the runtime.**
+
+Back in 2023, the mental model behind React Server Components immediately clicked with me. I
+ended up building [cosmos-rsc](https://github.com/nikhilsnayak/cosmos-rsc) and started writing a
+series about [building an RSC framework](/blog/build-your-own-rsc-framework-part-1). The series
+stopped at [part two](/blog/build-your-own-rsc-framework-part-2), but my interest in RSC never did.
+
+I had a similar reaction when I finally gave Effect a serious try. Effect gives the backend one
+model for services, errors, concurrency, cancellation, and resource lifetimes. This is especially
+useful when working with coding agents: there are fewer disconnected conventions for either the
+human or the agent to rediscover in every codebase.
+
+So I combined the tools I wanted to use:
+
+- [React Server Components](https://react.dev/reference/rsc/server-components) for the application
+  model
+- [Effect](https://effect.website/) for the runtime
+- [Rspack](https://rspack.rs/guide/integrations/rsc) for its native RSC integration
+- [Bun](https://bun.com/docs) as the server runtime
+- The [Navigation API](https://developer.mozilla.org/en-US/docs/Web/API/Navigation_API) for client
+  navigation
+
+That became **effective-rsc**.
+
+<Tweet id='2094718633125798127' />
+
+By the time this showed up in my feed, I was already deep into building it. Good advice. Slightly
+late.
+
+## What it looks like
+
+Pages are Effects with Schema-decoded route parameters. Routes and application services close at
+one composition point, and Server Functions use the same runtime while preserving React's
+protocol:
+
+<Tabs defaultValue='application.tsx'>
+
+<TabsList>
+  <TabsTrigger value='application.tsx'>application.tsx</TabsTrigger>
+  <TabsTrigger value='add-bookmark.ts'>add-bookmark.ts</TabsTrigger>
+</TabsList>
+
+<TabsContent value='application.tsx'>
+
+```tsx lineNumbers
+import { Effect, Schema } from 'effect';
+
+import { ERSC } from './ersc';
+import { RootLayout } from './root-layout';
+import { Bookmarks } from './services/bookmarks';
+
+const BookmarkPage = ERSC.Page.make({
+  params: Schema.Struct({ bookmarkId: Schema.NonEmptyString }),
+  render: Effect.fn('BookmarkPage')(function* ({ params }) {
+    const bookmarks = yield* Bookmarks;
+    const bookmark = yield* bookmarks.get(params.bookmarkId);
+
+    return <h1>{bookmark.title}</h1>;
+  }),
+});
+
+export default ERSC.make({
+  routes: ERSC.Routes.make({ layout: RootLayout }).page('/bookmarks/:bookmarkId', BookmarkPage),
+  layer: Bookmarks.layer,
+});
+```
+
+</TabsContent>
+
+<TabsContent value='add-bookmark.ts'>
+
+```tsx lineNumbers
+'use server';
+
+import { Effect, Schema } from 'effect';
+
+import { ERSC } from './ersc';
+import { Bookmarks } from './services/bookmarks';
+
+export const addBookmark = ERSC.ServerFn.make({
+  input: Schema.fromFormData(
+    Schema.Struct({
+      title: Schema.NonEmptyString,
+      url: Schema.URLFromString,
+    }),
+  ),
+  handler: Effect.fn('addBookmark')(function* (bookmark) {
+    const bookmarks = yield* Bookmarks;
+    yield* bookmarks.add(bookmark);
+  }),
+});
+```
+
+</TabsContent>
+
+</Tabs>
+
+Instead of awaiting work inside a Server Component, you can `yield*` it. Service requirements stay
+visible in the type, one application Layer provides the implementations, and the work stays
+attached to the request scope.
+
+If a request is aborted, its Effect work is interrupted and its resources are cleaned up. Server
+Functions run as Effects with Schema-validated input while continuing to use React's native
+`"use server"` protocol.
+
+If you already understand Effect and RSC, most of effective-rsc should feel familiar.
+
+The repository includes a
+[complete event platform](https://github.com/nikhilsnayak/effective-rsc/tree/main/examples/event-platform)
+that exercises nested routes, scoped middleware, Server Functions, Effect SQL, and View
+Transitions.
+
+## The client router
+
+The part I am most opinionated about is the client router.
+
+It is built directly on the browser Navigation API. Navigation settles when the destination
+reaches its first UI commit instead of waiting for the complete Flight stream. This keeps the URL,
+UI, Suspense, scroll, focus, and View Transitions coordinated while unfinished work continues
+streaming from the server.
+
+<NavigationDemo />
+
+There is no History API compatibility layer. If a browser lacks the Navigation API or
+`NavigationPrecommitController`, ERSC skips hydration. Links and native forms continue as a normal
+multi-page application, but Client Components are not interactive.
+
+That constraint let me build the router around the browser primitive I wanted instead of carrying
+an older navigation model into a new framework.
+
+## Try it
+
+```sh
+bunx create-ersc-app my-effective-rsc-app
+cd my-effective-rsc-app
+bun run dev
+```
+
+The package includes a combined
+[`LLMS.md`](https://github.com/nikhilsnayak/effective-rsc/blob/main/packages/effective-rsc/LLMS.md)
+reference that an agent can read before touching an application.
+
+Or paste this into a coding agent:
+
+```text noHighlight
+Create a small bookmark manager with effective-rsc.
+
+Start with:
+
+bunx create-ersc-app effective-bookmarks
+
+It should let me save bookmarks, list them, and open a page for each bookmark.
+```
+
+## About 0.1.0
+
+This is an experimental first release. It currently uses React Canary, Effect v4 RC, TypeScript 7,
+Rspack's RSC implementation, and modern browser APIs. Bun is the only supported server runtime.
+
+## Credits
+
+effective-rsc exists because of the work already done across React, Effect, Bun, and Rspack.
+
+[Rspack](https://github.com/web-infra-dev/rspack) and
+[`react-server-dom-rspack`](https://www.npmjs.com/package/react-server-dom-rspack) provide the
+native RSC compilation and transport. Special thanks to
+[Cong-Cong Pan](https://github.com/SyMind) for their work on Rspack's RSC implementation.
+
+The framework also learned from:
+
+- [rsc-html-stream](https://github.com/devongovett/rsc-html-stream) by
+  [Devon Govett](https://x.com/devongovett)
+- [Waku](https://github.com/wakujs/waku) by [Daishi Kato](https://x.com/dai_shi)
+- [Twofold](https://github.com/twofold-rsc/twofold) by
+  [Ryan Toronto](https://x.com/ryantotweets)
+- Next.js, Vite RSC, `rspack-rsc`, and `rsbuild-plugin-rsc`
+
+## Links
+
+- [GitHub](https://github.com/nikhilsnayak/effective-rsc)
+- [Documentation](https://github.com/nikhilsnayak/effective-rsc/tree/main/packages/effective-rsc/docs)
+- [Current limitations](https://github.com/nikhilsnayak/effective-rsc/blob/main/docs/ARCHITECTURE.md#known-limitations)
+- [Complete example application](https://github.com/nikhilsnayak/effective-rsc/tree/main/examples/event-platform)
+- [npm](https://www.npmjs.com/package/effective-rsc)
+
+<p>0.1.0 is available now. Try it and tell me where the model falls short.</p>
