@@ -1,4 +1,6 @@
+import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Suspense, ViewTransition } from 'react';
 
 import { ErrorBoundary } from '~/components/error-boundary';
@@ -39,7 +41,7 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
       title,
       description,
       type: 'article',
-      siteName: 'Nikhil S - Blog',
+      siteName: 'Nikhil S - Writing',
       publishedTime: publishedAt.toDateString(),
       url: `${BASE_URL}/blog/${slug}`,
       images: [
@@ -86,11 +88,20 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           }),
         }}
       />
+      <Link
+        href='/blog'
+        className='text-muted-foreground hover:text-foreground focus-ring mb-6 inline-flex items-center gap-2 text-sm underline-offset-4 hover:underline focus-visible:underline'
+      >
+        <ArrowLeft className='size-4' aria-hidden='true' />
+        All writing
+      </Link>
       <ViewTransition name={viewTransitionName(slug)}>
-        <h1 className='font-mono text-2xl font-semibold tracking-tighter text-balance'>{title}</h1>
+        <h1 className='max-w-3xl text-3xl leading-tight font-semibold tracking-tight text-pretty sm:text-4xl'>
+          {title}
+        </h1>
       </ViewTransition>
-      <div className='mt-4 mb-8 flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400'>
-        <p>{formatDate(publishedAt)}</p>
+      <div className='text-muted-foreground mt-4 mb-10 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:mb-12'>
+        <time dateTime={new Date(publishedAt).toISOString()}>{formatDate(publishedAt)}</time>
         <ErrorBoundary
           fallback={
             <ViewTransition enter='slide-up'>
@@ -111,27 +122,21 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <article className='prose dark:prose-invert min-w-full'>
+      <article className='prose dark:prose-invert prose-headings:font-mono prose-headings:font-medium prose-headings:tracking-tight min-w-full'>
         <Post />
       </article>
-      <div className='mt-8 space-y-4'>
-        <p>
-          If you enjoyed this blog, share it on social media to help others find it too
-          <SocialShare title={title} slug={slug} />
-        </p>
+      <div className='border-border/60 mt-10 flex flex-wrap items-center gap-6 border-t pt-3 text-sm'>
+        <SocialShare title={title} slug={slug} />
         <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
           <Suspense fallback={<HeartButton />}>
             <Hearts slug={slug} />
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className='mt-8'>
+      <div className='mt-10'>
         <ErrorBoundary fallback={<span>{"Couldn't load comments"}</span>}>
           <Suspense fallback={<Spinner variant='ellipsis' />}>
-            <h2
-              className='mb-4 font-mono text-xl font-medium tracking-tighter sm:text-2xl'
-              id='comments'
-            >
+            <h2 className='mb-6 font-mono text-xl font-medium tracking-tight' id='comments'>
               Comments
             </h2>
             <ScrollToHash id='comments' />

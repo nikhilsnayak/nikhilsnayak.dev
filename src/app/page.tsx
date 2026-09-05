@@ -2,20 +2,11 @@ import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense, ViewTransition } from 'react';
 
-import { BaseUiIcon } from '~/assets/icons/base-ui';
-import { BunIcon } from '~/assets/icons/bun';
-import { DrizzleOrmIcon } from '~/assets/icons/drizzle-orm';
-import { EffectIcon } from '~/assets/icons/effect';
-import { NextJsIcon } from '~/assets/icons/next-js';
-import { PostgresqlIcon } from '~/assets/icons/postgresql';
-import { ReactJsIcon } from '~/assets/icons/react-js';
-import { ShadcnUiIcon } from '~/assets/icons/shadcn-ui';
-import { TailwindCssIcon } from '~/assets/icons/tailwind-css';
-import { TypescriptIcon } from '~/assets/icons/typescript';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { Spinner } from '~/components/spinner';
-import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
+import { Contributions } from '~/features/github/components/contributions';
+import { BASE_URL } from '~/lib/constants';
 import { formatDate, viewTransitionName } from '~/lib/utils';
 
 export default async function HomePage() {
@@ -23,224 +14,184 @@ export default async function HomePage() {
 
   return (
     <section>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Person',
+            name: 'Nikhil S',
+            url: BASE_URL,
+            jobTitle: 'Software Engineer',
+            worksFor: {
+              '@type': 'Organization',
+              name: 'CodeCraft Technologies',
+              url: 'https://www.codecrafttech.com/',
+            },
+            sameAs: [
+              'https://github.com/nikhilsnayak',
+              'https://x.com/_nikhilsnayak_',
+              'https://www.linkedin.com/in/nikhilsnayak/',
+            ],
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
       <header>
         <h1 className='mb-3 text-3xl font-light sm:text-5xl'>
           <strong className='block font-bold'>Nikhil S</strong>
         </h1>
         <p className='mb-4 text-lg text-pretty sm:text-xl'>
-          {'Full-stack software engineer based in India, primarily working with React.'}
+          Software engineer building products and systems with TypeScript.
         </p>
-      </header>
-      <section className='mt-8 space-y-6'>
-        <h2 className='font-mono text-2xl font-medium tracking-tighter underline'>Experience:</h2>
-        <div>
-          <h3 className='hover:text-primary mb-2 inline-flex items-center gap-2 font-mono text-xl font-medium tracking-tighter'>
-            <a
-              href='https://www.codecrafttech.com/'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='codecraft technologies'
-              className='focus-ring flex items-center gap-2 transition-all hover:opacity-80'
-            >
-              CodeCraft Technologies
-              <ArrowUpRight className='w-4' />
-            </a>
-          </h3>
-          <div>
-            <div className='relative border-l pb-4 pl-4'>
-              <div className='bg-foreground absolute top-1 -left-1.5 size-3 animate-[cursor-blink_1.2s_step-end_infinite]' />
-              <p className='text-muted-foreground flex flex-col gap-1'>
-                <span className='font-medium'>Engineer - Software Development</span>
-                <time className='text-xs'>Nov 2024 - Present</time>
-              </p>
-            </div>
-            <div className='relative border-l pl-4'>
-              <div className='bg-background absolute top-1 -left-1.5 size-3 border' />
-              <p className='text-muted-foreground flex flex-col gap-1'>
-                <span className='font-medium'>Trainee Engineer - Software Development</span>
-                <time className='text-xs'>Aug 2023 - Nov 2024</time>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className='mt-8 space-y-4'>
-        <h2 className='mb-4 font-mono text-2xl font-medium tracking-tighter underline'>
-          Tech Stack:
-        </h2>
-        <ul className='space-y-2 text-pretty'>
-          <li className='border p-4'>
-            <span className='mr-2'>
-              <BunIcon className='inline size-3.5 dark:fill-[#ffffff]' />
-              <a
-                href='https://bun.sh/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Bun
-              </a>
-            </span>
-            +
-            <span className='mx-2'>
-              <TypescriptIcon className='inline size-3.5 fill-[#3178C6]' />
-              <a
-                href='https://www.typescriptlang.org/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Typescript
-              </a>
-            </span>
-            for blazingly fast dev exp and full stack type safety
-          </li>
-          <li className='border p-4'>
-            <span className='mr-2'>
-              <EffectIcon className='inline size-3.5 dark:fill-[#ffffff]' />
-              <a
-                href='https://effect.website/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Effect
-              </a>
-            </span>
-            for writing robust, production-grade TypeScript
-          </li>
-          <li className='border p-4'>
-            <span className='mr-2'>
-              <ReactJsIcon className='inline size-3.5 fill-[#61DAFB]' />
-              <a
-                href='https://react.dev/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                React
-              </a>
-            </span>
-            +
-            <span className='mx-2'>
-              <NextJsIcon className='inline size-3.5 dark:fill-[#ffffff]' />
-              <a
-                href='https://nextjs.org/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Next.js (App Router)
-              </a>
-            </span>
-            for powering interactive UIs at scale
-          </li>
-          <li className='border p-4'>
-            <span className='mr-2'>
-              <TailwindCssIcon className='inline size-3.5 fill-[#06B6D4]' />
-              <a
-                href='https://tailwindcss.com/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                TailwindCSS
-              </a>
-            </span>
-            +
-            <span className='mx-2'>
-              <BaseUiIcon className='inline size-3.5 dark:fill-[#ffffff]' />
-              <a
-                href='https://base-ui.com/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Base UI
-              </a>
-            </span>
-            =
-            <span className='mx-2'>
-              <ShadcnUiIcon className='inline size-3.5 dark:fill-[#ffffff]' />
-              <a
-                href='https://ui.shadcn.com/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Shadcn UI
-              </a>
-            </span>
-            for consistent and accessible design system
-          </li>
-          <li className='border p-4'>
-            <span className='mr-2'>
-              <PostgresqlIcon className='inline size-3.5 fill-[#4169E1]' />
-              <a
-                href='https://www.postgresql.org/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                PostgreSQL
-              </a>
-            </span>
-            +
-            <span className='mx-2'>
-              <DrizzleOrmIcon className='inline size-3.5 fill-[#C5F74F]' />
-              <a
-                href='https://orm.drizzle.team/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring ml-1 font-medium underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Drizzle ORM
-              </a>
-            </span>
-            for flexible and type safe data storage
-          </li>
-        </ul>
-        <p className='text-lg sm:text-xl'>
-          In my free time, I{' '}
-          <Link
-            href='/blog'
-            className='focus-ring underline underline-offset-2 transition-all hover:underline-offset-4'
+        <p className='mb-4 max-w-prose text-pretty'>
+          I like owning products end-to-end. When an abstraction gets in the way, I tend to
+          understand and improve the layer underneath it.
+        </p>
+        <p className='text-muted-foreground text-sm'>
+          Software Engineer at{' '}
+          <a
+            href='https://www.codecrafttech.com/'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-foreground focus-ring underline underline-offset-2 transition-all hover:underline-offset-4'
           >
-            write
-          </Link>{' '}
-          about these technologies, breaking down complex concepts from the ground up.
+            CodeCraft Technologies
+          </a>{' '}
+          · India · 2023 - present
         </p>
-      </section>
-      <section className='mt-8'>
-        <h2 className='mb-6 font-mono text-2xl font-medium tracking-tighter underline'>
-          Recent Posts:
-        </h2>
-        <div className='space-y-8'>
-          {recentPosts.slice(0, 2).map((post) => (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className='group border-border hover:border-primary press focus-ring block h-full space-y-4 overflow-hidden border p-4 transition'
-            >
-              <div className='space-y-1'>
-                <p className='text-muted-foreground flex items-center justify-between text-xs'>
-                  <span>{formatDate(post.metadata.publishedAt)}</span>
-                  <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
-                </p>
-                <ViewTransition name={viewTransitionName(post.slug)}>
-                  <h3 className='font-mono text-xl font-semibold text-balance'>
-                    {post.metadata.title}
-                  </h3>
-                </ViewTransition>
-              </div>
-              <ErrorBoundary fallback={<p className='w-max text-sm'>{"Couldn't load views"}</p>}>
-                <Suspense fallback={<Spinner variant='ellipsis' />}>
-                  <ViewsCount slug={post.slug} />
-                </Suspense>
-              </ErrorBoundary>
-            </Link>
+        <ul className='text-muted-foreground mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm'>
+          {[
+            { label: 'GitHub', href: 'https://github.com/nikhilsnayak' },
+            { label: 'X', href: 'https://x.com/_nikhilsnayak_' },
+            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/nikhilsnayak/' },
+            { label: 'Email', href: 'mailto:nikhilsrinivasnayak@gmail.com' },
+          ].map(({ label, href }, index) => (
+            <li key={label} className='flex items-center gap-3'>
+              {index > 0 ? <span aria-hidden='true'>·</span> : null}
+              <a
+                href={href}
+                target={href.startsWith('https:') ? '_blank' : undefined}
+                rel={href.startsWith('https:') ? 'noopener noreferrer' : undefined}
+                className='hover:text-foreground focus-ring underline underline-offset-4'
+              >
+                {label}
+              </a>
+            </li>
           ))}
+        </ul>
+      </header>
+      <section className='mt-12 space-y-6 sm:mt-16'>
+        <h2 className='font-mono text-xl font-medium tracking-tight'>Selected Work</h2>
+        <div className='divide-border/60 divide-y'>
+          <article className='space-y-3 pb-7'>
+            <h3 className='font-mono text-lg font-semibold'>effective-rsc</h3>
+            <p className='font-medium'>
+              An Effect-native React Server Components framework for Bun.
+            </p>
+            <p className='text-muted-foreground max-w-prose text-sm leading-relaxed text-pretty'>
+              An experimental framework that brings Effect's services, concurrency and resource
+              management into React Server Components and native Server Functions. Built on Rspack
+              and the Navigation API.
+            </p>
+            <p className='text-muted-foreground text-xs leading-relaxed'>
+              Request-scoped runtime · Streamed navigation · Schema-validated Server Functions
+            </p>
+            <div className='flex flex-wrap gap-x-5 gap-y-2 text-sm'>
+              <a
+                href='https://github.com/nikhilsnayak/effective-rsc'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
+              >
+                Source <ArrowUpRight className='size-4' aria-hidden='true' />
+              </a>
+              <Link
+                href='/blog/introducing-effective-rsc'
+                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
+              >
+                Introduction <ArrowUpRight className='size-4' aria-hidden='true' />
+              </Link>
+            </div>
+          </article>
+          <article className='space-y-3 pt-7'>
+            <h3 className='font-mono text-lg font-semibold'>Tether</h3>
+            <p className='font-medium'>A private, account-free room for two people.</p>
+            <p className='text-muted-foreground max-w-prose text-sm leading-relaxed text-pretty'>
+              An experimental calling app with peer-to-peer video, audio and chat. Share a link and
+              approve your guest, with a shared 3D room on web and desktop. Once connected, the call
+              continues directly between devices without the signaling server.
+            </p>
+            <p className='text-muted-foreground text-xs leading-relaxed'>
+              WebRTC · Effect · React Three Fiber · Web, desktop and mobile
+            </p>
+            <div className='flex flex-wrap gap-x-5 gap-y-2 text-sm'>
+              <a
+                href='https://tether.nikhilsnayak.dev'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
+              >
+                Open Tether <ArrowUpRight className='size-4' aria-hidden='true' />
+              </a>
+              <a
+                href='https://github.com/nikhilsnayak/tether'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
+              >
+                Source <ArrowUpRight className='size-4' aria-hidden='true' />
+              </a>
+            </div>
+          </article>
         </div>
+      </section>
+      <section className='mt-12 sm:mt-16'>
+        <h2 className='mb-6 font-mono text-xl font-medium tracking-tight'>Writing</h2>
+        <ul className='space-y-6'>
+          {recentPosts.slice(0, 3).map((post) => (
+            <li key={post.slug} className='space-y-1'>
+              <time
+                dateTime={post.metadata.publishedAt.toISOString()}
+                className='text-muted-foreground text-xs'
+              >
+                {formatDate(post.metadata.publishedAt)}
+              </time>
+              <ViewTransition name={viewTransitionName(post.slug)}>
+                <h3 className='font-medium text-pretty'>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className='focus-ring underline-offset-4 hover:underline focus-visible:underline'
+                  >
+                    {post.metadata.title}
+                  </Link>
+                </h3>
+              </ViewTransition>
+              <p className='text-muted-foreground max-w-prose text-sm leading-relaxed text-pretty'>
+                {post.metadata.summary}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <Link
+          href='/blog'
+          className='focus-ring mt-6 inline-flex items-center gap-1 text-sm underline underline-offset-2 transition-all hover:underline-offset-4'
+        >
+          All writing <ArrowUpRight className='size-4' aria-hidden='true' />
+        </Link>
+      </section>
+      <section className='mt-12 space-y-6 sm:mt-16'>
+        <h2 className='font-mono text-xl font-medium tracking-tight'>Open Source</h2>
+        <ErrorBoundary
+          fallback={
+            <p className='text-muted-foreground text-xs leading-relaxed'>
+              Contributions are unavailable right now. Please check back later.
+            </p>
+          }
+        >
+          <Suspense fallback={<Spinner variant='ellipsis' />}>
+            <Contributions />
+          </Suspense>
+        </ErrorBoundary>
       </section>
     </section>
   );

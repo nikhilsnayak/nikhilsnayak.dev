@@ -20,12 +20,12 @@ export function SourceLink() {
   return (
     <a
       href={href}
-      className='hover:text-primary focus-ring block max-w-max text-xs tracking-tighter underline transition-colors'
+      className='hover:text-foreground focus-ring underline-offset-4 hover:underline focus-visible:underline'
       target='_blank'
       rel='noopener noreferrer'
       aria-label='source code'
     >
-      view source
+      Source
     </a>
   );
 }

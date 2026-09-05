@@ -85,7 +85,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
       target='_blank'
       rel='noopener noreferrer'
       className={cn(
-        'underline underline-offset-2 transition-all hover:underline-offset-4',
+        'underline underline-offset-2 transition-all hover:underline-offset-4 focus-ring',
         props.className,
       )}
     />
@@ -176,13 +176,13 @@ function Pre(props: Readonly<PreProps>) {
 
   return (
     <pre
-      className='relative rounded-none! border-2 border-neutral-400 bg-neutral-200 p-0! dark:border-neutral-600 dark:bg-neutral-800'
+      className='border-border bg-muted/50 relative rounded-none! border p-0!'
       data-line-numbers={lineNumbers}
     >
       {filename ? (
-        <h6 className='text-foreground sticky top-0 right-0 left-0 overflow-hidden border-b-2 border-neutral-400 px-2 py-1 dark:border-neutral-600'>
+        <div className='border-border text-muted-foreground sticky top-0 right-0 left-0 overflow-hidden border-b px-4 py-2 font-mono text-xs font-normal'>
           {filename}
-        </h6>
+        </div>
       ) : null}
       {cloneElement(children, {
         highlightedLines: getLineNumbers(highlight),
@@ -204,7 +204,8 @@ function createHeading(level: number) {
         createElement('a', {
           href: `#${slug}`,
           key: `link-${slug}`,
-          className: 'anchor',
+          className: 'anchor focus-ring',
+          'aria-label': `Link to ${children}`,
         }),
       ],
       children,
@@ -239,7 +240,11 @@ function Snippet({ children }: PropsWithChildren) {
 }
 
 function Preview({ children }: PropsWithChildren) {
-  return <TabsContent value='preview'>{children}</TabsContent>;
+  return (
+    <TabsContent value='preview' className='not-prose'>
+      {children}
+    </TabsContent>
+  );
 }
 
 interface CollapsibleContentProps extends PropsWithChildren {
@@ -279,7 +284,7 @@ function CustomTabs({ className, ...props }: ComponentProps<typeof Tabs>) {
 
 function CustomTabsList({ className, ...props }: ComponentProps<typeof TabsList>) {
   return (
-    <ScrollArea className='w-full border-2 border-b-0 border-neutral-400 bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800'>
+    <ScrollArea className='border-border bg-muted/50 w-full border border-b-0'>
       <TabsList className={cn('bg-inherit', className)} {...props} />
       <ScrollBar orientation='horizontal' />
     </ScrollArea>

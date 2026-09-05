@@ -1,4 +1,3 @@
-import { Eye, Heart, MessageCircle } from 'lucide-react';
 import { cacheLife } from 'next/cache';
 
 import { NumberFormatter } from '~/lib/utils';
@@ -12,31 +11,10 @@ export async function BlogStats() {
 
   const { totalComments, totalHearts, totalViews } = await getBlogStats();
 
-  const stats = [
-    {
-      icon: <Eye className='size-4 text-blue-500' />,
-      value: totalViews,
-    },
-    {
-      icon: <Heart className='size-4 text-red-500' />,
-      value: totalHearts,
-    },
-    {
-      icon: <MessageCircle className='size-4 text-emerald-500' />,
-      value: totalComments,
-    },
-  ];
-
   return (
-    <div className='flex items-center gap-6'>
-      {stats.map((stat, index) => (
-        <div key={index} className='flex items-center gap-2'>
-          {stat.icon}
-          <span className='text-muted-foreground cursor-default font-mono leading-4 font-semibold'>
-            {NumberFormatter.format(stat.value)}
-          </span>
-        </div>
-      ))}
-    </div>
+    <p className='text-muted-foreground text-xs leading-relaxed tabular-nums'>
+      {NumberFormatter.format(totalViews)} views · {NumberFormatter.format(totalHearts)} likes ·{' '}
+      {NumberFormatter.format(totalComments)} comments
+    </p>
   );
 }

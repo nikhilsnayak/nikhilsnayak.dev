@@ -6,16 +6,14 @@ import { ThemeProvider } from 'next-themes';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ViewTransition } from 'react';
 
-import { GithubIcon } from '~/assets/icons/github';
-import { XIcon } from '~/assets/icons/x';
 import { NavLink } from '~/components/nav-link';
 import { ThemeToggle } from '~/components/theme-toggle';
 import { Toaster } from '~/components/ui/sonner';
-import { LanguageStats } from '~/features/github/components/language-stats';
-import { LatestCommit } from '~/features/github/components/latest-commit';
 import { SourceLink } from '~/features/github/components/source-link';
 import { BASE_URL } from '~/lib/constants';
 import { cn } from '~/lib/utils';
+
+import backgroundStyles from './page-background.module.css';
 
 const geistSans = Geist({
   variable: '--font-sans',
@@ -27,16 +25,20 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const siteTitle = 'Nikhil S | Software Engineer';
+const siteDescription =
+  'Software engineer building products and systems with TypeScript, React and Effect. Creator of effective-rsc and Tether. Open source and technical writing.';
+
 export const metadata: Metadata = {
   title: {
-    default: 'Nikhil S',
+    default: siteTitle,
     template: '%s | Nikhil S',
   },
-  description: 'Software Engineer from India',
+  description: siteDescription,
   metadataBase: new URL(BASE_URL),
   openGraph: {
-    title: 'Nikhil S',
-    description: 'Software Engineer from India',
+    title: siteTitle,
+    description: siteDescription,
     url: BASE_URL,
     siteName: 'Nikhil S',
     locale: 'en_IN',
@@ -60,10 +62,10 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: 'Nikhil S',
+    title: siteTitle,
     card: 'summary_large_image',
     creator: '@_nikhilsnayak_',
-    description: 'Software Engineer from India',
+    description: siteDescription,
     site: BASE_URL,
   },
 };
@@ -79,7 +81,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             'bg-background text-foreground relative font-sans antialiased',
           )}
         >
-          <div id='root' className='isolate flex h-full flex-col'>
+          <div id='root' className={cn(backgroundStyles.background, 'flex min-h-dvh flex-col')}>
             <ThemeProvider
               attribute='class'
               defaultTheme='system'
@@ -100,31 +102,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                       <NavLink href='/'>home</NavLink>
                     </li>
                     <li>
-                      <NavLink href='/blog'>blog</NavLink>
-                    </li>
-                  </ul>
-                  <ul className='flex items-center gap-3'>
-                    <li className='border-r pr-3'>
-                      <a
-                        href='https://x.com/_nikhilsnayak_'
-                        className='group press focus-ring inline-block transition-transform'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        aria-label='x.com'
-                      >
-                        <XIcon className='group-hover:fill-primary size-4 transition-colors' />
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href='https://github.com/nikhilsnayak'
-                        className='group press focus-ring inline-block transition-transform'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        aria-label='github'
-                      >
-                        <GithubIcon className='group-hover:fill-primary size-4 transition-colors' />
-                      </a>
+                      <NavLink href='/blog'>writing</NavLink>
                     </li>
                   </ul>
                 </nav>
@@ -135,15 +113,49 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
               >
                 {children}
               </main>
-              <footer className='mx-auto w-full max-w-(--breakpoint-lg) space-y-6 border-t p-4'>
+              <footer className='mx-auto mt-8 w-full max-w-(--breakpoint-lg) border-t p-4'>
                 <div className='flex items-center justify-between gap-6'>
-                  <div className='space-y-2'>
+                  <div className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-3 text-xs'>
                     <SourceLink />
-                    <LatestCommit />
+                    <a
+                      href='https://github.com/nikhilsnayak'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='hover:text-foreground focus-ring underline-offset-4 hover:underline focus-visible:underline'
+                    >
+                      GitHub
+                    </a>
+                    <a
+                      href='https://x.com/_nikhilsnayak_'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='hover:text-foreground focus-ring underline-offset-4 hover:underline focus-visible:underline'
+                    >
+                      X
+                    </a>
+                    <a
+                      href='https://www.linkedin.com/in/nikhilsnayak/'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='hover:text-foreground focus-ring underline-offset-4 hover:underline focus-visible:underline'
+                    >
+                      LinkedIn
+                    </a>
+                    <a
+                      href='mailto:nikhilsrinivasnayak@gmail.com'
+                      className='hover:text-foreground focus-ring underline-offset-4 hover:underline focus-visible:underline'
+                    >
+                      Email
+                    </a>
+                    <a
+                      href={`${BASE_URL}/rss.xml`}
+                      className='hover:text-foreground focus-ring underline-offset-4 hover:underline focus-visible:underline'
+                    >
+                      RSS
+                    </a>
                   </div>
                   <ThemeToggle />
                 </div>
-                <LanguageStats />
               </footer>
             </ThemeProvider>
             <SpeedInsights />

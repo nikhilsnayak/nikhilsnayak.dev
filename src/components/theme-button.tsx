@@ -22,17 +22,21 @@ export function ThemeButton({ type, children }: Readonly<ThemeButtonProps>) {
       {isActive && (
         <motion.div
           layoutId='activeThemeIndicator'
-          className='bg-background absolute inset-0'
+          className='bg-muted absolute inset-0'
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
         />
       )}
       <Button
         variant='ghost'
         size='icon'
+        aria-pressed={isActive}
+        aria-label={`${type === 'system' ? 'System' : type === 'dark' ? 'Dark' : 'Light'} theme`}
         onClick={() => setTheme(type)}
-        className={cn('hover:bg-background/40! relative z-10 p-2 transition-colors duration-200')}
+        className={cn(
+          'relative z-10 p-2 transition-colors duration-200',
+          isActive ? 'text-foreground' : 'text-muted-foreground',
+        )}
       >
-        <span className='sr-only'>{type}</span>
         {children}
       </Button>
     </div>

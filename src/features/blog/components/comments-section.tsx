@@ -1,11 +1,8 @@
-import { LogOut } from 'lucide-react';
 import type { Route } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { GithubIcon } from '~/assets/icons/github';
 import { FormSubmit } from '~/components/form-submit';
-import { Spinner } from '~/components/spinner';
 import { auth } from '~/lib/auth';
 
 import { getCommentsBySlug } from '../functions/queries';
@@ -16,44 +13,46 @@ export async function CommentsSection({ slug }: Readonly<{ slug: string }>) {
   const initialComments = await getCommentsBySlug(slug);
 
   return (
-    <div className='space-y-8'>
+    <div className='max-w-(--breakpoint-sm) space-y-6'>
       {!session?.user ? (
-        <div className='space-y-2'>
-          <p>Please sign in to comment.</p>
-          <form
-            action={async () => {
-              'use server';
-              const { url } = await auth.api.signInSocial({
-                body: {
-                  provider: 'github',
-                  callbackURL: `/blog/${slug}#comments`,
-                },
-                headers: await headers(),
-              });
-              if (url) {
-                redirect(url as Route);
-              }
-            }}
+        <form
+          action={async () => {
+            'use server';
+            const { url } = await auth.api.signInSocial({
+              body: {
+                provider: 'github',
+                callbackURL: `/blog/${slug}#comments`,
+              },
+              headers: await headers(),
+            });
+            if (url) {
+              redirect(url as Route);
+            }
+          }}
+        >
+          <FormSubmit
+            variant='link'
+            className='text-muted-foreground hover:text-foreground h-auto p-0 text-sm leading-6 font-normal underline underline-offset-4'
+            pendingFallback={<output className='w-full text-left'>Signing in…</output>}
           >
-            <FormSubmit pendingFallback={<Spinner />}>
-              <span className='flex items-center gap-2'>
-                <GithubIcon />
-                <span>Sign in with GitHub</span>
-              </span>
-            </FormSubmit>
-          </form>
-        </div>
+            Sign in with GitHub to comment
+          </FormSubmit>
+        </form>
       ) : (
-        <div className='flex items-center gap-2'>
-          <p>You are signed in as {session.user.name}.</p>
+        <div className='text-muted-foreground flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm leading-6'>
+          <p>Signed in as {session.user.name}</p>
           <form
             action={async () => {
               'use server';
               await auth.api.signOut({ headers: await headers() });
             }}
           >
-            <FormSubmit pendingFallback={<Spinner />}>
-              <LogOut />
+            <FormSubmit
+              variant='link'
+              className='text-muted-foreground hover:text-foreground h-auto min-w-20 justify-start p-0 text-sm leading-6 font-normal underline underline-offset-4'
+              pendingFallback={<output className='w-full text-left'>Signing out…</output>}
+            >
+              Sign out
             </FormSubmit>
           </form>
         </div>

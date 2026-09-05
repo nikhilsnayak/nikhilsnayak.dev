@@ -16,24 +16,6 @@ export function slugify(str: string) {
     .replace(/--+/g, '-'); // Replace multiple - with single -
 }
 
-function deslugify(str: string) {
-  return str
-    .replace(/-and-/g, ' & ') // Replace '-and-' with '&'
-    .replace(/-/g, ' ') // Replace hyphens with spaces
-    .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize the first letter of each word
-    .trim(); // Remove whitespace from both ends of a string
-}
-
-export function getBreadCrumbItems(path: string) {
-  return path
-    .split('/')
-    .filter(Boolean)
-    .map((part, i, parts) => ({
-      label: deslugify(part),
-      pathname: i < parts.length - 1 ? '/' + parts.slice(0, i + 1).join('/') : undefined,
-    }));
-}
-
 export function viewTransitionName(slug: string) {
   // `view-transition-name` must be a valid CSS <custom-ident>, which cannot
   // start with a digit. Slugs like "2-years-..." would otherwise produce an

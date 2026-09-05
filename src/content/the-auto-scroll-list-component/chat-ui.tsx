@@ -8,7 +8,7 @@ export function ChatUI() {
   const { messages, continueConversation, isPending } = useContinueConversation();
 
   return (
-    <div className='not-prose w-full border bg-gray-100 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
+    <div className='not-prose border-border bg-muted/50 w-full border'>
       <ul className='mb-4 h-[50vh] space-y-4 overflow-auto p-4'>
         {messages.map((message) => {
           return (

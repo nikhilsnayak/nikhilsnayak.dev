@@ -4,8 +4,8 @@ import { ThemeButton } from './theme-button';
 
 export function ThemeToggle() {
   return (
-    <div className='bg-muted flex gap-2 border'>
-      <span className='sr-only'>Toggle theme</span>
+    <fieldset className='flex shrink-0 gap-1'>
+      <legend className='sr-only'>Color theme</legend>
       <ThemeButton type='light'>
         <Sun />
       </ThemeButton>
@@ -15,6 +15,6 @@ export function ThemeToggle() {
       <ThemeButton type='system'>
         <Monitor />
       </ThemeButton>
-    </div>
+    </fieldset>
   );
 }

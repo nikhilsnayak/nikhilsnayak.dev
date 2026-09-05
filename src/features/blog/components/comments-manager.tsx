@@ -258,13 +258,15 @@ function useCommentsManager() {
 }
 
 function CommentsList() {
-  const { comments } = useCommentsManager();
+  const { comments, session } = useCommentsManager();
 
   return (
     <List
-      className='max-w-(--breakpoint-sm) space-y-4 overflow-hidden'
+      className='space-y-6 overflow-hidden'
       items={comments}
-      emptyListFallback={<p>No comments yet.</p>}
+      emptyListFallback={
+        session?.user ? <p className='text-muted-foreground text-sm'>No comments yet.</p> : null
+      }
     >
       {(comment) => {
         return <CommentThread comment={comment} />;
@@ -279,24 +281,29 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
   return (
     <div className='py-2'>
       <div className='flex flex-col items-start justify-between sm:flex-row'>
-        <div className='flex items-start gap-3 sm:gap-4'>
-          <Avatar className='h-10 w-10 border'>
+        <div className='flex min-w-0 items-start gap-3'>
+          <Avatar className='size-8'>
             <AvatarImage alt={comment.user.name ?? ''} src={comment.user.image ?? ''} />
             <AvatarFallback>{comment.user.name?.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>
-            <h3 className='flex items-center gap-2'>
-              <span className='font-bold'>{comment.user.name}</span>
+            <h3 className='flex flex-wrap items-center gap-2 text-sm'>
+              <span className='font-medium wrap-anywhere'>{comment.user.name}</span>
               {session?.user?.id === comment.userId && (
-                <span className='bg-muted text-muted-foreground px-1 py-0.5 text-[10px]'>You</span>
+                <span className='text-muted-foreground text-xs'>you</span>
               )}
               {comment.isPending && <Spinner className='size-4' />}
             </h3>
-            <span className='text-muted-foreground text-sm'>{formatDate(comment.createdAt)}</span>
+            <time
+              dateTime={new Date(comment.createdAt).toISOString()}
+              className='text-muted-foreground text-xs'
+            >
+              {formatDate(comment.createdAt)}
+            </time>
           </div>
         </div>
         {session?.user?.id && !comment.isPending && (
-          <div className='mt-2 flex items-center gap-2 sm:mt-0'>
+          <div className='text-muted-foreground mt-2 flex items-center gap-1 sm:mt-0'>
             <AddReplyControl parentId={comment.id} slug={comment.slug} />
             {session.user.id === comment.userId && (
               <>
@@ -311,11 +318,11 @@ function CommentThread({ comment }: Readonly<{ comment: OptimisticComment }>) {
           </div>
         )}
       </div>
-      <p className='my-2 wrap-break-word'>{comment.content}</p>
+      <p className='mt-2 pl-11 text-sm leading-relaxed wrap-break-word'>{comment.content}</p>
 
       {comment.replies.length > 0 && (
         <List
-          className='mt-4 w-full space-y-4 overflow-hidden border-l pl-4'
+          className='border-border/60 mt-4 w-full space-y-4 overflow-hidden border-l pl-4'
           items={comment.replies}
         >
           {(reply) => {
@@ -343,9 +350,16 @@ function AddCommentControl({ slug }: Readonly<{ slug: string }>) {
       className='flex flex-col gap-2'
     >
       <input type='text' name='slug' value={slug} hidden readOnly />
-      <Textarea name='content' placeholder='Write a comment...' required minLength={3} />
-      <Button className='self-end' type='submit'>
-        Comment
+      <Textarea
+        name='content'
+        aria-label='Comment'
+        placeholder='Write a comment...'
+        className='min-h-24 text-sm md:text-sm dark:bg-transparent'
+        required
+        minLength={3}
+      />
+      <Button variant='outline' className='self-end' type='submit'>
+        Post comment
       </Button>
     </form>
   );
@@ -363,8 +377,8 @@ function EditCommentControl({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
         render={
-          <Button size='icon' variant='ghost'>
-            <Pencil className='size-4 text-blue-400' />
+          <Button size='icon' variant='ghost' aria-label='Edit comment' title='Edit comment'>
+            <Pencil className='size-3.5' />
           </Button>
         }
       />
@@ -414,8 +428,14 @@ function DeleteCommentControl({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
         render={
-          <Button size='icon' variant='ghost'>
-            <Trash2 className='size-4 text-red-400' />
+          <Button
+            size='icon'
+            variant='ghost'
+            aria-label='Delete comment'
+            title='Delete comment'
+            className='text-destructive hover:text-destructive'
+          >
+            <Trash2 className='size-3.5' />
           </Button>
         }
       />
@@ -458,8 +478,8 @@ function AddReplyControl({ parentId, slug }: Readonly<{ parentId: string; slug: 
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
         render={
-          <Button size='icon' variant='ghost'>
-            <Reply className='size-4' />
+          <Button size='icon' variant='ghost' aria-label='Reply to comment' title='Reply'>
+            <Reply className='size-3.5' />
           </Button>
         }
       />

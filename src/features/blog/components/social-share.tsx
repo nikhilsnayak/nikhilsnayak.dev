@@ -19,12 +19,20 @@ export function SocialShare({ slug, title }: Readonly<{ slug: string; title: str
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant='ghost' className='text-foreground ml-2 size-4 p-0 align-text-bottom'>
-            <ShareIcon />
+          <Button
+            variant='ghost'
+            className='text-muted-foreground h-9 gap-2 px-0 text-sm leading-none font-normal hover:bg-transparent dark:hover:bg-transparent'
+          >
+            <ShareIcon
+              className='relative -top-0.5 size-4 shrink-0'
+              strokeWidth={1.5}
+              aria-hidden='true'
+            />
+            <span>Share</span>
           </Button>
         }
       />
-      <DropdownMenuContent side='right'>
+      <DropdownMenuContent side='bottom' align='start'>
         <DropdownMenuItem
           render={
             <CopyToClipBoard className='flex w-full items-center gap-2' content={postLink}>
@@ -36,7 +44,7 @@ export function SocialShare({ slug, title }: Readonly<{ slug: string; title: str
         <DropdownMenuItem
           render={
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this blog post: ${title} - ${postLink} by @_nikhilsnayak_`)}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this article: ${title} - ${postLink} by @_nikhilsnayak_`)}`}
               className='flex w-full items-center gap-2'
               target='_blank'
               rel='noopener noreferrer'

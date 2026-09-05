@@ -2,51 +2,25 @@ import 'server-only';
 import { cacheLife } from 'next/cache';
 import { Octokit } from 'octokit';
 
-import { formatDate } from '~/lib/utils';
-
 const octokit = new Octokit({ auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN });
 const owner = 'nikhilsnayak';
-const repo = 'nikhilsnayak.dev';
 
-export async function getLatestCommit() {
+export async function getContributions() {
   'use cache';
-  cacheLife('max');
+  cacheLife('hours');
 
-  const response = await octokit.rest.repos.listCommits({
-    owner,
-    repo,
-    ref: 'main',
-    per_page: 1,
+  const response = await octokit.rest.search.issuesAndPullRequests({
+    q: `is:pr is:merged is:public author:${owner} -user:${owner}`,
+    sort: 'updated',
+    order: 'desc',
+    per_page: 3,
   });
 
-  const latestCommit = response.data[0];
-
-  return {
-    author: latestCommit?.commit?.author?.name,
-    date: latestCommit?.commit.author?.date
-      ? formatDate(new Date(latestCommit.commit.author.date))
-      : null,
-    message: latestCommit.commit.message,
-    url: latestCommit.html_url,
-  };
-}
-
-export async function getLanguages() {
-  'use cache';
-  cacheLife('max');
-
-  const response = await octokit.rest.repos.listLanguages({
-    owner,
-    repo,
-  });
-
-  const languages = response.data;
-  const totalBytes = Object.values(languages).reduce((a, b) => a + b, 0);
-
-  const languageStats = Object.entries(languages).map(([name, bytes]) => ({
-    name,
-    percentage: (bytes / totalBytes) * 100,
+  return response.data.items.map((pullRequest) => ({
+    id: pullRequest.id,
+    title: pullRequest.title,
+    url: pullRequest.html_url,
+    repository: new URL(pullRequest.repository_url).pathname.replace('/repos/', ''),
+    number: pullRequest.number,
   }));
-
-  return languageStats.sort((a, b) => b.percentage - a.percentage);
 }

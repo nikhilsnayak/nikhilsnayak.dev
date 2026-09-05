@@ -35,7 +35,7 @@ export function GenUI() {
   };
 
   return (
-    <section className='bg-background w-full border p-4 shadow-lg'>
+    <section className='border-border bg-muted/50 w-full border p-4'>
       <ul className='relative mb-4 h-[60vh] space-y-4 overflow-auto p-4'>
         {messages.length === 0 ? (
           <li className='text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>

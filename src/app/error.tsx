@@ -18,12 +18,15 @@ export default function ErrorFallback({
   }, [error]);
 
   return (
-    <div className='flex flex-col items-center justify-center px-4 md:px-6'>
-      <h1 className='text-foreground mt-6 font-mono text-3xl font-medium tracking-tighter sm:text-4xl'>
-        Something went wrong!
-      </h1>
+    <section className='py-6 sm:py-10'>
+      <h1 className='font-mono text-2xl font-medium tracking-tight'>Something went wrong</h1>
+      <p className='text-muted-foreground mt-3 max-w-prose text-sm leading-relaxed'>
+        This page couldn't load. You can try again.
+      </p>
       <div className='mt-6'>
         <Button
+          variant='link'
+          className='text-foreground h-auto p-0 text-sm font-normal underline underline-offset-4'
           onClick={() => {
             startTransition(() => {
               router.refresh();
@@ -34,6 +37,6 @@ export default function ErrorFallback({
           Try again
         </Button>
       </div>
-    </div>
+    </section>
   );
 }

@@ -1,15 +1,15 @@
-import { ArrowUpRight, Rss } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ViewTransition } from 'react';
 
 import { BlogStats } from '~/features/blog/components/blog-stats';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
+import { BASE_URL } from '~/lib/constants';
 import { formatDate, viewTransitionName } from '~/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'A list of blog posts where I document my learnings',
+  title: 'Writing',
+  description: 'Articles on React, TypeScript and the systems I build.',
 };
 
 export default async function BlogsPage() {
@@ -25,46 +25,53 @@ export default async function BlogsPage() {
   }, new Map<number, typeof blog>());
 
   return (
-    <section className='space-y-6'>
-      <div className='flex items-center justify-between'>
-        <h1 className='font-mono text-2xl font-medium tracking-tighter underline'>Blog</h1>
-        <a
-          href='/rss.xml'
-          target='_blank'
-          rel='noopener noreferrer'
-          aria-label='rss feed'
-          className='hover:text-primary press focus-ring inline-block transition'
-        >
-          <Rss />
-        </a>
-      </div>
+    <section className='space-y-12'>
+      <header className='space-y-3'>
+        <div className='flex items-baseline justify-between gap-4'>
+          <h1 className='font-mono text-2xl font-medium tracking-tight'>Writing</h1>
+          <a
+            href={`${BASE_URL}/rss.xml`}
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='rss feed'
+            className='text-muted-foreground hover:text-foreground focus-ring text-xs underline-offset-4 hover:underline focus-visible:underline'
+          >
+            RSS
+          </a>
+        </div>
 
-      <BlogStats />
+        <BlogStats />
+      </header>
 
       <div className='space-y-12'>
         {[...postsByYear.entries()].map(([year, posts]) => (
           <div key={year}>
-            <h2 className='mb-6 font-mono text-xl font-medium tracking-tighter'>{year}</h2>
-            <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
+            <h2 className='mb-6 font-mono text-xl font-medium tracking-tight'>{year}</h2>
+            <ul className='space-y-6'>
               {posts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className='group border-border hover:border-primary press focus-ring block h-full space-y-2 overflow-hidden border p-4 transition'
-                >
-                  <p className='text-muted-foreground flex items-center justify-between text-xs'>
-                    <span>{formatDate(post.metadata.publishedAt)}</span>
-                    <ArrowUpRight className='w-4 transition-transform duration-300 group-hover:rotate-45' />
-                  </p>
+                <li key={post.slug} className='space-y-1'>
+                  <time
+                    dateTime={post.metadata.publishedAt.toISOString()}
+                    className='text-muted-foreground text-xs'
+                  >
+                    {formatDate(post.metadata.publishedAt)}
+                  </time>
                   <ViewTransition name={viewTransitionName(post.slug)}>
-                    <h2 className='font-mono text-lg font-semibold text-balance'>
-                      {post.metadata.title}
-                    </h2>
+                    <h3 className='font-medium text-pretty'>
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className='focus-ring underline-offset-4 hover:underline focus-visible:underline'
+                      >
+                        {post.metadata.title}
+                      </Link>
+                    </h3>
                   </ViewTransition>
-                  <p className='text-sm'>{post.metadata.summary}</p>
-                </Link>
+                  <p className='text-muted-foreground max-w-prose text-sm leading-relaxed text-pretty'>
+                    {post.metadata.summary}
+                  </p>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ))}
       </div>

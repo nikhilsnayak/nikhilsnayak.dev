@@ -337,26 +337,21 @@ html {
 }
 
 article.prose .anchor {
-  @apply invisible absolute no-underline;
+  @apply absolute no-underline opacity-0;
 
   margin-left: -1em;
-  padding-right: 0.5em;
-  width: 80%;
-  max-width: 700px;
+  width: 1em;
   cursor: pointer;
 }
 
-article.anchor:hover {
-  @apply visible;
-}
-
 article.prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
+  @apply text-muted-foreground;
   content: '#';
 }
 
-article.prose *:hover > .anchor {
-  @apply visible;
+article.prose *:hover > .anchor,
+article.prose .anchor:focus-visible {
+  @apply opacity-100;
 }
 
 article.prose pre[data-line-numbers='true'] code {

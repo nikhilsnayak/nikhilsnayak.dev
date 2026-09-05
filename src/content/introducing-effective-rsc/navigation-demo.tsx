@@ -65,8 +65,8 @@ export function NavigationDemo() {
   const eventIsStreaming = route === 'event' && phase !== 'complete';
 
   return (
-    <figure className='not-prose my-8 overflow-hidden border-2 border-neutral-400 bg-neutral-100 shadow-sm dark:border-neutral-600 dark:bg-neutral-900'>
-      <div className='flex items-center gap-2 border-b-2 border-neutral-400 bg-neutral-200 px-3 py-2 dark:border-neutral-600 dark:bg-neutral-800'>
+    <figure className='not-prose border-border bg-muted/50 my-8 overflow-hidden border'>
+      <div className='border-border bg-muted flex items-center gap-2 border-b px-3 py-2'>
         <span aria-hidden='true' className='size-2 bg-red-400' />
         <span aria-hidden='true' className='size-2 bg-amber-400' />
         <span aria-hidden='true' className='size-2 bg-green-400' />
