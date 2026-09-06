@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useSelectedLayoutSegment } from 'next/navigation';
 import { ViewTransition, type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '~/lib/utils';
@@ -9,9 +9,9 @@ import { cn } from '~/lib/utils';
 type NavLinkProps = ComponentPropsWithoutRef<typeof Link>;
 
 export function NavLink({ className, href, ...props }: NavLinkProps) {
-  const path = usePathname();
+  const segment = useSelectedLayoutSegment();
   const hrefStr = typeof href === 'string' ? href : href.href || '';
-  const isActive = path === hrefStr || (hrefStr !== '/' && path.startsWith(hrefStr + '/'));
+  const isActive = hrefStr === (segment === null ? '/' : `/${segment}`);
 
   return (
     <div className='relative'>

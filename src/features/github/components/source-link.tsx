@@ -1,10 +1,9 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { useSelectedLayoutSegments } from 'next/navigation';
 
 export function SourceLink() {
-  const path = usePathname();
-  const parts = path.split('/').slice(1);
+  const parts = useSelectedLayoutSegments();
 
   const isBlogPage = ['blog', 'blogs'].includes(parts.at(-2) ?? '');
 
