@@ -9,6 +9,10 @@ import { NavigationDemo } from './navigation-demo';
 I just published
 [effective-rsc 0.1.0](https://github.com/nikhilsnayak/effective-rsc/releases/tag/v0.1.0).
 
+> Update: The [documentation site](https://effective-rsc.nikhilsnayak.dev/docs) is now live,
+> built with effective-rsc itself. The repository also includes a Vercel deployment adapter
+> and a small [hello-world example](https://github.com/nikhilsnayak/effective-rsc/tree/main/examples/hello-world).
+
 **React owns the UI. Effect owns the runtime.**
 
 Back in 2023, the mental model behind React Server Components immediately clicked with me. I
@@ -133,8 +137,9 @@ streaming from the server.
 <NavigationDemo />
 
 There is no History API compatibility layer. If a browser lacks the Navigation API or
-`NavigationPrecommitController`, ERSC skips hydration. Links and native forms continue as a normal
-multi-page application, but Client Components are not interactive.
+`NavigationPrecommitController`, links use full-page navigation. Hydration, Client Components, and
+Server Functions still work. Without JavaScript, links and native forms retain their normal
+browser behavior.
 
 That constraint let me build the router around the browser primitive I wanted instead of carrying
 an older navigation model into a new framework.
@@ -148,7 +153,7 @@ bun run dev
 ```
 
 The package includes a combined
-[`LLMS.md`](https://github.com/nikhilsnayak/effective-rsc/blob/main/packages/effective-rsc/LLMS.md)
+[`LLMS.md`](https://effective-rsc.nikhilsnayak.dev/generated/LLMS.md)
 reference that an agent can read before touching an application.
 
 Or paste this into a coding agent:
@@ -163,9 +168,15 @@ bunx create-ersc-app effective-bookmarks
 It should let me save bookmarks, list them, and open a page for each bookmark.
 ```
 
-## About 0.1.0
+## Deployment
 
-This is an experimental first release. It currently uses React Canary, Effect v4 RC, TypeScript 7,
+Deploy directly on [Bun](https://effective-rsc.nikhilsnayak.dev/docs/advanced/production-startup)
+or use the [Vercel adapter](https://effective-rsc.nikhilsnayak.dev/docs/guides/deploying-to-vercel).
+The documentation site runs on Vercel.
+
+## Status
+
+The framework is experimental. It currently uses React Canary, Effect v4 RC, TypeScript 7,
 Rspack's RSC implementation, and modern browser APIs. Bun is the only supported server runtime.
 
 ## Credits
@@ -189,9 +200,9 @@ The framework also learned from:
 ## Links
 
 - [GitHub](https://github.com/nikhilsnayak/effective-rsc)
-- [Documentation](https://github.com/nikhilsnayak/effective-rsc/tree/main/packages/effective-rsc/docs)
+- [Documentation](https://effective-rsc.nikhilsnayak.dev/docs)
 - [Current limitations](https://github.com/nikhilsnayak/effective-rsc/blob/main/docs/ARCHITECTURE.md#known-limitations)
 - [Complete example application](https://github.com/nikhilsnayak/effective-rsc/tree/main/examples/event-platform)
 - [npm](https://www.npmjs.com/package/effective-rsc)
 
-<p>0.1.0 is available now. Try it and tell me where the model falls short.</p>
+<p>Try it and tell me where the model falls short.</p>

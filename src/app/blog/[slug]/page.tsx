@@ -37,6 +37,9 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
   return {
     title,
     description,
+    alternates: {
+      canonical: `${BASE_URL}/blog/${slug}`,
+    },
     openGraph: {
       title,
       description,
