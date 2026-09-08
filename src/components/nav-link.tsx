@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import { ViewTransition, type ComponentPropsWithoutRef } from 'react';
+import { type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '~/lib/utils';
 
@@ -14,20 +14,21 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
   const isActive = hrefStr === (segment === null ? '/' : `/${segment}`);
 
   return (
-    <div className='relative'>
-      <Link
-        {...props}
-        href={href}
-        className={cn(
-          'press focus-ring inline-block font-semibold transition-transform',
-          className,
-        )}
+    <Link
+      {...props}
+      href={href}
+      aria-current={isActive ? 'page' : undefined}
+      className={cn(
+        'focus-ring inline-flex min-h-10 items-center gap-2 font-mono text-xs transition-colors hover:text-foreground',
+        isActive ? 'text-foreground' : 'text-muted-foreground',
+        className,
+      )}
+    >
+      <span
+        className={cn('size-1 rounded-full', isActive ? 'bg-primary' : 'bg-transparent')}
+        aria-hidden='true'
       />
-      {isActive ? (
-        <ViewTransition name='active-indicator'>
-          <div className='bg-primary absolute right-0 -bottom-1 left-0 h-[2px]' />
-        </ViewTransition>
-      ) : null}
-    </div>
+      {props.children}
+    </Link>
   );
 }

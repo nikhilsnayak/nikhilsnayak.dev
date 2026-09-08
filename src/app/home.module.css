@@ -1,0 +1,12 @@
+.portrait {
+  mask-image: linear-gradient(to bottom, oklch(0 0 0) 45%, transparent 95%);
+}
+
+@media (min-width: 640px) {
+  .portrait {
+    mask-image:
+      linear-gradient(to right, transparent, oklch(0 0 0) 45%),
+      linear-gradient(to bottom, oklch(0 0 0) 65%, transparent);
+    mask-composite: intersect;
+  }
+}

@@ -11,7 +11,7 @@ export function UserInput({
         type='text'
         name='query'
         required
-        className='grow border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:text-white'
+        className='min-w-0 grow border border-gray-300 px-4 py-2 dark:bg-gray-700 dark:text-white'
       />
       <button type='submit' disabled={isPending} className='bg-purple-500 px-4 py-2 text-white'>
         Ask

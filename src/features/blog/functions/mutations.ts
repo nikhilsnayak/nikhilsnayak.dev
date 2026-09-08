@@ -85,13 +85,22 @@ export async function addComment(
   }
 
   try {
+    if (parsedResult.data.parentId) {
+      const parent = await db.query.comments.findFirst({
+        where: { id: parsedResult.data.parentId, slug: parsedResult.data.slug },
+        columns: { id: true },
+      });
+      if (!parent) return { error: 'The comment you’re replying to is no longer available.' };
+    }
+
     const newComment = await db
       .insert(comments)
       .values({ ...parsedResult.data, userId: session.user.id })
       .returning()
       .then((res) => res[0]);
 
-    return { ...newComment, user: session.user };
+    const { id, name, image } = session.user;
+    return { ...newComment, user: { id, name, image } };
   } catch (error) {
     console.log(error);
     return { error: 'Server error' };
@@ -140,7 +149,8 @@ export async function editComment(
       .returning()
       .then((res) => res[0]);
 
-    return { ...updatedCommentFromDb, user: session.user };
+    const { id, name, image } = session.user;
+    return { ...updatedCommentFromDb, user: { id, name, image } };
   } catch (error) {
     console.log(error);
     return { error: 'Server error' };
@@ -181,7 +191,8 @@ export async function deleteComment(
       .where(eq(comments.id, commentId))
       .returning()
       .then((res) => res[0]);
-    return { ...deletedComment, user: session.user };
+    const { id, name, image } = session.user;
+    return { ...deletedComment, user: { id, name, image } };
   } catch (error) {
     console.log(error);
     return { error: 'Server error' };

@@ -3,7 +3,11 @@ import { z } from 'zod';
 
 import { comments } from '~/lib/db/schema';
 
-const CommentSchema = createSelectSchema(comments);
+const CommentSchema = createSelectSchema(comments, {
+  content: z.string().refine((content) => content.trim().length >= 3, {
+    message: 'Write at least three characters.',
+  }),
+});
 
 const BaseSchema = {
   parentId: z.string().optional().nullable().default(null),

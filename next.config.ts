@@ -21,8 +21,9 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   typedRoutes: true,
   cacheComponents: true,
-  partialPrefetching: true,
   experimental: {
+    // The validation worker cannot resolve client modules behind dynamic server imports.
+    devValidationWorker: false,
     inlineCss: true,
     prefetchInlining: true,
     cachedNavigations: true,

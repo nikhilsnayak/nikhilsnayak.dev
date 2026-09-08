@@ -1,19 +1,24 @@
-import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense, ViewTransition } from 'react';
 
 import { ErrorBoundary } from '~/components/error-boundary';
+import { ExternalLink } from '~/components/external-link';
+import { InteractiveName } from '~/components/interactive-name';
+import { InteractivePortrait } from '~/components/interactive-portrait';
+import { NameMark } from '~/components/name-mark';
 import { Spinner } from '~/components/spinner';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 import { Contributions } from '~/features/github/components/contributions';
-import { BASE_URL } from '~/lib/constants';
-import { formatDate, viewTransitionName } from '~/lib/utils';
+import { BASE_URL, SITE_INTRO } from '~/lib/constants';
+import { cn, viewTransitionName } from '~/lib/utils';
+
+import styles from './home.module.css';
 
 export default async function HomePage() {
-  const recentPosts = await getBlogMetadata();
+  const posts = await getBlogMetadata();
 
   return (
-    <section>
+    <div className='space-y-20 sm:space-y-24'>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{
@@ -23,11 +28,6 @@ export default async function HomePage() {
             name: 'Nikhil S',
             url: BASE_URL,
             jobTitle: 'Software Engineer',
-            worksFor: {
-              '@type': 'Organization',
-              name: 'CodeCraft Technologies',
-              url: 'https://www.codecrafttech.com/',
-            },
             sameAs: [
               'https://github.com/nikhilsnayak',
               'https://x.com/_nikhilsnayak_',
@@ -36,155 +36,138 @@ export default async function HomePage() {
           }).replace(/</g, '\\u003c'),
         }}
       />
-      <header>
-        <h1 className='mb-3 text-3xl font-light sm:text-5xl'>
-          <strong className='block font-bold'>Nikhil S</strong>
-        </h1>
-        <p className='mb-4 text-lg text-pretty sm:text-xl'>
-          Software engineer building products and systems with TypeScript.
-        </p>
-        <p className='mb-4 max-w-prose text-pretty'>
-          I like owning products end-to-end. When an abstraction gets in the way, I tend to
-          understand and improve the layer underneath it.
-        </p>
-        <p className='text-muted-foreground text-sm'>
-          Software Engineer at{' '}
-          <a
-            href='https://www.codecrafttech.com/'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-foreground focus-ring underline underline-offset-2 transition-all hover:underline-offset-4'
-          >
-            CodeCraft Technologies
-          </a>{' '}
-          · India · 2023 - present
-        </p>
-        <ul className='text-muted-foreground mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm'>
-          {[
-            { label: 'GitHub', href: 'https://github.com/nikhilsnayak' },
-            { label: 'X', href: 'https://x.com/_nikhilsnayak_' },
-            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/nikhilsnayak/' },
-            { label: 'Email', href: 'mailto:nikhilsrinivasnayak@gmail.com' },
-          ].map(({ label, href }, index) => (
-            <li key={label} className='flex items-center gap-3'>
-              {index > 0 ? <span aria-hidden='true'>·</span> : null}
-              <a
-                href={href}
-                target={href.startsWith('https:') ? '_blank' : undefined}
-                rel={href.startsWith('https:') ? 'noopener noreferrer' : undefined}
-                className='hover:text-foreground focus-ring underline underline-offset-4'
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <header className='relative pt-40 sm:min-h-88 sm:pt-16'>
+        <InteractivePortrait
+          className={cn(
+            styles.portrait,
+            'pointer-events-none absolute -top-18 -right-6 z-0 w-[min(22rem,100vw)] opacity-45 mix-blend-multiply invert select-none sm:-top-20 sm:w-112 lg:-right-24 lg:w-124 dark:opacity-55 dark:mix-blend-screen dark:invert-0 print:hidden forced-colors:hidden',
+          )}
+        />
+        <div className='relative z-1 max-w-116'>
+          <p className='text-muted-foreground mb-5 font-mono text-sm'>hey, i'm</p>
+          <h1>
+            <span className='sr-only'>Nikhil S</span>
+            <InteractiveName>
+              <NameMark />
+            </InteractiveName>
+          </h1>
+          <p className='mt-7 max-w-96 text-base leading-relaxed text-pretty sm:text-lg'>
+            {SITE_INTRO}
+          </p>
+        </div>
       </header>
-      <section className='mt-12 space-y-6 sm:mt-16'>
-        <h2 className='font-mono text-xl font-medium tracking-tight'>Selected Work</h2>
-        <div className='divide-border/60 divide-y'>
-          <article className='space-y-3 pb-7'>
-            <h3 className='font-mono text-lg font-semibold'>effective-rsc</h3>
-            <p className='font-medium'>
-              An Effect-native React Server Components framework for Bun.
+
+      <section aria-labelledby='building-heading'>
+        <h2 id='building-heading' className='section-label mb-6'>
+          things i'm building
+        </h2>
+        <div className='grid gap-12 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-0'>
+          <article className='border-border min-w-0 border-t pt-5 sm:row-span-4 sm:grid sm:grid-rows-subgrid'>
+            <p className='font-mono text-xs'>effective-rsc</p>
+            <h3 className='mt-6 text-xl leading-normal tracking-tight text-pretty'>
+              What if Effect handled the runtime behind RSC?
+            </h3>
+            <p className='text-muted-foreground mt-3 text-sm leading-7 text-pretty'>
+              Both clicked for me, so I wanted to see how they'd fit together. Still an experiment.
             </p>
-            <p className='text-muted-foreground max-w-prose text-sm leading-relaxed text-pretty'>
-              An experimental framework that brings Effect's services, concurrency and resource
-              management into React Server Components and native Server Functions. Built on Rspack
-              and the Navigation API.
-            </p>
-            <p className='text-muted-foreground text-xs leading-relaxed'>
-              Request-scoped runtime · Streamed navigation · Schema-validated Server Functions
-            </p>
-            <div className='flex flex-wrap gap-x-5 gap-y-2 text-sm'>
-              <a
-                href='https://github.com/nikhilsnayak/effective-rsc'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Source <ArrowUpRight className='size-4' aria-hidden='true' />
-              </a>
-              <Link
-                href='/blog/introducing-effective-rsc'
-                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
-              >
-                Introduction <ArrowUpRight className='size-4' aria-hidden='true' />
+            <div className='mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm'>
+              <Link href='/blog/introducing-effective-rsc' className='text-link'>
+                the story
               </Link>
+              <ExternalLink
+                href='https://github.com/nikhilsnayak/effective-rsc'
+                aria-label='effective-rsc code on GitHub'
+                className='text-link inline-flex items-center gap-1'
+              >
+                code
+              </ExternalLink>
             </div>
           </article>
-          <article className='space-y-3 pt-7'>
-            <h3 className='font-mono text-lg font-semibold'>Tether</h3>
-            <p className='font-medium'>A private, account-free room for two people.</p>
-            <p className='text-muted-foreground max-w-prose text-sm leading-relaxed text-pretty'>
-              An experimental calling app with peer-to-peer video, audio and chat. Share a link and
-              approve your guest, with a shared 3D room on web and desktop. Once connected, the call
-              continues directly between devices without the signaling server.
+          <article className='border-border min-w-0 border-t pt-5 sm:row-span-4 sm:grid sm:grid-rows-subgrid'>
+            <p className='font-mono text-xs'>Tether</p>
+            <h3 className='mt-6 text-xl leading-normal tracking-tight text-pretty'>
+              What if a call felt like sharing a room?
+            </h3>
+            <p className='text-muted-foreground mt-3 text-sm leading-7 text-pretty'>
+              A little room for two people. You share a link, they knock, you let them in. Video,
+              audio and chat go directly between your devices. No accounts.
             </p>
-            <p className='text-muted-foreground text-xs leading-relaxed'>
-              WebRTC · Effect · React Three Fiber · Web, desktop and mobile
-            </p>
-            <div className='flex flex-wrap gap-x-5 gap-y-2 text-sm'>
-              <a
+            <div className='mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm'>
+              <ExternalLink
                 href='https://tether.nikhilsnayak.dev'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
+                className='text-link inline-flex items-center gap-1'
               >
-                Open Tether <ArrowUpRight className='size-4' aria-hidden='true' />
-              </a>
-              <a
+                try it
+              </ExternalLink>
+              <ExternalLink
                 href='https://github.com/nikhilsnayak/tether'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='focus-ring inline-flex items-center gap-1 underline underline-offset-2 transition-all hover:underline-offset-4'
+                aria-label='Tether code on GitHub'
+                className='text-link inline-flex items-center gap-1'
               >
-                Source <ArrowUpRight className='size-4' aria-hidden='true' />
-              </a>
+                code
+              </ExternalLink>
             </div>
           </article>
         </div>
       </section>
-      <section className='mt-12 sm:mt-16'>
-        <h2 className='mb-6 font-mono text-xl font-medium tracking-tight'>Writing</h2>
-        <ul className='space-y-6'>
-          {recentPosts.slice(0, 3).map((post) => (
-            <li key={post.slug} className='space-y-1'>
-              <time
-                dateTime={post.metadata.publishedAt.toISOString()}
-                className='text-muted-foreground text-xs'
+
+      <section aria-labelledby='writing-heading'>
+        <div className='mb-5 flex items-baseline justify-between gap-4'>
+          <h2 id='writing-heading' className='section-label'>
+            things i've written
+          </h2>
+          <Link href='/blog' className='text-link text-xs'>
+            all writing
+          </Link>
+        </div>
+        <ul className='divide-border divide-y'>
+          {posts.slice(0, 3).map((post) => (
+            <li key={post.slug}>
+              <Link
+                href={`/blog/${post.slug}`}
+                className='focus-ring group flex items-baseline justify-between gap-6 py-5'
               >
-                {formatDate(post.metadata.publishedAt)}
-              </time>
-              <ViewTransition name={viewTransitionName(post.slug)}>
-                <h3 className='font-medium text-pretty'>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className='focus-ring underline-offset-4 hover:underline focus-visible:underline'
-                  >
+                <ViewTransition
+                  name={viewTransitionName(post.slug)}
+                  default='none'
+                  share='article-title'
+                >
+                  <h3 className='text-sm leading-6 text-pretty underline-offset-4 group-hover:underline sm:text-base'>
                     {post.metadata.title}
-                  </Link>
-                </h3>
-              </ViewTransition>
-              <p className='text-muted-foreground max-w-prose text-sm leading-relaxed text-pretty'>
-                {post.metadata.summary}
-              </p>
+                  </h3>
+                </ViewTransition>
+                <time
+                  dateTime={post.metadata.publishedAt.toISOString()}
+                  className='text-muted-foreground shrink-0 font-mono text-xs tabular-nums'
+                >
+                  {post.metadata.publishedAt.getFullYear()}
+                </time>
+              </Link>
             </li>
           ))}
         </ul>
-        <Link
-          href='/blog'
-          className='focus-ring mt-6 inline-flex items-center gap-1 text-sm underline underline-offset-2 transition-all hover:underline-offset-4'
-        >
-          All writing <ArrowUpRight className='size-4' aria-hidden='true' />
-        </Link>
       </section>
-      <section className='mt-12 space-y-6 sm:mt-16'>
-        <h2 className='font-mono text-xl font-medium tracking-tight'>Open Source</h2>
+
+      <section aria-labelledby='upstream-heading'>
+        <h2 id='upstream-heading' className='section-label mb-6'>
+          things i ran into
+        </h2>
+        <p className='text-muted-foreground mb-6 max-w-xl text-sm leading-7 text-pretty'>
+          These started as bugs I hit while building something. Some I fixed with a small PR. For
+          the others, I put together a repro and opened an issue.
+        </p>
         <ErrorBoundary
           fallback={
-            <p className='text-muted-foreground text-xs leading-relaxed'>
-              Contributions are unavailable right now. Please check back later.
+            <p className='text-muted-foreground text-sm'>
+              Couldn't load these right now.{' '}
+              <a
+                href='https://github.com/nikhilsnayak'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-link'
+              >
+                Find me on GitHub.
+              </a>
             </p>
           }
         >
@@ -193,6 +176,33 @@ export default async function HomePage() {
           </Suspense>
         </ErrorBoundary>
       </section>
-    </section>
+
+      <section aria-labelledby='about-heading' className='max-w-xl'>
+        <h2 id='about-heading' className='section-label mb-6'>
+          a little about me
+        </h2>
+        <div className='text-muted-foreground space-y-4 text-sm leading-7 text-pretty'>
+          <p>
+            I studied electronics, discovered C in my first semester, and spent lockdown learning
+            Python on an old laptop. Somehow I ended up a React nerd.{' '}
+            <Link href='/blog/2-years-into-software-engineering' className='text-link'>
+              There's a longer version.
+            </Link>
+          </p>
+          <p>
+            I'm based in India and work at{' '}
+            <a
+              href='https://www.codecrafttech.com/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-link'
+            >
+              CodeCraft
+            </a>
+            .
+          </p>
+        </div>
+      </section>
+    </div>
   );
 }

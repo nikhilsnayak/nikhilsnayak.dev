@@ -3,50 +3,50 @@
   isolation: isolate;
 }
 
-.background::before,
-.background::after {
+.background::before {
   content: '';
   position: absolute;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
-}
-
-.background::before {
-  inset: 0;
-  opacity: 0.32;
+  opacity: 0.24;
   filter: contrast(2) brightness(0.65);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23888' filter='url(%23grain)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='oklch(0.626754%200%200)' filter='url(%23grain)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
   mask-image:
-    radial-gradient(ellipse 48% 38% at 50% 50%, black 15%, transparent 100%),
-    radial-gradient(ellipse 42% 46% at 50% 50%, rgb(0 0 0 / 75%) 0%, transparent 100%),
-    radial-gradient(ellipse 35% 32% at 50% 50%, rgb(0 0 0 / 55%) 0%, transparent 100%);
+    radial-gradient(ellipse at center, oklch(0 0 0) 10%, transparent 70%),
+    radial-gradient(ellipse at center, oklch(0 0 0 / 65%), transparent 70%);
   mask-size:
-    1100px 970px,
-    830px 1310px,
-    670px 790px;
+    1400px 1100px,
+    900px 1300px;
   mask-position:
-    -210px -180px,
-    right -140px top 270px,
-    110px 530px;
-  mask-repeat: repeat;
+    center top -200px,
+    center top 400px;
+  mask-repeat: repeat-y;
 }
 
 :global(.dark) .background::before {
-  opacity: 0.055;
+  opacity: 0.12;
   filter: none;
 }
 
 .background::after {
-  top: 80px;
-  right: max(16px, calc((100% - var(--breakpoint-lg)) / 2 + 16px));
+  content: '';
+  position: absolute;
+  top: 112px;
+  left: max(24px, calc((100% - 64rem) / 2));
+  z-index: -1;
   width: 180px;
   height: 190px;
-  opacity: 0.025;
+  pointer-events: none;
+  opacity: 0.035;
   background:
-    linear-gradient(currentColor, currentColor) right 12px top 8px / 56px 56px,
-    linear-gradient(currentColor, currentColor) left 12px top 40px / 24px 24px,
-    linear-gradient(currentColor, currentColor) right 40px bottom 16px / 32px 32px;
+    linear-gradient(currentColor, currentColor) left 24px top 48px / 56px 56px,
+    linear-gradient(currentColor, currentColor) left 84px top 24px / 24px 24px;
   background-repeat: no-repeat;
+}
+
+:global(.dark) .background::after {
+  opacity: 0.045;
 }
 
 @media (max-width: 639px) {

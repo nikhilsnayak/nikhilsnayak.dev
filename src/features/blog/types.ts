@@ -1,8 +1,10 @@
 import type { User } from '~/lib/auth';
 import type { comments } from '~/lib/db/schema';
 
+export type CommentAuthor = Pick<User, 'id' | 'name' | 'image'>;
+
 export type Comment = typeof comments.$inferSelect & {
-  user: User;
+  user: CommentAuthor;
   replies: Comment[];
 };
 

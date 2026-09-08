@@ -1,6 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { Suspense, ViewTransition } from 'react';
 
 import { ErrorBoundary } from '~/components/error-boundary';
@@ -26,9 +27,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
   const metadata = await getPostMetadataBySlug(slug);
-  if (!metadata) {
-    return {};
-  }
+  if (!metadata) notFound();
 
   const { title, publishedAt, summary: description } = metadata;
 
@@ -50,6 +49,9 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
       images: [
         {
           url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${title} — Nikhil S`,
         },
       ],
     },
@@ -57,7 +59,7 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${title} — Nikhil S` }],
     },
   };
 }
@@ -65,7 +67,9 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
 export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
   const { slug } = await params;
 
-  const { default: Post, frontmatter: metadata } = await import(`~/content/${slug}/post.mdx`);
+  const metadata = await getPostMetadataBySlug(slug);
+  if (!metadata) notFound();
+  const { default: Post } = await import(`~/content/${slug}/post.mdx`);
 
   const { publishedAt, summary, title } = metadata;
 
@@ -93,13 +97,13 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
       />
       <Link
         href='/blog'
-        className='text-muted-foreground hover:text-foreground focus-ring mb-6 inline-flex items-center gap-2 text-sm underline-offset-4 hover:underline focus-visible:underline'
+        className='text-link text-muted-foreground mb-8 inline-flex items-center gap-2 font-mono text-xs'
       >
         <ArrowLeft className='size-4' aria-hidden='true' />
         All writing
       </Link>
-      <ViewTransition name={viewTransitionName(slug)}>
-        <h1 className='max-w-3xl text-3xl leading-tight font-semibold tracking-tight text-pretty sm:text-4xl'>
+      <ViewTransition name={viewTransitionName(slug)} default='none' share='article-title'>
+        <h1 className='max-w-3xl text-3xl leading-tight font-medium tracking-tight text-pretty sm:text-[2.75rem]'>
           {title}
         </h1>
       </ViewTransition>
@@ -125,9 +129,13 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <article className='prose dark:prose-invert prose-headings:font-mono prose-headings:font-medium prose-headings:tracking-tight min-w-full'>
+      <article className='prose dark:prose-invert prose-headings:font-medium prose-headings:tracking-tight min-w-full'>
         <Post />
       </article>
+      <svg className='text-muted-foreground mt-10 h-6 w-6' viewBox='0 0 32 32' aria-hidden='true'>
+        <rect x='6' y='12' width='14' height='14' fill='currentColor' />
+        <rect x='21' y='6' width='6' height='6' className='fill-primary' />
+      </svg>
       <div className='border-border/60 mt-10 flex flex-wrap items-center gap-6 border-t pt-3 text-sm'>
         <SocialShare title={title} slug={slug} />
         <ErrorBoundary fallback={<span>{"Couldn't load hearts"}</span>}>
@@ -136,11 +144,11 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className='mt-10'>
+      <div className='mt-16'>
         <ErrorBoundary fallback={<span>{"Couldn't load comments"}</span>}>
           <Suspense fallback={<Spinner variant='ellipsis' />}>
-            <h2 className='mb-6 font-mono text-xl font-medium tracking-tight' id='comments'>
-              Comments
+            <h2 className='section-label mb-6 scroll-mt-8' id='comments'>
+              comments
             </h2>
             <ScrollToHash id='comments' />
             <CommentsSection slug={slug} />

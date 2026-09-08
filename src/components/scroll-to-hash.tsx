@@ -14,7 +14,10 @@ export function ScrollToHash({
 }: Readonly<{ id: string; behavior?: ScrollBehavior }>) {
   useEffect(() => {
     if (window.location.hash === `#${id}`) {
-      document.getElementById(id)?.scrollIntoView({ behavior });
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document
+        .getElementById(id)
+        ?.scrollIntoView({ behavior: reducedMotion ? 'instant' : behavior });
     }
   }, [id, behavior]);
 

@@ -2,6 +2,8 @@
 
 import { useSelectedLayoutSegments } from 'next/navigation';
 
+import { ExternalLink } from '~/components/external-link';
+
 export function SourceLink() {
   const parts = useSelectedLayoutSegments();
 
@@ -17,14 +19,8 @@ export function SourceLink() {
   }
 
   return (
-    <a
-      href={href}
-      className='hover:text-foreground focus-ring underline-offset-4 hover:underline focus-visible:underline'
-      target='_blank'
-      rel='noopener noreferrer'
-      aria-label='source code'
-    >
-      Source
-    </a>
+    <ExternalLink href={href} className='text-link gap-1' aria-label='source code'>
+      source
+    </ExternalLink>
   );
 }

@@ -2,6 +2,8 @@
 
 import { useCallback, useState, type ComponentProps } from 'react';
 
+import { cn } from '~/lib/utils';
+
 import { AssistantMessage, UserMessage } from './message';
 import { useContinueConversation } from './use-continue-conversation';
 import { UserInput } from './user-input';
@@ -54,7 +56,7 @@ function AutoScrollList({ className, ...rest }: Readonly<Omit<ComponentProps<'ul
   return (
     <ul
       ref={autoScrollListRef}
-      className={`overflow-y-auto ${className}`}
+      className={cn('overflow-y-auto', className)}
       onWheel={(e) => {
         const { scrollHeight, clientHeight, scrollTop } = e.currentTarget;
         const maxScrollHeight = scrollHeight - clientHeight;

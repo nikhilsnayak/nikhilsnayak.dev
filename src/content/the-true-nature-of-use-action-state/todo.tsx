@@ -1,5 +1,7 @@
 import type { PropsWithChildren, SubmitEventHandler } from 'react';
 
+import { cn } from '~/lib/utils';
+
 export function AddTodoForm({
   onSubmit,
 }: Readonly<{
@@ -36,7 +38,7 @@ export function TodoItem({
 >) {
   return (
     <div className='flex items-center justify-between gap-2 border-b p-1'>
-      <p className={`overflow-hidden text-ellipsis ${done ? 'line-through' : ''}`}>{children}</p>
+      <p className={cn('overflow-hidden text-ellipsis', done && 'line-through')}>{children}</p>
       <div className='flex shrink-0 items-center gap-1'>
         <input
           type='checkbox'

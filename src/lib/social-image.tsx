@@ -1,48 +1,59 @@
+/* oxlint-disable next/no-img-element -- ImageResponse needs native img elements to embed raster assets. */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { ImageResponse } from 'next/og';
+import type { ReactNode } from 'react';
 
-const fontRegular = await fs.readFile(
-  path.join(process.cwd(), 'src/assets/fonts/JetBrainsMono-Regular.ttf'),
-);
-const fontBold = await fs.readFile(
-  path.join(process.cwd(), 'src/assets/fonts/JetBrainsMono-Bold.ttf'),
-);
+import { NameMark } from '~/components/name-mark';
+
+import { imagePalette as palette } from './image-palette';
+
+const [fontRegular, fontMono, portrait] = await Promise.all([
+  fs.readFile(path.join(process.cwd(), 'src/assets/fonts/Geist-Regular.ttf')),
+  fs.readFile(path.join(process.cwd(), 'src/assets/fonts/JetBrainsMono-Regular.ttf')),
+  fs.readFile(path.join(process.cwd(), 'src/assets/images/portrait-dot-matrix.png')),
+]);
+
+const portraitSource = `data:image/png;base64,${portrait.toString('base64')}`;
+const grainSource = `data:image/svg+xml;base64,${Buffer.from(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" stitchTiles="stitch" seed="7"/><feColorMatrix type="saturate" values="0"/></filter><rect width="1200" height="630" filter="url(#grain)"/></svg>',
+).toString('base64')}`;
 
 export const socialImageSize = { width: 1200, height: 630 };
 
-const grain = `data:image/svg+xml;base64,${Buffer.from(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><defs><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" seed="7"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="1200" height="630" fill="#303238"/><rect width="1200" height="630" opacity="0.19" filter="url(#grain)"/></svg>',
-).toString('base64')}`;
-
-const squares = [
-  { top: 65, left: 76, size: 90, opacity: 0.08 },
-  { top: 38, left: 202, size: 56, opacity: 0.07 },
-  { top: 114, left: 276, size: 23, opacity: 0.08 },
-  { top: 166, left: 31, size: 32, opacity: 0.07 },
-  { top: 410, left: 132, size: 31, opacity: 0.08 },
-  { top: 439, left: 208, size: 95, opacity: 0.09 },
-  { top: 491, left: 55, size: 55, opacity: 0.08 },
-  { top: 552, left: 161, size: 38, opacity: 0.08 },
-];
-
-interface SocialImageProps {
-  title: string;
-  description?: string;
+export function createSocialImage() {
+  return renderSocialImage(
+    <NameMark width={550} color={palette.foreground} accentColor={palette.accent} className='' />,
+  );
 }
 
-export function createSocialImage({ title, description }: SocialImageProps) {
-  const displayTitle = title.length > 160 ? `${title.slice(0, 157)}...` : title;
-  const fontSize =
-    displayTitle.length <= 30
-      ? 88
-      : displayTitle.length <= 50
-        ? 60
-        : displayTitle.length <= 70
-          ? 48
-          : 42;
+export function createArticleSocialImage(title: string) {
+  const normalizedTitle = title.trim().replace(/\s+/g, ' ');
+  const displayTitle =
+    normalizedTitle.length > 160
+      ? `${normalizedTitle.slice(0, 157).replace(/\s+\S*$/, '')}…`
+      : normalizedTitle;
+  const fontSize = displayTitle.length <= 35 ? 76 : displayTitle.length <= 85 ? 62 : 48;
 
+  return renderSocialImage(
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 36, width: 850 }}>
+      <NameMark width={230} color={palette.foreground} accentColor={palette.accent} className='' />
+      <div
+        style={{
+          fontSize,
+          letterSpacing: '-0.045em',
+          lineHeight: 1.12,
+          overflowWrap: 'break-word',
+        }}
+      >
+        {displayTitle}
+      </div>
+    </div>,
+  );
+}
+
+function renderSocialImage(content: ReactNode) {
   return new ImageResponse(
     <div
       style={{
@@ -50,72 +61,79 @@ export function createSocialImage({ title, description }: SocialImageProps) {
         flexDirection: 'column',
         width: '100%',
         height: '100%',
-        backgroundColor: '#303238',
-        backgroundImage: `url("${grain}")`,
-        color: '#ffffff',
-        fontFamily: 'JetBrains Mono',
+        padding: '60px 72px 40px',
+        backgroundColor: palette.background,
+        color: palette.foreground,
+        fontFamily: 'Geist',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      {squares.map(({ size, ...square }) => (
-        <div
-          key={square.left}
-          style={{
-            position: 'absolute',
-            ...square,
-            width: size,
-            height: size,
-            background: '#ffffff',
-          }}
-        />
-      ))}
+      <img
+        src={portraitSource}
+        alt=''
+        width={600}
+        height={600}
+        style={{ position: 'absolute', top: -14, right: -30, opacity: 0.35 }}
+      />
+      <img
+        src={grainSource}
+        alt=''
+        width={1200}
+        height={630}
+        style={{ position: 'absolute', top: 0, left: 0, opacity: 0.065 }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: 90,
+          left: 34,
+          width: 42,
+          height: 42,
+          background: palette.foreground,
+          opacity: 0.035,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: 72,
+          left: 79,
+          width: 18,
+          height: 18,
+          background: palette.foreground,
+          opacity: 0.035,
+        }}
+      />
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
-          width: '100%',
-          height: '100%',
-          padding: '100px 112px 72px 150px',
+          justifyContent: 'center',
+          flexGrow: 1,
+          paddingBottom: 20,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: 32 }}>
-            <div
-              style={{
-                fontSize,
-                fontWeight: 700,
-                letterSpacing: '-0.02em',
-                lineHeight: 1.2,
-                overflowWrap: 'break-word',
-              }}
-            >
-              {displayTitle}
-            </div>
-            {description ? (
-              <div style={{ fontSize: 32, lineHeight: 1.5, color: '#f5f5f5' }}>{description}</div>
-            ) : null}
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            fontSize: 26,
-            fontWeight: 700,
-            color: '#f5f5f5',
-            letterSpacing: '0.02em',
-          }}
-        >
-          nikhilsnayak.dev
-        </div>
+        {content}
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          borderTop: `1px solid ${palette.border}`,
+          paddingTop: 20,
+          fontFamily: 'JetBrains Mono',
+          fontSize: 17,
+          color: palette.muted,
+        }}
+      >
+        nikhilsnayak.dev
       </div>
     </div>,
     {
       ...socialImageSize,
       fonts: [
-        { name: 'JetBrains Mono', data: fontRegular, style: 'normal', weight: 400 },
-        { name: 'JetBrains Mono', data: fontBold, style: 'normal', weight: 700 },
+        { name: 'Geist', data: fontRegular, style: 'normal', weight: 400 },
+        { name: 'JetBrains Mono', data: fontMono, style: 'normal', weight: 400 },
       ],
     },
   );

@@ -51,4 +51,8 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+function TabsIndicator(props: TabsPrimitive.Indicator.Props) {
+  return <TabsPrimitive.Indicator data-slot='tabs-indicator' {...props} />;
+}
+
+export { Tabs, TabsList, TabsTrigger, TabsContent, TabsIndicator };

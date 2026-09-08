@@ -22,7 +22,9 @@ export async function getBlogMetadata() {
 
   const posts = await Promise.all(
     slugs.map(async (slug) => {
-      const metadata = await getPostMetadataBySlug(slug);
+      const postContent = await fs.readFile(path.join(CONTENT_DIR, slug, 'post.mdx'), 'utf-8');
+      const { data } = matter(postContent);
+      const metadata = PostMetadataSchema.parse(data);
       return {
         metadata,
         slug,
@@ -39,10 +41,9 @@ export async function getBlogMetadata() {
 }
 
 export async function getPostMetadataBySlug(slug: string) {
-  const postPath = path.join(CONTENT_DIR, slug, 'post.mdx');
-  const postContent = await fs.readFile(postPath, 'utf-8');
-  const { data } = matter(postContent);
-  return PostMetadataSchema.parse(data);
+  const posts = await getBlogMetadata();
+  const post = posts.find((post) => post.slug === slug);
+  return post?.metadata;
 }
 
 export function getViewsBySlug(slug: string) {
@@ -65,7 +66,7 @@ export async function getHeartsInfoBySlug(slug: string) {
 export async function getCommentsBySlug(slug: string): Promise<Comment[]> {
   const comments = await db.query.comments.findMany({
     where: { slug },
-    with: { user: true },
+    with: { user: { columns: { id: true, name: true, image: true } } },
     orderBy: (commentsTable, { desc }) => [desc(commentsTable.createdAt)],
   });
 
@@ -75,12 +76,13 @@ export async function getCommentsBySlug(slug: string): Promise<Comment[]> {
 
   const result: Comment[] = [];
 
-  comments.forEach((comment) => {
-    if (comment.parentId) {
-      const parentComment = commentMap.get(comment.parentId)!;
-      parentComment.replies.push(commentMap.get(comment.id)!);
+  commentMap.forEach((comment) => {
+    const parentComment = comment.parentId ? commentMap.get(comment.parentId) : undefined;
+    if (parentComment) {
+      parentComment.replies.push(comment);
     } else {
-      result.push(commentMap.get(comment.id)!);
+      // Keep historical orphaned replies readable if their parent isn't in this article.
+      result.push(comment);
     }
   });
 

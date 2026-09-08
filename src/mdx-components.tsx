@@ -1,6 +1,6 @@
 import { highlight, type LineNumbers } from 'code-syntactic-sugar';
-import { AppWindow, Code2 } from 'lucide-react';
 import type { MDXComponents } from 'mdx/types';
+import * as motion from 'motion/react-client';
 import { cacheLife } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,50 +14,18 @@ import {
 } from 'react';
 import { Tweet as ReactTweet, type TweetProps } from 'react-tweet';
 
+import { CodeFrame } from '~/components/code-frame';
+import { ExternalLink } from '~/components/external-link';
 import { Spinner } from '~/components/spinner';
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { detailEase } from '~/lib/motion';
 import { cn, slugify } from '~/lib/utils';
-
-function Table({
-  data,
-}: Readonly<{
-  data: {
-    headers: string[];
-    rows: string[][];
-  };
-}>) {
-  const headers = data.headers.map((header, index) => <th key={index}>{header}</th>);
-
-  const rows = data.rows.map((row, index) => (
-    <tr key={index}>
-      {row.map((cell, cellIndex) => (
-        <td key={cellIndex}>{cell}</td>
-      ))}
-    </tr>
-  ));
-
-  return (
-    <table>
-      <thead>
-        <tr>{headers}</tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </table>
-  );
-}
 
 function CustomLink({ href, ...props }: ComponentProps<'a'>) {
   if (href?.startsWith('/')) {
     return (
-      <Link
-        {...props}
-        href={{ pathname: href }}
-        className={cn(
-          'underline underline-offset-2 transition-all hover:underline-offset-4 focus-ring',
-          props.className,
-        )}
-      >
+      <Link {...props} href={{ pathname: href }} className={cn('text-link', props.className)}>
         {props.children}
       </Link>
     );
@@ -66,26 +34,16 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
   if (href?.startsWith('#')) {
     return (
       // oxlint-disable-next-line jsx-a11y/anchor-has-content
-      <a
-        {...props}
-        href={href}
-        className={cn(
-          'underline underline-offset-2 transition-all hover:underline-offset-4 focus-ring',
-          props.className,
-        )}
-      />
+      <a {...props} href={href} className={cn('text-link', props.className)} />
     );
   }
 
   return (
-    // oxlint-disable-next-line jsx-a11y/anchor-has-content
-    <a
+    <ExternalLink
       {...props}
       href={href}
-      target='_blank'
-      rel='noopener noreferrer'
       className={cn(
-        'underline underline-offset-2 transition-all hover:underline-offset-4 focus-ring',
+        'text-link [&>.external-arrow]:ml-1 [&>.external-arrow]:align-[-0.125em]',
         props.className,
       )}
     />
@@ -175,22 +133,14 @@ function Pre(props: Readonly<PreProps>) {
   };
 
   return (
-    <pre
-      className='border-border bg-muted/50 relative rounded-none! border p-0!'
-      data-line-numbers={lineNumbers}
-    >
-      {filename ? (
-        <div className='border-border text-muted-foreground sticky top-0 right-0 left-0 overflow-hidden border-b px-4 py-2 font-mono text-xs font-normal'>
-          {filename}
-        </div>
-      ) : null}
+    <CodeFrame code={children.props.children} filename={filename} lineNumbers={lineNumbers}>
       {cloneElement(children, {
         highlightedLines: getLineNumbers(highlight),
         addedLines: getLineNumbers(addition),
         removedLines: getLineNumbers(deletion),
         noHighlight,
       })}
-    </pre>
+    </CodeFrame>
   );
 }
 
@@ -219,19 +169,32 @@ function createHeading(level: number) {
 
 function CodeBlock({ children }: PropsWithChildren) {
   return (
-    <Tabs defaultValue='snippet'>
-      <TabsList>
-        <TabsTrigger value='snippet' className='flex items-center gap-2'>
-          <Code2 className='size-5' />
-          Code
-        </TabsTrigger>
-        <TabsTrigger value='preview' className='flex items-center gap-2'>
-          <AppWindow className='size-5' />
-          Preview
-        </TabsTrigger>
-      </TabsList>
+    <CustomTabs defaultValue='snippet'>
+      <div className='border-border bg-muted/50 flex h-11 items-center border border-b-0 pr-28 pl-1.5'>
+        <TabsList
+          aria-label='Example view'
+          className='group/code-view border-border relative h-9 rounded-full border bg-transparent p-0.5'
+        >
+          <TabsIndicator
+            className='bg-secondary pointer-events-none absolute top-(--active-tab-top) left-(--active-tab-left) h-(--active-tab-height) w-(--active-tab-width) rounded-full group-has-focus-visible/code-view:transform-none!'
+            render={<motion.span layout transition={{ duration: 0.18, ease: detailEase }} />}
+          />
+          {[
+            ['snippet', 'Code'],
+            ['preview', 'Preview'],
+          ].map(([value, label]) => (
+            <TabsTrigger
+              key={value}
+              value={value}
+              className='data-active:text-foreground dark:data-active:text-foreground text-muted-foreground relative h-7.5 w-16 flex-none rounded-full border-0 px-0 font-mono text-[11px] font-normal shadow-none data-active:bg-transparent data-active:shadow-none dark:data-active:bg-transparent'
+            >
+              {label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </div>
       {children}
-    </Tabs>
+    </CustomTabs>
   );
 }
 
@@ -241,31 +204,10 @@ function Snippet({ children }: PropsWithChildren) {
 
 function Preview({ children }: PropsWithChildren) {
   return (
-    <TabsContent value='preview' className='not-prose'>
+    <TabsContent value='preview' className='not-prose border-border bg-muted/50 border p-3 sm:p-4'>
       {children}
     </TabsContent>
   );
-}
-
-interface CollapsibleContentProps extends PropsWithChildren {
-  summary: string;
-}
-
-function CollapsibleContent({ summary, children }: CollapsibleContentProps) {
-  return (
-    <details className='my-4'>
-      <summary className='focus-ring cursor-pointer'>{summary}</summary>
-      <div className='mt-2'>{children}</div>
-    </details>
-  );
-}
-
-function Row({ children }: PropsWithChildren) {
-  return <div className='grid gap-4 sm:grid-cols-2'>{children}</div>;
-}
-
-function Column({ children }: PropsWithChildren) {
-  return <div className='grid place-items-center'>{children}</div>;
 }
 
 async function Tweet(props: TweetProps) {
@@ -279,15 +221,33 @@ async function Tweet(props: TweetProps) {
 }
 
 function CustomTabs({ className, ...props }: ComponentProps<typeof Tabs>) {
-  return <Tabs className={cn('gap-0 [&_pre]:mt-0!', className)} {...props} />;
+  return <Tabs className={cn('mdx-tabs my-6 gap-0', className)} {...props} />;
 }
 
 function CustomTabsList({ className, ...props }: ComponentProps<typeof TabsList>) {
   return (
-    <ScrollArea className='border-border bg-muted/50 w-full border border-b-0'>
-      <TabsList className={cn('bg-inherit', className)} {...props} />
-      <ScrollBar orientation='horizontal' />
-    </ScrollArea>
+    <div className='border-border bg-muted/50 border border-b-0 pr-28'>
+      <ScrollArea className='w-full'>
+        <TabsList className={cn('h-11 bg-transparent p-0', className)} {...props} />
+        <ScrollBar
+          orientation='horizontal'
+          className='h-1 border-t-0 p-0'
+          style={{ top: 0, bottom: 'auto' }}
+        />
+      </ScrollArea>
+    </div>
+  );
+}
+
+function CustomTabsTrigger({ className, ...props }: ComponentProps<typeof TabsTrigger>) {
+  return (
+    <TabsTrigger
+      className={cn(
+        'text-muted-foreground data-active:text-foreground data-active:border-foreground h-11 border-0 border-b border-transparent bg-transparent px-3.5 font-mono text-xs font-normal shadow-none data-active:bg-transparent data-active:shadow-none dark:data-active:border-foreground dark:data-active:bg-transparent',
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
@@ -301,21 +261,15 @@ const components = {
   Image,
   a: CustomLink,
   code: Code,
-  Table,
   LoadingSpinner: Spinner,
   pre: Pre,
   CodeBlock,
   Snippet,
   Preview,
-  CollapsibleContent,
-  Row,
-  Column,
   Tweet,
-  ScrollArea,
-  ScrollBar,
   Tabs: CustomTabs,
   TabsList: CustomTabsList,
-  TabsTrigger,
+  TabsTrigger: CustomTabsTrigger,
   TabsContent,
 };
 
