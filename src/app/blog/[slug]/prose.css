@@ -1,0 +1,132 @@
+@reference '../../globals.css';
+
+article.prose :is(h1, h2, h3, h4, h5, h6),
+#comments {
+  scroll-margin-top: 1.5rem;
+}
+
+article.prose .anchor {
+  @apply absolute no-underline opacity-0;
+
+  margin-left: -1em;
+  width: 1em;
+  cursor: pointer;
+  translate: -3px 0;
+  transition:
+    opacity 120ms var(--ease-detail),
+    translate 120ms var(--ease-detail);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  article.prose .anchor {
+    translate: 0 0;
+    transition: none;
+  }
+}
+
+article.prose .anchor:after {
+  @apply text-muted-foreground;
+  content: '#';
+}
+
+article.prose *:hover > .anchor,
+article.prose .anchor:focus-visible {
+  @apply opacity-100;
+
+  translate: 0 0;
+}
+
+article.prose pre[data-line-numbers='true'] code {
+  counter-reset: css-line-number;
+}
+
+article.prose pre[data-line-numbers='true'] .css__line::before {
+  counter-increment: css-line-number 1;
+  content: counter(css-line-number, decimal-leading-zero);
+  display: inline-block;
+  width: 2rem;
+  color: oklch(0.718705 0 0);
+}
+
+article.prose pre code {
+  @apply my-2 block w-full min-w-max;
+}
+
+article.prose pre code .css__line {
+  @apply inline-block w-full border-l-4 border-transparent px-4;
+}
+
+article.prose pre code .css__line[data-highlighted-line] {
+  background-color: oklch(var(--highlighted-line) / 0.1);
+  border-color: oklch(var(--highlighted-line) / 0.5);
+}
+
+article.prose pre code .css__line[data-added-line] {
+  background-color: oklch(var(--added-line) / 0.1);
+  border-color: oklch(var(--added-line) / 0.5);
+}
+
+article.prose pre code .css__line[data-removed-line] {
+  background-color: oklch(var(--removed-line) / 0.1);
+  border-color: oklch(var(--removed-line) / 0.5);
+}
+
+article.prose pre code[data-no-highlight] {
+  @apply text-foreground;
+}
+
+article.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-links: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-invert-body: var(--foreground);
+  --tw-prose-invert-links: var(--foreground);
+  --tw-prose-invert-headings: var(--foreground);
+  line-height: 1.85;
+}
+
+@keyframes heading-arrive {
+  0%,
+  35% {
+    background-color: color-mix(in srgb, var(--primary) 13%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--primary) 13%, transparent);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+article.prose :is(h1, h2, h3, h4, h5, h6):target {
+  animation: heading-arrive 1600ms ease-in both;
+}
+
+article.prose :is(h1, h2, h3, h4, h5, h6):target > .anchor {
+  opacity: 1;
+}
+
+article.prose :is(h1, h2, h3, h4, h5, h6):target > .anchor::after {
+  content: '•';
+  color: var(--primary);
+}
+
+article.prose .mdx-tabs > [data-slot='tabs-content'] > .code-frame:first-child {
+  @apply mt-0;
+}
+
+article.prose .mdx-tabs > [data-slot='tabs-content'] > .code-frame:last-child {
+  @apply mb-0;
+}
+
+article.prose .mdx-tabs > [data-slot='tabs-content'] > .code-frame:first-child > .code-toolbar {
+  @apply absolute -top-11 right-0 z-1 border-b-0 pl-0;
+}
+
+article.prose
+  .mdx-tabs
+  > [data-slot='tabs-content']
+  > .code-frame:first-child
+  > .code-toolbar
+  > span {
+  @apply hidden;
+}

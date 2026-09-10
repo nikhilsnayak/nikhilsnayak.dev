@@ -1,0 +1,63 @@
+::view-transition-old(.slide-down) {
+  animation:
+    150ms ease-out both fade-out,
+    150ms ease-out both slide-down;
+}
+
+::view-transition-new(.slide-up) {
+  animation:
+    210ms ease-in 150ms both fade-in,
+    400ms ease-in both slide-up;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(10px);
+  }
+}
+
+::view-transition-group(.nav-dot) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-detail);
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+::view-transition-group(.article-title) {
+  animation-duration: 180ms;
+  animation-timing-function: var(--ease-detail);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

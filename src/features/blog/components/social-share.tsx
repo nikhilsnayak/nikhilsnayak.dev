@@ -12,17 +12,43 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { useCopyToClipboard } from '~/hooks/use-copy-to-clipboard';
+import { useIsClient } from '~/hooks/use-is-client';
 import { BASE_URL } from '~/lib/constants';
 import { detailEase } from '~/lib/motion';
+
+const triggerClassName =
+  'focus-ring text-muted-foreground hover:text-foreground aria-expanded:text-foreground inline-flex h-11 cursor-pointer items-center gap-2 bg-transparent p-0 text-sm leading-none';
+
+const itemClassName =
+  'text-muted-foreground data-highlighted:text-foreground data-highlighted:bg-foreground/5 [&_svg]:text-muted-foreground min-h-11 cursor-pointer gap-3 px-3 font-mono';
 
 export function SocialShare({ slug, title }: Readonly<{ slug: string; title: string }>) {
   const postLink = `${BASE_URL}/blog/${slug}`;
   const { status, copy } = useCopyToClipboard(postLink);
   const [keyboard, setKeyboard] = useState(false);
+  const canShare = useIsClient() && typeof navigator.share === 'function';
+
+  if (canShare) {
+    return (
+      <button
+        type='button'
+        className={triggerClassName}
+        onClick={() => {
+          void navigator.share({ title, url: postLink }).catch(() => {});
+        }}
+      >
+        <span className='relative top-[-1.5px] shrink-0' aria-hidden='true'>
+          <ShareIcon size={14} className='size-3.5' strokeWidth={1.5} />
+        </span>
+        <span>Share</span>
+      </button>
+    );
+  }
+
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger className='focus-ring text-muted-foreground hover:text-foreground aria-expanded:text-foreground inline-flex h-11 cursor-pointer items-center gap-2 bg-transparent p-0 text-sm leading-none'>
+        <DropdownMenuTrigger className={triggerClassName}>
           <motion.span
             key={status}
             className='relative top-[-1.5px] shrink-0'
@@ -51,7 +77,7 @@ export function SocialShare({ slug, title }: Readonly<{ slug: string; title: str
           className='bg-background w-44 border p-1 shadow-[0_8px_24px_oklch(0_0_0/0.18)]'
         >
           <DropdownMenuItem
-            className='text-muted-foreground data-highlighted:text-foreground data-highlighted:bg-foreground/5 [&_svg]:text-muted-foreground min-h-11 cursor-pointer gap-3 px-3 font-mono'
+            className={itemClassName}
             onClick={(event) => {
               setKeyboard(event.detail === 0);
               void copy();
@@ -61,10 +87,10 @@ export function SocialShare({ slug, title }: Readonly<{ slug: string; title: str
             <span>Copy link</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className='text-muted-foreground data-highlighted:text-foreground data-highlighted:bg-foreground/5 [&_svg]:text-muted-foreground min-h-11 cursor-pointer gap-3 px-3 font-mono'
+            className={itemClassName}
             render={
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${title} — ${postLink}`)}`}
+                href={`https://x.com/intent/post?text=${encodeURIComponent(`${title} — ${postLink}`)}`}
                 target='_blank'
                 rel='noopener noreferrer'
               >

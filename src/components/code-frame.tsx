@@ -24,6 +24,7 @@ export function CodeFrame({
   const [keyboard, setKeyboard] = useState(false);
   const viewport = useRef<HTMLPreElement>(null);
   const [edges, setEdges] = useState({ left: false, right: false });
+  const selected = useRef<string | undefined>(undefined);
   useEffect(() => {
     const element = viewport.current;
     if (!element) return;
@@ -53,9 +54,21 @@ export function CodeFrame({
           type='button'
           className='focus-ring hover:text-foreground flex min-h-11 shrink-0 cursor-pointer items-center gap-2 px-3 text-xs transition-colors print:hidden'
           aria-label={status === 'error' ? 'Copy failed. Try copying code again' : 'Copy code'}
+          onPointerDown={() => {
+            const selection = window.getSelection();
+            const range =
+              selection && selection.rangeCount === 1 && !selection.isCollapsed
+                ? selection.getRangeAt(0)
+                : undefined;
+            const text = range?.toString().trim();
+            const whollyInside =
+              !!range && !!viewport.current?.contains(range.commonAncestorContainer);
+            selected.current = whollyInside && text ? text : undefined;
+          }}
           onClick={(event) => {
             setKeyboard(event.detail === 0);
-            void copy();
+            void copy(selected.current);
+            selected.current = undefined;
           }}
         >
           <motion.span
@@ -94,12 +107,12 @@ export function CodeFrame({
         </pre>
         <span
           aria-hidden='true'
-          className='from-foreground/12 pointer-events-none absolute inset-y-0 left-0 w-4.5 bg-linear-to-r to-transparent opacity-0 data-[visible=true]:opacity-100 print:hidden'
+          className='from-foreground/12 pointer-events-none absolute inset-y-0 left-0 w-4.5 bg-linear-to-r to-transparent opacity-0 transition-opacity duration-150 data-[visible=true]:opacity-100 motion-reduce:transition-none print:hidden'
           data-visible={edges.left}
         />
         <span
           aria-hidden='true'
-          className='from-foreground/12 pointer-events-none absolute inset-y-0 right-0 w-4.5 bg-linear-to-l to-transparent opacity-0 data-[visible=true]:opacity-100 print:hidden'
+          className='from-foreground/12 pointer-events-none absolute inset-y-0 right-0 w-4.5 bg-linear-to-l to-transparent opacity-0 transition-opacity duration-150 data-[visible=true]:opacity-100 motion-reduce:transition-none print:hidden'
           data-visible={edges.right}
         />
       </div>

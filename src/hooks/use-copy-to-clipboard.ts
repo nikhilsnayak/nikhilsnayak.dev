@@ -14,11 +14,11 @@ export function useCopyToClipboard(content: string) {
     [],
   );
 
-  async function copy() {
+  async function copy(override?: string) {
     const currentAttempt = ++attempt.current;
     clearTimeout(timeout.current);
     try {
-      await navigator.clipboard.writeText(content);
+      await navigator.clipboard.writeText(override ?? content);
       if (currentAttempt !== attempt.current) return;
       setStatus('copied');
       timeout.current = setTimeout(() => setStatus('idle'), 1200);

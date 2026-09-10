@@ -1,8 +1,10 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
-@plugin '@tailwindcss/typography';
 
-@custom-variant dark (&:is(.dark *));
+@import 'tw-animate-css';
+
+@import './view-transitions.css';
+
+@plugin '@tailwindcss/typography';
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -41,6 +43,7 @@
   --shadow-sm: var(--shadow-sm);
   --shadow-xs: var(--shadow-xs);
   --shadow-2xs: var(--shadow-2xs);
+  --ease-detail: cubic-bezier(0.23, 1, 0.32, 1);
   --spacing: var(--spacing);
   --font-sans: var(--font-sans);
   --radius-2xl: calc(var(--radius) + 8px);
@@ -136,11 +139,7 @@
   --css-entity: oklch(0.76469 0.163333 69.507987);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-}
+@custom-variant dark (&:is(.dark *));
 
 @custom-variant data-open {
   &:where([data-state='open']),
@@ -210,11 +209,42 @@
   }
 }
 
-/* Consistent, branded keyboard-focus indicator. Opt-in per element (add the
-   `focus-ring` class), mirroring how `press` is applied — no global selector. */
 @utility focus-ring {
   &:focus-visible {
     @apply outline-ring outline-2 outline-offset-2;
+  }
+}
+
+@utility site-width {
+  @apply mx-auto w-[min(100%-3rem,44rem)];
+}
+
+@utility section-label {
+  @apply text-muted-foreground font-mono text-xs leading-normal;
+}
+
+@utility text-link {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 4px;
+  transition:
+    color 150ms ease,
+    text-decoration-color 150ms ease;
+
+  &:hover {
+    color: var(--foreground);
+    text-decoration-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
   }
 }
 
@@ -247,186 +277,84 @@ html {
   background-color: var(--accent-foreground);
 }
 
-article.prose :is(h1, h2, h3, h4, h5, h6),
-#comments {
-  scroll-margin-top: 1.5rem;
-}
-
-article.prose .anchor {
-  @apply absolute no-underline opacity-0;
-
-  margin-left: -1em;
-  width: 1em;
-  cursor: pointer;
-}
-
-article.prose .anchor:after {
-  @apply text-muted-foreground;
-  content: '#';
-}
-
-article.prose *:hover > .anchor,
-article.prose .anchor:focus-visible {
-  @apply opacity-100;
-}
-
-article.prose pre[data-line-numbers='true'] code {
-  counter-reset: css-line-number;
-}
-
-article.prose pre[data-line-numbers='true'] .css__line::before {
-  counter-increment: css-line-number 1;
-  content: counter(css-line-number, decimal-leading-zero);
-  display: inline-block;
-  width: 2rem;
-  color: oklch(0.718705 0 0);
-}
-
-article.prose pre code {
-  @apply my-2 block w-full min-w-max;
-}
-
-article.prose pre code .css__line {
-  @apply inline-block w-full border-l-4 border-transparent px-4;
-}
-
-article.prose pre code .css__line[data-highlighted-line] {
-  background-color: oklch(var(--highlighted-line) / 0.1);
-  border-color: oklch(var(--highlighted-line) / 0.5);
-}
-
-article.prose pre code .css__line[data-added-line] {
-  background-color: oklch(var(--added-line) / 0.1);
-  border-color: oklch(var(--added-line) / 0.5);
-}
-
-article.prose pre code .css__line[data-removed-line] {
-  background-color: oklch(var(--removed-line) / 0.1);
-  border-color: oklch(var(--removed-line) / 0.5);
-}
-
-article.prose pre code[data-no-highlight] {
-  @apply text-foreground;
-}
-
-::view-transition-old(.slide-down) {
-  animation:
-    150ms ease-out both fade-out,
-    150ms ease-out both slide-down;
-}
-
-::view-transition-new(.slide-up) {
-  animation:
-    210ms ease-in 150ms both fade-in,
-    400ms ease-in both slide-up;
-}
-
-@keyframes slide-up {
-  from {
-    transform: translateY(10px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-down {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(10px);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
 ::selection {
   background-color: var(--primary);
   color: var(--primary-foreground);
 }
 
-@utility site-width {
-  @apply mx-auto w-[min(100%-3rem,44rem)];
+.page-background {
+  position: relative;
+  isolation: isolate;
 }
 
-@utility section-label {
-  @apply text-muted-foreground font-mono text-xs leading-normal;
+.page-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.24;
+  filter: contrast(2) brightness(0.65);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='oklch(0.626754%200%200)' filter='url(%23grain)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+  mask-image:
+    radial-gradient(ellipse at center, oklch(0 0 0) 10%, transparent 70%),
+    radial-gradient(ellipse at center, oklch(0 0 0 / 65%), transparent 70%);
+  mask-size:
+    1400px 1100px,
+    900px 1300px;
+  mask-position:
+    center top -200px,
+    center top 400px;
+  mask-repeat: repeat-y;
 }
 
-@utility text-link {
-  text-decoration-line: underline;
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
-  text-underline-offset: 4px;
-  transition:
-    color 150ms ease,
-    text-decoration-color 150ms ease;
+.dark .page-background::before {
+  opacity: 0.12;
+  filter: none;
+}
 
-  &:hover {
-    color: var(--foreground);
-    text-decoration-color: currentColor;
+.page-background::after {
+  content: '';
+  position: absolute;
+  top: 112px;
+  left: max(24px, calc((100% - 64rem) / 2));
+  z-index: -1;
+  width: 180px;
+  height: 190px;
+  pointer-events: none;
+  opacity: 0.035;
+  background:
+    linear-gradient(currentColor, currentColor) left 24px top 48px / 56px 56px,
+    linear-gradient(currentColor, currentColor) left 84px top 24px / 24px 24px;
+  background-repeat: no-repeat;
+}
+
+.dark .page-background::after {
+  opacity: 0.045;
+}
+
+@media (max-width: 639px) {
+  .page-background::after {
+    display: none;
   }
+}
 
-  &:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 4px;
+@media print, (forced-colors: active) {
+  .page-background::before,
+  .page-background::after {
+    display: none;
   }
 }
 
-article.prose {
-  --tw-prose-body: var(--foreground);
-  --tw-prose-links: var(--foreground);
-  --tw-prose-headings: var(--foreground);
-  --tw-prose-invert-body: var(--foreground);
-  --tw-prose-invert-links: var(--foreground);
-  --tw-prose-invert-headings: var(--foreground);
-  line-height: 1.85;
+.portrait-mask {
+  mask-image: linear-gradient(to bottom, oklch(0 0 0) 45%, transparent 95%);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
+@media (min-width: 640px) {
+  .portrait-mask {
+    mask-image:
+      linear-gradient(to right, transparent, oklch(0 0 0) 45%),
+      linear-gradient(to bottom, oklch(0 0 0) 65%, transparent);
+    mask-composite: intersect;
   }
-}
-
-article.prose :is(h1, h2, h3, h4, h5, h6):target > .anchor {
-  opacity: 1;
-}
-article.prose :is(h1, h2, h3, h4, h5, h6):target > .anchor::after {
-  content: '•';
-  color: var(--primary);
-}
-
-/* The active panel owns Copy, but places it beside the horizontally scrolling tabs. */
-.mdx-tabs > [data-slot='tabs-content'] > .code-frame:first-child {
-  @apply mt-0;
-}
-
-.mdx-tabs > [data-slot='tabs-content'] > .code-frame:last-child {
-  @apply mb-0;
-}
-
-.mdx-tabs > [data-slot='tabs-content'] > .code-frame:first-child > .code-toolbar {
-  @apply absolute -top-11 right-0 z-1 border-b-0 pl-0;
-}
-
-.mdx-tabs > [data-slot='tabs-content'] > .code-frame:first-child > .code-toolbar > span {
-  @apply hidden;
-}
-
-::view-transition-group(.article-title) {
-  animation-duration: 180ms;
-  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { ChevronDown, Ellipsis, Pencil, Trash2 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   createContext,
   startTransition,
@@ -8,12 +9,12 @@ import {
   useActionState,
   useOptimistic,
   useRef,
+  type ReactNode,
   type RefObject,
   useState,
 } from 'react';
 import { toast } from 'sonner';
 
-import { List } from '~/components/list';
 import { Spinner } from '~/components/spinner';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
@@ -34,6 +35,7 @@ import {
   DropdownMenuItem,
 } from '~/components/ui/dropdown-menu';
 import { Textarea } from '~/components/ui/textarea';
+import { detailEase } from '~/lib/motion';
 import { cn, formatDate } from '~/lib/utils';
 
 import { addComment, deleteComment, editComment } from '../functions/mutations';
@@ -264,23 +266,54 @@ function useCommentsManager() {
   return context;
 }
 
+function AnimatedComments({
+  items,
+  className,
+  emptyFallback,
+  children,
+}: Readonly<{
+  items: OptimisticComment[];
+  className?: string;
+  emptyFallback?: ReactNode;
+  children: (item: OptimisticComment) => ReactNode;
+}>) {
+  if (items.length === 0) return emptyFallback ?? null;
+
+  return (
+    <ul className={className}>
+      <AnimatePresence initial={false}>
+        {items.map((item) => (
+          <motion.li
+            key={item.id}
+            layout
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4, transition: { duration: 0.18, ease: detailEase } }}
+            transition={{ duration: 0.32, ease: detailEase }}
+          >
+            {children(item)}
+          </motion.li>
+        ))}
+      </AnimatePresence>
+    </ul>
+  );
+}
+
 function CommentsList() {
   const { comments } = useCommentsManager();
 
   return (
-    <List
+    <AnimatedComments
       className='space-y-8'
       items={comments}
-      emptyListFallback={
+      emptyFallback={
         <p className='border-border text-muted-foreground border-t py-6 font-mono text-xs'>
           No comments yet.
         </p>
       }
     >
-      {(comment) => {
-        return <CommentThread comment={comment} />;
-      }}
-    </List>
+      {(comment) => <CommentThread comment={comment} />}
+    </AnimatedComments>
   );
 }
 
@@ -419,12 +452,12 @@ function CommentThread({
       {comment.replies.length > 0 && (
         <CollapsibleContent className='col-span-2'>
           <div className={cn('pt-2', !nested && 'pl-3 sm:pl-9')}>
-            <List
+            <AnimatedComments
               className={cn('space-y-4', !nested && 'border-border/60 border-l pl-3 sm:pl-4')}
               items={comment.replies}
             >
               {(reply) => <CommentThread comment={reply} nested />}
-            </List>
+            </AnimatedComments>
           </div>
         </CollapsibleContent>
       )}

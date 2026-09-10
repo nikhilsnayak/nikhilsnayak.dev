@@ -1,13 +1,6 @@
-const letters = [
-  ['10001', '11001', '11001', '10101', '10011', '10011', '10001'],
-  ['11111', '00100', '00100', '00100', '00100', '00100', '11111'],
-  ['10001', '10010', '10100', '11000', '10100', '10010', '10001'],
-  ['10001', '10001', '10001', '11111', '10001', '10001', '10001'],
-  ['11111', '00100', '00100', '00100', '00100', '00100', '11111'],
-  ['10000', '10000', '10000', '10000', '10000', '10000', '11111'],
-  [],
-  ['01111', '10000', '10000', '01110', '00001', '00001', '11110'],
-];
+import { NAME_MARK_GLYPHS } from '~/lib/constants';
+
+import { DotMatrix } from './dot-matrix';
 
 export function NameMark({
   width = 404,
@@ -29,22 +22,7 @@ export function NameMark({
       aria-hidden='true'
       className={className}
     >
-      {letters.flatMap((rows, letter) =>
-        rows.flatMap((row, y) =>
-          row
-            .split('')
-            .map((dot, x) =>
-              dot === '1' ? (
-                <circle
-                  key={`${letter}-${y}-${x}`}
-                  cx={letter * 48 + x * 8 + 4}
-                  cy={y * 8 + 4}
-                  r='2.8'
-                />
-              ) : null,
-            ),
-        ),
-      )}
+      <DotMatrix glyphs={NAME_MARK_GLYPHS} />
       <circle
         cx='398'
         cy='52'

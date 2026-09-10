@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { Suspense, ViewTransition } from 'react';
 
 import { ErrorBoundary } from '~/components/error-boundary';
+import { ExternalLink } from '~/components/external-link';
 import { BlogStats } from '~/features/blog/components/blog-stats';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
-import { BASE_URL, WRITING_INTRO } from '~/lib/constants';
+import { FEED_PATH, WRITING_INTRO } from '~/lib/constants';
 import { formatDate, viewTransitionName } from '~/lib/utils';
 
 const socialImage = {
@@ -43,13 +44,13 @@ export default async function BlogsPage() {
           <h1 className='text-4xl font-medium tracking-tight sm:text-5xl'>
             writing<span className='text-primary'>.</span>
           </h1>
-          <a
-            href={`${BASE_URL}/rss.xml`}
-            className='text-link font-mono text-xs'
+          <ExternalLink
+            href={FEED_PATH}
+            className='text-link inline-flex items-center gap-1 font-mono text-xs'
             aria-label='RSS feed'
           >
             rss
-          </a>
+          </ExternalLink>
         </div>
         <p className='text-muted-foreground max-w-lg leading-7 text-pretty'>{WRITING_INTRO}</p>
         <div className='mt-5'>
@@ -75,7 +76,10 @@ export default async function BlogsPage() {
             aria-labelledby={`year-${year}`}
             className='grid gap-4 sm:grid-cols-[64px_1fr] sm:gap-8'
           >
-            <h2 id={`year-${year}`} className='section-label pt-1 tabular-nums'>
+            <h2
+              id={`year-${year}`}
+              className='section-label pt-1 tabular-nums sm:sticky sm:top-8 sm:self-start'
+            >
               {year}
             </h2>
             <ul className='space-y-8'>

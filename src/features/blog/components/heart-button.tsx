@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion, useAnimationControls } from 'motion/react';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { Button } from '~/components/ui/button';
 import { detailEase } from '~/lib/motion';
@@ -16,18 +16,16 @@ export function HeartButton({ heartsInfo }: Readonly<{ heartsInfo?: HeartsInfo }
   const controls = useAnimationControls();
   const clipId = useId();
   const count = Math.min(heartsInfo?.currentClientHeartsCount ?? 0, 3);
-  const previous = useRef(count);
   const [pointer, setPointer] = useState(false);
 
   useEffect(() => {
-    if (previous.current < 3 && count === 3 && pointer) {
-      void controls.start({
-        scale: [1, 1.08, 1],
-        transition: { duration: 0.2, ease: detailEase },
-      });
-    }
-    previous.current = count;
-  }, [controls, count, pointer]);
+    if (count < 3) return;
+    void controls.start({
+      scale: [1, 1.2, 1],
+      transition: { duration: 0.5, repeat: Infinity, repeatDelay: 0.5 },
+    });
+    return () => controls.stop();
+  }, [controls, count]);
 
   const release = () => {
     if (pointer)
@@ -47,8 +45,9 @@ export function HeartButton({ heartsInfo }: Readonly<{ heartsInfo?: HeartsInfo }
           : `Like. Current likes: ${heartsInfo?.total ?? 0}`
       }
       disabled={!heartsInfo || count === 3}
-      onPointerDown={() => {
+      onPointerDown={(event) => {
         setPointer(true);
+        if (event.pointerType !== 'mouse') navigator.vibrate?.(count === 2 ? [6, 30, 12] : 6);
         void controls.start({
           scale: 0.94,
           transition: { duration: 0.1, ease: detailEase },

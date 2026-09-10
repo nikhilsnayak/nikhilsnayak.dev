@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Suspense, ViewTransition } from 'react';
 
+import { EffectiveRscIcon } from '~/assets/icons/effective-rsc';
+import { TetherIcon } from '~/assets/icons/tether';
 import { ErrorBoundary } from '~/components/error-boundary';
 import { ExternalLink } from '~/components/external-link';
 import { InteractiveName } from '~/components/interactive-name';
@@ -10,9 +12,7 @@ import { Spinner } from '~/components/spinner';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 import { Contributions } from '~/features/github/components/contributions';
 import { BASE_URL, SITE_INTRO } from '~/lib/constants';
-import { cn, viewTransitionName } from '~/lib/utils';
-
-import styles from './home.module.css';
+import { viewTransitionName } from '~/lib/utils';
 
 export default async function HomePage() {
   const posts = await getBlogMetadata();
@@ -37,12 +37,7 @@ export default async function HomePage() {
         }}
       />
       <header className='relative pt-40 sm:min-h-88 sm:pt-16'>
-        <InteractivePortrait
-          className={cn(
-            styles.portrait,
-            'pointer-events-none absolute -top-18 -right-6 z-0 w-[min(22rem,100vw)] opacity-45 mix-blend-multiply invert select-none sm:-top-20 sm:w-112 lg:-right-24 lg:w-124 dark:opacity-55 dark:mix-blend-screen dark:invert-0 print:hidden forced-colors:hidden',
-          )}
-        />
+        <InteractivePortrait className='portrait-mask pointer-events-none absolute -top-18 -right-6 z-0 w-[min(22rem,100vw)] opacity-45 mix-blend-multiply invert select-none sm:-top-20 sm:w-112 lg:-right-24 lg:w-124 dark:opacity-55 dark:mix-blend-screen dark:invert-0 print:hidden forced-colors:hidden' />
         <div className='relative z-1 max-w-116'>
           <p className='text-muted-foreground mb-5 font-mono text-sm'>hey, i'm</p>
           <h1>
@@ -59,11 +54,16 @@ export default async function HomePage() {
 
       <section aria-labelledby='building-heading'>
         <h2 id='building-heading' className='section-label mb-6'>
-          things i'm building
+          things i've built
         </h2>
         <div className='grid gap-12 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-0'>
           <article className='border-border min-w-0 border-t pt-5 sm:row-span-4 sm:grid sm:grid-rows-subgrid'>
-            <p className='font-mono text-xs'>effective-rsc</p>
+            <p className='flex items-center gap-2 font-mono text-xs'>
+              <span className='bg-background inline-flex size-5 shrink-0 items-center justify-center rounded-[5px] shadow-sm dark:shadow-[0_1px_6px_oklch(1_0_0/0.14)]'>
+                <EffectiveRscIcon className='size-3' />
+              </span>
+              effective-rsc
+            </p>
             <h3 className='mt-6 text-xl leading-normal tracking-tight text-pretty'>
               What if Effect handled the runtime behind RSC?
             </h3>
@@ -75,6 +75,13 @@ export default async function HomePage() {
                 the story
               </Link>
               <ExternalLink
+                href='https://effective-rsc.nikhilsnayak.dev'
+                aria-label='effective-rsc documentation'
+                className='text-link inline-flex items-center gap-1'
+              >
+                docs
+              </ExternalLink>
+              <ExternalLink
                 href='https://github.com/nikhilsnayak/effective-rsc'
                 aria-label='effective-rsc code on GitHub'
                 className='text-link inline-flex items-center gap-1'
@@ -84,7 +91,12 @@ export default async function HomePage() {
             </div>
           </article>
           <article className='border-border min-w-0 border-t pt-5 sm:row-span-4 sm:grid sm:grid-rows-subgrid'>
-            <p className='font-mono text-xs'>Tether</p>
+            <p className='flex items-center gap-2 font-mono text-xs'>
+              <span className='bg-background inline-flex size-5 shrink-0 items-center justify-center rounded-[5px] shadow-sm dark:shadow-[0_1px_6px_oklch(1_0_0/0.14)]'>
+                <TetherIcon className='size-3' />
+              </span>
+              Tether
+            </p>
             <h3 className='mt-6 text-xl leading-normal tracking-tight text-pretty'>
               What if a call felt like sharing a room?
             </h3>
@@ -150,7 +162,7 @@ export default async function HomePage() {
 
       <section aria-labelledby='upstream-heading'>
         <h2 id='upstream-heading' className='section-label mb-6'>
-          things i ran into
+          things i've run into
         </h2>
         <p className='text-muted-foreground mb-6 max-w-xl text-sm leading-7 text-pretty'>
           These started as bugs I hit while building something. Some I fixed with a small PR. For

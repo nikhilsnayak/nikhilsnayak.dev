@@ -1,3 +1,4 @@
+import './prose.css';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -97,9 +98,12 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
       />
       <Link
         href='/blog'
-        className='text-link text-muted-foreground mb-8 inline-flex items-center gap-2 font-mono text-xs'
+        className='text-link text-muted-foreground group mb-8 inline-flex items-center gap-2 font-mono text-xs'
       >
-        <ArrowLeft className='size-4' aria-hidden='true' />
+        <ArrowLeft
+          className='ease-detail size-4 transition-transform duration-140 group-hover:-translate-x-0.5 motion-reduce:transition-none'
+          aria-hidden='true'
+        />
         All writing
       </Link>
       <ViewTransition name={viewTransitionName(slug)} default='none' share='article-title'>

@@ -16,6 +16,7 @@ import { Tweet as ReactTweet, type TweetProps } from 'react-tweet';
 
 import { CodeFrame } from '~/components/code-frame';
 import { ExternalLink } from '~/components/external-link';
+import { HeadingAnchor } from '~/components/heading-anchor';
 import { Spinner } from '~/components/spinner';
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from '~/components/ui/tabs';
@@ -150,14 +151,7 @@ function createHeading(level: number) {
     return createElement(
       `h${level}`,
       { id: slug },
-      [
-        createElement('a', {
-          href: `#${slug}`,
-          key: `link-${slug}`,
-          className: 'anchor focus-ring',
-          'aria-label': `Link to ${children}`,
-        }),
-      ],
+      [createElement(HeadingAnchor, { key: `link-${slug}`, slug, label: children })],
       children,
     );
   };

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import { type ComponentPropsWithoutRef } from 'react';
+import { ViewTransition, type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '~/lib/utils';
 
@@ -24,10 +24,13 @@ export function NavLink({ className, href, ...props }: NavLinkProps) {
         className,
       )}
     >
-      <span
-        className={cn('size-1 rounded-full', isActive ? 'bg-primary' : 'bg-transparent')}
-        aria-hidden='true'
-      />
+      <span className='relative size-1 shrink-0' aria-hidden='true'>
+        {isActive && (
+          <ViewTransition name='nav-dot' share='nav-dot' default='none'>
+            <span className='bg-primary absolute inset-0 rounded-full' />
+          </ViewTransition>
+        )}
+      </span>
       {props.children}
     </Link>
   );
