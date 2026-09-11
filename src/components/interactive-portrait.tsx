@@ -192,6 +192,7 @@ export function InteractivePortrait({ className }: { className: string }) {
         alt=''
         sizes='(min-width: 1024px) 496px, (min-width: 640px) 448px, (max-width: 352px) 100vw, 352px'
         loading='eager'
+        fetchPriority='high'
       />
       <canvas
         ref={canvasRef}

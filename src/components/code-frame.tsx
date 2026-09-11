@@ -53,7 +53,13 @@ export function CodeFrame({
         <button
           type='button'
           className='focus-ring hover:text-foreground flex min-h-11 shrink-0 cursor-pointer items-center gap-2 px-3 text-xs transition-colors print:hidden'
-          aria-label={status === 'error' ? 'Copy failed. Try copying code again' : 'Copy code'}
+          aria-label={
+            status === 'copied'
+              ? 'Copied code'
+              : status === 'error'
+                ? 'Copy failed. Try again'
+                : 'Copy code'
+          }
           onPointerDown={() => {
             const selection = window.getSelection();
             const range =

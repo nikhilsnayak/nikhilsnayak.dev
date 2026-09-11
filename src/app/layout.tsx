@@ -12,7 +12,7 @@ import { NavLink } from '~/components/nav-link';
 import { ThemeToggle } from '~/components/theme-toggle';
 import { Toaster } from '~/components/ui/sonner';
 import { SourceLink } from '~/features/github/components/source-link';
-import { BASE_URL, FEED_PATH } from '~/lib/constants';
+import { BASE_URL, FEED_ALTERNATE_TYPES, FEED_PATH } from '~/lib/constants';
 import { cn } from '~/lib/utils';
 
 const geistSans = Geist({
@@ -46,9 +46,7 @@ export const metadata: Metadata = {
   },
   authors: [{ name: 'Nikhil S', url: BASE_URL }],
   alternates: {
-    types: {
-      'application/rss+xml': `${BASE_URL}${FEED_PATH}`,
-    },
+    types: FEED_ALTERNATE_TYPES,
   },
   robots: {
     index: true,

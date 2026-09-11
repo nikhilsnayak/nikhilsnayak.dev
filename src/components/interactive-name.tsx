@@ -1,42 +1,88 @@
 'use client';
 
-import { motion, useReducedMotion } from 'motion/react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
 
-export function InteractiveName({ children }: { children: ReactNode }) {
-  const reduced = useReducedMotion();
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const [glint, setGlint] = useState(false);
-  useEffect(() => () => clearTimeout(timer.current), []);
+import { NameMark } from './name-mark';
+
+const RADIUS = 58;
+const PUSH = 7;
+
+export function InteractiveName() {
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const dots = Array.from(svg.querySelectorAll('circle')).map((dot) => ({
+      dot,
+      cx: dot.cx.baseVal.value,
+      cy: dot.cy.baseVal.value,
+    }));
+    const { width: viewWidth, height: viewHeight } = svg.viewBox.baseVal;
+    const media = window.matchMedia(
+      '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
+    );
+
+    const reset = () => {
+      for (const { dot } of dots) dot.style.transform = '';
+    };
+
+    const move = (event: PointerEvent) => {
+      if (!media.matches || event.pointerType !== 'mouse') return;
+
+      const bounds = svg.getBoundingClientRect();
+      if (!bounds.width) return;
+
+      const unit = viewWidth / bounds.width;
+      const pointerX = (event.clientX - bounds.left) * unit;
+      const pointerY = (event.clientY - bounds.top) * unit;
+
+      if (
+        pointerX < -RADIUS ||
+        pointerY < -RADIUS ||
+        pointerX > viewWidth + RADIUS ||
+        pointerY > viewHeight + RADIUS
+      ) {
+        reset();
+        return;
+      }
+
+      for (const { dot, cx, cy } of dots) {
+        const dx = cx - pointerX;
+        const dy = cy - pointerY;
+        const distance = Math.hypot(dx, dy);
+        if (distance >= RADIUS) {
+          dot.style.transform = '';
+          continue;
+        }
+        const falloff = 1 - distance / RADIUS;
+        const offset = (PUSH * falloff * falloff) / (distance || 1);
+        dot.style.transform = `translate(${dx * offset}px, ${dy * offset}px)`;
+      }
+    };
+
+    window.addEventListener('pointermove', move, { passive: true });
+    window.addEventListener('blur', reset);
+    window.addEventListener('scroll', reset, { passive: true });
+    document.documentElement.addEventListener('pointerleave', reset);
+    media.addEventListener('change', reset);
+
+    return () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('blur', reset);
+      window.removeEventListener('scroll', reset);
+      document.documentElement.removeEventListener('pointerleave', reset);
+      media.removeEventListener('change', reset);
+      reset();
+    };
+  }, []);
+
   return (
-    <span
-      className='relative block w-full max-w-101'
-      onPointerEnter={(event) => {
-        if (
-          reduced ||
-          event.pointerType !== 'mouse' ||
-          !window.matchMedia('(hover: hover) and (pointer: fine)').matches
-        )
-          return;
-        timer.current = setTimeout(() => {
-          setGlint(true);
-        }, 250);
-      }}
-      onPointerLeave={() => clearTimeout(timer.current)}
-    >
-      <span className='block opacity-85'>{children}</span>
-      {glint && !reduced && (
-        <motion.span
-          aria-hidden='true'
-          className='pointer-events-none absolute inset-0 motion-reduce:hidden'
-          initial={{ clipPath: 'polygon(-20% 0, 0% 0, 0% 100%, -20% 100%)' }}
-          animate={{ clipPath: 'polygon(100% 0, 120% 0, 120% 100%, 100% 100%)' }}
-          transition={{ duration: 0.45, ease: 'linear' }}
-          onAnimationComplete={() => setGlint(false)}
-        >
-          {children}
-        </motion.span>
-      )}
+    <span className='relative block w-full max-w-101'>
+      <span className='block opacity-85'>
+        <NameMark className='interactive-name overflow-visible' ref={svgRef} />
+      </span>
     </span>
   );
 }

@@ -6,7 +6,7 @@ import { ErrorBoundary } from '~/components/error-boundary';
 import { ExternalLink } from '~/components/external-link';
 import { BlogStats } from '~/features/blog/components/blog-stats';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
-import { FEED_PATH, WRITING_INTRO } from '~/lib/constants';
+import { FEED_ALTERNATE_TYPES, FEED_PATH, WRITING_INTRO } from '~/lib/constants';
 import { formatDate, viewTransitionName } from '~/lib/utils';
 
 const socialImage = {
@@ -19,6 +19,10 @@ const socialImage = {
 export const metadata: Metadata = {
   title: 'Writing',
   description: 'Things I figured out, things I built, and a few questions along the way.',
+  alternates: {
+    canonical: '/blog',
+    types: FEED_ALTERNATE_TYPES,
+  },
   openGraph: {
     title: 'Writing | Nikhil S',
     description: 'Things I figured out, things I built, and a few questions along the way.',
@@ -98,12 +102,17 @@ export default async function BlogsPage() {
                     <p className='text-muted-foreground mt-2 text-sm leading-6 text-pretty'>
                       {post.metadata.summary}
                     </p>
-                    <time
-                      dateTime={post.metadata.publishedAt.toISOString()}
-                      className='text-muted-foreground mt-3 block font-mono text-[11px]'
-                    >
-                      {formatDate(post.metadata.publishedAt)}
-                    </time>
+                    <p className='text-muted-foreground mt-3 flex flex-wrap items-center gap-x-2 font-mono text-[11px]'>
+                      <time dateTime={post.metadata.publishedAt.toISOString()}>
+                        {formatDate(post.metadata.publishedAt)}
+                      </time>
+                      {post.metadata.interactive ? (
+                        <>
+                          <span aria-hidden='true'>·</span>
+                          <span className='text-primary'>interactive</span>
+                        </>
+                      ) : null}
+                    </p>
                   </Link>
                 </li>
               ))}

@@ -13,6 +13,16 @@ import { CONTENT_DIR } from '../constants';
 import { PostMetadataSchema } from '../schema';
 import type { Comment } from '../types';
 
+const ASSET_IMPORT = /\.(png|jpe?g|gif|svg|webp|avif)'/;
+const LOCAL_IMPORT = /^import\s.+\sfrom\s'\.\//;
+
+function hasLiveDemo(content: string) {
+  return content
+    .split('```')[0]
+    .split('\n')
+    .some((line) => LOCAL_IMPORT.test(line) && !ASSET_IMPORT.test(line));
+}
+
 export async function getBlogMetadata() {
   'use cache';
   cacheLife('max');
@@ -23,10 +33,10 @@ export async function getBlogMetadata() {
   const posts = await Promise.all(
     slugs.map(async (slug) => {
       const postContent = await fs.readFile(path.join(CONTENT_DIR, slug, 'post.mdx'), 'utf-8');
-      const { data } = matter(postContent);
+      const { data, content } = matter(postContent);
       const metadata = PostMetadataSchema.parse(data);
       return {
-        metadata,
+        metadata: { ...metadata, interactive: hasLiveDemo(content) },
         slug,
       };
     }),

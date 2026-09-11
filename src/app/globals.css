@@ -358,3 +358,7 @@ html {
     mask-composite: intersect;
   }
 }
+
+.interactive-name circle {
+  transition: transform 200ms var(--ease-detail);
+}

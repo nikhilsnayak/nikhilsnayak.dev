@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense, ViewTransition } from 'react';
 
@@ -7,12 +8,18 @@ import { ErrorBoundary } from '~/components/error-boundary';
 import { ExternalLink } from '~/components/external-link';
 import { InteractiveName } from '~/components/interactive-name';
 import { InteractivePortrait } from '~/components/interactive-portrait';
-import { NameMark } from '~/components/name-mark';
 import { Spinner } from '~/components/spinner';
 import { getBlogMetadata } from '~/features/blog/functions/queries';
 import { Contributions } from '~/features/github/components/contributions';
-import { BASE_URL, SITE_INTRO } from '~/lib/constants';
+import { BASE_URL, FEED_ALTERNATE_TYPES, SITE_INTRO } from '~/lib/constants';
 import { viewTransitionName } from '~/lib/utils';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+    types: FEED_ALTERNATE_TYPES,
+  },
+};
 
 export default async function HomePage() {
   const posts = await getBlogMetadata();
@@ -27,6 +34,7 @@ export default async function HomePage() {
             '@type': 'Person',
             name: 'Nikhil S',
             url: BASE_URL,
+            description: SITE_INTRO,
             jobTitle: 'Software Engineer',
             sameAs: [
               'https://github.com/nikhilsnayak',
@@ -42,9 +50,7 @@ export default async function HomePage() {
           <p className='text-muted-foreground mb-5 font-mono text-sm'>hey, i'm</p>
           <h1>
             <span className='sr-only'>Nikhil S</span>
-            <InteractiveName>
-              <NameMark />
-            </InteractiveName>
+            <InteractiveName />
           </h1>
           <p className='mt-7 max-w-96 text-base leading-relaxed text-pretty sm:text-lg'>
             {SITE_INTRO}
@@ -76,7 +82,7 @@ export default async function HomePage() {
               </Link>
               <ExternalLink
                 href='https://effective-rsc.nikhilsnayak.dev'
-                aria-label='effective-rsc documentation'
+                aria-label='effective-rsc docs'
                 className='text-link inline-flex items-center gap-1'
               >
                 docs

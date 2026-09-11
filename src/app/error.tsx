@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { startTransition, useEffect } from 'react';
 
@@ -21,12 +22,17 @@ export default function ErrorFallback({
     <section className='py-6 sm:py-10'>
       <h1 className='font-mono text-2xl font-medium tracking-tight'>Something went wrong</h1>
       <p className='text-muted-foreground mt-3 max-w-prose text-sm leading-relaxed'>
-        This page couldn't load. You can try again.
+        This page couldn't load. Trying again usually works.
       </p>
-      <div className='mt-6'>
+      {error.digest ? (
+        <p className='text-muted-foreground mt-5 font-mono text-xs'>
+          error <span className='text-foreground select-all'>{error.digest}</span>
+        </p>
+      ) : null}
+      <div className='mt-6 flex flex-wrap items-center gap-x-6 gap-y-2'>
         <Button
           variant='link'
-          className='text-foreground h-auto p-0 text-sm font-normal underline underline-offset-4'
+          className='text-link h-auto p-0 font-mono text-xs font-normal'
           onClick={() => {
             startTransition(() => {
               router.refresh();
@@ -34,8 +40,11 @@ export default function ErrorFallback({
             });
           }}
         >
-          Try again
+          try again
         </Button>
+        <Link href='/' className='text-link font-mono text-xs'>
+          back to home
+        </Link>
       </div>
     </section>
   );

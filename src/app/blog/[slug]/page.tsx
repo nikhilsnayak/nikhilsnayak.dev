@@ -14,7 +14,7 @@ import { Hearts } from '~/features/blog/components/hearts';
 import { SocialShare } from '~/features/blog/components/social-share';
 import { ViewsCount } from '~/features/blog/components/views';
 import { getBlogMetadata, getPostMetadataBySlug } from '~/features/blog/functions/queries';
-import { BASE_URL } from '~/lib/constants';
+import { BASE_URL, FEED_ALTERNATE_TYPES } from '~/lib/constants';
 import { formatDate, viewTransitionName } from '~/lib/utils';
 
 export async function generateStaticParams() {
@@ -39,6 +39,7 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
     description,
     alternates: {
       canonical: `${BASE_URL}/blog/${slug}`,
+      types: FEED_ALTERNATE_TYPES,
     },
     openGraph: {
       title,

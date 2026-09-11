@@ -2,6 +2,10 @@ export const BASE_URL = 'https://www.nikhilsnayak.dev';
 
 export const FEED_PATH = '/rss.xml';
 
+export const FEED_ALTERNATE_TYPES = {
+  'application/rss+xml': `${BASE_URL}${FEED_PATH}`,
+};
+
 export const SITE_INTRO =
   'I build things for the web and often find myself asking, “does this really need to be so complicated?”';
 

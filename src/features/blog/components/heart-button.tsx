@@ -39,11 +39,6 @@ export function HeartButton({ heartsInfo }: Readonly<{ heartsInfo?: HeartsInfo }
       type='submit'
       variant='ghost'
       className='text-muted-foreground h-11 gap-2 px-0 text-sm leading-none font-normal hover:bg-transparent active:transform-none disabled:pointer-events-auto dark:hover:bg-transparent'
-      aria-label={
-        count === 3
-          ? `Liked. Current likes: ${heartsInfo?.total ?? 0}`
-          : `Like. Current likes: ${heartsInfo?.total ?? 0}`
-      }
       disabled={!heartsInfo || count === 3}
       onPointerDown={(event) => {
         setPointer(true);
@@ -105,6 +100,7 @@ export function HeartButton({ heartsInfo }: Readonly<{ heartsInfo?: HeartsInfo }
           </motion.span>
         </AnimatePresence>
       </span>
+      <span className='sr-only'>likes</span>
     </Button>
   );
 }
