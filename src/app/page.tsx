@@ -14,6 +14,13 @@ import { Contributions } from '~/features/github/components/contributions';
 import { BASE_URL, FEED_ALTERNATE_TYPES, SITE_INTRO } from '~/lib/constants';
 import { viewTransitionName } from '~/lib/utils';
 
+// Hand-picked homepage articles, in display order.
+const FEATURED_POST_SLUGS = [
+  'the-true-nature-of-use-action-state',
+  'introducing-effective-rsc',
+  'the-auto-scroll-list-component',
+];
+
 export const metadata: Metadata = {
   alternates: {
     canonical: '/',
@@ -23,6 +30,9 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const posts = await getBlogMetadata();
+  const featuredPosts = FEATURED_POST_SLUGS.map((slug) =>
+    posts.find((post) => post.slug === slug),
+  ).filter(Boolean);
 
   return (
     <div className='space-y-20 sm:space-y-24'>
@@ -139,7 +149,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <ul className='divide-border divide-y'>
-          {posts.slice(0, 3).map((post) => (
+          {featuredPosts.map((post) => (
             <li key={post.slug}>
               <Link
                 href={`/blog/${post.slug}`}
