@@ -20,11 +20,13 @@ export function viewTransitionName(slug: string) {
 }
 
 export function formatDate(date: Date) {
-  return date.toLocaleString('en-us', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  return date
+    .toLocaleString('en-us', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })
+    .toLocaleLowerCase();
 }
 
 export const NumberFormatter = new Intl.NumberFormat('en', {

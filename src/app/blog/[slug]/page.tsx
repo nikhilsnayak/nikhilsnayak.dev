@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
   if (!metadata) notFound();
 
   const { title, publishedAt, summary: description } = metadata;
+  const lastModified = metadata.updatedAt ?? publishedAt;
 
   const ogImage = `${BASE_URL}/api/og?title=${encodeURIComponent(title)}`;
 
@@ -46,7 +47,8 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
       description,
       type: 'article',
       siteName: 'Nikhil S - Writing',
-      publishedTime: publishedAt.toDateString(),
+      publishedTime: publishedAt.toISOString(),
+      modifiedTime: lastModified.toISOString(),
       url: `${BASE_URL}/blog/${slug}`,
       images: [
         {
@@ -73,7 +75,8 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
   if (!metadata) notFound();
   const { default: Post } = await import(`~/content/${slug}/post.mdx`);
 
-  const { publishedAt, summary, title } = metadata;
+  const { publishedAt, updatedAt, summary, title } = metadata;
+  const lastModified = updatedAt ?? publishedAt;
 
   return (
     <section>
@@ -85,8 +88,8 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: title,
-            datePublished: publishedAt,
-            dateModified: publishedAt,
+            datePublished: publishedAt.toISOString(),
+            dateModified: lastModified.toISOString(),
             description: summary,
             image: `/api/og?title=${encodeURIComponent(title)}`,
             url: `${BASE_URL}/blog/${slug}`,
@@ -112,8 +115,23 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           {title}
         </h1>
       </ViewTransition>
-      <div className='text-muted-foreground mt-4 mb-10 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:mb-12'>
-        <time dateTime={new Date(publishedAt).toISOString()}>{formatDate(publishedAt)}</time>
+      <div className='text-muted-foreground mt-4 mb-10 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] leading-5 tabular-nums sm:mb-12'>
+        <time className='text-foreground/80' dateTime={publishedAt.toISOString()}>
+          {formatDate(publishedAt)}
+        </time>
+        {updatedAt ? (
+          <>
+            <span className='text-muted-foreground/50' aria-hidden='true'>
+              |
+            </span>
+            <span className='text-muted-foreground/70'>
+              updated <time dateTime={updatedAt.toISOString()}>{formatDate(updatedAt)}</time>
+            </span>
+          </>
+        ) : null}
+        <span className='text-muted-foreground/50' aria-hidden='true'>
+          |
+        </span>
         <ErrorBoundary
           fallback={
             <ViewTransition enter='slide-up'>

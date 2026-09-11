@@ -12,7 +12,7 @@ export default async function sitemap() {
     })),
     ...blog.map((post) => ({
       url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: post.metadata.publishedAt,
+      lastModified: post.metadata.updatedAt ?? post.metadata.publishedAt,
     })),
   ];
 }
