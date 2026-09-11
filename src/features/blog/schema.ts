@@ -31,4 +31,11 @@ export const PostMetadataSchema = z.object({
   publishedAt: z.date(),
   updatedAt: z.date().optional(),
   summary: z.string(),
+  series: z
+    .object({
+      id: z.string(),
+      order: z.number().int().positive(),
+    })
+    .optional(),
+  related: z.array(z.string()).optional(),
 });

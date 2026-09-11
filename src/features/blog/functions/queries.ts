@@ -56,6 +56,40 @@ export async function getPostMetadataBySlug(slug: string) {
   return post?.metadata;
 }
 
+export async function getPostConnectionsBySlug(slug: string) {
+  const posts = await getBlogMetadata();
+  const currentPost = posts.find((post) => post.slug === slug);
+  const series = currentPost?.metadata.series;
+  const seriesPosts = series
+    ? posts
+        .flatMap((post) =>
+          post.metadata.series?.id === series.id
+            ? [{ ...post, order: post.metadata.series.order }]
+            : [],
+        )
+        .toSorted((a, b) => a.order - b.order)
+    : [];
+
+  const postsBySlug = new Map(posts.map((post) => [post.slug, post]));
+  const excludedSlugs = new Set([slug, ...seriesPosts.map((post) => post.slug)]);
+  const relatedPosts = [...new Set(currentPost?.metadata.related ?? [])].flatMap((relatedSlug) => {
+    const post = postsBySlug.get(relatedSlug);
+    return post && !excludedSlugs.has(relatedSlug) ? [post] : [];
+  });
+
+  const currentIndex = seriesPosts.findIndex((post) => post.slug === slug);
+  const previousPost = currentIndex > 0 ? seriesPosts[currentIndex - 1] : undefined;
+  const nextPost = currentIndex >= 0 ? seriesPosts[currentIndex + 1] : undefined;
+
+  return {
+    previousPost,
+    nextPost,
+    relatedPosts,
+    currentPart: currentIndex + 1,
+    totalParts: seriesPosts.length,
+  };
+}
+
 export function getViewsBySlug(slug: string) {
   return db.query.views.findFirst({ where: { slug } });
 }

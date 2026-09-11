@@ -54,6 +54,83 @@
   animation-timing-function: var(--ease-detail);
 }
 
+/* Only ordered series navigation moves the article; site chrome stays still. */
+html:active-view-transition-type(series-next, series-prev) {
+  &::view-transition-old(root) {
+    display: none;
+  }
+
+  &::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+::view-transition-group(.series-next),
+::view-transition-group(.series-prev),
+::view-transition-group(.series-controls) {
+  animation: none;
+}
+
+::view-transition-old(.series-next),
+::view-transition-new(.series-prev) {
+  --series-offset: -100%;
+}
+
+::view-transition-new(.series-next),
+::view-transition-old(.series-prev) {
+  --series-offset: 100%;
+}
+
+/* Keep both pages opaque and move them together inside the reading column. */
+::view-transition-image-pair(.series-next),
+::view-transition-image-pair(.series-prev) {
+  overflow: clip;
+}
+
+::view-transition-old(.series-next),
+::view-transition-old(.series-prev),
+::view-transition-new(.series-next),
+::view-transition-new(.series-prev) {
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+  object-position: left top;
+  mix-blend-mode: normal;
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  animation-fill-mode: both;
+}
+
+::view-transition-old(.series-next),
+::view-transition-old(.series-prev) {
+  animation-name: series-out;
+}
+
+::view-transition-new(.series-next),
+::view-transition-new(.series-prev) {
+  animation-name: series-in;
+}
+
+::view-transition-old(.series-controls) {
+  display: none;
+}
+
+::view-transition-new(.series-controls) {
+  animation: none;
+}
+
+@keyframes series-in {
+  from {
+    transform: translateX(var(--series-offset));
+  }
+}
+
+@keyframes series-out {
+  to {
+    transform: translateX(var(--series-offset));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),
