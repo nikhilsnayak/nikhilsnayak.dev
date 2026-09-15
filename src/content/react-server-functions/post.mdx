@@ -1,0 +1,403 @@
+---
+title: React Server Functions Are More Than Mutations
+publishedAt: 2026-09-15
+summary: I wanted to use React's existing protocol to query Server Functions. Following that idea led to streaming values, React trees, and the question of who owns the work while they arrive.
+related:
+  - introducing-effective-rsc
+---
+
+import { ReadingDemo } from './reading-demo';
+import { CompletionDemo } from './completion-demo';
+import { LiveFeed } from './live-feed';
+
+Fetching data after hydration kept sending me down a different path from the initial server
+render. Infinite scrolling was one place I kept running into this: render the first page on the
+server, pass the data to a Client Component, seed its cache, and reach for SWR or TanStack Query
+to keep loading from there.
+
+For ordinary pagination, I would just put the page in the URL. Navigation gets me another server
+render. But an infinite list needs to keep the entries already on screen, including anything the
+reader has expanded or interacted with, and append the next ones.
+
+Both libraries solve client-side fetching well. What bothered me was the point where the
+approach changed. The database operation was still “give me the next page.” But continuing it
+after hydration meant introducing another data abstraction.
+
+React had already given me a callable Server Function, with argument encoding and result decoding.
+Why couldn't I use that for reads too?
+
+That was what I wanted to explore in [effective-rsc](/blog/introducing-effective-rsc): querying
+a Server Function while keeping React's encoding and decoding.
+
+## The second data path
+
+I built **Fieldnotes**, a reading feed, as an example to work through. It has short notes on design, technology,
+and everyday life: a title and summary in the list, with the full note available when expanded.
+The data comes from a SQLite database with 10,000 fictional entries.
+
+The behavior I wanted was simple. Load more entries without disturbing the ones already there.
+
+This first illustration uses local data and simulated delays. Expand a note, then load the next
+three entries. They arrive together, and the note stays open. The button makes the timing easier
+to compare; the actual feed later in the post loads on scroll.
+
+<ReadingDemo />
+
+A route returning JSON would have been enough for this feed. Its cursor is a number. Its entries
+are ordinary records. I could have stopped at:
+
+```text noHighlight
+/api/feed?after=6
+```
+
+But I was adding a query primitive to a framework, and I didn't want its inputs and results to
+suddenly follow different rules from a normal Server Function.
+
+## I wanted to keep React's protocol
+
+In my [RSC framework series](/blog/build-your-own-rsc-framework-part-1), I had already worked
+through how React encodes Server Function arguments and decodes their results. The transport
+already knew how to handle dates, maps, and sets.
+
+If I converted everything into URL parameters and JSON, I would have to decide how to represent
+those values again. Then maintain that contract alongside the one React already provides.
+
+I wanted to keep using React's `encodeReply` for the arguments and Flight for the response.
+That meant keeping a request body.
+
+POST would work. Server Functions already used it, and there is nothing preventing a POST
+handler from reading data. But in effective-rsc, that request goes through the mutation path,
+including refreshing the route. I wanted a query to say that it was a read all the way down to
+HTTP, while preserving the existing encoding.
+
+GET didn't solve that either: its request body has no generally defined semantics.
+
+Then there was `QUERY`.
+
+[HTTP QUERY](https://www.rfc-editor.org/rfc/rfc10008.html) is defined as safe and idempotent,
+with input in the request body. That fit what I needed: send React's encoded arguments without
+using the mutation request path.
+
+```http
+QUERY /_ersc/query
+```
+
+The method changes. The Server Function reference, argument encoding, and Flight response stay.
+
+QUERY also allows caching that accounts for the request body, although effective-rsc currently
+sends `Cache-Control: private, no-store`. Using the method doesn't enable caching by itself.
+
+## Same function, different consumer
+
+I didn't want to introduce a second way to define Server Functions just for reads. The handler
+already described what should run on the server. For the feed, that was a call to `FeedService`:
+
+```ts filename="server-functions.tsx" lineNumbers
+'use server';
+
+import { Effect } from 'effect';
+
+import { ERSC } from './ersc';
+import { PageInput } from './model';
+import { FeedService } from './service';
+
+export const getPage = ERSC.ServerFn.make({
+  input: PageInput,
+  handler: Effect.fn('getPage')(function* ({ after }) {
+    const feed = yield* FeedService;
+    return yield* feed.page(after).pipe(Effect.orDie);
+  }),
+});
+```
+
+Nothing here says “query.” `PageInput` validates the cursor, and the handler reads a page.
+The choice happens where I consume the reference:
+
+```ts filename="queries.ts" lineNumbers
+import { ServerFn } from 'effective-rsc/client';
+
+import { getPage } from './server-functions';
+
+export const readPage = ServerFn.query(getPage);
+```
+
+Calling `getPage` directly from the browser still takes effective-rsc's normal Server Function
+path: POST, followed by mutation refresh behavior. `ServerFn.query(getPage)` selects read
+semantics; running `readPage({ after: 6 })` makes a QUERY request.
+Same handler, same validation, same server dependencies.
+
+**The Server Function describes what runs on the server. The consumer decides how the result
+participates in the app.**
+
+That separation mattered to me. I could add read behavior around an existing reference without
+creating a parallel API for authoring it. The handler still has to be safe to call as a read;
+the wrapper changes how it is invoked, not what its code does.
+
+I added `ServerFn.queryAtom(getPage)` to connect that request to Effect Atom's value, pending,
+and failure state. At that point, I had the query API I wanted.
+
+I thought that was it.
+
+Then I remembered Flight could serialize a `ReadableStream`.
+
+## Then I returned a Stream
+
+React already has [code to read a stream and encode its values into Flight](https://github.com/facebook/react/blob/9b9385327857d1211fb4dc022122d897fb38bc5a/packages/react-server/src/ReactFlightServer.js#L1285-L1399).
+The decoder reconstructs a `ReadableStream` on the client. Effect has its own `Stream` type,
+so I tried adapting one to the other:
+
+```mermaid title="Streaming values through React Flight" description="The server adapts an Effect Stream to a ReadableStream. Flight encodes its values into the HTTP response. The browser decodes a ReadableStream and adapts it back to an Effect Stream."
+flowchart TB
+  subgraph Server
+    serverEffect["Effect Stream"] -->|adapt| serverReadable["ReadableStream"]
+  end
+  subgraph Browser
+    clientReadable["ReadableStream"] -->|adapt| clientEffect["Effect Stream"]
+  end
+  serverReadable -->|encode with Flight| response["HTTP response"]
+  response -->|decode with Flight| clientReadable
+```
+
+The Server Function could return the stream instead of collecting a page first:
+
+```ts filename="server-functions.tsx" lineNumbers
+export const streamFeed = ERSC.ServerFn.make({
+  input: PageInput,
+  handler: Effect.fn('streamFeed')(function* ({ after }) {
+    const feed = yield* FeedService;
+    return feed.stream(after).pipe(Stream.orDie);
+  }),
+});
+```
+
+It worked. Entries arrived individually, through the same Flight decoder I was already using.
+
+That became `ServerFn.stream`. The function is still defined with `ERSC.ServerFn.make`; its
+return value is now a stream, and the client consumes it as one:
+
+```ts
+const readPage = ServerFn.stream(streamFeed);
+const entries = readPage({ after: 6 });
+```
+
+Consuming `entries` starts the QUERY request. `ServerFn.streamAtom(streamFeed)` provides the
+corresponding atom of the latest arriving value.
+
+With the same simulated delay, the entries can arrive one at a time. Load the next three below
+and scroll down to expand the first arrival while the other two are still loading:
+
+<ReadingDemo streaming />
+
+The page still takes the same amount of time to finish. But the first new entry is already
+usable while the next one is being produced.
+
+At this point I was streaming data. But I had kept Flight as the transport, and Flight could
+carry more than records.
+
+## The value could be UI
+
+I added one operation to the stream:
+
+```ts
+Stream.map(renderStory);
+```
+
+This is what `renderStory` returns:
+
+```tsx filename="story-card.tsx" lineNumbers
+export const renderStory = (story: Story) => ({
+  id: story.id,
+  content: <StoryCard story={story} />,
+});
+```
+
+A React element. In each streamed value.
+
+I hadn't added a component encoding format or taught the client how to rebuild a card from JSON.
+React already knew what to do with that value. The server rendered `StoryCard`, and Flight
+carried the result to the client.
+
+The list only needed the ID for its key and cursor, and `content` to display:
+
+```tsx
+<ol>
+  {items.map((item) => (
+    <li key={item.id}>{item.content}</li>
+  ))}
+</ol>
+```
+
+The client feed doesn't even import `StoryCard`.
+
+This is where keeping React's protocol paid off beyond the original query problem. I could
+return a `Stream<ReactNode>`, or put React content alongside data as I did here. A card could
+contain a Client Component, too: `StoryDetails` owns the expanded state, and appending later
+cards doesn't reset it.
+
+Then I wanted to see what happened if part of that card wasn't ready yet.
+
+The title and summary were already available. I moved the full note lookup into a separate
+Effectful Server Component:
+
+```tsx filename="story-card.tsx" lineNumbers
+const StoryNote = ERSC.Component.make({
+  render: Effect.fn('StoryNote')(function* ({ id }: { readonly id: number }) {
+    const feed = yield* FeedService;
+    const detail = yield* feed.detail(id);
+    return <p>{detail ?? 'This note is no longer available.'}</p>;
+  }),
+});
+```
+
+The card passes `<StoryNote id={story.id} />` as children to `StoryDetails`. Inside that Client
+Component, the expanded panel has a Suspense boundary:
+
+```tsx
+const note = expanded && (
+  <div className='story-detail-body'>
+    <Suspense fallback={<p>Loading the note…</p>}>{children}</Suspense>
+  </div>
+);
+```
+
+Now a card could arrive while its note was still being fetched on the server. I could expand
+it, see the fallback, and watch the next card arrive before the first note finished.
+
+All through one request.
+
+The lookup starts even if the card is collapsed; expanding it reveals content from that same
+Flight response. The live feed loads six entries per request. I added delays between entries
+and in the note lookup to make both visible, and View Transitions for expansion and the change
+from fallback to content.
+
+Try it in the live feed. Scroll until new entries arrive, then immediately expand one while the
+following entries are still loading.
+
+<LiveFeed />
+
+[Open the live feed ↗](https://effective-rsc-streaming-feed.vercel.app) to inspect the QUERY
+requests in DevTools or navigate away while a page is loading.
+
+Putting a pending Server Component inside a streamed card exposed a problem I hadn't needed
+to think about when I was only streaming records.
+
+## The stream was finished. The response wasn't.
+
+My initial client adapter treated the end of the returned stream as the end of the request.
+After all six entries arrived, the stream reported EOF and the consumer could finish its run.
+
+Except the last card could still contain a `StoryNote` running on the server.
+
+The note wasn't another entry in the feed stream. It belonged to an entry I had already received.
+React was still sending its content through the surrounding Flight response.
+
+**No more items did not mean no more content.**
+
+If finishing the stream cancelled the request, I could report success to the feed atom and
+then abort the bytes React needed to finish a card already on screen.
+
+Step through the timing model below. At item EOF, entry 9 is present, but its note is still
+pending. Cancelling at that point stops the note from completing.
+
+<CompletionDemo />
+
+I couldn't fix this by holding every item until the entire response finished. That would throw
+away the progressive delivery I had just built. The items needed to arrive immediately, while
+the stream's completion needed to wait for Flight.
+
+The adapter now waits after the decoded stream reaches its normal end:
+
+```ts
+Stream.onEnd(Deferred.await(completed));
+```
+
+The browser request settles `completed` after the Flight response and its cleanup finish.
+The atom can display received values throughout that wait, but it doesn't report the run as
+finished. Interruption can still cancel it, and a late transport failure can still fail it.
+
+A nested component can have its own render error, handled by its React error boundary. Finishing
+delivery doesn't promise that every component rendered successfully.
+
+## Who owns the work now?
+
+Once I handed a card to React, there could still be work running on its behalf. Who owned that
+work? When could it be stopped?
+
+Those were the same questions that led me to build effective-rsc in the first place. Here they
+had a very concrete consequence: receiving a value couldn't release the request while that
+value still depended on it.
+
+I made the stream consumer stay responsible for the request through Flight completion.
+Explicitly interrupting it reaches the browser's AbortSignal and stops the server's stream
+producer and pending render work. Normal item EOF lets Flight continue sending pending content.
+
+For the feed, I also wanted to retain received entries across navigation. Keeping the atom alive
+with `Atom.keepAlive` does that, but it also keeps an active run alive. Leaving the page therefore
+needs an explicit interruption:
+
+```tsx
+// Retain the received cards, but stop the active request when the feed unmounts.
+useEffect(() => () => loadMore(Atom.Interrupt), [loadMore]);
+```
+
+Retaining entries and retaining their request are two different decisions.
+
+Returning to the feed can start a new request after the last received ID. Retrying a failed page
+can use that same cursor. An unfinished note in an old card needs a fresh request too.
+
+Reloading the entire feed would discard cards that were already usable. I only needed to fetch
+that one note again. So I came back to the query primitive:
+
+```tsx filename="server-functions.tsx" lineNumbers
+export const getStoryNote = ERSC.ServerFn.make({
+  input: Schema.Struct({ id: Schema.Natural }),
+  handler: ({ id }) => Effect.succeed(<StoryNote id={id} />),
+});
+```
+
+The card's error boundary now offers **Retry note**. That starts a fresh QUERY for just that
+note and renders the returned React tree back inside the same Suspense boundary.
+
+So the recovery looks exactly like the original load: the fallback appears, the Server Component
+runs again, and the rest of the feed stays untouched.
+
+Another failure leaves the note retryable. Nothing above the card needs to reset.
+
+The old response still can't resume. But a query can recover the part of its UI that didn't arrive.
+
+## Back to the next page
+
+To append entries to the first page, I composed `ServerFn.stream` with `Stream.scan` inside
+an `Atom.fn`. Each arrival produces the updated list:
+
+```ts
+readPage({ after }).pipe(
+  Stream.scan(currentPage, (page, item) => ({
+    ...page,
+    items: [...page.items, item],
+  })),
+);
+```
+
+The server reads the first page from `FeedService` and renders its cards with `renderStory`.
+Those results seed the client atom; scrolling starts a stream that appends more cards. Both
+paths use the same service, renderer, and encoding, while the client retains the list and its state.
+
+I started with wanting to read through a Server Function. Keeping its protocol meant I could
+also stream values, then React trees, then React trees whose Server Components hadn't finished
+yet. The hard part was keeping the work alive for exactly as long as those values needed it.
+
+In the [first effective-rsc post](/blog/introducing-effective-rsc), I wrote:
+
+> React owns the UI. Effect owns the runtime.
+
+This was the first example where that line stopped feeling like just a design principle. React renders the cards, resolves
+Suspense, and preserves client state. Effect composes the stream and handles its lifetime and
+interruption. The queries and streams still operate on ordinary Server Function references;
+the feed supplies the pagination and decides what to do with each result.
+
+The query and stream APIs are available in **effective-rsc 0.2.0**.
+
+[Live demo](https://effective-rsc-streaming-feed.vercel.app) ·
+[Source](https://github.com/nikhilsnayak/effective-rsc/tree/main/examples/streaming-feed) ·
+[Query and stream API](https://effective-rsc.nikhilsnayak.dev/docs/api-reference/client-queries-and-streams)

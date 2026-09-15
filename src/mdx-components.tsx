@@ -17,6 +17,7 @@ import { Tweet as ReactTweet, type TweetProps } from 'react-tweet';
 import { CodeFrame } from '~/components/code-frame';
 import { ExternalLink } from '~/components/external-link';
 import { HeadingAnchor } from '~/components/heading-anchor';
+import { Mermaid } from '~/components/mermaid';
 import { Spinner } from '~/components/spinner';
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from '~/components/ui/tabs';
@@ -53,6 +54,7 @@ function CustomLink({ href, ...props }: ComponentProps<'a'>) {
 
 interface CodeProps {
   children: string;
+  className?: string;
   highlightedLines?: LineNumbers;
   addedLines?: LineNumbers;
   removedLines?: LineNumbers;
@@ -99,6 +101,8 @@ function Code({
 
 interface PreProps {
   children: ReactElement<CodeProps, 'code'>;
+  title?: string;
+  description?: string;
   filename?: string;
   lineNumbers?: boolean;
   highlight?: string;
@@ -109,6 +113,16 @@ interface PreProps {
 
 function Pre(props: Readonly<PreProps>) {
   const { children, filename, lineNumbers, highlight, addition, deletion, noHighlight } = props;
+
+  if (children.props.className === 'language-mermaid') {
+    return (
+      <Mermaid
+        chart={children.props.children}
+        title={props.title}
+        description={props.description}
+      />
+    );
+  }
 
   const getLineNumbers = (rawString?: string) => {
     const rangeArray = (numbers: number[]) => {
